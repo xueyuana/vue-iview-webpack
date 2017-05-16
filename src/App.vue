@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <hello></hello>
+    <project-apply></project-apply>
   </div>
 </template>
 
@@ -11,13 +12,13 @@
 
 <script>
 import Hello from './components/login.vue';
+import projectApply from './components/projectapply.vue';
 
 export default {
 
   components: {
-    Hello
+    Hello,
+    projectApply
   }
 }
 </script>
-
-
