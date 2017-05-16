@@ -1,7 +1,7 @@
 <template>
    <div>
     <div  class="login-container-div ">
-        <Row type="flex" justify="center" align="middle" style="text-align: center;font-size: 30px;color:#3399ff;m-top:110px"> <Col span="24">
+        <Row type="flex" justify="center" align="middle" style="text-align: center;font-size: 30px;color:#3399ff;margin-bottom:20px"> <Col span="24">
             技术运维统一管理平台
             </Col>
         </Row>
@@ -83,7 +83,7 @@
 
 
                     <Form-item>
-                        <Checkbox v-model="formInline.remeber">记住密码</Checkbox>
+                        <Checkbox v-model="formInline.remeber"　@:checked="rmpwd|getstatus">记住密码</Checkbox>
                         <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
                     </Form-item>
                 </Form>
@@ -180,7 +180,9 @@
                 this.$Message.error('表单验证失败!');
             }
         })
-    }
+    },rmpwd(){
+
+        }
     }
     }
 </script>
