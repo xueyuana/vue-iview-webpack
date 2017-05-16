@@ -10,7 +10,7 @@
 </style>
 
 <script>
-import Hello from './components/helloWorld.vue';
+import Hello from './components/login.vue';
 
 export default {
 
