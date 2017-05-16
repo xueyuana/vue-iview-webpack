@@ -15,7 +15,7 @@
 
                     <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70" >
 
-                        <Form-item prop="user" label="用户命">
+                        <Form-item prop="user" label="用户名">
                             <Input type="text" v-model="formInline.userName" placeholder="" >
 
                             </Input>
@@ -41,7 +41,7 @@
 
 
                         <Form-item>
-                            <Checkbox v-model="formInline.rememberPassword"  v-on:click="doRememberPassword($event)">记住密码</Checkbox>
+                            <Checkbox v-model="formInline.rememberPassword"  @click.prevent.native="doRememberPassword">记住密码</Checkbox>
                             <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
                         </Form-item>
                     </Form>
@@ -138,7 +138,7 @@
     function delCookie(c_name){
         var exp = new Date();
         exp.setTime(exp.getTime() - 1);
-        var cval = this.getCookie(c_name);
+        var cval = getCookie(c_name);
         if(cval!=null){
             document.cookie = c_name + "=" + cval + ";expires=" + exp.toGMTString();
         }
@@ -191,7 +191,6 @@
 
 
                             }).then(function () {
-
                                 if (rememberStatus){
                                     console.log("勾选了记住密码，现在开始写入cookie");
                                     setCookie('accountInfo',accountInfo,1440*3);
@@ -200,6 +199,7 @@
                                     console.log("没有勾选记住密码，现在开始删除账号cookie");
                                     delCookie('accountInfo');
                                 }
+
                                 this.$Message.success('提交成功!');
                                 // 成功回调
                             }, function () {
@@ -208,7 +208,7 @@
                             });
 
 
-                  
+
             } else {
                 this.$Message.error('表单验证失败!');
             }
@@ -216,14 +216,10 @@
     },
         doRememberPassword: function(event){
             let mySelf = this;
-            let rememberStatus = mySelf.rememberPassword;
+            let rememberStatus = mySelf.formInline.rememberPassword;
             // event.preventDefault();
-            mySelf.rememberPassword = !rememberStatus;
-            //如果去掉勾选，则删掉cookie
-            // if (!rememberStatus){
+            mySelf.formInline.rememberPassword = !rememberStatus;
 
-            // }
-            // mySelf.rememberPassword = false;
         },
 
         loadAccountInfo: function(){
