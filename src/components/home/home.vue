@@ -32,7 +32,7 @@
                 <Row type="flex">
                     <i-col span="4" class="layout-menu-left">
                         <Menu active-name="11" theme="dark" width="auto" :open-names="['1']" @on-select="go">
-                            <div class="layout-logo-left">
+                            <div class="layout-logo-left" @click="goConsole">
                                 管理控制台
                             </div>
                             <Submenu name="1">
@@ -46,29 +46,28 @@
                                 <template slot="title">
                                    资源管理
                                 </template>
-                                <Menu-item name="21">申请资源</Menu-item>
+                                <Menu-item name="21">资源申请</Menu-item>
                                 <Menu-item name="22">申请历史</Menu-item>
                             </Submenu>
                             <Submenu name="3">
                                 <template slot="title">
                                    持续交付
                                 </template>
-                                <Menu-item name="31">部署申请</Menu-item>
+                                <Menu-item name="31">应用部署</Menu-item>
                                 <Menu-item name="32">部署历史</Menu-item>
                             </Submenu>
                             <Submenu name="4">
                                 <template slot="title">
                                     工作台
                                 </template>
-                                <Menu-item name="41">工作列表</Menu-item>
+                                <Menu-item name="41">处理列表</Menu-item>
                                 <Menu-item name="42">我的工作台</Menu-item>
                             </Submenu>
                             <Submenu name="5">
                                 <template slot="title">
                                     权限管理
                                 </template>
-                                <Menu-item name="51">账号管理</Menu-item>
-                                <Menu-item name="52">权限配置</Menu-item>
+                                <Menu-item name="51">添加权限</Menu-item>
                             </Submenu>
                         </Menu>
                     </i-col>
@@ -76,7 +75,7 @@
                         <div class="layout-header">
                             <Breadcrumb separator=">">
                                 <Breadcrumb-item href="#">主页</Breadcrumb-item>
-                                <Breadcrumb-item href="#">管理控制台</Breadcrumb-item>
+                                <Breadcrumb-item>管理控制台</Breadcrumb-item>
                             </Breadcrumb>
                         </div>
                         <div class="layout-content">
@@ -170,13 +169,13 @@
     }
     .layout-logo-left{
         width: 100%;
-        line-height: 40px;
+        line-height: 50px;
         text-align: center;
-        height: 40px;
-        background: #5b6270;
-        border-radius: 3px;
-        margin: 15px auto;
+        height: 50px;
+        background: #5cadff;
+        margin-bottom: 15px;
         color: #fff;
+        cursor: pointer;
     }
 
 
@@ -190,14 +189,42 @@
         },
 
         methods: {
+            // 跳转到管理控制台
+            goConsole () {
+                this.$router.push({name: 'managementConsole'});
+            },
+
             // 导航跳转
-            go  (name) {
+            go (name) {
                 switch (name){
-                    case '11':
+                    case '11': //项目申请
                         this.$router.push({name: 'projectApplication'});
                         break;
+                    case '12': //项目申请历史
+                        this.$router.push({name: 'pro_applicationHistory'});
+                        break;
+                    case '21': //资源申请
+                        this.$router.push({name: 'resourceApplication'});
+                        break;
+                    case '22': //资源申请历史
+                        this.$router.push({name: 'res_applicationHistory'});
+                        break;
+                    case '31': //应用部署
+                        this.$router.push({name: 'applicationDeployment'});
+                        break;
+                    case '32': //部署历史
+                        this.$router.push({name: 'deployHistory'});
+                        break;
+                    case '41': //处理列表
+                        this.$router.push({name: 'processList'});
+                        break;
+                    case '42': //我的工作台
+                        this.$router.push({name: 'myWorkbench'});
+                        break;
+                    case '51': //权限管理
+                        this.$router.push({name: 'addAuthority'});
+                        break;
                 }
-
             }
         }
     }

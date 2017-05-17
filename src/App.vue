@@ -41,7 +41,7 @@
  export default {
 
 <<<<<<< HEAD
-import projectApply from './components/common/projectApplication/projectapply.vue';
+import projectApply from 'components/common/projectManagement/projectApplication/projectapply.vue';
 
 
 export default {
