@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <hello></hello>
+    <deploy></deploy>
   </div>
 </template>
 
@@ -11,11 +11,13 @@
 
 <script>
 import Hello from './components/login.vue';
+import Deploy from './components/deploy.vue';
 
 export default {
 
   components: {
-    Hello
+    Hello,
+    Deploy
   }
 }
 </script>
