@@ -9,22 +9,20 @@
     <div class="login-container">
 
 
-        <Tabs size="small" class="demo-tabs-style2">
-            <Tab-pane label="普通用户登录">
 
                 <Row type="flex" justify="center" align="middle">
                     <Col span="24">
 
                     <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70" >
 
-                        <Form-item prop="user" label="用户命">
-                            <Input type="text" v-model="formInline.user" placeholder="" >
+                        <Form-item prop="user" label="用户名">
+                            <Input type="text" v-model="formInline.userName" placeholder="" >
 
                             </Input>
                         </Form-item>
 
                         <Form-item prop="password" label="密码">
-                            <Input type="password" v-model="formInline.password" placeholder="">
+                            <Input type="password" v-model="formInline.passWord" placeholder="">
 
                             </Input>
                         </Form-item>
@@ -43,55 +41,14 @@
 
 
                         <Form-item>
-                            <Checkbox v-model="formInline.remeber">记住密码</Checkbox>
+                            <Checkbox v-model="formInline.rememberPassword"  @click.prevent.native="doRememberPassword">记住密码</Checkbox>
                             <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
                         </Form-item>
                     </Form>
 
                     </Col>
                 </Row>
-            </Tab-pane>
-            <Tab-pane label="管理员登录">
-                <Row type="flex" justify="center" align="middle">
-                <Col span="24">
 
-                <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70" >
-
-                    <Form-item prop="user" label="用户名">
-                        <Input type="text" v-model="formInline.user" placeholder="" >
-
-                        </Input>
-                    </Form-item>
-
-                    <Form-item prop="password" label="密码">
-                        <Input type="password" v-model="formInline.password" placeholder="">
-
-                        </Input>
-                    </Form-item>
-
-                    <Form-item prop="code" label="验证码">
-                        <Row>
-                            <Col span="18">
-                            <Input type="text" v-model="formInline.code" placeholder="">
-
-                            </Input>
-                            </Col>
-                            <Col span="4" offset="1"><img width="30" height="30" src=""/>
-                            </Col>
-                        </Row>
-                    </Form-item>
-
-
-                    <Form-item>
-                        <Checkbox v-model="formInline.remeber"　@:checked="rmpwd|getstatus">记住密码</Checkbox>
-                        <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
-                    </Form-item>
-                </Form>
-
-                </Col>
-            </Row></Tab-pane>
-
-        </Tabs>
 
     </div>
    </div>
@@ -153,36 +110,145 @@
 </style>
 
 <script>
+    // 设置cookie
+    function setCookie (c_name,value,expiremMinutes){
+        var exdate = new Date();
+        exdate.setTime(exdate.getTime() + expiremMinutes * 60 * 1000);
+        document.cookie= c_name + "=" + escape(value)+((expiremMinutes==null) ? "" : ";expires="+exdate.toGMTString());
+    }
+
+    // 读取cookie
+    function getCookie(c_name){
+        if (document.cookie.length>0)
+        {
+            var c_start=document.cookie.indexOf(c_name + "=");
+            if (c_start!=-1)
+            {
+                c_start=c_start + c_name.length+1;
+                var c_end=document.cookie.indexOf(";",c_start);
+                if (c_end==-1)
+                    c_end = document.cookie.length
+                return unescape(document.cookie.substring(c_start, c_end))
+            }
+        }
+        return ""
+    }
+
+    // 删除cookie
+    function delCookie(c_name){
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval = getCookie(c_name);
+        if(cval!=null){
+            document.cookie = c_name + "=" + cval + ";expires=" + exp.toGMTString();
+        }
+    }
     export default {
         data () {
         return {
             formInline: {
-                user: '',
-                password: ''
+                userName: '',
+                passWord: '',
+                rememberPassword: false
             },
             ruleInline: {
-                user: [
+                userName: [
                     { required: true, message: '请填写用户名', trigger: 'blur' }
                 ],
-                password: [
+                passWord: [
                     { required: true, message: '请填写密码', trigger: 'blur' },
                     { type: 'string', min: 6, message: '密码长度不能小于6位', trigger: 'blur' }
                 ]
             }
         }
     },
+    // 相当于init doAjax
+    beforeCreate() {
+        // console.log('login页面 加载完成！')
+    },
+    // 相当于ready 模板编译挂载之后
+    mounted: function() {
+        //读取cookie中的账号信息，如果有accountInfo的话，则说明该用户之前勾选了记住密码的功能，则需要自动填上账号密码
+        this.loadAccountInfo();
+    },
     methods: {
         handleSubmit(name) {
             this.$refs[name].validate((valid) => {
+
                 if (valid) {
-                this.$Message.success('提交成功!');
+                    let userName = this.formInline.userName;
+                    let passWord = this.formInline.passWord;
+                    let rememberStatus = this.formInline.rememberPassword;
+                    let accountInfo = "";
+                    accountInfo = userName + "&" + passWord;
+                    console.log(this.formInline.userName);
+                    this.$http.post(
+                            'http://172.28.20.124/uop/login/',
+                            // 请求体重发送数据给服务端
+                            {
+                                'username':userName,
+                                'password':passWord
+
+
+                            }).then(function () {
+                                if (rememberStatus){
+                                    console.log("勾选了记住密码，现在开始写入cookie");
+                                    setCookie('accountInfo',accountInfo,1440*3);
+                                }
+                                else{
+                                    console.log("没有勾选记住密码，现在开始删除账号cookie");
+                                    delCookie('accountInfo');
+                                }
+
+                                this.$Message.success('提交成功!');
+                                // 成功回调
+                            }, function () {
+                                this.$Message.error('登陆失败!');
+                                // 失败回调
+                            });
+
+
+
             } else {
                 this.$Message.error('表单验证失败!');
             }
         })
-    },rmpwd(){
+    },
+        doRememberPassword: function(event){
+            let mySelf = this;
+            let rememberStatus = mySelf.formInline.rememberPassword;
+            // event.preventDefault();
+            mySelf.formInline.rememberPassword = !rememberStatus;
 
+        },
+
+        loadAccountInfo: function(){
+
+            let mySelf = this;
+
+            let accountInfo = getCookie('accountInfo');
+
+            //如果cookie里没有账号信息
+            if(Boolean(accountInfo) == false){
+                console.log('cookie中没有检测到账号信息！');
+                return false;
+            }
+            else{
+                //如果cookie里有账号信息
+                console.log('cookie中检测到账号信息！现在开始预填写！');
+                let userName = "";
+                let passWord = "";
+                let index = accountInfo.indexOf("&");
+
+                userName = accountInfo.substring(0,index);
+                passWord = accountInfo.substring(index+1);
+
+                mySelf.formInline.userName = userName;
+                mySelf.formInline.passWord = passWord;
+                mySelf.formInline.rememberPassword = true;
+            }
         }
     }
     }
+
 </script>

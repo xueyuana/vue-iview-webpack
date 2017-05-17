@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <deploy></deploy>
+
   </div>
 </template>
 
@@ -21,5 +22,3 @@ export default {
   }
 }
 </script>
-
-
