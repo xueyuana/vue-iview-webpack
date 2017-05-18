@@ -97,7 +97,7 @@
                             {
                                 type: "string",
                                 name: "项目编码",
-                                value: self.formValidate.peoject_code
+                                value: self.formValidate.project_code
                             },
                             {
                                 type: "string",

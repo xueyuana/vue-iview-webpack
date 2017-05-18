@@ -9,7 +9,7 @@ export const projectInfo = {
     mutations: {
         // 保存获取的所有 groups
         getProjectList(state, newProjectList) {
-            state.groups = newProjectList;
+            state.projectList = newProjectList;
         }
     },
     getters: {},
