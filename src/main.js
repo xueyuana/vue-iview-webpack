@@ -2,7 +2,7 @@
 
 //导入vue
 import Vue from 'vue';
-import App from './App1.vue';
+import App from './App.vue';
 
 //导入vuex 状态管理
 import Vuex from 'vuex';
@@ -32,7 +32,7 @@ import home from './components/home/home.vue';
 import managementConsole from './components/common/managementConsole/projectMain.vue';
 
 // 导入项目管理
-import projectApplication from './components/common/projectManagement/projectApplication/projectapply.vue';
+import projectApplication from './components/common/projectManagement/projectApplication/createProject.vue';
 import pro_applicationHistory from './components/common/projectManagement/applicationHistory/applicationHistory.vue';
 
 // 资源管理

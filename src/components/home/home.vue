@@ -181,6 +181,8 @@
 
 </style>
 <script>
+    import common from '../../tools/common.js';
+
     export default {
         data () {
             return {
@@ -196,6 +198,12 @@
                     level_1: this.$store.state.breadcrumbData.level.level_1,
                     level_2: '管理控制台'
                 });
+            },
+
+            // 点击项目查询 请求获取项目创建信息
+            getProjectInfo () {
+
+
             },
 
             // 导航跳转
