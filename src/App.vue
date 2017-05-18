@@ -1,22 +1,22 @@
 <template>
   <div id="app">
-    <hello></hello>
+    <home></home>
   </div>
 </template>
 
 <style scoped>
 
-
 </style>
 
+
 <script>
-import Hello from './components/login.vue';
 
+  import Hello from './components/login/login.vue';
 
-export default {
+  export default {
 
-  components: {
-    Hello
+    components: {
+      Hello
+    }
   }
-}
 </script>

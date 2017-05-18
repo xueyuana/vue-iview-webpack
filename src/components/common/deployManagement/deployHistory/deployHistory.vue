@@ -4,41 +4,41 @@
       <Form :model="formItem" :label-width="70">
         <Row :gutter="16">
           <Col span="5">
-            <Form-item label="发起人:">
-              <Input v-model="formItem.sponsor" placeholder="请输入"></Input>
-            </Form-item>
+          <Form-item label="发起人:">
+            <Input v-model="formItem.sponsor" placeholder="请输入"></Input>
+          </Form-item>
           </Col>
           <Col span="10">
-            <Form-item label="发起日期:">
-              <Row>
-                <Col span="11">
-                  <Date-picker type="date" placeholder="选择日期" v-model="formItem.fromDate"></Date-picker>
-                </Col>
-                <Col span="2" style="text-align: center">-</Col>
-                <Col span="11">
-                  <Date-picker type="date" placeholder="选择日期" v-model="formItem.endDate"></Date-picker>
-                </Col>
-              </Row>
-            </Form-item>
+          <Form-item label="发起日期:">
+            <Row>
+              <Col span="11">
+              <Date-picker type="date" placeholder="选择日期" v-model="formItem.fromDate"></Date-picker>
+              </Col>
+              <Col span="2" style="text-align: center">-</Col>
+              <Col span="11">
+              <Date-picker type="date" placeholder="选择日期" v-model="formItem.endDate"></Date-picker>
+              </Col>
+            </Row>
+          </Form-item>
           </Col>
           <Col span="6">
-            <Form-item label="部署名称:">
-              <Input v-model="formItem.name" placeholder="请输入"></Input>
-            </Form-item>
+          <Form-item label="部署名称:">
+            <Input v-model="formItem.name" placeholder="请输入"></Input>
+          </Form-item>
           </Col>
           <Col span="3"></Col>
         </Row>
 
         <Row :gutter="16">
           <Col span="21">
-            <div class="inquire-form-belongs">
-              <Form-item label="所属项目:">
-                <Input v-model="formItem.belongs" placeholder="请输入"></Input>
-              </Form-item>
-            </div>
+          <div class="inquire-form-belongs">
+            <Form-item label="所属项目:">
+              <Input v-model="formItem.belongs" placeholder="请输入"></Input>
+            </Form-item>
+          </div>
           </Col>
           <Col span="3">
-            <Button type="primary">查询</Button>
+          <Button type="primary">查询</Button>
           </Col>
         </Row>
       </Form>
@@ -51,7 +51,7 @@
 
 <style lang="less" scoped>
   .inquire {
-    margin-top: 40px;
+    margin-top: 30px;
     &-form {
       padding-top: 15px;
       background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);;
