@@ -2,7 +2,11 @@
 
 //导入vue
 import Vue from 'vue';
-import App from './App1.vue';
+import App from './App.vue';
+
+//导入vuex 状态管理
+import Vuex from 'vuex';
+Vue.use(Vuex);
 
 //导入iview
 import iView from 'iview';
@@ -28,23 +32,23 @@ import home from './components/home/home.vue';
 import managementConsole from './components/common/managementConsole/projectMain.vue';
 
 // 导入项目管理
-import projectApplication from 'components/common/projectManagement/projectApplication/projectapply.vue';
-import pro_applicationHistory from 'components/common/projectManagement/applicationHistory/applicationHistory.vue';
+import projectApplication from './components/common/projectManagement/projectApplication/createProject.vue';
+import pro_applicationHistory from './components/common/projectManagement/applicationHistory/applicationHistory.vue';
 
 // 资源管理
-import resourceApplication from 'components/common/resourceManagement/resourceApplication/resourceApplication.vue';
-import res_applicationHistory from 'components/common/resourceManagement/applicationHistory/applicationHistory.vue';
+import resourceApplication from './components/common/resourceManagement/resourceApplication/resourceApplication.vue';
+import res_applicationHistory from './components/common/resourceManagement/applicationHistory/applicationHistory.vue';
 
 // 部署管理
-import applicationDeployment from 'components/common/deployManagement/applicationDeployment/applicationDeployment.vue';
+import applicationDeployment from './components/common/deployManagement/applicationDeployment/applicationDeployment.vue';
 import deployHistory from 'components/common/deployManagement/deployHistory/deployHistory.vue';
 
 //工作台
-import processList from 'components/common/workbench/processList/processList.vue';
-import myWorkbench from 'components/common/workbench/myWorkbench/myWorkbranch.vue';
+import processList from './components/common/workbench/processList/processList.vue';
+import myWorkbench from './components/common/workbench/myWorkbench/myWorkbranch.vue';
 
 //权限管理
-import addAuthority from 'components/common/authorityManagement/addAuthority.vue';
+import addAuthority from './components/common/authorityManagement/addAuthority.vue';
 
 
 //创建路由对象
@@ -70,18 +74,26 @@ var vueRouters = new VueRouter({
                 {name:'myWorkbench',path:'/my_workbench',component:myWorkbench},
                 // 权限管理
                 {name:'addAuthority',path:'/add_authority',component:addAuthority}
-            ]
+            ],
+            // 默认跳转到管理控制台
+            redirect:{name:'managementConsole'}
         }
     ]
 });
+
+// 导入状态池
+import {store} from './store/store.js';
+
 
 
 //创建Vue对象
 new Vue({
     el: '#app',
+    // 使用状态池
+    store,
     //在Vue实例上使用路由
     router:vueRouters,
-    // //render:c=>c(App)//使用webpack,渲染App.vue这个根组件
+    //render:c=>c(App)//使用webpack,渲染App.vue这个根组件
     render: (function (createElement) {
         return createElement(App);
     })
