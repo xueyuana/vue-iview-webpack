@@ -1,6 +1,6 @@
 <template>
     <div>
-        项目申请历史
+        项目查询
 
     </div>
 </template>

@@ -39,8 +39,8 @@
                                 <template slot="title">
                                     项目管理
                                 </template>
-                                <Menu-item name="11">项目申请</Menu-item>
-                                <Menu-item name="12">申请历史</Menu-item>
+                                <Menu-item name="11">创建项目</Menu-item>
+                                <Menu-item name="12">项目查询</Menu-item>
                             </Submenu>
                             <Submenu name="2">
                                 <template slot="title">
@@ -74,8 +74,8 @@
                     <i-col span="20" offset="0">
                         <div class="layout-header">
                             <Breadcrumb separator=">">
-                                <Breadcrumb-item href="#">主页</Breadcrumb-item>
-                                <Breadcrumb-item>管理控制台</Breadcrumb-item>
+                                <Breadcrumb-item href="#">{{ $store.state.breadcrumbData.level.level_1 }}</Breadcrumb-item>
+                                <Breadcrumb-item>{{ $store.state.breadcrumbData.level.level_2 }}</Breadcrumb-item>
                             </Breadcrumb>
                         </div>
                         <div class="layout-content">
@@ -192,37 +192,79 @@
             // 跳转到管理控制台
             goConsole () {
                 this.$router.push({name: 'managementConsole'});
+                this.$store.commit('getLevel',{
+                    level_1: this.$store.state.breadcrumbData.level.level_1,
+                    level_2: '管理控制台'
+                });
             },
 
             // 导航跳转
             go (name) {
                 switch (name){
                     case '11': //项目申请
+                            // 跳转
                         this.$router.push({name: 'projectApplication'});
+                            // 更改面包屑导航的值
+                        this.$store.commit('getLevel',{
+                            level_1: this.$store.state.breadcrumbData.level.level_1,
+                            level_2: '创建项目'
+                        });
                         break;
                     case '12': //项目申请历史
                         this.$router.push({name: 'pro_applicationHistory'});
+                        this.$store.commit('getLevel',{
+                            level_1: this.$store.state.breadcrumbData.level.level_1,
+                            level_2: '申请查询'
+                        });
                         break;
                     case '21': //资源申请
                         this.$router.push({name: 'resourceApplication'});
+                        this.$store.commit('getLevel',{
+                            level_1: this.$store.state.breadcrumbData.level.level_1,
+                            level_2: '资源申请'
+                        });
                         break;
                     case '22': //资源申请历史
                         this.$router.push({name: 'res_applicationHistory'});
+                        this.$store.commit('getLevel',{
+                            level_1: this.$store.state.breadcrumbData.level.level_1,
+                            level_2: '申请历史'
+                        });
                         break;
                     case '31': //应用部署
                         this.$router.push({name: 'applicationDeployment'});
+                        this.$store.commit('getLevel',{
+                            level_1: this.$store.state.breadcrumbData.level.level_1,
+                            level_2: '应用部署'
+                        });
                         break;
                     case '32': //部署历史
                         this.$router.push({name: 'deployHistory'});
+                        this.$store.commit('getLevel',{
+                            level_1: this.$store.state.breadcrumbData.level.level_1,
+                            level_2: '部署历史'
+                        });
                         break;
                     case '41': //处理列表
                         this.$router.push({name: 'processList'});
+                        this.$store.commit('getLevel',{
+                            level_1: this.$store.state.breadcrumbData.level.level_1,
+                            level_2: '处理列表'
+                        });
                         break;
                     case '42': //我的工作台
                         this.$router.push({name: 'myWorkbench'});
+                        this.$store.commit('getLevel',{
+                            level_1: this.$store.state.breadcrumbData.level.level_1,
+                            level_2: '我的工作台'
+                        });
                         break;
                     case '51': //权限管理
                         this.$router.push({name: 'addAuthority'});
+                        this.$store.commit('getLevel',{
+                            level_1: this.$store.state.breadcrumbData.level.level_1,
+                            level_2: '权限管理'
+                        });
                         break;
                 }
             }
