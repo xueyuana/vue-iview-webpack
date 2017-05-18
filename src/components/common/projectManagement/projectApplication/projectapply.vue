@@ -1,5 +1,5 @@
 <template lang="html">
-  <Form label-width="100" ref="formInline" :model="formInline" label-pisiton="left">
+  <Form :label-width="100" ref="formInline" :model="formInline" label-pisiton="left">
     <div class="header">
       <div class="button">
         <Form-item>
