@@ -4,41 +4,41 @@
       <Form :model="formItem" :label-width="70">
         <Row :gutter="16">
           <Col span="5">
-          <Form-item label="发起人:">
-            <Input v-model="formItem.sponsor" placeholder="请输入"></Input>
-          </Form-item>
+            <Form-item label="发起人:">
+              <Input v-model="formItem.sponsor" placeholder="请输入"></Input>
+            </Form-item>
           </Col>
           <Col span="10">
-          <Form-item label="发起日期:">
-            <Row>
-              <Col span="11">
-              <Date-picker type="date" placeholder="选择日期" v-model="formItem.fromDate"></Date-picker>
-              </Col>
-              <Col span="2" style="text-align: center">-</Col>
-              <Col span="11">
-              <Date-picker type="date" placeholder="选择日期" v-model="formItem.endDate"></Date-picker>
-              </Col>
-            </Row>
-          </Form-item>
+            <Form-item label="发起日期:">
+              <Row>
+                <Col span="11">
+                <Date-picker type="date" placeholder="选择日期" v-model="formItem.fromDate"></Date-picker>
+                </Col>
+                <Col span="2" style="text-align: center">-</Col>
+                <Col span="11">
+                <Date-picker type="date" placeholder="选择日期" v-model="formItem.endDate"></Date-picker>
+                </Col>
+              </Row>
+            </Form-item>
           </Col>
           <Col span="6">
-          <Form-item label="部署名称:">
-            <Input v-model="formItem.name" placeholder="请输入"></Input>
-          </Form-item>
+            <Form-item label="部署名称:">
+              <Input v-model="formItem.name" placeholder="请输入"></Input>
+            </Form-item>
           </Col>
           <Col span="3"></Col>
         </Row>
 
         <Row :gutter="16">
           <Col span="21">
-          <div class="inquire-form-belongs">
-            <Form-item label="所属项目:">
-              <Input v-model="formItem.belongs" placeholder="请输入"></Input>
-            </Form-item>
-          </div>
+            <div class="inquire-form-belongs">
+              <Form-item label="所属项目:">
+                <Input v-model="formItem.belongs" placeholder="请输入"></Input>
+              </Form-item>
+            </div>
           </Col>
           <Col span="3">
-          <Button type="primary">查询</Button>
+            <Button type="primary">查询</Button>
           </Col>
         </Row>
       </Form>
@@ -72,6 +72,9 @@
 
 <script>
   export default {
+    mounted() {
+      console.log(this.$root.$data)
+    },
     data() {
       return {
         formItem: {
@@ -86,19 +89,41 @@
         columns1: [
           {
             title: '发起人',
-            key: 'sponsor'
+            key: 'sponsor',
+            align: 'center'
           },
           {
             title: '发起日期',
-            key: 'fromDate'
+            key: 'fromDate',
+            align: 'center'
           },
           {
             title: '部署名称',
-            key: 'name'
+            key: 'name',
+            align: 'center'
           },
           {
             title: '所属项目',
-            key: 'belongs'
+            key: 'belongs',
+            align: 'center',
+            render: (h, params) => {
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.show(params.index)
+                    }
+                  }
+                }, '查看')
+              ]);
+            }
           }
         ],
         data1: [
