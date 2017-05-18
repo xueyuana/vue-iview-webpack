@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <hello></hello>
     <approval></approval>
-    <project-apply></project-apply>
   </div>
 </template>
 
@@ -12,16 +10,11 @@
 </style>
 
 <script>
-import Hello from './components/login.vue';
-import approval from './components/approval.vue';
-import projectApply from './components/projectapply.vue';
+    import approval from './components/common/resourceApproval/approval.vue';
 
-export default {
-
-  components: {
-    Hello,
-    approval,
-    projectApply
-  }
-}
+    export default {
+        components: {
+            approval
+        }
+    }
 </script>
