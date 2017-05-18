@@ -120,15 +120,17 @@
 
                         const url=common.apihost+'iteminfo/iteminfoes';
 
-                        self.$http.post(url, newProject, {emulateJSON:true})
+                        self.$http.post(url,newProject,{emulateJSON:true})
                                 .then(response=>{ //提交成功
                                        console.log(response);
                                        if(response.body.code===2002) {
                                            console.log(response.body.result.msg);
+                                           // 2.0 跳转到项目查询页面
+                                           self.$router.push({name: 'pro_applicationHistory'});
+                                           // 3.0 修改面包屑导航的数据 修改侧边导航的默认选项
+
                                        }
                                 });
-
-                        // 2.0 跳转到项目查询页面
                     }
                 })
             },
