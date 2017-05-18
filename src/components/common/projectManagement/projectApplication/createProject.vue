@@ -20,8 +20,8 @@
                                 </Form-item>
                             </div>
                             <div class="project-id fr">
-                                <Form-item label="项目编号" prop="peoject_code">
-                                    <Input v-model="formValidate.peoject_code" placeholder="请输入项目编号"></Input>
+                                <Form-item label="项目编号" prop="project_code">
+                                    <Input v-model="formValidate.project_code" placeholder="请输入项目编号"></Input>
                                 </Form-item>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
             return {
                 formValidate: {
                     project_name: '',
-                    peoject_code: '',
+                    project_code: '',
 
                     project_desc: ''
                 },
@@ -73,7 +73,7 @@
                     project_name: [
 
                     ],
-                    peoject_code: [
+                    project_code: [
 
                     ],
                     project_desc: [
@@ -109,15 +109,14 @@
                                 name: "创建人",
                                 value: '张三'
                             }
-
                         ];
                         let newProject={
                             name:'项目名称',
-                            property_list: property_list
+                            property_list: JSON.stringify(property_list)
                         };
                         console.log(newProject);
 
-                        newProject=JSON.stringify(newProject);
+//                        newProject=JSON.stringify(newProject);
 
                         const url=common.apihost+'iteminfo/iteminfoes';
 
