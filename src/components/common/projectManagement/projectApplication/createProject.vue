@@ -112,11 +112,11 @@
                         ];
                         let newProject={
                             name:'项目名称',
-                            property_list: JSON.stringify(property_list)
+                            property_list: property_list
                         };
-                        console.log(newProject);
 
-//                        newProject=JSON.stringify(newProject);
+                        newProject=JSON.stringify(newProject);
+                        console.log(newProject);
 
                         const url=common.apihost+'iteminfo/iteminfoes';
 
