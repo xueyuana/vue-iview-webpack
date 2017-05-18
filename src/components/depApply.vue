@@ -1,16 +1,16 @@
 <template>
-  <div class="deplay">
-    <div class="deplay-button">
+  <div class="apply">
+    <div class="apply-button">
       <div>
-        <Button class="deplay-button-item"
+        <Button class="apply-button-item"
                 type="info" size="small"
                 v-for="(item, index) in funcBtns"
                 @click="onFunction(index)">{{item}}</Button>
       </div>
     </div>
-    <div class="deplay-content">
+    <div class="apply-content">
       <div>
-        <Button class="deplay-content-button"
+        <Button class="apply-content-button"
                 :class="{active: activeIndex === index}"
                 v-for="(item, index) in tabs"
                 @click="onTabs(index)"
@@ -18,37 +18,37 @@
                 shape="circle">{{item}}</Button>
       </div>
       <!--项目信息-->
-      <div class="deplay-content-title">项目信息：</div>
-      <Form class="deplay-content-form" :model="itemInfo" label-position="right" :label-width="70">
-        <div class="deplay-content-form-item">
+      <div class="apply-content-title">项目信息：</div>
+      <Form class="apply-content-form" :model="itemInfo" label-position="right" :label-width="70">
+        <div class="apply-content-form-item">
           <Form-item label="部署名称">
             <Input v-model="itemInfo.input1"></Input>
           </Form-item>
         </div>
-        <div class="deplay-content-form-item">
+        <div class="apply-content-form-item">
           <Form-item label="所属项目">
             <Input v-model="itemInfo.input2"></Input>
           </Form-item>
         </div>
-        <div class="deplay-content-form-item">
+        <div class="apply-content-form-item">
           <Form-item label="所属资源">
             <Input v-model="itemInfo.input3"></Input>
           </Form-item>
         </div>
-        <div class="deplay-content-form-item">
+        <div class="apply-content-form-item">
           <Form-item label="归属部门">
             <Input v-model="itemInfo.input3"></Input>
           </Form-item>
         </div>
-        <div class="deplay-content-form-item">
+        <div class="apply-content-form-item">
           <Form-item label="部署ID">
             <Input v-model="itemInfo.input3"></Input>
           </Form-item>
         </div>
       </Form>
       <!--数据库-->
-      <div class="deplay-content-title">数据库：</div>
-      <Form class="deplay-content-select" label-position="left" :label-width="70">
+      <div class="apply-content-title">数据库：</div>
+      <Form class="apply-content-select" label-position="left" :label-width="70">
         <Form-item label="执行目标:">
           <Select v-model="dataBase" placeholder="请选择">
             <Option value="MYSQL">MYSQL</Option>
@@ -56,32 +56,18 @@
           </Select>
         </Form-item>
       </Form>
-      <Form class="deplay-content-textarea" label-position="top">
-        <Form-item label="执行脚本：">
+      <Form class="apply-content-textarea" label-position="left" :label-width="70">
+        <Form-item label="执行脚本:">
           <Input v-model="exeScript" type="textarea" :autosize="{minRows: 2, maxRows: 5}"></Input>
         </Form-item>
       </Form>
       <!--应用包-->
-      <div class="deplay-content-title">应用包：</div>
-      <Form class="deplay-content-select" label-position="left" :label-width="70">
+      <div class="apply-content-title">应用包：</div>
+      <Form class="apply-content-select" label-position="left" :label-width="70">
         <Form-item label="镜像:">
           <Input v-model="mirror"></Input>
         </Form-item>
       </Form>
-      <!--添加相关附件-->
-      <div class="deplay-content-title">添加相关附件：</div>
-      <div class="deplay-content-upload">
-        <div class="deplay-content-upload-name">上传附件</div>
-        <Upload
-            multiple
-            type="drag"
-            action="//jsonplaceholder.typicode.com/posts/">
-          <div style="padding: 20px 50px">
-            <Icon type="plus" size="52" style="color: #000"></Icon>
-          </div>
-        </Upload>
-      </div>
-
 
     </div>
   </div>
@@ -89,7 +75,7 @@
 </template>
 
 <style lang="less" scoped>
-  .deplay {
+  .apply {
     width: 100%;
     padding: 10px 30px;
     &-button {
@@ -105,10 +91,6 @@
       color: #000;
       &-button {
         margin-right: 10px;
-      }
-      &-button.active {
-        color: #000;
-        border-color: cyan;
       }
       &-title {
         width: 100%;
@@ -135,7 +117,6 @@
       }
       &-upload {
         display: flex;
-        padding-left: 50px;
         padding-top: 20px;
         &-name {
           margin-right: 20px;
@@ -150,7 +131,7 @@
 <script>
   export default {
     mounted() {
-
+      this.$http.get()
     },
     data() {
       return {
@@ -165,7 +146,7 @@
           input5: '测试项目'
         },
         dataBase: 'MYSQL',
-        exeScript: '脚本说明：',
+        exeScript: '',
         mirror: '镜像URL'
       }
     },
