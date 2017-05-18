@@ -3,7 +3,7 @@
         <div class="container" v-for="item in items">
             <div class="but-container">
                 <Button type="primary" class="button" style="width: 80px">通过</Button>
-                <Button type="primary" style="width: 80px">不通过</Button>
+                <Button type="primary" style="width: 80px;">不通过</Button>
             </div>
             <div>
                 <div>
@@ -169,10 +169,13 @@
 
     .but-container {
         text-align: right;
+
     }
 
     .button {
         margin-right: 20px;
+        padding: 0 !important;
+        height: 32px;
     }
 
     .project {
@@ -272,10 +275,11 @@
         height: 90px;
         margin: 10px;
     }
-    .advice-cont textarea{
+
+    .advice-cont textarea {
         width: 835px;
         height: 90px;
-        resize:none;
+        resize: none;
         padding: 10px;
     }
 </style>
