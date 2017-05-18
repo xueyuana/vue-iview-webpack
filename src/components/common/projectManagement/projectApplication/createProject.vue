@@ -109,10 +109,12 @@
                                 }
                             ]
                         };
-                        newProject=JSON.stringify(newProject);
                         console.log(newProject);
 
-                        const url=common.apihost+'iteminfo/iteminfoes/';
+                        newProject=JSON.stringify(newProject);
+
+                        const url=common.apihost+'iteminfo/iteminfoes';
+
                         self.$http.post(url, newProject, {emulateJSON:true})
                                 .then(response=>{ //提交成功
                                        console.log(response);
