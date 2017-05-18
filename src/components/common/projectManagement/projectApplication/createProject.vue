@@ -103,16 +103,21 @@
                                 type: "string",
                                 name: "项目描述",
                                 value: self.formValidate.project_desc
+                            },
+                            {
+                                type: "string",
+                                name: "创建人",
+                                value: '张三'
                             }
+
                         ];
                         let newProject={
                             name:'项目名称',
-                            user : "张三",
-                            property_list: JSON.stringify(property_list)
+                            property_list: property_list
                         };
                         console.log(newProject);
 
-//                        newProject=JSON.stringify(newProject);
+                        newProject=JSON.stringify(newProject);
 
                         const url=common.apihost+'iteminfo/iteminfoes';
 
