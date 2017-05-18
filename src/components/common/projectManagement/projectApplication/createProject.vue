@@ -88,30 +88,31 @@
                 self.$refs[name].validate((valid) => {
                     if (valid) {
                         // 1.0 将表单数据提交到后台
+                        let property_list=[
+                            {
+                                type: "string",
+                                name: "项目名称",
+                                value: self.formValidate.project_name
+                            },
+                            {
+                                type: "string",
+                                name: "项目编码",
+                                value: self.formValidate.peoject_code
+                            },
+                            {
+                                type: "string",
+                                name: "项目描述",
+                                value: self.formValidate.project_desc
+                            }
+                        ];
                         let newProject={
                             name:'项目名称',
                             user : "张三",
-                            property_list: [
-                                {
-                                    type: "string",
-                                    name: "项目名称",
-                                    value: self.formValidate.project_name
-                                },
-                                {
-                                    type: "string",
-                                    name: "项目编码",
-                                    value: self.formValidate.peoject_code
-                                },
-                                {
-                                    type: "string",
-                                    name: "项目描述",
-                                    value: self.formValidate.project_desc
-                                }
-                            ]
+                            property_list: JSON.stringify(property_list)
                         };
                         console.log(newProject);
 
-                        newProject=JSON.stringify(newProject);
+//                        newProject=JSON.stringify(newProject);
 
                         const url=common.apihost+'iteminfo/iteminfoes';
 
