@@ -30,6 +30,7 @@ import home from './components/home/home.vue';
 
 // 导入管理控制台
 import managementConsole from './components/common/managementConsole/projectMain.vue';
+// import adminConsole from './components/common/managementConsole/adminConsole.vue';
 
 // 导入项目管理
 import projectApplication from './components/common/projectManagement/projectApplication/createProject.vue';
@@ -59,7 +60,10 @@ var vueRouters = new VueRouter({
         {name:'home',path:'/home',component:home,
             children: [
                 // 管理控制台
+                // 普通用户
                 {name:'managementConsole',path:'/management_console',component:managementConsole},
+                //管理员账户
+                // {name:'managementConsole',path:'/management_console',component:adminConsole},
                 // 项目管理
                 {name:'projectApplication',path:'/project_application',component:projectApplication},
                 {name:'pro_applicationHistory',path:'/pro_application_history',component:pro_applicationHistory},

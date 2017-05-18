@@ -89,10 +89,7 @@
                     if (valid) {
                         // 1.0 将表单数据提交到后台
                         let newProject={
-                            name: "test12",
-                            layer_id: "fffffffffftest9",
-                            group_id: "ggggggggggtest9",
-                            item_id: "eeeeeeeeeeeetest9",
+                            name:'项目名称',
                             user : "张三",
                             property_list: [
                                 {
@@ -113,6 +110,8 @@
                             ]
                         };
                         newProject=JSON.stringify(newProject);
+                        console.log(newProject);
+
                         const url=common.apihost+'iteminfo/iteminfoes/';
                         self.$http.post(url, newProject, {emulateJSON:true})
                                 .then(response=>{ //提交成功
@@ -123,9 +122,6 @@
                                 });
 
                         // 2.0 跳转到项目查询页面
-                        self.$Message.success('提交成功!');
-                    } else {
-                        self.$Message.error('表单验证失败!');
                     }
                 })
             },
