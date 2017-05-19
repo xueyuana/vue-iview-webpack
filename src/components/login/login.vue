@@ -109,6 +109,7 @@
 
 <script>
     import common from '../../tools/common.js';
+    import {userinfo} from '../../tools/user.js';
     // 设置cookie
     function setCookie (c_name,value,expiremMinutes){
         var exdate = new Date();
@@ -186,11 +187,10 @@
                     this.$http.post(
                             url,
                             {
-                               /* 'username':userName,
-                                'password':passWord*/
-                              'id':110,
-                               'password' :'feng'
-                            }, {emulateJSON:true} ).then(function () {
+                                'id':userName,
+                                'password':passWord
+
+                            }, {emulateJSON:true} ).then(response=>{
                                 if (rememberStatus){
                                     console.log("勾选了记住密码，现在开始写入cookie");
                                     setCookie('accountInfo',accountInfo,1440*3);
@@ -199,8 +199,14 @@
                                     console.log("没有勾选记住密码，现在开始删除账号cookie");
                                     delCookie('accountInfo');
                                 }
+                                if(response.body.code===200){
+                                    this.$Message.success('提交成功!');
+                                    this.$router.push({name: 'home'});
+                                    userinfo.username=response.body.result.msg.username;
+                                    userinfo.userId=response.body.result.msg.user_id;
+                                    console.log(userinfo);
+                                }
 
-                                this.$Message.success('提交成功!');
                                 // 成功回调
                             }, function () {
                                 this.$Message.error('登陆失败!');
