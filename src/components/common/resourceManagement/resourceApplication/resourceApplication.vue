@@ -208,7 +208,7 @@
                         <div class="container database">
                             <Tabs>
                                 <Tab-pane label="MYSQL" name="mysql">
-                                    <div class="container-left" style="height: 100px">
+                                    <div class="container-left" >
                                         <div>
                                             <span>实例名称：</span>
                                             <Input style="width: 180px" v-model="jsonname.resource_list[0].res_name"></Input>
@@ -225,7 +225,7 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px" >
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[0].cpu" >
                                                 <option value="2C,4G">2C 4G</option>
                                                 <option value="4C,8G">4C 8G</option>
                                             </Select>
@@ -518,7 +518,7 @@
     .container-right {
         float: right;
         margin-right: 180px;
-        height: 100px;
+
     }
 
 
