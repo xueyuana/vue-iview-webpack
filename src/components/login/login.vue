@@ -189,7 +189,7 @@
                                 'id':userName,
                                 'password':passWord
 
-                            }, {emulateJSON:true} ).then(function () {
+                            }, {emulateJSON:true} ).then(response=>{
                                 if (rememberStatus){
                                     console.log("勾选了记住密码，现在开始写入cookie");
                                     setCookie('accountInfo',accountInfo,1440*3);
