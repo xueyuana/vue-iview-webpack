@@ -36,9 +36,9 @@
           </Col>
           <Col class="apply-content-form-item" span="12">
           <Form-item label="所属项目:">
-            <Select v-model="project_name" placeholder="请选择">
-              <Option value="userCenter">用户中心</Option>
-              <Option value="cardManage">卡片管理</Option>
+            <Select class="apply-content-form-select" v-model="project_name" placeholder="请选择">
+              <Option value="名片测试项目">用户测试项目</Option>
+              <Option value="名片测试项目">名片测试项目</Option>
             </Select>
           </Form-item>
           </Col>
@@ -106,6 +106,9 @@
         &-item {
           display: flex;
         }
+        &-select {
+          width: 150px;
+        }
       }
       &-select {
         margin-top: 10px;
@@ -129,6 +132,10 @@
 </style>
 
 <script>
+
+  import {userinfo} from 'tools/user.js'
+  console.log(userinfo)
+
   export default {
     data() {
       return {
