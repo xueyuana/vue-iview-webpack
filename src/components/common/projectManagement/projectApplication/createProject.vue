@@ -101,6 +101,11 @@
                             },
                             {
                                 type: "string",
+                                name: "归属部门",
+                                value: "运维部"
+                            },
+                            {
+                                type: "string",
                                 name: "项目描述",
                                 value: self.formValidate.project_desc
                             },
