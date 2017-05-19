@@ -134,7 +134,7 @@
                                            // 2.0 跳转到项目查询页面
                                            self.$router.push({name: 'pro_applicationHistory'});
                                            // 3.0 修改面包屑导航的数据 修改侧边导航的默认选项
-                                           self.$router.go(0);
+//                                           self.$router.go(0);
 
                                            self.$store.commit('getActiveItem',{
                                                openNames:'1',  // Submenu
