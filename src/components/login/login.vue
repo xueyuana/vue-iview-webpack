@@ -182,7 +182,7 @@
                     accountInfo = userName + "&" + passWord;
                     console.log(this.formInline.userName);
 
-                        const url=common.apihost+'auth/userlist/';
+                        const url=common.apihost+'auth/userlist';
                     this.$http.post(
                             url,
                             {
