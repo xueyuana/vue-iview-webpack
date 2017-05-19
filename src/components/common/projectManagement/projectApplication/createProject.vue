@@ -71,10 +71,10 @@
                 },
                 ruleValidate: {
                     project_name: [
-
+                        {required: true, message: '项目名称不能为空', trigger: 'blur' }
                     ],
                     project_code: [
-
+                        {required: true, message: '项目编号不能为空', trigger: 'blur' }
                     ],
                     project_desc: [
 
