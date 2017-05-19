@@ -7,10 +7,13 @@ Vue.use(Vuex);
 import { breadcrumbData } from './breadcrumbData.js';
 /* 导入项目信息列表 */
 import { projectInfo } from './projectList.js';
+/* 导入侧边导航的激活状态*/
+import { openMenu } from './openMenu.js';
 
 export const store = new Vuex.Store({
     modules: {
         breadcrumbData:breadcrumbData,
-        projectInfo:projectInfo
+        projectInfo:projectInfo,
+        openMenu:openMenu
     }
 });

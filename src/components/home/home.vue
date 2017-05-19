@@ -31,7 +31,7 @@
             <div class="layout">
                 <Row type="flex">
                     <i-col span="4" class="layout-menu-left">
-                        <Menu active-name="11" theme="dark" width="auto" :open-names="['1']" @on-select="go">
+                        <Menu :active-name="$store.state.openMenu.activeItem.activeName" :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto"  @on-select="go">
                             <div class="layout-logo-left" @click="goConsole">
                                 管理控制台
                             </div>

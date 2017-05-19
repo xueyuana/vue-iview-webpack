@@ -4,9 +4,10 @@
 export const openMenu = {
     // 存储状态值
     state: {
+        // 默认不打开任何项
         activeItem:{
-            openNames:'',  //
-            activeName:''  //
+            openNames:'',  // Submenu
+            activeName:''  //Menu-item
         }
     },
     // 状态值的改变方法,操作状态值
