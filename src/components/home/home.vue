@@ -31,7 +31,7 @@
             <div class="layout">
                 <Row type="flex">
                     <i-col span="4" class="layout-menu-left">
-                        <Menu active-name="11" theme="dark" width="auto" :open-names="['1']" @on-select="go">
+                        <Menu :active-name="$store.state.openMenu.activeItem.activeName" :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto"  @on-select="go">
                             <div class="layout-logo-left" @click="goConsole">
                                 管理控制台
                             </div>
@@ -202,8 +202,32 @@
 
             // 点击项目查询 请求获取项目创建信息
             getProjectInfo () {
-
-
+                let self=this;
+                const url=common.apihost+'iteminfo/iteminfoes/'+"test1";
+                self.$http.get(url)
+                        .then(response => {
+                                console.log(response);
+                                if(response.body.code===2002) { // 请求成功
+                                    //  将项目信息列表 保存到状态池
+                                    let backDatas=response.body.result.res;
+                                    // 处理返回值
+                                    let newDatas=[];
+                                    for (let i=0;i<backDatas.length;i++) {
+                                        let newColumn=[];
+                                        let backDataObj=backDatas[i];
+                                        newColumn.push(backDataObj.column[0]); // 项目名称
+                                        newColumn.push(backDataObj.column[5]); // 创建日期
+                                        newColumn.push(backDataObj.column[4]); // 创建人
+                                        newColumn.push(backDataObj.column[1]); // 项目编号
+                                        newColumn.push(backDataObj.column[2]); // 归属部门
+                                        newDatas.push({
+                                            column:newColumn
+                                        })
+                                    };
+                                    self.$store.commit("getProjectList",newDatas);
+                                    console.log(self.$store.state.projectInfo.projectList);
+                                }
+                             });
             },
 
             // 导航跳转
@@ -220,9 +244,12 @@
                         break;
                     case '12': //项目申请历史
                         this.$router.push({name: 'pro_applicationHistory'});
+                            // 获取项目信息
+                        this.getProjectInfo();
+                            // 保存面包屑导航
                         this.$store.commit('getLevel',{
                             level_1: this.$store.state.breadcrumbData.level.level_1,
-                            level_2: '申请查询'
+                            level_2: '项目查询'
                         });
                         break;
                     case '21': //资源申请

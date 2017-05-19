@@ -108,6 +108,7 @@
 </style>
 
 <script>
+    import common from '../../tools/common.js';
     // 设置cookie
     function setCookie (c_name,value,expiremMinutes){
         var exdate = new Date();
@@ -180,15 +181,16 @@
                     let accountInfo = "";
                     accountInfo = userName + "&" + passWord;
                     console.log(this.formInline.userName);
+
+                        const url=common.apihost+'auth/userlist';
                     this.$http.post(
-                            'http://172.28.20.124/uop/login/',
-                            // 请求体重发送数据给服务端
+                            url,
                             {
-                                'username':userName,
-                                'password':passWord
-
-
-                            }).then(function () {
+                               /* 'username':userName,
+                                'password':passWord*/
+                              'id':110,
+                               'password' :'feng'
+                            }, {emulateJSON:true} ).then(function () {
                                 if (rememberStatus){
                                     console.log("勾选了记住密码，现在开始写入cookie");
                                     setCookie('accountInfo',accountInfo,1440*3);

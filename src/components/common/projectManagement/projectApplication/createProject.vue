@@ -20,8 +20,8 @@
                                 </Form-item>
                             </div>
                             <div class="project-id fr">
-                                <Form-item label="项目编号" prop="peoject_code">
-                                    <Input v-model="formValidate.peoject_code" placeholder="请输入项目编号"></Input>
+                                <Form-item label="项目编号" prop="project_code">
+                                    <Input v-model="formValidate.project_code" placeholder="请输入项目编号"></Input>
                                 </Form-item>
                             </div>
                         </div>
@@ -65,16 +65,16 @@
             return {
                 formValidate: {
                     project_name: '',
-                    peoject_code: '',
+                    project_code: '',
 
                     project_desc: ''
                 },
                 ruleValidate: {
                     project_name: [
-
+                        {required: true, message: '项目名称不能为空', trigger: 'blur' }
                     ],
-                    peoject_code: [
-
+                    project_code: [
+                        {required: true, message: '项目编号不能为空', trigger: 'blur' }
                     ],
                     project_desc: [
 
@@ -88,44 +88,70 @@
                 self.$refs[name].validate((valid) => {
                     if (valid) {
                         // 1.0 将表单数据提交到后台
+                        let property_list=[
+                            {
+                                type: "string",
+                                name: "项目名称",
+                                value: self.formValidate.project_name
+                            },
+                            {
+                                type: "string",
+                                name: "项目编码",
+                                value: self.formValidate.project_code
+                            },
+                            {
+                                type: "string",
+                                name: "归属部门",
+                                value: "运维部"
+                            },
+                            {
+                                type: "string",
+                                name: "项目描述",
+                                value: self.formValidate.project_desc
+                            },
+                            {
+                                type: "string",
+                                name: "创建人",
+                                value: '张三'
+                            }
+                        ];
                         let newProject={
-                            name: "test12",
-                            layer_id: "fffffffffftest9",
-                            group_id: "ggggggggggtest9",
-                            item_id: "eeeeeeeeeeeetest9",
-                            user : "张三",
-                            property_list: [
-                                {
-                                    type: "string",
-                                    name: "项目名称",
-                                    value: self.formValidate.project_name
-                                },
-                                {
-                                    type: "string",
-                                    name: "项目编码",
-                                    value: self.formValidate.peoject_code
-                                },
-                                {
-                                    type: "string",
-                                    name: "项目描述",
-                                    value: self.formValidate.project_desc
-                                }
-                            ]
+                            // 暂时设置为用户所填的项目名称  不能重复
+                            name:self.formValidate.project_name,
+                            property_list: property_list
                         };
+
                         newProject=JSON.stringify(newProject);
-                        const url=common.apihost+'iteminfo/iteminfoes/';
-                        self.$http.post(url, newProject, {emulateJSON:true})
+                        console.log(newProject);
+
+                        const url=common.apihost+'iteminfo/iteminfoes';
+
+                        self.$http.post(url,newProject,{emulateJSON:true})
                                 .then(response=>{ //提交成功
                                        console.log(response);
                                        if(response.body.code===2002) {
                                            console.log(response.body.result.msg);
+                                           // 2.0 跳转到项目查询页面
+                                           self.$router.push({name: 'pro_applicationHistory'});
+                                           // 3.0 修改面包屑导航的数据 修改侧边导航的默认选项
+//                                           self.$router.go(0);
+
+                                           self.$store.commit('getActiveItem',{
+                                               openNames:'1',  // Submenu
+                                               activeName:'12'  //Menu-item
+                                           });
+
+                                           self.$store.commit('getLevel',{
+                                               level_1: this.$store.state.breadcrumbData.level.level_1,
+                                               level_2: '项目查询'
+                                           });
+                                       }else if(response.body.code===2017) { // 模型已经存在
+                                           self.$Notice.error({
+                                               title: response.body.result.msg,
+                                               desc: ''
+                                           });
                                        }
                                 });
-
-                        // 2.0 跳转到项目查询页面
-                        self.$Message.success('提交成功!');
-                    } else {
-                        self.$Message.error('表单验证失败!');
                     }
                 })
             },

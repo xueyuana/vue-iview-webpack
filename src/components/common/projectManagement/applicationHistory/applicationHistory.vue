@@ -63,14 +63,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="data in datas" :key="data">
-                        <td>
-                            <a href="#"  style="text-decoration:underline">{{data.project_name}}</a>
-                        </td>
-                        <td>{{data.create_date}}</td>
-                        <td>{{data.creator}}</td>
-                        <td>{{data.project_code}}</td>
-                        <td>{{data.department}}</td>
+                    <tr v-for="data in $store.state.projectInfo.projectList" :key="data">
+                        <td v-for="columnObj in data.column">{{columnObj.value}}</td>
+                        <!--<td>-->
+                            <!--<a href="#"  style="text-decoration:underline">{{data.project_name}}</a>-->
+                        <!--</td>-->
+                        <!--<td>{{data.create_date}}</td>-->
+                        <!--<td>{{data.creator}}</td>-->
+                        <!--<td>{{data.project_code}}</td>-->
+                        <!--<td>{{data.department}}</td>-->
                     </tr>
                 </tbody>
 
@@ -164,6 +165,7 @@
                     }
                 ],
                 datas: [
+
                     {
                         project_name: '项目一',
                         create_date: '2017-5-18',
