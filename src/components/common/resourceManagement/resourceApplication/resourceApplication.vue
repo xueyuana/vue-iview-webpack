@@ -5,7 +5,7 @@
             <div class="addres-top clearfix">
                 <Button id="returnButton" ><a href="" style="color: #fff">返回</a> </Button>
                 <Button id="submit" type="primary" @click="handleSubmit()">提交</Button>
-                <Button id="save">保存到草稿</Button>
+                <Button id="save"  @click="save()">保存到草稿</Button>
             </div>
             <div class="addres-container">
                 <Tabs>
@@ -33,24 +33,25 @@
 
                         <div class="title"><span>计算信息:</span></div>
                         <div class="container">
-                            <div class="addres-compute">
-                                <div>
+                            <div class="clearfix" style="margin-bottom: 10px">
+                                <div class="container-left">
                                     <span>实例名称:</span>
                                     <Input style="width: 180px" v-model="jsonname.compute_list.ins_name"></Input>
-                                </div>
-                                <div>
+                                 </div>
+                                <div class="container-right">
                                     <span>实例规格：</span>
                                     <Select style="width: 180px" >
-                                        <option value="2C,4G">2C 4G</option>
-                                        <option value="4C,8G">4C 8G</option>
+                                        <Option value="2C,4G">2C 4G</Option>
+                                        <Option value="4C,8G">4C 8G</Option>
                                     </Select>
                                 </div>
-                                <div>
+                            </div>
+                                <div style="padding-top: 20px " class="clearfix">
                                     <span>镜像：</span>
-                                    <Input style="width: 180px" v-model="jsonname.compute_list.url"></Input>
+                                    <Input style="width: 380px" v-model="jsonname.compute_list.url"></Input>
                                 </div>
 
-                            </div>
+
                         </div>
 
                         <div class="title"><span>数据库信息:</span></div>
@@ -106,7 +107,7 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px">
+                                            <Select style="width: 180px;height:50px">
                                                 <option value="2C,4G">2C 4G</option>
                                                 <option value="2C,8G">2C 8G</option>
                                                 <option value="4C,16G">4C 16G</option>
@@ -158,7 +159,306 @@
 
                         </div>
                     </div></Tab-pane>
+                    <Tab-pane label="测试环境" name="test"><div class="allcontent">
+                        <div class="title"><span>项目信息:</span></div>
+                        <div class="container clearfix">
+                            <div class="container-left">
+                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="jsonname.resource_name" ></Input></div>
+                                <div>{{jsonname.resource_name}}</div>
+                            </div>
+                            <div class="container-right">
+                                <div>
+                                    <span>所属项目：</span>
+                                    <Select style="width: 180px" v-model="jsonname.project">
+                                        <option></option>
+                                    </Select>
+                                </div>
 
+                            </div>
+                        </div>
+                        <div class="title"><span>域名:</span></div>
+                        <div class="container">
+                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="jsonname.domain"></Input>.syswin.com</div>
+                        </div>
+
+                        <div class="title"><span>计算信息:</span></div>
+                        <div class="container">
+                            <div class="clearfix" style="margin-bottom: 10px">
+                                <div class="container-left">
+                                    <span>实例名称:</span>
+                                    <Input style="width: 180px" v-model="jsonname.compute_list.ins_name"></Input>
+                                </div>
+                                <div class="container-right">
+                                    <span>实例规格：</span>
+                                    <Select style="width: 180px" >
+                                        <Option value="2C,4G">2C 4G</Option>
+                                        <Option value="4C,8G">4C 8G</Option>
+                                    </Select>
+                                </div>
+                            </div>
+                            <div style="padding-top: 20px " class="clearfix">
+                                <span>镜像：</span>
+                                <Input style="width: 380px" v-model="jsonname.compute_list.url"></Input>
+                            </div>
+
+
+                        </div>
+
+                        <div class="title"><span>数据库信息:</span></div>
+                        <div class="container database">
+                            <Tabs>
+                                <Tab-pane label="MYSQL" name="mysql">
+                                    <div class="container-left" style="height: 100px">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[0].res_name"></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例数量：</span>
+                                            <Input-number v-model="jsonname.resource_list[0].quantity"></Input-number>
+                                        </div>
+                                        <div >
+                                            <span>存储空间：</span>
+                                            <Input-number v-model="jsonname.resource_list[0].disk"></Input-number>
+                                        </div>
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px" >
+                                                <option value="2C,4G">2C 4G</option>
+                                                <option value="4C,8G">4C 8G</option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例版本: </span>
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[0].version">
+                                                <option value="MYSQL5.5">MYSQL5.5</option>
+                                                <option value="MYSQL5.6">MYSQL5.6</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                                <Tab-pane label="REDIS" name="redis">
+                                    <div class="container-left">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[1].res_name"></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例版本：</span>
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[1].version">
+                                                <option value="Redis2.8">Redis2.8</option>
+                                                <option value="Redis3.0">Redis3.0</option>
+                                            </Select>
+                                        </div>
+
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px;height:50px">
+                                                <option value="2C,4G">2C 4G</option>
+                                                <option value="2C,8G">2C 8G</option>
+                                                <option value="4C,16G">4C 16G</option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例数量: </span>
+                                            <Select style="width: 180px">
+
+                                                <Input-number v-model="jsonname.resource_list[1].quantity"></Input-number>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                                <Tab-pane label="MONGODB" name="mongo">
+                                    <div class="container-left" style="height:100px;">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[2].res_name"></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例数量：</span>
+                                            <Input-number v-model="jsonname.resource_list[2].quantity" ></Input-number>
+                                        </div>
+                                        <div >
+                                            <span>存储空间：</span>
+                                            <Input-number v-model="jsonname.resource_list[2].disk"></Input-number>
+                                        </div>
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px">
+                                                <option value="2C,4G">2C 4G</option>
+                                                <option value="4C,8G">4C 8G</option>
+                                                <option value="4C,16G">4C 16G</option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例版本: </span>
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[2].version">
+                                                <option value="Mongo3.2">Mongo3.2</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                            </Tabs>
+
+
+                        </div>
+                    </div></Tab-pane>
+                    <Tab-pane label="生产环境" name="product"><div class="allcontent">
+                        <div class="title"><span>项目信息:</span></div>
+                        <div class="container clearfix">
+                            <div class="container-left">
+                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="jsonname.resource_name" ></Input></div>
+                                <div>{{jsonname.resource_name}}</div>
+                            </div>
+                            <div class="container-right">
+                                <div>
+                                    <span>所属项目：</span>
+                                    <Select style="width: 180px" v-model="jsonname.project">
+                                        <option></option>
+                                    </Select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="title"><span>域名:</span></div>
+                        <div class="container">
+                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="jsonname.domain"></Input>.syswin.com</div>
+                        </div>
+
+                        <div class="title"><span>计算信息:</span></div>
+                        <div class="container">
+                            <div class="clearfix" style="margin-bottom: 10px">
+                                <div class="container-left">
+                                    <span>实例名称:</span>
+                                    <Input style="width: 180px" v-model="jsonname.compute_list.ins_name"></Input>
+                                </div>
+                                <div class="container-right">
+                                    <span>实例规格：</span>
+                                    <Select style="width: 180px" >
+                                        <Option value="2C,4G">2C 4G</Option>
+                                        <Option value="4C,8G">4C 8G</Option>
+                                    </Select>
+                                </div>
+                            </div>
+                            <div style="padding-top: 20px " class="clearfix">
+                                <span>镜像：</span>
+                                <Input style="width: 380px" v-model="jsonname.compute_list.url"></Input>
+                            </div>
+
+
+                        </div>
+
+                        <div class="title"><span>数据库信息:</span></div>
+                        <div class="container database">
+                            <Tabs>
+                                <Tab-pane label="MYSQL" name="mysql">
+                                    <div class="container-left" style="height: 100px">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[0].res_name"></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例数量：</span>
+                                            <Input-number v-model="jsonname.resource_list[0].quantity"></Input-number>
+                                        </div>
+                                        <div >
+                                            <span>存储空间：</span>
+                                            <Input-number v-model="jsonname.resource_list[0].disk"></Input-number>
+                                        </div>
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px" >
+                                                <option value="2C,4G">2C 4G</option>
+                                                <option value="4C,8G">4C 8G</option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例版本: </span>
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[0].version">
+                                                <option value="MYSQL5.5">MYSQL5.5</option>
+                                                <option value="MYSQL5.6">MYSQL5.6</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                                <Tab-pane label="REDIS" name="redis">
+                                    <div class="container-left">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[1].res_name"></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例版本：</span>
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[1].version">
+                                                <option value="Redis2.8">Redis2.8</option>
+                                                <option value="Redis3.0">Redis3.0</option>
+                                            </Select>
+                                        </div>
+
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px;height:50px">
+                                                <option value="2C,4G">2C 4G</option>
+                                                <option value="2C,8G">2C 8G</option>
+                                                <option value="4C,16G">4C 16G</option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例数量: </span>
+                                            <Select style="width: 180px">
+
+                                                <Input-number v-model="jsonname.resource_list[1].quantity"></Input-number>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                                <Tab-pane label="MONGODB" name="mongo">
+                                    <div class="container-left" style="height:100px;">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[2].res_name"></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例数量：</span>
+                                            <Input-number v-model="jsonname.resource_list[2].quantity" ></Input-number>
+                                        </div>
+                                        <div >
+                                            <span>存储空间：</span>
+                                            <Input-number v-model="jsonname.resource_list[2].disk"></Input-number>
+                                        </div>
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px">
+                                                <option value="2C,4G">2C 4G</option>
+                                                <option value="4C,8G">4C 8G</option>
+                                                <option value="4C,16G">4C 16G</option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例版本: </span>
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[2].version">
+                                                <option value="Mongo3.2">Mongo3.2</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                            </Tabs>
+
+
+                        </div>
+                    </div></Tab-pane>
                 </Tabs>
 
 
@@ -205,21 +505,13 @@
         width: 100%;
         margin-left: 10px;
         padding-top: 10px;
-        padding-bottom: 50px;
+        padding-bottom: 10px;
     }
 
-    .container span {
-        color: #000;
-        display: inline-block;
-        width: 100px;
-        text-align: center;
-    }
+
 
     .container-left,.container-right {
         height: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
         float: left;
     }
 
@@ -228,11 +520,7 @@
         margin-right: 180px;
     }
 
-    .addres-compute {
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-    }
+
 
     .database {
         border: 1px solid #d7d7d7;
@@ -250,13 +538,13 @@
         return {
             jsonname: {
                 resource_name: "",
-                project: "",
+                project: "项目名称aaa",
                 department: "syswin",
-                user_name: "",
-                user_id: "",
+                user_name: "李秀芬",
+                user_id: "1231231",
                 domain: "",
-                env: "",
-                application_status: "notknow",
+                env: "develop",
+                application_status: "待提交",
                 resource_list: [
                     {
                         res_name: "",
@@ -311,11 +599,18 @@
             const url=common.apihost+'resource/';
 
            console.log(self.jsonname);
+            self.$router.push({name: 'res_applicationHistory'});
+            this.$http.post(url,newjson, {emulateJSON:true}  ).then(function (response) {
 
-            this.$http.post(url,newjson, {emulateJSON:true}  ).then(function () {
+                console.log(response);
+                if(response.body.code===200 && response.body.result.res=="success") {
+                    this.$Message.success('提交成功!');
+                    // 2.0 跳转到资源申请历史页面
+                    self.$router.push({name: 'res_applicationHistory'});
 
 
-                        this.$Message.success('提交成功!');
+                }
+
                         // 成功回调
                     }, function () {
                         this.$Message.error('登陆失败!');

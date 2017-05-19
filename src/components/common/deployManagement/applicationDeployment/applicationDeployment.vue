@@ -1,13 +1,18 @@
 <template>
   <div class="apply">
+    <!--功能按钮-->
     <div class="apply-button">
       <div>
         <Button class="apply-button-item"
                 type="info" size="small"
                 v-for="(item, index) in funcBtns"
-                @click="onFunction(index)">{{item}}</Button>
+                @click="onLink(index)">{{item}}
+
+        </Button>
       </div>
     </div>
+
+    <!--内容区-->
     <div class="apply-content">
       <div>
         <Button class="apply-content-button"
@@ -15,57 +20,59 @@
                 v-for="(item, index) in tabs"
                 @click="onTabs(index)"
                 size="large"
-                shape="circle">{{item}}</Button>
+                shape="circle">{{item}}
+
+        </Button>
       </div>
+
       <!--项目信息-->
       <div class="apply-content-title">项目信息：</div>
-      <Form class="apply-content-form" :model="itemInfo" label-position="right" :label-width="70">
-        <div class="apply-content-form-item">
-          <Form-item label="部署名称">
-            <Input v-model="itemInfo.input1"></Input>
+      <Form class="apply-content-form" label-position="right" :label-width="70">
+        <Row :gutter="128">
+          <Col class="apply-content-form-item" span="12">
+          <Form-item label="部署名称:">
+            <Input v-model="deploy_name"></Input>
           </Form-item>
-        </div>
-        <div class="apply-content-form-item">
-          <Form-item label="所属项目">
-            <Input v-model="itemInfo.input2"></Input>
+          </Col>
+          <Col class="apply-content-form-item" span="12">
+          <Form-item label="所属项目:">
+            <Select v-model="project_name" placeholder="请选择">
+              <Option value="userCenter">用户中心</Option>
+              <Option value="cardManage">卡片管理</Option>
+            </Select>
           </Form-item>
-        </div>
-        <div class="apply-content-form-item">
-          <Form-item label="所属资源">
-            <Input v-model="itemInfo.input3"></Input>
-          </Form-item>
-        </div>
-        <div class="apply-content-form-item">
-          <Form-item label="归属部门">
-            <Input v-model="itemInfo.input3"></Input>
-          </Form-item>
-        </div>
-        <div class="apply-content-form-item">
-          <Form-item label="部署ID">
-            <Input v-model="itemInfo.input3"></Input>
-          </Form-item>
-        </div>
+          </Col>
+        </Row>
+        <Row :gutter="128">
+          <Col class="apply-content-form-item apply-content-form-empty" span="12"></Col>
+          <!--<Col class="apply-content-form-item" span="12" v-show="input3">-->
+          <!--<Form-item label="部署ID:">-->
+            <!--<Input v-model="input5"></Input>-->
+          <!--</Form-item>-->
+          </Col>
+        </Row>
       </Form>
+
       <!--数据库-->
       <div class="apply-content-title">数据库：</div>
       <Form class="apply-content-select" label-position="left" :label-width="70">
         <Form-item label="执行目标:">
-          <Select v-model="dataBase" placeholder="请选择">
-            <Option value="MYSQL">MYSQL</Option>
-            <Option value="MONGODB">MONGODB</Option>
+          <Select v-model="exec_tag" placeholder="请选择">
+            <Option value="mysql-node1">mysql-node1</Option>
+            <Option value="mysql-node2">mysql-node2</Option>
           </Select>
         </Form-item>
       </Form>
       <Form class="apply-content-textarea" label-position="left" :label-width="70">
         <Form-item label="执行脚本:">
-          <Input v-model="exeScript" type="textarea" :autosize="{minRows: 2, maxRows: 5}"></Input>
+          <Input v-model="exec_context" type="textarea" :autosize="{minRows: 4, maxRows: 6}"></Input>
         </Form-item>
       </Form>
       <!--应用包-->
       <div class="apply-content-title">应用包：</div>
-      <Form class="apply-content-select" label-position="left" :label-width="70">
+      <Form class="apply-content-mirror" label-position="left" :label-width="70">
         <Form-item label="镜像:">
-          <Input v-model="mirror"></Input>
+          <Input v-model="mirror" placeholder="请输入镜像URL"></Input>
         </Form-item>
       </Form>
 
@@ -102,18 +109,21 @@
         line-height: 20px;
       }
       &-form {
-        display: flex;
-        flex-wrap: wrap;
         margin-top: 10px;
         &-item {
-          width: 50%;
           display: flex;
-          align-items: center;
+        }
+        &-empty {
+          height: 60px;
         }
       }
       &-select {
         margin-top: 10px;
-        width: 250px;
+        width: 210px;
+      }
+      &-mirror {
+        margin-top: 10px;
+        width: 400px;
       }
       &-upload {
         display: flex;
@@ -131,39 +141,78 @@
 <script>
   export default {
     mounted() {
-      this.$http.get()
+
     },
     data() {
       return {
         activeIndex: 0,
         funcBtns: ['返回', '提交', '保存到草稿'],
         tabs: ['开发环境', '测试环境', '生产环境'],
-        itemInfo: {
-          input1: '测试项目',
-          input2: '测试项目',
-          input3: '测试项目',
-          input4: '测试项目',
-          input5: '测试项目'
-        },
-        dataBase: 'MYSQL',
-        exeScript: '',
-        mirror: '镜像URL'
+        environment: 'dev',
+        deploy_name: '',
+        project_name: '',
+        exec_tag: 'mysql-node1',
+        exec_context: '',
+        mirror: ''
       }
     },
     computed: {},
     methods: {
-      onFunction(index) {
+      onLink(index) {
         switch (index) {
           case 0:
+            this.$router.go(-1)
             break
-          case 0:
+          case 1:
+            this.onSubmit()
             break
           default:
+            this.$router.push({name: 'deployHistory'})
             break
         }
       },
+
       onTabs(index) {
         this.activeIndex = index
+        switch (index) {
+          case 0:
+            this.environment = 'dev'
+            break
+          case 1:
+            this.environment = 'test'
+            break
+          default:
+            this.environment = 'product'
+            break
+        }
+      },
+
+      onSubmit() {
+        if (!this.deploy_name.trim()) {
+          this.$Message.warning('部署名称不能为空')
+        } else if (!this.project_name.trim()) {
+          this.$Message.warning('所属项目不能为空')
+        } else if (!this.exec_tag.trim()) {
+          this.$Message.warning('执行目标不能为空')
+        } else if (!this.exec_context.trim()) {
+          this.$Message.warning('执行脚本不能为空')
+        }  else if (!this.mirror.trim()) {
+          this.$Message.warning('镜像URL不能为空')
+        } else {
+          this.$http.post('http://uop-test.syswin.com/api/deployment/deployments', {
+            "environment": this.environment,
+            "initiator": "lisi",
+            "project_name": this.project_name,
+            "exec_tag": this.exec_tag,
+            "exec_context": this.exec_context,
+            "app_image": this.mirror,
+            "deploy_name": this.deploy_name
+          }).then(res => {
+            console.log('success', res)
+          }, res => {
+            console.log('error', res)
+          })
+        }
       }
     }
   }

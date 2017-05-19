@@ -1,29 +1,30 @@
 <template>
   <div class="inquire">
+    <!--查询条件-->
     <div class="inquire-form">
       <Form :model="formItem" :label-width="70">
         <Row :gutter="16">
           <Col span="5">
           <Form-item label="发起人:">
-            <Input v-model="formItem.sponsor" placeholder="请输入"></Input>
+            <Input v-model="formItem.initiator" placeholder="请输入"></Input>
           </Form-item>
           </Col>
           <Col span="10">
           <Form-item label="发起日期:">
             <Row>
               <Col span="11">
-              <Date-picker type="date" placeholder="选择日期" v-model="formItem.fromDate"></Date-picker>
+                <Date-picker type="date" format="yyyy-MM-dd" placeholder="选择日期" @on-change="formatCreateData"></Date-picker>
               </Col>
-              <Col span="2" style="text-align: center">-</Col>
+              <Col span="2" style="text-align: center">至</Col>
               <Col span="11">
-              <Date-picker type="date" placeholder="选择日期" v-model="formItem.endDate"></Date-picker>
+                <Date-picker type="date" format="yyyy-MM-dd" placeholder="选择日期" @on-change="formatEndData"></Date-picker>
               </Col>
             </Row>
           </Form-item>
           </Col>
           <Col span="6">
           <Form-item label="部署名称:">
-            <Input v-model="formItem.name" placeholder="请输入"></Input>
+            <Input v-model="formItem.deploy_name" placeholder="请输入"></Input>
           </Form-item>
           </Col>
           <Col span="3"></Col>
@@ -31,18 +32,20 @@
 
         <Row :gutter="16">
           <Col span="21">
-          <div class="inquire-form-belongs">
+          <div class="inquire-form-project_name">
             <Form-item label="所属项目:">
-              <Input v-model="formItem.belongs" placeholder="请输入"></Input>
+              <Input v-model="formItem.project_name" placeholder="请输入"></Input>
             </Form-item>
           </div>
           </Col>
           <Col span="3">
-          <Button type="primary">查询</Button>
+            <Button type="primary" @click.native="onInquire">查询</Button>
           </Col>
         </Row>
       </Form>
     </div>
+
+    <!--查询结果-->
     <div class="inquire-table">
       <Table border size="small" :columns="columns1" :data="data1"></Table>
     </div>
@@ -57,7 +60,7 @@
       background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);;
       border: 1px solid rgb(228, 228, 228);
       border-radius: 10px;
-      &-belongs {
+      &-project_name {
         width: 30%;
       }
       &-formStatus {
@@ -71,47 +74,79 @@
 </style>
 
 <script>
+  import urlBase from 'tools/common.js'
+
   export default {
+    mounted() {
+      this.onInquire()
+    },
     data() {
       return {
         formItem: {
-          sponsor: '',
-          fromDate: '',
+          initiator: '',
+          created_time: '',
           endDate: '',
-          name: '',
+          deploy_name: '',
           proStatus: '',
           formStatus: '',
-          belongs: ''
+          project_name: ''
         },
+        value1: '',
         columns1: [
           {
             title: '发起人',
-            key: 'sponsor'
+            key: 'initiator',
+            align: 'center'
           },
           {
             title: '发起日期',
-            key: 'fromDate'
+            key: 'created_time',
+            align: 'center'
           },
           {
             title: '部署名称',
-            key: 'name'
+            key: 'deploy_name',
+            align: 'center'
           },
           {
             title: '所属项目',
-            key: 'belongs'
+            key: 'project_name',
+            align: 'center',
+            render: (h, params) => {
+              return h('a', params.row['project_name'])
+            }
           }
         ],
-        data1: [
-          {
-            sponsor: '1',
-            fromDate: '2',
-            name: '3',
-            belongs: '6'
-          }
-        ]
+        data1: []
       }
     },
     computed: {},
-    methods: {}
+    methods: {
+      onInquire() {
+        let url = ''
+        if (this.formItem.initiator) {
+          url = urlBase.apihost + 'deployment/deploy_detail/' + this.formItem.initiator
+        } else if (this.formItem.created_time && this.formItem.endDate) {
+          console.log('created_time', this.formItem.created_time, this.formItem.endDate)
+          url = urlBase.apihost + 'deployment/deploy_time/' + this.formItem.created_time + '/' + this.formItem.endDate
+        } else {
+          url = urlBase.apihost + 'deployment/deployments'
+        }
+        this.$http.get(url).then(data => {
+          console.log('success', data)
+          this.data1 = data.body
+        }, err => {
+          console.log('error', err)
+        })
+
+      },
+      formatCreateData(value) {
+        this.formItem.created_time = value
+      },
+      formatEndData(value) {
+        this.formItem.endDate = value
+      }
+
+    }
   }
 </script>
