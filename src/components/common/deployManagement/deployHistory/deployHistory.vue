@@ -13,11 +13,11 @@
           <Form-item label="发起日期:">
             <Row>
               <Col span="11">
-                <Date-picker type="date" format="yyyy-MM-dd" placeholder="选择日期" @on-change="formatCreateData"></Date-picker>
+                <Date-picker type="datetime" placeholder="选择起始日期" @on-change="formatCreateData"></Date-picker>
               </Col>
               <Col span="2" style="text-align: center">至</Col>
               <Col span="11">
-                <Date-picker type="date" format="yyyy-MM-dd" placeholder="选择日期" @on-change="formatEndData"></Date-picker>
+                <Date-picker type="datetime" placeholder="选择截止日期" @on-change="formatEndData"></Date-picker>
               </Col>
             </Row>
           </Form-item>
@@ -29,7 +29,6 @@
           </Col>
           <Col span="3"></Col>
         </Row>
-
         <Row :gutter="16">
           <Col span="21">
           <div class="inquire-form-project_name">
@@ -74,7 +73,7 @@
 </style>
 
 <script>
-  import urlBase from 'tools/common.js'
+  import baseUrl from 'tools/common.js'
 
   export default {
     mounted() {
@@ -85,13 +84,12 @@
         formItem: {
           initiator: '',
           created_time: '',
-          endDate: '',
+          end_time: '',
           deploy_name: '',
           proStatus: '',
           formStatus: '',
           project_name: ''
         },
-        value1: '',
         columns1: [
           {
             title: '发起人',
@@ -123,16 +121,18 @@
     computed: {},
     methods: {
       onInquire() {
-        let url = ''
-        if (this.formItem.initiator) {
-          url = urlBase.apihost + 'deployment/deploy_detail/' + this.formItem.initiator
-        } else if (this.formItem.created_time && this.formItem.endDate) {
-          console.log('created_time', this.formItem.created_time, this.formItem.endDate)
-          url = urlBase.apihost + 'deployment/deploy_time/' + this.formItem.created_time + '/' + this.formItem.endDate
-        } else {
-          url = urlBase.apihost + 'deployment/deployments'
-        }
-        this.$http.get(url).then(data => {
+        let url = baseUrl.apihost + 'deployment/deployments'
+        let query = {}
+
+        this.formItem.initiator && (query.initiator = this.formItem.initiator)
+        this.formItem.created_time && (query.start_time = this.formItem.created_time)
+        this.formItem.end_time && (query.end_time = this.formItem.end_time)
+        this.formItem.project_name && (query.project_name = this.formItem.project_name)
+        this.formItem.deploy_name && (query.deploy_name = this.formItem.deploy_name)
+
+        this.$http.get(url, {
+          params: query
+        }).then(data => {
           console.log('success', data)
           this.data1 = data.body
         }, err => {
@@ -141,10 +141,11 @@
 
       },
       formatCreateData(value) {
+        console.log(value)
         this.formItem.created_time = value
       },
       formatEndData(value) {
-        this.formItem.endDate = value
+        this.formItem.end_time = value
       }
 
     }
