@@ -25,17 +25,18 @@
                             </Input>
                         </Form-item>
 
-                        <Form-item prop="code" label="验证码">
+                     <!--   <Form-item prop="code" label="验证码">
                             <Row>
                                 <Col span="18">
                                 <Input type="text" v-model="formInline.code" placeholder="">
 
                                 </Input>
                                 </Col>
-                                <Col span="4" offset="1"><img width="30" height="30" src=""/>
+                                <Col span="4" offset="1">
+                                  <img width="30" height="30" src="">
                                 </Col>
                             </Row>
-                        </Form-item>
+                        </Form-item>-->
 
 
                         <Form-item>
@@ -46,7 +47,6 @@
 
                     </Col>
                 </Row>
-
 
     </div>
    </div>
@@ -191,6 +191,7 @@
                                 'password':passWord
 
                             }, {emulateJSON:true} ).then(response=>{
+                        console.log(response);
                                 if (rememberStatus){
                                     console.log("勾选了记住密码，现在开始写入cookie");
                                     setCookie('accountInfo',accountInfo,1440*3);
@@ -203,13 +204,13 @@
                                     this.$Message.success('提交成功!');
                                     this.$router.push({name: 'home'});
                                     userinfo.username=response.body.result.msg.username;
-                                    userinfo.userId=response.body.result.msg.user_id;
+                                    userinfo.user_id=response.body.result.msg.user_id;
                                     console.log(userinfo);
                                 }
 
                                 // 成功回调
                             }, function () {
-                                this.$Message.error('登陆失败!');
+                               /* this.$Message.error('登陆失败!');*/
                                 // 失败回调
                             });
 

@@ -14,7 +14,7 @@
                 <ul>
                     <li>
                         用户：
-                        <span>用户名</span>
+                        <span>{{userInfo.username}}</span>
                     </li>
                     <li>
                         <a href="#">修改密码</a>
@@ -183,14 +183,24 @@
 <script>
     import common from '../../tools/common.js';
 
+    import {userinfo} from '../../tools/user.js';
+
     export default {
+
         data () {
             return {
-
+                // 保存用户名
+               userInfo:{}
             }
         },
-
+        created () {
+           this.getUserInfo();
+        },
         methods: {
+            // 获取用户名
+            getUserInfo () {
+               this.userInfo=userinfo;
+            },
             // 跳转到管理控制台
             goConsole () {
                 this.$router.push({name: 'managementConsole'});
