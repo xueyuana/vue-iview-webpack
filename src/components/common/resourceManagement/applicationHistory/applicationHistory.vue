@@ -83,7 +83,15 @@
 
 </style>
 <script>
-
+    let myjson= {
+        name: '发起人',
+        date: '2017.12.1',
+        resource: '资源',
+        formStatus: '审批中',
+        approveStatus: '审批中',
+        project: '项目'
+    };
+    import common from '../../../../tools/common.js';
     export default {
 
         data () {
@@ -153,16 +161,39 @@
     ],
     queryData: [
         {
-            name: '发起人',
-            date: '2017.12.1',
-            resource: '资源',
-            formStatus: '审批中',
-            approveStatus: '审批中',
-            project: '项目'
+            name: '',
+            date: '',
+            resource: '',
+            formStatus: '',
+            approveStatus: '',
+            project: ''
         }
     ]
     }
+    },
+    beforeCreate(){
+      //取得资源申请列表数据
+        let username="李秀芬";
+       this.queryData= myjson;
+        const url=common.apihost+'resource/';
+        this.$http.post(url, {emulateJSON:true}  ).then(function (response) {
+
+            console.log(response);
+            if(response.body.code===200 && response.body.result.res=="success") {
+
+
+
+
+            }
+
+            // 成功回调
+        }, function () {
+            this.$Message.error('登陆失败!');
+            // 失败回调
+        });
     }
 
+
     }
+
 </script>
