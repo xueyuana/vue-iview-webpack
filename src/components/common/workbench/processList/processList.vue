@@ -45,7 +45,7 @@
                     <p class="title">计算信息：</p>
                     <div class="compute-container">
                         <div class="compute-content">
-                            <div class="item">
+                            <div class="item" style="margin-right: 20px">
                                 <span>实例规格：</span>
                                 <span class="cont-data">{{ item.comCaseSpec }}</span>
                             </div>
@@ -163,11 +163,12 @@
 
 <style scoped>
     .container {
-        width: 860px;
+        width: 100%;
         margin: 20px 30px;
     }
 
     .but-container {
+        width: 95%;
         text-align: right;
 
     }
@@ -184,7 +185,7 @@
 
     .title {
         height: 30px;
-        width: 100%;
+        width: 95%;
         line-height: 30px;
         font-weight: 700;
         font-style: normal;
@@ -195,11 +196,13 @@
     }
 
     .pro-container {
+        width: 95%;
         height: 90px;
         padding: 10px;
     }
 
     .pro-content {
+        width: 98%;
         height: 30px;
         line-height: 30px;
         display: flex;
@@ -229,6 +232,7 @@
     }
 
     .compute-container {
+        width: 97%;
         height: 50px;
         padding: 10px;
     }
@@ -238,7 +242,7 @@
         line-height: 30px;
         display: flex;
         justify-content: space-between;
-        margin: 0 110px 10px 0;
+        margin: 0 50px 10px 0;
     }
 
     .small {
@@ -246,16 +250,10 @@
     }
 
     .source-container {
-        width: 835px;
+        width: 92%;
         margin: 10px;
         padding: 10px;
         border: 1px solid #aaa;
-    }
-
-    .source-but {
-        margin-bottom: 10px;
-        padding-bottom: 10px;
-        border-bottom: 1px dashed #000;
     }
 
     .source-content {
@@ -271,13 +269,13 @@
     }
 
     .advice-cont {
-        width: 835px;
+        width: 95%;
         height: 90px;
         margin: 10px;
     }
 
     .advice-cont textarea {
-        width: 835px;
+        width: 97%;
         height: 90px;
         resize: none;
         padding: 10px;
