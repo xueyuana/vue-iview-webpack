@@ -20,7 +20,7 @@
                                 <div>
                                     <span>所属项目：</span>
                                     <Select style="width: 180px" v-model="jsonname.project">
-                                        <option></option>
+                                        <Option value="应用统筹部"></Option>
                                     </Select>
                                 </div>
 
@@ -170,7 +170,8 @@
                                 <div>
                                     <span>所属项目：</span>
                                     <Select style="width: 180px" v-model="jsonname.project">
-                                        <Option>应用统筹部</Option>
+                                        <Option value="用户测试项目">用户测试项目</Option>
+                                        <Option value="名片测试项目">名片测试项目</Option>
                                     </Select>
                                 </div>
 
@@ -545,7 +546,7 @@ import {userinfo} from '../../../../tools/user.js';
                 resource_name: "",
                 project: "项目名称aaa",
                 department: "syswin",
-                user_name: "李秀芬",
+                user_name: userinfo.username,
                 user_id: userinfo.user_id,
                 domain: "",
                 env: "develop",
