@@ -243,7 +243,7 @@
 </style>
 <script>
 
-
+    import common from '../../../../tools/common.js';
 
     export default {
         data () {
@@ -306,13 +306,13 @@
     methods: {
         handleSubmit() {
             let self=this;
-            newProject=JSON.stringify(self.jsonname);
+            let newjson=JSON.stringify(self.jsonname);
 
             const url=common.apihost+'resource/';
 
            console.log(self.jsonname);
 
-            this.$http.post(url,newProject, {emulateJSON:true}  ).then(function () {
+            this.$http.post(url,newjson, {emulateJSON:true}  ).then(function () {
 
 
                         this.$Message.success('提交成功!');
