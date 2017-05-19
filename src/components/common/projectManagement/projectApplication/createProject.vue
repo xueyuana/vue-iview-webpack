@@ -145,6 +145,11 @@
                                                level_1: this.$store.state.breadcrumbData.level.level_1,
                                                level_2: '项目查询'
                                            });
+                                       }else if(response.body.code===2017) { // 模型已经存在
+                                           self.$Notice.error({
+                                               title: response.body.result.msg,
+                                               desc: ''
+                                           });
                                        }
                                 });
                     }
