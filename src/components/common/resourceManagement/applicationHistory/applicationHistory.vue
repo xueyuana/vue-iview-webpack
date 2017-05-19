@@ -92,6 +92,7 @@
         project: '项目'
     };
     import common from '../../../../tools/common.js';
+    import {userinfo} from '../../../../tools/user.js';
     export default {
 
         data () {
@@ -174,15 +175,15 @@
     },
     beforeCreate(){
       //取得资源申请列表数据
-        let username="李秀芬";
-       this.queryData= myjson;
-        const url=common.apihost+'resource/';
-        this.$http.post(url, {emulateJSON:true}  ).then(function (response) {
+        let userid= userinfo.user_id;
+      console.log(this.queryData)
+        const url=common.apihost+'resource/?user_id='+userid;
+        this.$http.get(url, {emulateJSON:true}  ).then(function (response) {
 
             console.log(response);
             if(response.body.code===200 && response.body.result.res=="success") {
 
-
+                this.queryData=response.body.result.msg
 
 
             }

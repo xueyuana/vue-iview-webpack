@@ -25,7 +25,7 @@
                             </Input>
                         </Form-item>
 
-                        <Form-item prop="code" label="验证码">
+                     <!--   <Form-item prop="code" label="验证码">
                             <Row>
                                 <Col span="18">
                                 <Input type="text" v-model="formInline.code" placeholder="">
@@ -35,7 +35,7 @@
                                 <Col span="4" offset="1"><img width="30" height="30" src=""/>
                                 </Col>
                             </Row>
-                        </Form-item>
+                        </Form-item>-->
 
 
                         <Form-item>
@@ -209,7 +209,7 @@
 
                                 // 成功回调
                             }, function () {
-                                this.$Message.error('登陆失败!');
+                               /* this.$Message.error('登陆失败!');*/
                                 // 失败回调
                             });
 
