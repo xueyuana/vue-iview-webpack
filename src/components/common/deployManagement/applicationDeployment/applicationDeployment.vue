@@ -28,7 +28,7 @@
       <!--项目信息-->
       <div class="apply-content-title">项目信息：</div>
       <Form class="apply-content-form" label-position="right" :label-width="70">
-        <Row :gutter="128">
+        <Row :gutter="160">
           <Col class="apply-content-form-item" span="12">
           <Form-item label="部署名称:">
             <Input v-model="deploy_name"></Input>
@@ -43,14 +43,7 @@
           </Form-item>
           </Col>
         </Row>
-        <Row :gutter="128">
-          <Col class="apply-content-form-item apply-content-form-empty" span="12"></Col>
-          <!--<Col class="apply-content-form-item" span="12" v-show="input3">-->
-          <!--<Form-item label="部署ID:">-->
-            <!--<Input v-model="input5"></Input>-->
-          <!--</Form-item>-->
-          </Col>
-        </Row>
+
       </Form>
 
       <!--数据库-->
@@ -113,9 +106,6 @@
         &-item {
           display: flex;
         }
-        &-empty {
-          height: 60px;
-        }
       }
       &-select {
         margin-top: 10px;
@@ -140,9 +130,6 @@
 
 <script>
   export default {
-    mounted() {
-
-    },
     data() {
       return {
         activeIndex: 0,
@@ -151,12 +138,13 @@
         environment: 'dev',
         deploy_name: '',
         project_name: '',
+        deploy_id: '',
         exec_tag: 'mysql-node1',
         exec_context: '',
         mirror: ''
       }
     },
-    computed: {},
+
     methods: {
       onLink(index) {
         switch (index) {
@@ -209,6 +197,7 @@
             "deploy_name": this.deploy_name
           }).then(res => {
             console.log('success', res)
+            this.$router.push({name: 'deployHistory'})
           }, res => {
             console.log('error', res)
           })
