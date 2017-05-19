@@ -147,6 +147,7 @@
                         ];
                         let newProject={
                             // 暂时设置为用户所填的项目名称  不能重复
+                            user_id:'',
                             name:self.formValidate.project_name,
                             property_list: property_list
                         };
@@ -160,7 +161,7 @@
                                 .then(response=>{ //提交成功
                                        console.log(response);
                                        if(response.body.code===2002) {
-                                           console.log(response.body.result.msg);
+
                                            // 2.0 跳转到项目查询页面
                                            self.$router.push({name: 'pro_applicationHistory'});
 

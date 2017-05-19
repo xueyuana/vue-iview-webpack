@@ -32,7 +32,8 @@
 
                                 </Input>
                                 </Col>
-                                <Col span="4" offset="1"><img width="30" height="30" src=""/>
+                                <Col span="4" offset="1">
+                                  <img width="30" height="30" src="">
                                 </Col>
                             </Row>
                         </Form-item>
@@ -46,7 +47,6 @@
 
                     </Col>
                 </Row>
-
 
     </div>
    </div>
