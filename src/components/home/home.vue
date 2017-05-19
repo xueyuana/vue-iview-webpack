@@ -202,8 +202,18 @@
 
             // 点击项目查询 请求获取项目创建信息
             getProjectInfo () {
-
-
+                let self=this;
+                const url=common.apihost+'iteminfo/iteminfoes/'+"test1";
+                self.$http.get(url)
+                        .then(response => {
+                                console.log(response);
+                                if(response.body.code===2002) { // 请求成功
+                                    //  将项目信息列表 保存到状态池
+                                    let backDatas=response.body.result.res;
+                                    self.$store.commit("getProjectList",backDatas);
+                                    console.log(self.$store.state.projectInfo.projectList);
+                                }
+                             });
             },
 
             // 导航跳转
@@ -220,9 +230,12 @@
                         break;
                     case '12': //项目申请历史
                         this.$router.push({name: 'pro_applicationHistory'});
+                            // 获取项目信息
+                        this.getProjectInfo();
+                            // 保存面包屑导航
                         this.$store.commit('getLevel',{
                             level_1: this.$store.state.breadcrumbData.level.level_1,
-                            level_2: '申请查询'
+                            level_2: '项目查询'
                         });
                         break;
                     case '21': //资源申请
