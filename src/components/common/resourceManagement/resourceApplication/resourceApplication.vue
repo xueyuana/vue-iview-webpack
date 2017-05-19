@@ -1,27 +1,25 @@
 <!--资源申请历史-->
 <template>
     <div class="addres-wrap">
-        <Form ref="json" :model="json"   >
+        <Form ref="jsonname" :model="jsonname">
             <div class="addres-top clearfix">
                 <Button id="returnButton" ><a href="" style="color: #fff">返回</a> </Button>
-                <Button id="submit" type="primary" @click="handleSubmit('json')">提交</Button>
+                <Button id="submit" type="primary" @click="handleSubmit()">提交</Button>
                 <Button id="save">保存到草稿</Button>
             </div>
             <div class="addres-container">
-
                 <Tabs>
                     <Tab-pane label="开发环境" name="develop"><div class="allcontent">
                         <div class="title"><span>项目信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
-
-                                <div><span>资源名称：</span> <Input style="width: 180px" :model="json.resource_name" ></Input></div>
-
+                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="jsonname.resource_name" ></Input></div>
+                                <div>{{jsonname.resource_name}}</div>
                             </div>
                             <div class="container-right">
                                 <div>
                                     <span>所属项目：</span>
-                                    <Select style="width: 180px" v-model="json.project">
+                                    <Select style="width: 180px" v-model="jsonname.project">
                                         <option></option>
                                     </Select>
                                 </div>
@@ -30,7 +28,7 @@
                         </div>
                         <div class="title"><span>域名:</span></div>
                         <div class="container">
-                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="json.domain"></Input>.syswin.com</div>
+                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="jsonname.domain"></Input>.syswin.com</div>
                         </div>
 
                         <div class="title"><span>计算信息:</span></div>
@@ -38,7 +36,7 @@
                             <div class="addres-compute">
                                 <div>
                                     <span>实例名称:</span>
-                                    <Input style="width: 180px" v-model="json.compute_list.ins_name"></Input>
+                                    <Input style="width: 180px" v-model="jsonname.compute_list.ins_name"></Input>
                                 </div>
                                 <div>
                                     <span>实例规格：</span>
@@ -49,7 +47,7 @@
                                 </div>
                                 <div>
                                     <span>镜像：</span>
-                                    <Input style="width: 180px" v-model="json.compute_list.url"></Input>
+                                    <Input style="width: 180px" v-model="jsonname.compute_list.url"></Input>
                                 </div>
 
                             </div>
@@ -62,15 +60,15 @@
                                     <div class="container-left" style="height: 100px">
                                         <div>
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="json.resource_list[0].res_name"></Input>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[0].res_name"></Input>
                                         </div>
                                         <div>
                                             <span>实例数量：</span>
-                                            <Input-number v-model="json.resource_list[0].quantity"></Input-number>
+                                            <Input-number v-model="jsonname.resource_list[0].quantity"></Input-number>
                                         </div>
                                         <div >
                                             <span>存储空间：</span>
-                                            <Input-number v-model="json.resource_list[0].disk"></Input-number>
+                                            <Input-number v-model="jsonname.resource_list[0].disk"></Input-number>
                                         </div>
                                     </div>
                                     <div class="container-right">
@@ -83,7 +81,7 @@
                                         </div>
                                         <div>
                                             <span>实例版本: </span>
-                                            <Select style="width: 180px" v-model="json.resource_list[0].version">
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[0].version">
                                                 <option value="MYSQL5.5">MYSQL5.5</option>
                                                 <option value="MYSQL5.6">MYSQL5.6</option>
                                             </Select>
@@ -94,11 +92,11 @@
                                     <div class="container-left">
                                         <div>
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="json.resource_list[1].res_name"></Input>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[1].res_name"></Input>
                                         </div>
                                         <div>
                                             <span>实例版本：</span>
-                                            <Select style="width: 180px" v-model="json.resource_list[1].version">
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[1].version">
                                                 <option value="Redis2.8">Redis2.8</option>
                                                 <option value="Redis3.0">Redis3.0</option>
                                             </Select>
@@ -118,7 +116,7 @@
                                             <span>实例数量: </span>
                                             <Select style="width: 180px">
 
-                                                <Input-number v-model="json.resource_list[1].quantity"></Input-number>
+                                                <Input-number v-model="jsonname.resource_list[1].quantity"></Input-number>
                                             </Select>
                                         </div>
                                     </div>
@@ -127,15 +125,15 @@
                                     <div class="container-left" style="height:100px;">
                                         <div>
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="json.resource_list[2].res_name"></Input>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[2].res_name"></Input>
                                         </div>
                                         <div>
                                             <span>实例数量：</span>
-                                            <Input-number v-model="json.resource_list[2].quantity" ></Input-number>
+                                            <Input-number v-model="jsonname.resource_list[2].quantity" ></Input-number>
                                         </div>
                                         <div >
                                             <span>存储空间：</span>
-                                            <Input-number v-model="json.resource_list[2].disk"></Input-number>
+                                            <Input-number v-model="jsonname.resource_list[2].disk"></Input-number>
                                         </div>
                                     </div>
                                     <div class="container-right">
@@ -149,7 +147,7 @@
                                         </div>
                                         <div>
                                             <span>实例版本: </span>
-                                            <Select style="width: 180px" v-model="json.resource_list[2].version">
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[2].version">
                                                 <option value="Mongo3.2">Mongo3.2</option>
                                             </Select>
                                         </div>
@@ -245,55 +243,55 @@
 </style>
 <script>
 
-
+    import common from '../../../../tools/common.js';
 
     export default {
         data () {
         return {
-            json: {
-                "resource_name": "",
-                "project": "",
-                "department": "syswin",
-                "user_name": "",
-                "user_id": "",
-                "domain": "",
-                "env": "",
-                "application_status": "notknow",
-                "resource_list": [
+            jsonname: {
+                resource_name: "",
+                project: "",
+                department: "syswin",
+                user_name: "",
+                user_id: "",
+                domain: "",
+                env: "",
+                application_status: "notknow",
+                resource_list: [
                     {
-                        "res_name": "",
-                        "res_type": "mysql",
-                        "cpu": 0,
-                        "mem": 0,
-                        "disk": 0,
-                        "quantity": 0,
-                        "version": ""
+                        res_name: "",
+                        res_type: "mysql",
+                        cpu: 0,
+                        mem: 0,
+                        disk: 0,
+                        quantity: 0,
+                        version: ""
                     },
                     {
-                        "res_name": "",
-                        "res_type": "mongo",
-                        "cpu": 0,
-                        "mem": 0,
-                        "disk": 0,
-                        "quantity": 0,
-                        "version": ""
+                        res_name: "",
+                        res_type: "mongo",
+                        cpu: 0,
+                        mem: 0,
+                        disk: 0,
+                        quantity: 0,
+                        version: ""
                     } ,
                     {
-                        "res_name": "",
-                        "res_type": "redis",
-                        "cpu": 0,
-                        "mem": 0,
-                        "disk": 0,
-                        "quantity": 0,
-                        "version": ""
+                        res_name: "",
+                        res_type: "redis",
+                        cpu: 0,
+                        mem: 0,
+                        disk: 0,
+                        quantity: 0,
+                        version: ""
                     }
                 ],
-                "compute_list": [
+                compute_list: [
                     {
-                        "ins_name": "",
-                        "cpu": 0,
-                        "mem": 0,
-                        "url": "0"
+                        ins_name: "",
+                        cpu: 0,
+                        mem: 0,
+                        url: "0"
                     }
                 ]
             },
@@ -306,18 +304,15 @@
         }
     },
     methods: {
-        handleSubmit(name) {
+        handleSubmit() {
+            let self=this;
+            let newjson=JSON.stringify(self.jsonname);
 
-            console.log(this.json.resource_name);
-            let that=this;
-            let data=this.json;
-            this.$http.post(
-                    'http://172.28.11.111:5000/api/resource/',
-                    // 请求体重发送数据给服务端
-                    {
-                        data
+            const url=common.apihost+'resource/';
 
-                    }).then(function () {
+           console.log(self.jsonname);
+
+            this.$http.post(url,newjson, {emulateJSON:true}  ).then(function () {
 
 
                         this.$Message.success('提交成功!');
