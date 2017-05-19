@@ -208,7 +208,7 @@
                         <div class="container database">
                             <Tabs>
                                 <Tab-pane label="MYSQL" name="mysql">
-                                    <div class="container-left" >
+                                    <div >
                                         <div>
                                             <span>实例名称：</span>
                                             <Input style="width: 180px" v-model="jsonname.resource_list[0].res_name"></Input>
@@ -222,19 +222,24 @@
                                             <Input-number v-model="jsonname.resource_list[0].disk"></Input-number>
                                         </div>
                                     </div>
-                                    <div class="container-right">
+                                    <div >
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px" v-model="jsonname.resource_list[0].cpu" >
-                                                <option value="2C,4G">2C 4G</option>
-                                                <option value="4C,8G">4C 8G</option>
+                                            <Select style="width: 180px;height:100px" v-model="jsonname.resource_list[0].cpu" >
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="4C,8G">4C 8G</Option>
                                             </Select>
                                         </div>
-                                        <div>
+                                        <div style="height: 150px">
                                             <span>实例版本: </span>
-                                            <Select style="width: 180px" v-model="jsonname.resource_list[0].version">
-                                                <option value="MYSQL5.5">MYSQL5.5</option>
-                                                <option value="MYSQL5.6">MYSQL5.6</option>
+                                            <Select style="width: 180px;height:100px" v-model="jsonname.resource_list[0].version">
+                                                <Option value="MYSQL5.5">MYSQL5.5</Option>
+                                                <Option value="MYSQL5.6">MYSQL5.6</Option>
+                                            </Select>
+                                            <Select v-model="jsonname.resource_list[0].version" style="width:200px">
+                                                <Option value="beijing">北京市</Option>
+                                                <Option value="shanghai" disabled>上海市</Option>
+                                                <Option value="shenzhen">深圳市</Option>
                                             </Select>
                                         </div>
                                     </div>
@@ -531,9 +536,8 @@
 
 </style>
 <script>
-const userid="1231231";
     import common from '../../../../tools/common.js';
-
+import {userinfo} from '../../../../tools/user.js';
     export default {
         data () {
         return {
@@ -542,7 +546,7 @@ const userid="1231231";
                 project: "项目名称aaa",
                 department: "syswin",
                 user_name: "李秀芬",
-                user_id: userinfo.userId,
+                user_id: userinfo.user_id,
                 domain: "",
                 env: "develop",
                 application_status: "待提交",
