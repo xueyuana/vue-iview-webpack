@@ -161,12 +161,12 @@
     ],
     queryData: [
         {
-            name: 'user',
-            date: '2017-05-03',
-            resource: 's',
-            formStatus: 'ww',
-            approveStatus: 'ww',
-            project: 'ww',
+            name: '',
+            date: '',
+            resource: '',
+            formStatus: '',
+            approveStatus: '',
+            project: '',
             id:''
         }
     ]

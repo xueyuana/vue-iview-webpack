@@ -4,8 +4,8 @@
         <Form ref="jsonname" :model="jsonname">
             <div class="addres-top clearfix">
                 <Button id="returnButton" ><a href="" style="color: #fff">返回</a> </Button>
-                <Button id="submit" type="primary" @click="handleSubmit()">提交</Button>
-                <Button id="save"  @click="save()">保存到草稿</Button>
+                <Button id="submit" type="primary" @click="save()">提交</Button>
+                <Button id="save"  @click="handleSubmit()" >保存到草稿</Button>
             </div>
             <div class="addres-container">
                 <Tabs>
@@ -14,7 +14,7 @@
                         <div class="container clearfix">
                             <div class="container-left">
                                 <div><span>资源名称：</span> <Input style="width: 180px" v-model="jsonname.resource_name" ></Input></div>
-                                <div>{{jsonname.resource_name}}</div>
+
                             </div>
                             <div class="container-right">
                                 <div>
@@ -518,6 +518,7 @@
     .container-right {
         float: right;
         margin-right: 180px;
+        height: 100px;
     }
 
 
@@ -530,7 +531,7 @@
 
 </style>
 <script>
-
+const userid="1231231";
     import common from '../../../../tools/common.js';
 
     export default {
@@ -541,7 +542,7 @@
                 project: "项目名称aaa",
                 department: "syswin",
                 user_name: "李秀芬",
-                user_id: "1231231",
+                user_id: window.userId,
                 domain: "",
                 env: "develop",
                 application_status: "待提交",

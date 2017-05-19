@@ -23,7 +23,7 @@ Vue.use(VueResource);
 
 //导入初始化的css
 import '../static/css/reset.css';
-
+import {userinfo} from './tools/user.js';
 //导入组件
 import login from './components/login/login.vue';
 import home from './components/home/home.vue';

@@ -201,6 +201,9 @@
                                 if(response.body.code===200){
                                     this.$Message.success('提交成功!');
                                     this.$router.push({name: 'home'});
+                                    userinfo.username=response.body.result.msg.username;
+                                    userinfo.userId=response.body.result.msg.user_id;
+                                    console.log(userinfo);
                                 }
 
                                 // 成功回调
