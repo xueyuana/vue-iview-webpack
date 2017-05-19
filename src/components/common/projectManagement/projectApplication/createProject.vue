@@ -111,7 +111,7 @@
                             }
                         ];
                         let newProject={
-                            // 暂时设置为用户所填的项目名称
+                            // 暂时设置为用户所填的项目名称  不能重复
                             name:self.formValidate.project_name,
                             property_list: property_list
                         };
