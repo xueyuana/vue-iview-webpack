@@ -4,7 +4,7 @@
         <Form ref="jsonname" :model="jsonname">
             <div class="addres-top clearfix">
                 <Button id="returnButton" ><a href="" style="color: #fff">返回</a> </Button>
-                <Button id="submit" type="primary" @click="save()">提交</Button>
+                <Button id="submit" type="primary">提交</Button>
                 <Button id="save"  @click="handleSubmit()" >保存到草稿</Button>
             </div>
             <div class="addres-container">
@@ -76,15 +76,15 @@
                                         <div>
                                             <span>实例规格：</span>
                                             <Select style="width: 180px" >
-                                                <option value="2C,4G">2C 4G</option>
-                                                <option value="4C,8G">4C 8G</option>
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="4C,8G">4C 8G</Option>
                                             </Select>
                                         </div>
                                         <div>
                                             <span>实例版本: </span>
                                             <Select style="width: 180px" v-model="jsonname.resource_list[0].version">
-                                                <option value="MYSQL5.5">MYSQL5.5</option>
-                                                <option value="MYSQL5.6">MYSQL5.6</option>
+                                                <Option value="MYSQL5.5">MYSQL5.5</Option>
+                                                <Option value="MYSQL5.6">MYSQL5.6</Option>
                                             </Select>
                                         </div>
                                     </div>
@@ -170,7 +170,7 @@
                                 <div>
                                     <span>所属项目：</span>
                                     <Select style="width: 180px" v-model="jsonname.project">
-                                        <option></option>
+                                        <Option>应用统筹部</Option>
                                     </Select>
                                 </div>
 
@@ -612,13 +612,10 @@ import {userinfo} from '../../../../tools/user.js';
                     this.$Message.success('提交成功!');
                     // 2.0 跳转到资源申请历史页面
                     self.$router.push({name: 'res_applicationHistory'});
-
-
                 }
-
-                        // 成功回调
+                 // 成功回调
                     }, function () {
-                        this.$Message.error('登陆失败!');
+                        /*this.$Message.error('登陆失败!');*/
                         // 失败回调
                     });
 
