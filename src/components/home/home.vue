@@ -211,10 +211,10 @@
                                     //  将项目信息列表 保存到状态池
                                     let backDatas=response.body.result.res;
                                     // 处理返回值
-                                    let newColumn=[];
                                     let newDatas=[];
                                     for (let i=0;i<backDatas.length;i++) {
-                                       let backDataObj=backDatas[i];
+                                        let newColumn=[];
+                                        let backDataObj=backDatas[i];
                                         newColumn.push(backDataObj.column[0]); // 项目名称
                                         newColumn.push(backDataObj.column[5]); // 创建日期
                                         newColumn.push(backDataObj.column[4]); // 创建人
