@@ -542,7 +542,7 @@ const userid="1231231";
                 project: "项目名称aaa",
                 department: "syswin",
                 user_name: "李秀芬",
-                user_id: window.userId,
+                user_id: userinfo.userId,
                 domain: "",
                 env: "develop",
                 application_status: "待提交",

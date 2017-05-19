@@ -109,6 +109,7 @@
 
 <script>
     import common from '../../tools/common.js';
+    import {userinfo} from '../../tools/user.js';
     // 设置cookie
     function setCookie (c_name,value,expiremMinutes){
         var exdate = new Date();

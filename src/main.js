@@ -23,7 +23,7 @@ Vue.use(VueResource);
 
 //导入初始化的css
 import '../static/css/reset.css';
-import {userinfo} from './tools/user.js';
+
 //导入组件
 import login from './components/login/login.vue';
 import home from './components/home/home.vue';
@@ -95,8 +95,6 @@ new Vue({
     el: '#app',
     // 使用状态池
     store,
-    //导入全局user
-    userinfo,
     //在Vue实例上使用路由
     router:vueRouters,
     //render:c=>c(App)//使用webpack,渲染App.vue这个根组件
