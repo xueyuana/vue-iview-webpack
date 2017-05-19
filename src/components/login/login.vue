@@ -186,10 +186,9 @@
                     this.$http.post(
                             url,
                             {
-                               /* 'username':userName,
-                                'password':passWord*/
-                              'id':110,
-                               'password' :'feng'
+                                'id':userName,
+                                'password':passWord
+
                             }, {emulateJSON:true} ).then(function () {
                                 if (rememberStatus){
                                     console.log("勾选了记住密码，现在开始写入cookie");
@@ -199,8 +198,11 @@
                                     console.log("没有勾选记住密码，现在开始删除账号cookie");
                                     delCookie('accountInfo');
                                 }
+                                if(response.body.code===200){
+                                    this.$Message.success('提交成功!');
+                                    this.$router.push({name: 'home'});
+                                }
 
-                                this.$Message.success('提交成功!');
                                 // 成功回调
                             }, function () {
                                 this.$Message.error('登陆失败!');
