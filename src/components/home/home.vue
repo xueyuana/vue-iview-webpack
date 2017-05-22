@@ -247,23 +247,23 @@
             // 导航跳转
             go (name) {
                 switch (name){
-                    case '11': //项目申请
+                    case '11': //项目创建
                             // 跳转
                         this.$router.push({name: 'projectApplication'});
                             // 更改面包屑导航的值
                         this.$store.commit('getLevel',{
                             level_1: this.$store.state.breadcrumbData.level.level_1,
-                            level_2: '创建项目'
+                            level_2: '创建部署单元'
                         });
                         break;
-                    case '12': //项目申请历史
+                    case '12': //项目创建历史
                         this.$router.push({name: 'pro_applicationHistory'});
                             // 获取项目信息
                         this.getProjectInfo();
                             // 保存面包屑导航
                         this.$store.commit('getLevel',{
                             level_1: this.$store.state.breadcrumbData.level.level_1,
-                            level_2: '项目查询'
+                            level_2: '部署单元查询'
                         });
                         break;
                     case '21': //资源申请
