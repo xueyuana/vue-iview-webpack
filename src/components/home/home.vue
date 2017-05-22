@@ -18,7 +18,7 @@
                     </li>
                     <li class="department">
                         所属部门：
-                        <span></span>
+                        <span>{{userInfo.department}}</span>
                     </li>
                     <li>
                         <a href="#">修改密码</a>

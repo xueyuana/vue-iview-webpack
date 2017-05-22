@@ -205,6 +205,7 @@
                                     this.$router.push({name: 'home'});
                                     userinfo.username=response.body.result.msg.username;
                                     userinfo.user_id=response.body.result.msg.user_id;
+                                    userinfo.department=response.body.result.msg.department;
                                     console.log(userinfo);
                                 }
 

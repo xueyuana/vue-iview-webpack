@@ -74,7 +74,6 @@
                         <td>{{data.item_name}}</td>
                         <td>2017-5-22</td>
                         <td>{{data.user}}</td>
-                        <td>{{data.user}}</td>
                         <td>{{data.item_code}}</td>
                         <td>{{data.item_depart}}</td>
                     </tr>
