@@ -63,19 +63,35 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="data in $store.state.projectInfo.projectList" :key="data">
-                        <td v-for="columnObj in data.column">{{columnObj.value}}</td>
-                        <!--<td>-->
-                            <!--<a href="#"  style="text-decoration:underline">{{data.project_name}}</a>-->
+                    <tr v-for="(data,trIndex) in $store.state.projectInfo.projectList" :key="data">
+                        <!--<td>{{trIndex+1}}</td>-->
+                        <!--<td v-for="(columnObj,index) in data.column">-->
+                            <!--<a href="#"  style="text-decoration:underline" v-if="index==0">{{columnObj.value}}</a>-->
+                            <!--<span v-else>{{columnObj.value}}</span>-->
                         <!--</td>-->
-                        <!--<td>{{data.create_date}}</td>-->
-                        <!--<td>{{data.creator}}</td>-->
-                        <!--<td>{{data.project_code}}</td>-->
-                        <!--<td>{{data.department}}</td>-->
+
+                        <td>{{trIndex+1}}</td>
+                        <td>{{data.item_name}}</td>
+                        <td>2017-5-22</td>
+                        <td>{{data.user}}</td>
+                        <td>{{data.item_code}}</td>
+                        <td>{{data.item_depart}}</td>
                     </tr>
                 </tbody>
 
             </table>
+            <div style="margin: 10px;overflow: hidden">
+                <div style="float: right;">
+                    <Page
+                            :total="$store.state.projectInfo.projectList.length"
+                            :page-size="10"
+                            :current="1"
+                            show-sizer
+                            @on-change="changePage"
+                            @on-page-size-change="changePageSize"
+                    ></Page>
+                </div>
+            </div>
         </div>
     </div>
   </div>
@@ -144,6 +160,10 @@
                 // 表格数据
                 columns: [
                     {
+                        title: '编号',
+                        key: 'identifier'
+                    },
+                    {
                         title: '项目名称',
                         key: 'project_name'
                     },
@@ -204,7 +224,19 @@
             },
             handleReset (name) {
                 this.$refs[name].resetFields();
+            },
+
+            //实现分页  改变后的页码
+            changePage (page) {
+                console.log(page);
+            },
+
+            // 返回切换后的每页条数
+            changePageSize (pageSize) {
+               console.log(pageSize);
             }
+
+
         }
     }
 </script>
