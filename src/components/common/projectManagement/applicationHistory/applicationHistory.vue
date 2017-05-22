@@ -64,7 +64,12 @@
                 </thead>
                 <tbody>
                     <tr v-for="data in $store.state.projectInfo.projectList" :key="data">
-                        <td v-for="columnObj in data.column">{{columnObj.value}}</td>
+                        <!--<td v-for="columnObj in data.column">{{columnObj.value}}</td>-->
+                        <td v-for="(columnObj,index) in data.column">
+                            <a href="#"  style="text-decoration:underline" v-if="index==0">{{columnObj.value}}</a>
+                            <span v-else>{{columnObj.value}}</span>
+                        </td>
+
                         <!--<td>-->
                             <!--<a href="#"  style="text-decoration:underline">{{data.project_name}}</a>-->
                         <!--</td>-->

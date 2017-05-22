@@ -12,9 +12,13 @@
             </div>
             <div class="user-info fr">
                 <ul>
-                    <li>
+                    <li class="username">
                         用户：
                         <span>{{userInfo.username}}</span>
+                    </li>
+                    <li class="department">
+                        所属部门：
+                        <span></span>
                     </li>
                     <li>
                         <a href="#">修改密码</a>
