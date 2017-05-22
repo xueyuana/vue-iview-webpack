@@ -83,14 +83,7 @@
 
 </style>
 <script>
-    let myjson= {
-        name: '发起人',
-        date: '2017.12.1',
-        resource: '资源',
-        formStatus: '审批中',
-        approveStatus: '审批中',
-        project: '项目'
-    };
+
     import common from '../../../../tools/common.js';
     import {userinfo} from '../../../../tools/user.js';
     export default {
