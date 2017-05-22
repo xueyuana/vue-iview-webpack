@@ -68,7 +68,7 @@ var vueRouters = new VueRouter({
                 {name:'projectApplication',path:'/project_application',component:projectApplication},
                 {name:'pro_applicationHistory',path:'/pro_application_history',component:pro_applicationHistory},
                 // 资源管理
-                {name:'resourceApplication',path:'/resource_application',component:resourceApplication},
+                {name:'resourceApplication',path:'/resource_application',query: { id: 'ss' },component:resourceApplication},
                 {name:'res_applicationHistory',path:'/res_application_history',component:res_applicationHistory},
                 // 部署管理
                 {name:'applicationDeployment',path:'/application_deployment',component:applicationDeployment},

@@ -145,23 +145,24 @@
                         },
                         on: {
                             click: () => {
-                            console.log('点击了')
+                            this.gotoEdit(params.index);
+
                     }
             }
-    },'查看')
+    },'编辑')
     ])
     }
     }
     ],
     queryData: [
         {
-            name: '',
-            date: '',
-            resource: '',
-            formStatus: '',
-            approveStatus: '',
-            project: '',
-            id:''
+            name: 'sdfsd',
+            date: 'sdfsf',
+            resource: 'sdfsf',
+            formStatus: 'sdfdsf',
+            approveStatus: '流程不存在',
+            project: 'sdfsf',
+            id:'123'
         }
     ]
     }
@@ -186,7 +187,15 @@
             this.$Message.error('登陆失败!');
             // 失败回调
         });
+    },
+
+    methods:{
+        gotoEdit(index){
+            console.log(this.queryData[index].id);
+            this.$router.push({name: 'resourceApplication',query: { id:  this.queryData[index].id }});
+        }
     }
+
 
 
     }
