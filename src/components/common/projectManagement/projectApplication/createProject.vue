@@ -121,38 +121,38 @@
                 self.$refs[name].validate((valid) => {
                     if (valid) {
                         // 1.0 将表单数据提交到后台
-                        let property_list=[
-                            {
-                                type: "string",
-                                name: "项目名称",
-                                value: self.formValidate.project_name
-                            },
-                            {
-                                type: "string",
-                                name: "项目编码",
-                                value: self.formValidate.project_code
-                            },
-                            {
-                                type: "string",
-                                name: "归属部门",
-                                value: "运维部"
-                            },
-                            {
-                                type: "string",
-                                name: "项目描述",
-                                value: self.formValidate.project_desc
-                            },
-                            {
-                                type: "string",
-                                name: "创建人",
-                                value: userinfo.username
-                            }
-                        ];
-                        let newProject={
-                            // 暂时设置为用户所填的项目名称  不能重复
-                            name:self.formValidate.project_name,
-                            property_list: property_list
-                        };
+//                        let property_list=[
+//                            {
+//                                type: "string",
+//                                name: "项目名称",
+//                                value: self.formValidate.project_name
+//                            },
+//                            {
+//                                type: "string",
+//                                name: "项目编码",
+//                                value: self.formValidate.project_code
+//                            },
+//                            {
+//                                type: "string",
+//                                name: "归属部门",
+//                                value: "运维部"
+//                            },
+//                            {
+//                                type: "string",
+//                                name: "项目描述",
+//                                value: self.formValidate.project_desc
+//                            },
+//                            {
+//                                type: "string",
+//                                name: "创建人",
+//                                value: userinfo.username
+//                            }
+//                        ];
+//                        let newProject={
+//                            // 暂时设置为用户所填的项目名称  不能重复
+//                            name:self.formValidate.project_name,
+//                            property_list: property_list
+//                        };
 
 //                        let newProject={
 //                            // 暂时设置为用户所填的项目名称  不能重复
@@ -163,6 +163,16 @@
 //                            item_department  : "应用统筹部",
 //                            item_description : self.formValidate.project_desc
 //                        };
+
+                        let newProject={
+                            // 暂时设置为用户所填的项目名称  不能重复
+                            user_id : '147768',
+                            user_name : '母红英',
+                            item_name : self.formValidate.project_name,
+                            item_code : self.formValidate.project_code,
+                            item_department  : "应用统筹部",
+                            item_description : self.formValidate.project_desc
+                        };
 
                         newProject=JSON.stringify(newProject);
                         console.log(newProject);
@@ -190,7 +200,7 @@
                                                // 3.0.3  修改面包屑导航数据
                                            self.$store.commit('getLevel',{
                                                level_1: this.$store.state.breadcrumbData.level.level_1,
-                                               level_2: '项目查询'
+                                               level_2: '部署单元查询'
                                            });
                                        }else if(response.body.code===2017) { // 模型已经存在
                                            self.$Notice.error({
