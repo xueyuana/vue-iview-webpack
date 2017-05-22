@@ -208,27 +208,33 @@
         },
 
         methods: {
+            // 提交删选条件
             handleSubmit (name) {
                 console.log(this.formValidate);
-//              
+//
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        const url=common.apihost+'iteminfo/iteminfoes/'+"test1";
-                        self.$http.get(url)
+                        const url=common.apihost+'iteminfo/iteminfoes/';
+//                     
+                        let query={
+                            user_name: this.formValidate.creator,
+                            start_time: this.formValidate.create_date_begin,
+                            end_time: this.formValidate.create_date_end,
+                            item_name: this.formValidate.project_name,
+                            depart: this.formValidate.department,
+                            item_code: this.formValidate.project_code
+                        };
+                        this.$http.get(url,{params:query})
                                 .then(response => {
-                            console.log(response);
-                        if(response.body.code===200) { // 请求成功
-                            //  将项目信息列表 保存到状态池
-                            let backDatas=response.body.result.res;
-                            self.$store.commit("getProjectList",backDatas);
-                            console.log(self.$store.state.projectInfo.projectList);
-                        }
-                    });
-                        this.$Message.success('提交成功!');
-                    } else {
-                        this.$Message.error('表单验证失败!');
-            }
-            })
+                                    console.log(response);
+                                    if(response.body.code===200) { // 请求成功
+                                        //  将项目信息列表 保存到状态池
+                                        let backDatas=response.body.result.res;
+
+                                    }
+                                });
+                    }
+                });
             },
             handleReset (name) {
                 this.$refs[name].resetFields();
