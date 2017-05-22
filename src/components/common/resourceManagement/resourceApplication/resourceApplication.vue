@@ -297,8 +297,8 @@ import {userinfo} from '../../../../tools/user.js';
 
         console.log(this.$route.query.id);
        if(this.$route.query.id){
+
           
-           this.jsonname= msg;
            console.log( this.jsonname.resource_name);
            const url=common.apihost+'resource/'+this.$route.query.id;
            this.$http.get(url).then(function (response) {
