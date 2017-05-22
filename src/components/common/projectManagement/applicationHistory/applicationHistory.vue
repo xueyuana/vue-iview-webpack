@@ -7,7 +7,7 @@
                     <Row>
                         <Col span="6">
                             <Form-item label="创建人" prop="creator">
-                                <Input v-model="formValidate.creator"></Input>
+                                <Input v-model="formValidate.creator" placeholder="请输入"></Input>
                             </Form-item>
                             <Form-item label="归属部门" prop="department">
                                 <Select v-model="formValidate.department" placeholder="请选择归属部门">
@@ -35,12 +35,12 @@
                             </Form-item>
 
                             <Form-item label="项目编号" prop="project_code">
-                                <Input v-model="formValidate.project_code"></Input>
+                                <Input v-model="formValidate.project_code" placeholder="请输入"></Input>
                             </Form-item>
                         </Col>
                         <Col span="6">
                             <Form-item label="项目名称" prop="project_name">
-                                <Input v-model="formValidate.project_name"></Input>
+                                <Input v-model="formValidate.project_name" placeholder="请输入"></Input>
                             </Form-item>
                         </Col>
                         <Col span="4">
@@ -64,12 +64,6 @@
                 </thead>
                 <tbody>
                     <tr v-for="(data,trIndex) in $store.state.projectInfo.projectList" :key="data">
-                        <!--<td>{{trIndex+1}}</td>-->
-                        <!--<td v-for="(columnObj,index) in data.column">-->
-                            <!--<a href="#"  style="text-decoration:underline" v-if="index==0">{{columnObj.value}}</a>-->
-                            <!--<span v-else>{{columnObj.value}}</span>-->
-                        <!--</td>-->
-
                         <td>{{trIndex+1}}</td>
                         <td>{{data.item_name}}</td>
                         <td>{{data.create_date}}</td>
@@ -183,31 +177,31 @@
                         title: '归属部门',
                         key: 'department'
                     }
-                ],
-                datas: [
-
-                    {
-                        project_name: '项目一',
-                        create_date: '2017-5-18',
-                        creator:'xxx',
-                        project_code: '00001',
-                        department:'引用统筹部'
-                    },
-                    {
-                        project_name: '项目二',
-                        create_date: '2017-5-18',
-                        creator:'xxx',
-                        project_code: '00001',
-                        department:'引用统筹部'
-                    },
-                    {
-                        project_name: '项目三',
-                        create_date: '2017-5-18',
-                        creator:'xxx',
-                        project_code: '00001',
-                        department:'引用统筹部'
-                    }
                 ]
+//                datas: [
+//
+//                    {
+//                        project_name: '项目一',
+//                        create_date: '2017-5-18',
+//                        creator:'xxx',
+//                        project_code: '00001',
+//                        department:'引用统筹部'
+//                    },
+//                    {
+//                        project_name: '项目二',
+//                        create_date: '2017-5-18',
+//                        creator:'xxx',
+//                        project_code: '00001',
+//                        department:'引用统筹部'
+//                    },
+//                    {
+//                        project_name: '项目三',
+//                        create_date: '2017-5-18',
+//                        creator:'xxx',
+//                        project_code: '00001',
+//                        department:'引用统筹部'
+//                    }
+//                ]
             }
 
         },
