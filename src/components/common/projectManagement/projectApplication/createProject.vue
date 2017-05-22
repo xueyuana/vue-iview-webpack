@@ -165,11 +165,11 @@
 //                        };
 
                         let newProject={
-                            user_id : '147768',
-                            user_name : '母红英',
+                            user_id : userinfo.user_id ,
+                            user_name : userinfo.username,
                             item_name : self.formValidate.project_name,
                             item_code : self.formValidate.project_code,
-                            item_department  : "应用统筹部",
+                            item_department  : userinfo.department,
                             item_description : self.formValidate.project_desc
                         };
 
