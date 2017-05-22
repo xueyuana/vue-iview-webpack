@@ -121,6 +121,7 @@
 
 </style>
 <script>
+    import common from '../../../../tools/common.js';
     export default {
         data () {
             return {
@@ -208,8 +209,21 @@
 
         methods: {
             handleSubmit (name) {
+                console.log(this.formValidate);
+//              
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        const url=common.apihost+'iteminfo/iteminfoes/'+"test1";
+                        self.$http.get(url)
+                                .then(response => {
+                            console.log(response);
+                        if(response.body.code===200) { // 请求成功
+                            //  将项目信息列表 保存到状态池
+                            let backDatas=response.body.result.res;
+                            self.$store.commit("getProjectList",backDatas);
+                            console.log(self.$store.state.projectInfo.projectList);
+                        }
+                    });
                         this.$Message.success('提交成功!');
                     } else {
                         this.$Message.error('表单验证失败!');
