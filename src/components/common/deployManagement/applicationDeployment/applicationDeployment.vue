@@ -37,7 +37,7 @@
           <Col class="apply-content-form-item" span="12">
           <Form-item label="所属项目:">
             <Select class="apply-content-form-select" v-model="project_name" placeholder="请选择">
-              <Option value="名片测试项目">用户测试项目</Option>
+              <Option value="用户测试项目">用户测试项目</Option>
               <Option value="名片测试项目">名片测试项目</Option>
             </Select>
           </Form-item>

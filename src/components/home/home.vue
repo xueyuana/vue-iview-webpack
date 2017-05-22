@@ -37,10 +37,10 @@
                             </div>
                             <Submenu name="1">
                                 <template slot="title">
-                                    项目管理
+                                    部署单元管理
                                 </template>
-                                <Menu-item name="11">创建项目</Menu-item>
-                                <Menu-item name="12">项目查询</Menu-item>
+                                <Menu-item name="11">创建部署单元</Menu-item>
+                                <Menu-item name="12">部署单元查询</Menu-item>
                             </Submenu>
                             <Submenu name="2">
                                 <template slot="title">
