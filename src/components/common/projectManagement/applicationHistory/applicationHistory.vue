@@ -64,11 +64,19 @@
                 </thead>
                 <tbody>
                     <tr v-for="(data,trIndex) in $store.state.projectInfo.projectList" :key="data">
+                        <!--<td>{{trIndex+1}}</td>-->
+                        <!--<td v-for="(columnObj,index) in data.column">-->
+                            <!--<a href="#"  style="text-decoration:underline" v-if="index==0">{{columnObj.value}}</a>-->
+                            <!--<span v-else>{{columnObj.value}}</span>-->
+                        <!--</td>-->
+
                         <td>{{trIndex+1}}</td>
-                        <td v-for="(columnObj,index) in data.column">
-                            <a href="#"  style="text-decoration:underline" v-if="index==0">{{columnObj.value}}</a>
-                            <span v-else>{{columnObj.value}}</span>
-                        </td>
+                        <td>{{data.item_name}}</td>
+                        <td>2017-5-22</td>
+                        <td>{{data.user}}</td>
+                        <td>{{data.user}}</td>
+                        <td>{{data.item_code}}</td>
+                        <td>{{data.item_depart}}</td>
                     </tr>
                 </tbody>
 

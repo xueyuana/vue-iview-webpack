@@ -165,7 +165,6 @@
 //                        };
 
                         let newProject={
-                            // 暂时设置为用户所填的项目名称  不能重复
                             user_id : '147768',
                             user_name : '母红英',
                             item_name : self.formValidate.project_name,
