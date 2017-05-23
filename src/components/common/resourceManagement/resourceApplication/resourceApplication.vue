@@ -297,12 +297,9 @@ import {userinfo} from '../../../../tools/user.js';
 
         console.log(this.$route.query.id);
        if(this.$route.query.id){
-           console.log( this.jsonname.resource_name);
+          
            const url=common.apihost+'resource/'+this.$route.query.id;
-           this.$http.get(url,{
-                       params: params
-                   },
-                   {emulateJSON: true}).then(function (response) {
+           this.$http.get(url,{emulateJSON: true}).then(function (response) {
                console.log("response:"+response);
 
                if(response.body.code===200 && response.body.res=="success") {
