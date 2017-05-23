@@ -1,45 +1,55 @@
 <template>
     <div>
     <div class="proMain clearfix">
-        <div class="proCard">
-            <div class="proCardTitle">待办事项</div>
-            <div class="proCardContent">
-                <ul>
-                    <li @click="goResourceHistory">
-                        <span class="name">待审批</span>
-                        <span class="number fr">2</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="proButton">
-            <div class="proButtons">
-                <div @click="goCreateProject">
-                    <div class="content">创建部署单元</div>
-                    <div class="title">
-                        <Icon type="android-add"></Icon>
-                    </div>
-                </div>
-            </div>
-
-            <div class="proButtons">
-                <div @click="goResourceApp">
-                    <div class="content">资源申请</div>
-                    <div class="title">
-                        <Icon type="android-add"></Icon>
-                    </div>
-                </div>
-            </div>
-            <div class="proButtons">
-                <div @click="goApplcationDeploy">
-                    <div class="content">应用部署</div>
-                    <div class="title">
-                        <Icon type="android-add"></Icon>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Row :gutter="64">
+            <Col span="9">
+                  <div class="proCard">
+                        <div class="proCardTitle">待办事项</div>
+                        <div class="proCardContent">
+                            <ul>
+                                <li @click="goResourceHistory">
+                                    <span class="name">待审批</span>
+                                    <span class="number fr">2</span>
+                                </li>
+                            </ul>
+                        </div>
+                 </div>
+            </Col>
+            <Col span="10" offset="5">
+               <Row :gutter="24">
+                   <Col span="8">
+                       <div class="proButtons">
+                       <div @click="goCreateProject">
+                           <div class="content">创建部署单元</div>
+                           <div class="title">
+                               <Icon type="android-add"></Icon>
+                           </div>
+                       </div>
+                   </div>
+                   </Col>
+                   <Col span="8">
+                       <div class="proButtons">
+                       <div @click="goResourceApp">
+                           <div class="content">资源申请</div>
+                           <div class="title">
+                               <Icon type="android-add"></Icon>
+                           </div>
+                       </div>
+                   </div>
+                   </Col>
+                   <Col span="8">
+                      <div class="proButtons">
+                       <div @click="goApplcationDeploy">
+                           <div class="content">应用部署</div>
+                           <div class="title">
+                               <Icon type="android-add"></Icon>
+                           </div>
+                       </div>
+                   </div>
+                   </Col>
+               </Row>
+            </Col>
+        </Row>
     </div>
 
     <div class="survey">
@@ -204,19 +214,19 @@
     }
 
     .proMain {
-        width: 90%;
+        /*width: 90%;*/
     }
 
     .proCard {
-        width: 250px;
-        float: left;
+        /*width: 250px;*/
+        /*float: left;*/
         border: 1px solid #39f;
         -webkit-border-radius: 5px;
         border-radius: 5px;
         -moz-border-radius: 5px;
         background-clip: padding-box;
         height: 120px;
-        margin-right: 30px;
+        /*margin-right: 30px;*/
 
     }
 
@@ -272,10 +282,10 @@
     }
 
     .proButtons {
-        width: 120px;
-        float: left;
+        /*width: 120px;*/
+        /*float: left;*/
         height: 120px;
-        margin-right: 30px;
+        /*margin-right: 30px;*/
 
     }
     .proButtons>div {
