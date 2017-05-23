@@ -37,7 +37,7 @@
           </Col>
           <Col class="apply-content-form-item" span="12">
           <Form-item label="所属部署单元:">
-            <Select class="apply-content-form-select" v-model="project_name" placeholder="请选择">
+            <Select class="apply-content-form-select" v-model="project_name" :placeholder="project_list.length? '请选择' : '空'">
               <Option v-for="key in project_list" :value="key.item_name">{{key.item_name}}</Option>
             </Select>
           </Form-item>
@@ -70,7 +70,7 @@
         <Form-item label="镜像:">
           <Input v-model="mirror" placeholder="请输入镜像URL" style="min-width: 250px"></Input>
         </Form-item>
-        <Button type="primary" @click="onTest">检索</Button>
+        <Button type="primary" @click="onTest">检测</Button>
       </Form>
 
     </div>
@@ -251,7 +251,7 @@
       getProjectList() {
         let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + getUserInfo().userName
         this.$http.get(url).then(data => {
-          console.log('success', data.body.result.res)
+          console.log('ProjectList', data)
           this.project_list = data.body.result.res
         }, err => {
           console.log('error', err)

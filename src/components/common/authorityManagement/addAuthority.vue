@@ -19,11 +19,14 @@
              :columns="columns"
              :data="filterDate"
              @on-selection-change="onSelectChange"
-             @on-select="onSelect"
              style="margin-top: -1px"></Table>
-      <div style="margin: 10px;overflow: hidden">
+      <div style="margin: 10px; overflow: hidden">
         <div style="float: right;">
-          <Page :total="this.searchList.length" :page-size="pageSize" :current="1" show-sizer @on-change="changePage"
+          <Page :total="this.searchList.length"
+                :page-size="pageSize"
+                :current="1"
+                show-sizer
+                @on-change="changePage"
                 @on-page-size-change="changePageSize"></Page>
         </div>
       </div>
@@ -195,9 +198,6 @@
         }
       },
       // 选项
-      onSelect(selection, row) {
-        this.selected = row
-      },
       onSelectChange(selection) {
         let len = selection.length
         if (len === 0) {
@@ -215,7 +215,7 @@
           }
           console.log(JSON.stringify(params))
           this.$http.put(url, JSON.stringify(params)).then(data => {
-            console.log('success', data)
+            window.location.reload()
           }, err => {
             console.log('error', err)
           })

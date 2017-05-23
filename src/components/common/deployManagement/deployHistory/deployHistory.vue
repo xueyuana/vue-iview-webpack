@@ -2,7 +2,7 @@
   <div class="inquire">
     <!--查询条件-->
     <div class="inquire-form">
-      <Form :model="formItem" :label-width="70">
+      <Form :model="formItem" :label-width="90">
         <Row :gutter="16">
           <Col span="5">
           <Form-item label="发起人:">
