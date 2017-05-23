@@ -222,6 +222,11 @@
                             level_1: this.$store.state.breadcrumbData.level.level_1,
                             level_2: '创建部署单元'
                         });
+                            // 打开项设置
+                        this.$store.commit('getActiveItem',{
+                            openNames:'1',  // Submenu
+                            activeName:'11'  //Menu-item
+                        });
                         break;
                     case '12': //项目创建历史
                         this.$router.push({name: 'pro_applicationHistory'});
@@ -229,6 +234,11 @@
                         this.$store.commit('getLevel',{
                             level_1: this.$store.state.breadcrumbData.level.level_1,
                             level_2: '部署单元查询'
+                        });
+                        // 打开项设置
+                        this.$store.commit('getActiveItem',{
+                            openNames:'1',  // Submenu
+                            activeName:'12'  //Menu-item
                         });
                         break;
                     case '21': //资源申请

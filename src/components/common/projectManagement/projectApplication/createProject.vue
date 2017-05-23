@@ -86,22 +86,6 @@
             }
         },
         methods: {
-            // 获取项目信息的方法
-            getProjectInfo () {
-                let self=this;
-                const url=common.apihost+'iteminfo/iteminfoes/'+"test1";
-                self.$http.get(url)
-                        .then(response => {
-                                console.log(response);
-                                if(response.body.code===200) { // 请求成功
-                                    //  将项目信息列表 保存到状态池
-                                    let backDatas=response.body.result.res;
-                                    self.$store.commit("getProjectList",backDatas);
-                                    console.log(self.$store.state.projectInfo.projectList);
-                                }
-                        });
-            },
-
             handleSubmit (name) {
                 let self=this;
                 self.$refs[name].validate((valid) => {
@@ -125,23 +109,21 @@
                                 .then(response=>{ //提交成功
                                        console.log(response);
                                        if(response.body.code===2002) {
-
-                                           // 3.0.1 修改激活项
+                                           // 2.0 修改面包屑导航的数据 修改侧边导航的默认选项
+                                            // 2.0.1 修改激活项
                                            self.$store.commit('getActiveItem',{
                                                openNames:'1',  // Submenu
                                                activeName:'12'  //Menu-item
                                            });
-                                           // 3.0.2  修改面包屑导航数据
+                                            // 2.0.2  修改面包屑导航数据
                                            self.$store.commit('getLevel',{
                                                level_1: this.$store.state.breadcrumbData.level.level_1,
                                                level_2: '部署单元查询'
                                            });
 
-                                           // 2.0 跳转到项目查询页面
+                                            // 3.0 跳转到项目查询页面
                                            self.$router.push({name: 'pro_applicationHistory'});
 
-                                           // 3.0 修改面包屑导航的数据 修改侧边导航的默认选项
-                                           
                                        }else if(response.body.code===2017) { // 模型已经存在
                                            self.$Notice.error({
                                                title: response.body.result.msg,
