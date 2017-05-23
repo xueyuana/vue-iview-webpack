@@ -136,9 +136,39 @@
 
 <script>
 
+  // 读取cookie
+  function getCookie(c_name){
+    if (document.cookie.length>0)
+    {
+      var c_start=document.cookie.indexOf(c_name + "=");
+      if (c_start!=-1)
+      {
+        c_start=c_start + c_name.length+1;
+        var c_end=document.cookie.indexOf(";",c_start);
+        if (c_end==-1)
+          c_end = document.cookie.length
+        return unescape(document.cookie.substring(c_start, c_end))
+      }
+    }
+    return ""
+  }
+  // 获取用户信息
+  function getUserInfo() {
+    let userInfo = {}
+    let accountInfo = getCookie('accountInfo')
+
+    let index = accountInfo.indexOf("&");
+
+    userInfo.userName = accountInfo.substring(0,index)
+    userInfo.passWord = accountInfo.substring(index+1)
+
+    return userInfo
+  }
+
+
   import {userinfo} from 'tools/user.js'
   import baseUrl from 'tools/common.js'
-  console.log('userinfo', userinfo)
+  console.log('userinfo', getCookie('accountInfo'))
 
   export default {
     data() {
@@ -178,7 +208,7 @@
             break
         }
       },
-
+      // 环境切换
       onTabs(index) {
         this.activeIndex = index
         switch (index) {
@@ -193,7 +223,7 @@
             break
         }
       },
-
+      // 保存到草稿
       onSaveDraft() {
         if (!this.deploy_name.trim()) {
           this.$Message.warning('部署名称不能为空')
@@ -221,7 +251,17 @@
             console.log('error', res)
           })
         }
+      },
+      // 请求部署单元列表
+      getProjectList() {
+        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + getUserInfo().userName
+        this.$http.get(url).then(data => {
+          console.log('success', data.body.result.res)
+        }, err => {
+          console.log('error', err)
+        })
       }
+
     }
   }
 </script>
