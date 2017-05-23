@@ -213,13 +213,14 @@
         if (this.formItem.id) {
           this.loading = true
           let url = baseUrl.apihost + 'auth/admindetail/' + this.formItem.id
+          let bl = this.booleanString(this.formItem.autho)
           let params = {
-            'admin_user': this.formItem.autho
+            'admin_user': bl
           }
           console.log(params)
           this.$http.put(url, params, {emulateJSON:true}).then(data => {
             console.log(data)
-            this.filterDate[this.index].autho = this.formItem.autho ? '管理员' : '普通用户'
+            this.filterDate[this.index].autho = bl ? '管理员' : '普通用户'
             this.loading = false
             this.confirm = false
           }, err => {
@@ -261,6 +262,16 @@
           }
         }
         console.log(this.index)
+      },
+      booleanString(Boolean) {
+        switch (Boolean) {
+          case 'true':
+            return true
+            break
+          case 'false':
+            return false
+            break
+        }
       }
     }
   }
