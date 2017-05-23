@@ -211,13 +211,17 @@
       // 提交和重置
       onSubmit() {
         if (this.formItem.id) {
+          this.loading = true
           let url = baseUrl.apihost + 'auth/admindetail/' + this.formItem.id
           let params = {
             'is_admin': this.formItem.autho
           }
-          console.log(JSON.stringify(params))
-          this.$http.put(url, JSON.stringify(params), {emulateJSON:true}).then(data => {
+          console.log(params)
+          this.$http.put(url, params, {emulateJSON:true}).then(data => {
+            console.log(data)
             this.filterDate[this.index].autho = this.formItem.autho ? '管理员' : '普通用户'
+            this.loading = false
+            this.confirm = false
           }, err => {
             console.log('error', err)
           })
@@ -256,6 +260,7 @@
             this.index = i
           }
         }
+        console.log(this.index)
       }
     }
   }
