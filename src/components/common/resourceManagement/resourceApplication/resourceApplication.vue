@@ -302,7 +302,7 @@ import {userinfo} from '../../../../tools/user.js';
            this.$http.get(url,{emulateJSON: true}).then(function (response) {
                console.log("response:"+response);
 
-               if(response.body.code===200 && response.result.res=="success") {
+               if(response.body.code===200 && response.body.result.res=="success") {
                 this.jsonname= response.body.result.msg
 
                }
