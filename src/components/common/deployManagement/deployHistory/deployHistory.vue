@@ -32,7 +32,7 @@
         <Row :gutter="16">
           <Col span="21">
           <div class="inquire-form-project_name">
-            <Form-item label="所属项目:">
+            <Form-item label="所属部署单元:">
               <Input v-model="formItem.project_name" placeholder="请输入"></Input>
             </Form-item>
           </div>
@@ -46,7 +46,7 @@
 
     <!--查询结果-->
     <div class="inquire-table">
-      <Table border size="small" :columns="columns1" :data="filterDate"></Table>
+      <Table border size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
           <Page :total="this.data1.length" :page-size="pageSize" :current="1" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
@@ -95,7 +95,12 @@
           formStatus: '',
           project_name: ''
         },
-        columns1: [
+        columns: [
+          {
+            title: '编号',
+            type: 'index',
+            align: 'center'
+          },
           {
             title: '发起人',
             key: 'initiator',
@@ -107,16 +112,31 @@
             align: 'center'
           },
           {
-            title: '部署名称',
+            title: '所属部署单元',
             key: 'deploy_name',
             align: 'center'
           },
           {
-            title: '所属项目',
-            key: 'project_name',
+            title: '部署状态',
+            key: 'status',
+            align: 'center'
+          },
+          {
+            title: '操作',
+            key: 'action',
             align: 'center',
             render: (h, params) => {
-              return h('a', params.row['project_name'])
+              return h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                on: {
+                  click: () => {
+                    console.log(111)
+                  }
+                }
+              }, '重新部署');
             }
           }
         ],
@@ -125,8 +145,8 @@
         pageSize: 10
       }
     },
-    computed: {},
     methods: {
+      // 查找
       onInquire() {
         let url = baseUrl.apihost + 'deployment/deployments'
         let query = {}
@@ -142,39 +162,39 @@
         }).then(data => {
           console.log('success', data)
           this.data1 = data.body
-          this.filterDate = this.mockTableData1(data.body, this.pageSize, 1)
+          this.filterDate = this.mockTableData(data.body, this.pageSize, 1)
         }, err => {
           console.log('error', err)
         })
-
       },
+      // 时间选择器
       formatCreateData(value) {
-        console.log(value)
         this.formItem.created_time = value
       },
       formatEndData(value) {
         this.formItem.end_time = value
       },
-
-      mockTableData1 (originData, pageSize, index) {
+      // 分页
+      changePage(val) {
+        this.filterDate = this.mockTableData(this.data1, this.pageSize, val)
+      },
+      changePageSize(val) {
+        this.pageSize = val
+        this.changePage(1)
+      },
+      mockTableData (originData, pageSize, index) {
         let data = [];
         let num = (index - 1) * pageSize
         let maxNum = (num + pageSize) > this.data1.length ? this.data1.length : (num + pageSize)
         for (let i = num; i < maxNum; i++) {
           data.push({
             initiator: originData[i].initiator,
-            created_time: originData[i].created_time.substring(0, 19),
+            created_time: originData[i].created_time.substring(0, 16),
             deploy_name: originData[i].deploy_name,
             project_name: originData[i].project_name
           })
         }
         return data;
-      },
-      changePage(val) {
-        this.filterDate = this.mockTableData1(this.data1, this.pageSize, val)
-      },
-      changePageSize(val) {
-        this.pageSize = 20
       }
     }
   }

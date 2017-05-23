@@ -200,9 +200,10 @@
                                     console.log("没有勾选记住密码，现在开始删除账号cookie");
                                     delCookie('accountInfo');
                                 }
-                                if(response.body.code===200){
+                                if(response.body.code===200 || response.body.code===304){
                                     this.$Message.success('提交成功!');
                                     this.$router.push({name: 'home'});
+                                    console.log(response)
                                     userinfo.username=response.body.result.msg.username;
                                     userinfo.user_id=response.body.result.msg.user_id;
                                     userinfo.department=response.body.result.msg.department;
@@ -217,11 +218,11 @@
 
 
 
-            } else {
-                this.$Message.error('表单验证失败!');
-            }
-        })
-    },
+                } else {
+                    this.$Message.error('表单验证失败!');
+                }
+            })
+        },
         doRememberPassword: function(event){
             let mySelf = this;
             let rememberStatus = mySelf.formInline.rememberPassword;
