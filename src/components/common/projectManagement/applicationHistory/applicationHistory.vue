@@ -3,18 +3,18 @@
   <div>
         <div class="search-title">
             <div class="search-form">
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
                     <Row>
-                        <Col span="6">
+                        <Col span="10">
                             <Form-item label="创建人" prop="creator">
                                 <Input v-model="formValidate.creator" placeholder="请输入"></Input>
                             </Form-item>
 
-                            <Form-item label="项目编号" prop="project_code">
-                                <Input v-model="formValidate.project_code" placeholder="请输入"></Input>
+                            <Form-item label="部署单元名称" prop="project_name">
+                                <Input v-model="formValidate.project_name" placeholder="请输入"></Input>
                             </Form-item>
                         </Col>
-                        <Col span="8">
+                        <Col span="10">
                             <Form-item label="创建日期">
                                 <Row>
                                     <Col span="11">
@@ -30,12 +30,17 @@
                                     </Col>
                                 </Row>
                             </Form-item>
-                        </Col>
-                        <Col span="6">
-                            <Form-item label="项目名称" prop="project_name">
-                                <Input v-model="formValidate.project_name" placeholder="请输入"></Input>
+
+                            <Form-item label="部署单元编号" prop="project_code">
+                                <Input v-model="formValidate.project_code" placeholder="请输入"></Input>
                             </Form-item>
+
                         </Col>
+                        <!--<Col span="6">-->
+                            <!--<Form-item label="部署单元名称" prop="project_name">-->
+                                <!--<Input v-model="formValidate.project_name" placeholder="请输入"></Input>-->
+                            <!--</Form-item>-->
+                        <!--</Col>-->
                         <Col span="4">
                             <Form-item>
                                 <Button type="primary" @click="handleSubmit('formValidate')">查询</Button>
@@ -148,7 +153,7 @@
                         key: 'identifier'
                     },
                     {
-                        title: '项目名称',
+                        title: '部署单元名称',
                         key: 'project_name'
                     },
                     {
@@ -160,7 +165,7 @@
                         key: 'creator'
                     },
                     {
-                        title: '项目编号',
+                        title: '部署单元编号',
                         key: 'project_code'
                     },
                     {

@@ -1,6 +1,6 @@
 <template>
     <div class="create-project">
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
             <div class="form-main">
                 <div class="submit">
                     <Form-item>
@@ -10,23 +10,23 @@
                 </div>
                 <div class="project-info">
                     <div class="info-title">
-                        <p>项目信息：</p>
+                        <p>部署单元信息：</p>
                     </div>
                     <div class="project-mian">
                         <div class="project-top clearfix">
                             <div class="project-name fl">
-                                <Form-item label="项目名称" prop="project_name">
+                                <Form-item label="部署单元名称" prop="project_name">
                                     <Input v-model="formValidate.project_name" placeholder="请输入项目名称"></Input>
                                 </Form-item>
                             </div>
                             <div class="project-id fr">
-                                <Form-item label="项目编号" prop="project_code">
+                                <Form-item label="部署单元编号" prop="project_code">
                                     <Input v-model="formValidate.project_code" placeholder="请输入项目编号"></Input>
                                 </Form-item>
                             </div>
                         </div>
                         <div class="project-des">
-                            <Form-item label="项目描述" prop="project_desc">
+                            <Form-item label="部署单元描述" prop="project_desc">
                                 <Input v-model="formValidate.project_desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}"
                                        placeholder="请输入..."></Input>
                             </Form-item>
