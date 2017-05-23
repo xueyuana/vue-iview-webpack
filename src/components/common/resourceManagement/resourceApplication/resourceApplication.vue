@@ -303,6 +303,7 @@
                 console.log("response:"+response);
 
                 if(response.body.code===200 && response.body.result.res=="success") {
+                    console.log("res_id"+ response.body.result.msg.res_id);
                     this.formInline= response.body.result.msg;
                     this.formInline.res_id=response.body.result.msg.res_id;
                 }
