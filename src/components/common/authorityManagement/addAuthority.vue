@@ -214,7 +214,7 @@
           this.loading = true
           let url = baseUrl.apihost + 'auth/admindetail/' + this.formItem.id
           let params = {
-            'is_admin': this.formItem.autho
+            'admin_user': this.formItem.autho
           }
           console.log(params)
           this.$http.put(url, params, {emulateJSON:true}).then(data => {
