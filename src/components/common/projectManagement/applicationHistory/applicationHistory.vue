@@ -9,12 +9,9 @@
                             <Form-item label="创建人" prop="creator">
                                 <Input v-model="formValidate.creator" placeholder="请输入"></Input>
                             </Form-item>
-                            <Form-item label="归属部门" prop="department">
-                                <Select v-model="formValidate.department" placeholder="请选择归属部门">
-                                    <Option value="beijing">大数据部</Option>
-                                    <Option value="shanghai">运维部</Option>
-                                    <Option value="shenzhen">云服务</Option>
-                                </Select>
+
+                            <Form-item label="项目编号" prop="project_code">
+                                <Input v-model="formValidate.project_code" placeholder="请输入"></Input>
                             </Form-item>
                         </Col>
                         <Col span="8">
@@ -22,20 +19,16 @@
                                 <Row>
                                     <Col span="11">
                                     <Form-item prop="create_date_begin">
-                                        <Date-picker type="date" placeholder="选择日期" v-model="formValidate.create_date_begin"></Date-picker>
+                                        <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.create_date_begin"></Date-picker>
                                     </Form-item>
                                     </Col>
                                     <Col span="2" style="text-align: center">至</Col>
                                     <Col span="11">
                                     <Form-item prop="create_date_end">
-                                        <Date-picker type="date" placeholder="选择日期" v-model="formValidate.create_date_end"></Date-picker>
+                                        <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.create_date_end"></Date-picker>
                                     </Form-item>
                                     </Col>
                                 </Row>
-                            </Form-item>
-
-                            <Form-item label="项目编号" prop="project_code">
-                                <Input v-model="formValidate.project_code" placeholder="请输入"></Input>
                             </Form-item>
                         </Col>
                         <Col span="6">
@@ -78,7 +71,7 @@
                 <div style="float: right;">
                     <Page
                             :total="$store.state.projectInfo.projectList.length"
-                            :page-size="10"
+                            :page-size="pageSize"
                             :current="1"
                             show-sizer
                             @on-change="changePage"
@@ -131,7 +124,6 @@
                     create_date_begin:'',
                     create_date_end:'',
                     project_name:'',
-                    department: '',
                     project_code:''
                 },
                 ruleValidate: {
@@ -145,9 +137,6 @@
 
                     ],
                     project_name: [
-
-                    ],
-                    department: [
 
                     ],
                     project_code:[]
@@ -178,31 +167,11 @@
                         title: '归属部门',
                         key: 'department'
                     }
-                ]
-//                datas: [
-//
-//                    {
-//                        project_name: '项目一',
-//                        create_date: '2017-5-18',
-//                        creator:'xxx',
-//                        project_code: '00001',
-//                        department:'引用统筹部'
-//                    },
-//                    {
-//                        project_name: '项目二',
-//                        create_date: '2017-5-18',
-//                        creator:'xxx',
-//                        project_code: '00001',
-//                        department:'引用统筹部'
-//                    },
-//                    {
-//                        project_name: '项目三',
-//                        create_date: '2017-5-18',
-//                        creator:'xxx',
-//                        project_code: '00001',
-//                        department:'引用统筹部'
-//                    }
-//                ]
+                ],
+
+                data1: [],
+                filterDate: [],
+                pageSize: 10
             }
 
         },
@@ -211,26 +180,25 @@
             // 提交删选条件
             handleSubmit (name) {
                 console.log(this.formValidate);
-//
+
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        const url=common.apihost+'iteminfo/iteminfoes/';
-//                     
-                        let query={
-                            user_name: this.formValidate.creator,
-                            start_time: this.formValidate.create_date_begin,
-                            end_time: this.formValidate.create_date_end,
-                            item_name: this.formValidate.project_name,
-                            depart: this.formValidate.department,
-                            item_code: this.formValidate.project_code
-                        };
+                        const url=common.apihost+'iteminfo/iteminfoes/project_item';
+                        // 查询条件
+                        let query={};
+                        this.formValidate.creator &&　(query.user_name= this.formValidate.creator);
+                        this.formValidate.create_date_begin &&　(query.start_time=  this.formValidate.create_date_begin);
+                        this.formValidate.create_date_end &&　(query.end_time= this.formValidate.create_date_end);
+                        this.formValidate.project_name &&　(query.item_name= this.formValidate.project_name);
+                        this.formValidate.project_code &&　(query.item_code= this.formValidate.project_code);
+
+                        console.log(query)
+
                         this.$http.get(url,{params:query})
                                 .then(response => {
                                     console.log(response);
                                     if(response.body.code===200) { // 请求成功
-                                        //  将项目信息列表 保存到状态池
                                         let backDatas=response.body.result.res;
-
                                     }
                                 });
                     }
@@ -239,6 +207,7 @@
             handleReset (name) {
                 this.$refs[name].resetFields();
             },
+
 
             //实现分页  改变后的页码
             changePage (page) {
