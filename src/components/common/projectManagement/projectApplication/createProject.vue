@@ -1,6 +1,6 @@
 <template>
     <div class="create-project">
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
             <div class="form-main">
                 <div class="submit">
                     <Form-item>
@@ -10,23 +10,23 @@
                 </div>
                 <div class="project-info">
                     <div class="info-title">
-                        <p>项目信息：</p>
+                        <p>部署单元信息：</p>
                     </div>
                     <div class="project-mian">
                         <div class="project-top clearfix">
                             <div class="project-name fl">
-                                <Form-item label="项目名称" prop="project_name">
+                                <Form-item label="部署单元名称" prop="project_name">
                                     <Input v-model="formValidate.project_name" placeholder="请输入项目名称"></Input>
                                 </Form-item>
                             </div>
                             <div class="project-id fr">
-                                <Form-item label="项目编号" prop="project_code">
+                                <Form-item label="部署单元编号" prop="project_code">
                                     <Input v-model="formValidate.project_code" placeholder="请输入项目编号"></Input>
                                 </Form-item>
                             </div>
                         </div>
                         <div class="project-des">
-                            <Form-item label="项目描述" prop="project_desc">
+                            <Form-item label="部署单元描述" prop="project_desc">
                                 <Input v-model="formValidate.project_desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}"
                                        placeholder="请输入..."></Input>
                             </Form-item>
@@ -86,22 +86,6 @@
             }
         },
         methods: {
-            // 获取项目信息的方法
-            getProjectInfo () {
-                let self=this;
-                const url=common.apihost+'iteminfo/iteminfoes/'+"test1";
-                self.$http.get(url)
-                        .then(response => {
-                                console.log(response);
-                                if(response.body.code===200) { // 请求成功
-                                    //  将项目信息列表 保存到状态池
-                                    let backDatas=response.body.result.res;
-                                    self.$store.commit("getProjectList",backDatas);
-                                    console.log(self.$store.state.projectInfo.projectList);
-                                }
-                        });
-            },
-
             handleSubmit (name) {
                 let self=this;
                 self.$refs[name].validate((valid) => {
@@ -125,25 +109,21 @@
                                 .then(response=>{ //提交成功
                                        console.log(response);
                                        if(response.body.code===2002) {
-
-                                           // 2.0 跳转到项目查询页面
-                                           self.$router.push({name: 'pro_applicationHistory'});
-
-                                           // 3.0 修改面包屑导航的数据 修改侧边导航的默认选项
-                                              // 3.0.1  请求项目信息
-                                           if(window.location.hash==="#/"+'pro_application_history') { //项目查询
-                                               self.getProjectInfo();
-                                           }
-                                              // 3.0.2  修改激活项
+                                           // 2.0 修改面包屑导航的数据 修改侧边导航的默认选项
+                                            // 2.0.1 修改激活项
                                            self.$store.commit('getActiveItem',{
                                                openNames:'1',  // Submenu
                                                activeName:'12'  //Menu-item
                                            });
-                                               // 3.0.3  修改面包屑导航数据
+                                            // 2.0.2  修改面包屑导航数据
                                            self.$store.commit('getLevel',{
                                                level_1: this.$store.state.breadcrumbData.level.level_1,
                                                level_2: '部署单元查询'
                                            });
+
+                                            // 3.0 跳转到项目查询页面
+                                           self.$router.push({name: 'pro_applicationHistory'});
+
                                        }else if(response.body.code===2017) { // 模型已经存在
                                            self.$Notice.error({
                                                title: response.body.result.msg,

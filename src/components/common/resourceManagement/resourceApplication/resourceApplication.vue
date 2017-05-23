@@ -297,13 +297,13 @@ import {userinfo} from '../../../../tools/user.js';
 
         console.log(this.$route.query.id);
        if(this.$route.query.id){
-           console.log( this.jsonname.resource_name);
+
            const url=common.apihost+'resource/'+this.$route.query.id;
-           this.$http.post(url).then(function (response) {
+           this.$http.get(url,{emulateJSON: true}).then(function (response) {
                console.log("response:"+response);
 
-               if(response.body.code===200 && response.body.res=="success") {
-                this.jsonname= response.body.msg
+               if(response.body.code===200 && response.body.result.res=="success") {
+                this.jsonname= response.body.result.msg
 
                }
                // 成功回调
@@ -330,7 +330,6 @@ import {userinfo} from '../../../../tools/user.js';
                         /*this.$Message.error('登陆失败!');*/
                         // 失败回调
                     });
-            
 
         },
         argToString(arg){

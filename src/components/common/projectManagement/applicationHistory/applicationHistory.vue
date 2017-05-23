@@ -1,53 +1,49 @@
-
 <template>
-  <div>
+    <div>
         <div class="search-title">
             <div class="search-form">
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
                     <Row>
-                        <Col span="6">
-                            <Form-item label="创建人" prop="creator">
-                                <Input v-model="formValidate.creator" placeholder="请输入"></Input>
-                            </Form-item>
-                            <Form-item label="归属部门" prop="department">
-                                <Select v-model="formValidate.department" placeholder="请选择归属部门">
-                                    <Option value="beijing">大数据部</Option>
-                                    <Option value="shanghai">运维部</Option>
-                                    <Option value="shenzhen">云服务</Option>
-                                </Select>
-                            </Form-item>
-                        </Col>
-                        <Col span="8">
-                            <Form-item label="创建日期">
-                                <Row>
-                                    <Col span="11">
-                                    <Form-item prop="create_date_begin">
-                                        <Date-picker type="date" placeholder="选择日期" v-model="formValidate.create_date_begin"></Date-picker>
-                                    </Form-item>
-                                    </Col>
-                                    <Col span="2" style="text-align: center">至</Col>
-                                    <Col span="11">
-                                    <Form-item prop="create_date_end">
-                                        <Date-picker type="date" placeholder="选择日期" v-model="formValidate.create_date_end"></Date-picker>
-                                    </Form-item>
-                                    </Col>
-                                </Row>
-                            </Form-item>
+                        <Col span="10">
+                        <Form-item label="创建人" prop="creator">
+                            <Input v-model="formValidate.creator" placeholder="请输入"></Input>
+                        </Form-item>
 
-                            <Form-item label="项目编号" prop="project_code">
-                                <Input v-model="formValidate.project_code" placeholder="请输入"></Input>
-                            </Form-item>
+                        <Form-item label="部署单元名称" prop="project_name">
+                            <Input v-model="formValidate.project_name" placeholder="请输入"></Input>
+                        </Form-item>
                         </Col>
-                        <Col span="6">
-                            <Form-item label="项目名称" prop="project_name">
-                                <Input v-model="formValidate.project_name" placeholder="请输入"></Input>
-                            </Form-item>
+                        <Col span="10">
+                        <Form-item label="创建日期">
+                            <Row>
+                                <Col span="11">
+                                <Form-item prop="create_date_begin">
+                                    <Date-picker type="datetime" placeholder="选择日期"
+                                                 v-model="formValidate.create_date_begin"></Date-picker>
+                                </Form-item>
+                                </Col>
+                                <Col span="2" style="text-align: center">
+                                至</Col>
+                                <Col span="11">
+                                <Form-item prop="create_date_end">
+                                    <Date-picker type="datetime" placeholder="选择日期"
+                                                 v-model="formValidate.create_date_end"></Date-picker>
+                                </Form-item>
+                                </Col>
+                            </Row>
+                        </Form-item>
+
+                        <Form-item label="部署单元编号" prop="project_code">
+                            <Input v-model="formValidate.project_code" placeholder="请输入"></Input>
+                        </Form-item>
+
                         </Col>
                         <Col span="4">
-                            <Form-item>
-                                <Button type="primary" @click="handleSubmit('formValidate')">查询</Button>
-                                <Button type="ghost" @click="handleReset('formValidate')" style="margin-top: 24px">重置</Button>
-                            </Form-item>
+                        <Form-item>
+                            <Button type="primary" @click="goQuery">查询</Button>
+                            <Button type="ghost" @click="handleReset('formValidate')" style="margin-top: 24px">重置
+                            </Button>
+                        </Form-item>
                         </Col>
                     </Row>
                 </Form>
@@ -63,22 +59,31 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(data,trIndex) in $store.state.projectInfo.projectList" :key="data">
-                        <td>{{trIndex+1}}</td>
-                        <td>{{data.item_name}}</td>
-                        <td>{{data.create_date}}</td>
-                        <td>{{data.user}}</td>
-                        <td>{{data.item_code}}</td>
-                        <td>{{data.item_depart}}</td>
-                    </tr>
+                <!--<tr v-for="(data,trIndex) in $store.state.projectInfo.projectList" :key="data">-->
+                    <!--<td>{{trIndex+1}}</td>-->
+                    <!--<td>{{data.item_name}}</td>-->
+                    <!--<td>{{data.create_date}}</td>-->
+                    <!--<td>{{data.user}}</td>-->
+                    <!--<td>{{data.item_code}}</td>-->
+                    <!--<td>{{data.item_depart}}</td>-->
+                <!--</tr>-->
+
+                <tr v-for="(data,trIndex) in filterDate" :key="data">
+                    <td>{{trIndex+1}}</td>
+                    <td><a href="#">{{data.item_name}}</a></td>
+                    <td>{{data.create_date}}</td>
+                    <td>{{data.user}}</td>
+                    <td>{{data.item_code}}</td>
+                    <td>{{data.item_depart}}</td>
+                </tr>
                 </tbody>
 
             </table>
             <div style="margin: 10px;overflow: hidden">
                 <div style="float: right;">
                     <Page
-                            :total="$store.state.projectInfo.projectList.length"
-                            :page-size="10"
+                            :total="this.data1.length"
+                            :page-size="pageSize"
                             :current="1"
                             show-sizer
                             @on-change="changePage"
@@ -88,7 +93,7 @@
             </div>
         </div>
     </div>
-  </div>
+    </div>
 </template>
 
 <style scoped>
@@ -98,23 +103,29 @@
         border: 1px solid rgb(228, 228, 228);
         border-radius: 10px;
     }
+
     .project-history {
         padding: 20px 20px;
     }
+
     table {
         width: 100%;
         border-collapse: collapse;
     }
+
     table td {
         text-align: center;
     }
+
     table tr {
         height: 50px;
         border: 1px solid #D7DDE4;
     }
-    table thead tr{
+
+    table thead tr {
         background-color: #F5F7F9;
     }
+
     table tbody tr:hover {
         background-color: #F3FAFF;
     }
@@ -128,29 +139,17 @@
                 // 查询表单数据
                 formValidate: {
                     creator: '',
-                    create_date_begin:'',
-                    create_date_end:'',
-                    project_name:'',
-                    department: '',
-                    project_code:''
+                    create_date_begin: '',
+                    create_date_end: '',
+                    project_name: '',
+                    project_code: ''
                 },
                 ruleValidate: {
-                    creator: [
-
-                    ],
-                    create_date_begin: [
-
-                    ],
-                    create_date_end:[
-
-                    ],
-                    project_name: [
-
-                    ],
-                    department: [
-
-                    ],
-                    project_code:[]
+                    creator: [],
+                    create_date_begin: [],
+                    create_date_end: [],
+                    project_name: [],
+                    project_code: []
                 },
                 // 表格数据
                 columns: [
@@ -159,7 +158,7 @@
                         key: 'identifier'
                     },
                     {
-                        title: '项目名称',
+                        title: '部署单元名称',
                         key: 'project_name'
                     },
                     {
@@ -171,83 +170,84 @@
                         key: 'creator'
                     },
                     {
-                        title: '项目编号',
+                        title: '部署单元编号',
                         key: 'project_code'
                     },
                     {
                         title: '归属部门',
                         key: 'department'
                     }
-                ]
-//                datas: [
-//
-//                    {
-//                        project_name: '项目一',
-//                        create_date: '2017-5-18',
-//                        creator:'xxx',
-//                        project_code: '00001',
-//                        department:'引用统筹部'
-//                    },
-//                    {
-//                        project_name: '项目二',
-//                        create_date: '2017-5-18',
-//                        creator:'xxx',
-//                        project_code: '00001',
-//                        department:'引用统筹部'
-//                    },
-//                    {
-//                        project_name: '项目三',
-//                        create_date: '2017-5-18',
-//                        creator:'xxx',
-//                        project_code: '00001',
-//                        department:'引用统筹部'
-//                    }
-//                ]
+                ],
+
+                data1: [],
+                filterDate: [],
+                pageSize: 10
             }
 
         },
-
+        mounted() {
+            this.goQuery()
+        },
         methods: {
             // 提交删选条件
-            handleSubmit (name) {
-                console.log(this.formValidate);
-//
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        const url=common.apihost+'iteminfo/iteminfoes/';
-//                     
-                        let query={
-                            user_name: this.formValidate.creator,
-                            start_time: this.formValidate.create_date_begin,
-                            end_time: this.formValidate.create_date_end,
-                            item_name: this.formValidate.project_name,
-                            depart: this.formValidate.department,
-                            item_code: this.formValidate.project_code
-                        };
-                        this.$http.get(url,{params:query})
-                                .then(response => {
-                                    console.log(response);
-                                    if(response.body.code===200) { // 请求成功
-                                        //  将项目信息列表 保存到状态池
-                                        let backDatas=response.body.result.res;
+            goQuery () {
 
-                                    }
-                                });
-                    }
-                });
+                const url = common.apihost + 'iteminfo/iteminfoes/project_item';
+                // 查询条件
+                let query = {};
+                this.formValidate.creator && (query.user_name = this.formValidate.creator);
+                this.formValidate.create_date_begin && (query.start_time = this.formValidate.create_date_begin);
+                this.formValidate.create_date_end && (query.end_time = this.formValidate.create_date_end);
+                this.formValidate.project_name && (query.item_name = this.formValidate.project_name);
+                this.formValidate.project_code && (query.item_code = this.formValidate.project_code);
+
+                console.log(query)
+
+                this.$http.get(url, {params: query})
+                        .then(response => {
+                               console.log(response);
+                                if (response.body.code === 200) { // 请求成功
+                                    let backDatas = response.body.result.res;
+                                    this.data1 = backDatas;
+
+                                    this.filterDate = this.mockTableData(backDatas, this.pageSize, 1)
+                                }
+                        });
             },
+
             handleReset (name) {
                 this.$refs[name].resetFields();
             },
 
+
             //实现分页  改变后的页码
             changePage (page) {
                 console.log(page);
+                this.filterDate = this.mockTableData(this.data1, this.pageSize, page)
             },
 
             // 返回切换后的每页条数
             changePageSize (pageSize) {
-               console.log(pageSize);
+                console.log(pageSize);
+
+                this.pageSize = pageSize
+                this.changePage(1)
+            },
+            // 构造删选之后的数据
+            mockTableData (originData, pageSize, index) {
+                let data = [];
+                let num = (index - 1) * pageSize
+                let maxNum = (num + pageSize) > this.data1.length ? this.data1.length : (num + pageSize)
+                for (let i = num; i < maxNum; i++) {
+                    data.push({
+                        item_name: originData[i].item_name,
+                        create_date: originData[i].create_date.substring(0, 16),
+                        user: originData[i].user,
+                        item_code: originData[i].item_code,
+                        item_depart: originData[i].item_depart
+                    })
+                }
+                return data;
             }
 
 
