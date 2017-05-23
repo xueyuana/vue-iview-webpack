@@ -6,46 +6,51 @@
            @on-click="onSearch"
            @on-enter="onSearch"
            style="width: 300px"></Input>
-
     <!--查询列表-->
     <div class="autho-list">
       <div class="title">用户列表</div>
       <div class="title btns">
         <Button-group>
-          <Button type="dashed" v-for="(key, index) in btns" @click="onAction(index)" style="width: 80px">{{key}}</Button>
+          <Button type="dashed" v-for="(key, index) in btns" @click="onAction(index)" style="width: 80px">{{key}}
+          </Button>
         </Button-group>
       </div>
       <Table border
              :columns="columns"
              :data="filterDate"
              @on-selection-change="onSelectChange"
-             @on-select="onSelect"
              style="margin-top: -1px"></Table>
-      <div style="margin: 10px;overflow: hidden">
+      <div style="margin: 10px; overflow: hidden">
         <div style="float: right;">
-          <Page :total="this.searchList.length" :page-size="pageSize" :current="1" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
+          <Page :total="this.searchList.length"
+                :page-size="pageSize"
+                :current="1"
+                show-sizer
+                @on-change="changePage"
+                @on-page-size-change="changePageSize"></Page>
         </div>
       </div>
     </div>
+    <!--弹窗-->
     <Modal
         v-model="confirm"
         title="用户信息"
         width="400"
-        class-name="vertical-center-modal">
+        class-username="vertical-center-modal">
       <Form class="autho-form" :model="formItem" label-position="left" :label-width="70">
         <Form-item label="员工号:">
-          <Input v-model="formItem.jobNum" placeholder="请输入"></Input>
+          <Input v-model="formItem.id" placeholder="请输入"></Input>
         </Form-item>
         <Form-item label="姓名:">
-          <Input v-model="formItem.name" placeholder="请输入"></Input>
+          <Input v-model="formItem.username" placeholder="请输入"></Input>
         </Form-item>
         <Form-item label="部门:">
-          <Input v-model="formItem.belongs" placeholder="请输入"></Input>
+          <Input v-model="formItem.department" placeholder="请输入"></Input>
         </Form-item>
         <Form-item label="添加权限:">
           <Select v-model="formItem.autho" placeholder="请选择">
-            <Option value="管理员">管理员</Option>
-            <Option value="普通用户">普通用户</Option>
+            <Option value="true">管理员</Option>
+            <Option value="false">普通用户</Option>
           </Select>
         </Form-item>
         <Form-item label="创建时间:">
@@ -82,12 +87,13 @@
     }
 
   }
-  .vertical-center-modal{
+
+  .vertical-center-modal {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    .ivu-modal{
+    .ivu-modal {
       top: 0;
     }
   }
@@ -95,6 +101,8 @@
 </style>
 
 <script>
+  import baseUrl from 'tools/common.js'
+
   export default {
     data() {
       return {
@@ -117,22 +125,17 @@
           },
           {
             title: '工号',
-            key: 'jobNum',
+            key: 'id',
             align: 'center'
           },
           {
             title: '姓名',
-            key: 'name',
+            key: 'username',
             align: 'center'
           },
           {
             title: '所属部门',
-            key: 'belongs',
-            align: 'center'
-          },
-          {
-            title: '用户名',
-            key: 'userId',
+            key: 'department',
             align: 'center'
           },
           {
@@ -147,29 +150,40 @@
           }
         ],
         filterDate: [],
-        searchList: [
-          {
-            jobNum: 147523,
-            name: '赵瞬东',
-            belongs: '运维部',
-            userId: 101253,
-            autho: '管理员',
-            time: '2017-5-22'
-          }
-        ],
+        searchList: [],
         selected: {},
-        formItem: {}
+        formItem: {},
+        index: ''
       }
     },
 
     mounted() {
-      this.filterDate = this.mockTableData(this.searchList, this.pageSize, 1)
+      this.getUserList()
     },
 
     methods: {
+      // 获取用户列表
+      getUserList() {
+        let url = baseUrl.apihost + (this.searchData ? ('auth/admindetail/' + this.searchData) : 'auth/all_user')
+        this.$http.get(url).then(data => {
+          console.log('success', data)
+          this.searchList = data.body.map(item => {
+            return {
+              id: item.id,
+              username: item.username,
+              department: item.department,
+              autho: item.is_admin ? '管理员' : '普通用户',
+              time: item.created_time.substring(0, 10)
+            }
+          })
+          this.filterDate = this.mockTableData(this.searchList, this.pageSize, 1)
+        }, err => {
+          console.log('error', err)
+        })
+      },
       // 搜索
       onSearch() {
-        console.log(111)
+        this.getUserList()
       },
       // 功能按钮
       onAction(index) {
@@ -185,20 +199,29 @@
         }
       },
       // 选项
-      onSelect(selection, row) {
-        this.selected = row
-      },
       onSelectChange(selection) {
         let len = selection.length
         if (len === 0) {
           this.selected = {}
         } else {
           this.selected = selection[len - 1]
+          this.indexOfSelected(this.selected)
         }
       },
       // 提交和重置
       onSubmit() {
-
+        if (this.formItem.id) {
+          let url = baseUrl.apihost + 'auth/admindetail/' + this.formItem.id
+          let params = {
+            'is_admin': this.formItem.autho
+          }
+          console.log(JSON.stringify(params))
+          this.$http.put(url, JSON.stringify(params), {emulateJSON:true}).then(data => {
+            this.filterDate[this.index].autho = this.formItem.autho ? '管理员' : '普通用户'
+          }, err => {
+            console.log('error', err)
+          })
+        }
       },
       onReset() {
         this.formItem = {}
@@ -217,15 +240,22 @@
         let maxNum = (num + pageSize) > this.searchList.length ? this.searchList.length : (num + pageSize)
         for (let i = num; i < maxNum; i++) {
           data.push({
-            jobNum: originData[i].jobNum,
-            name: originData[i].name,
-            belongs: originData[i].belongs,
+            id: originData[i].id,
+            username: originData[i].username,
+            department: originData[i].department,
             userId: originData[i].userId,
             autho: originData[i].autho,
             time: originData[i].time
           })
         }
         return data;
+      },
+      indexOfSelected(selected) {
+        for (let i=0;i<this.filterDate.length;i++) {
+          if (this.filterDate[i].id === selected.id && this.filterDate[i].autho == selected.autho) {
+            this.index = i
+          }
+        }
       }
     }
   }
