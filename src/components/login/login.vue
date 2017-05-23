@@ -14,13 +14,13 @@
                     <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70" >
 
                         <Form-item prop="user" label="用户名">
-                            <Input type="text" v-model="formInline.userName" placeholder="" >
+                            <Input type="text" v-model="formInline.userName" placeholder="请输入工号" >
 
                             </Input>
                         </Form-item>
 
                         <Form-item prop="password" label="密码">
-                            <Input type="password" v-model="formInline.passWord" placeholder="">
+                            <Input type="password" v-model="formInline.passWord" placeholder="请输入密码">
 
                             </Input>
                         </Form-item>
@@ -205,6 +205,7 @@
                                     this.$router.push({name: 'home'});
                                     userinfo.username=response.body.result.msg.username;
                                     userinfo.user_id=response.body.result.msg.user_id;
+                                    userinfo.department=response.body.result.msg.department;
                                     console.log(userinfo);
                                 }
 

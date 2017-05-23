@@ -7,7 +7,7 @@
                     <Row>
                         <Col span="6">
                             <Form-item label="创建人" prop="creator">
-                                <Input v-model="formValidate.creator"></Input>
+                                <Input v-model="formValidate.creator" placeholder="请输入"></Input>
                             </Form-item>
                             <Form-item label="归属部门" prop="department">
                                 <Select v-model="formValidate.department" placeholder="请选择归属部门">
@@ -35,12 +35,12 @@
                             </Form-item>
 
                             <Form-item label="项目编号" prop="project_code">
-                                <Input v-model="formValidate.project_code"></Input>
+                                <Input v-model="formValidate.project_code" placeholder="请输入"></Input>
                             </Form-item>
                         </Col>
                         <Col span="6">
                             <Form-item label="项目名称" prop="project_name">
-                                <Input v-model="formValidate.project_name"></Input>
+                                <Input v-model="formValidate.project_name" placeholder="请输入"></Input>
                             </Form-item>
                         </Col>
                         <Col span="4">
@@ -63,19 +63,29 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="data in $store.state.projectInfo.projectList" :key="data">
-                        <td v-for="columnObj in data.column">{{columnObj.value}}</td>
-                        <!--<td>-->
-                            <!--<a href="#"  style="text-decoration:underline">{{data.project_name}}</a>-->
-                        <!--</td>-->
-                        <!--<td>{{data.create_date}}</td>-->
-                        <!--<td>{{data.creator}}</td>-->
-                        <!--<td>{{data.project_code}}</td>-->
-                        <!--<td>{{data.department}}</td>-->
+                    <tr v-for="(data,trIndex) in $store.state.projectInfo.projectList" :key="data">
+                        <td>{{trIndex+1}}</td>
+                        <td>{{data.item_name}}</td>
+                        <td>{{data.create_date}}</td>
+                        <td>{{data.user}}</td>
+                        <td>{{data.item_code}}</td>
+                        <td>{{data.item_depart}}</td>
                     </tr>
                 </tbody>
 
             </table>
+            <div style="margin: 10px;overflow: hidden">
+                <div style="float: right;">
+                    <Page
+                            :total="$store.state.projectInfo.projectList.length"
+                            :page-size="10"
+                            :current="1"
+                            show-sizer
+                            @on-change="changePage"
+                            @on-page-size-change="changePageSize"
+                    ></Page>
+                </div>
+            </div>
         </div>
     </div>
   </div>
@@ -111,6 +121,7 @@
 
 </style>
 <script>
+    import common from '../../../../tools/common.js';
     export default {
         data () {
             return {
@@ -144,6 +155,10 @@
                 // 表格数据
                 columns: [
                     {
+                        title: '编号',
+                        key: 'identifier'
+                    },
+                    {
                         title: '项目名称',
                         key: 'project_name'
                     },
@@ -163,48 +178,79 @@
                         title: '归属部门',
                         key: 'department'
                     }
-                ],
-                datas: [
-
-                    {
-                        project_name: '项目一',
-                        create_date: '2017-5-18',
-                        creator:'xxx',
-                        project_code: '00001',
-                        department:'引用统筹部'
-                    },
-                    {
-                        project_name: '项目二',
-                        create_date: '2017-5-18',
-                        creator:'xxx',
-                        project_code: '00001',
-                        department:'引用统筹部'
-                    },
-                    {
-                        project_name: '项目三',
-                        create_date: '2017-5-18',
-                        creator:'xxx',
-                        project_code: '00001',
-                        department:'引用统筹部'
-                    }
                 ]
+//                datas: [
+//
+//                    {
+//                        project_name: '项目一',
+//                        create_date: '2017-5-18',
+//                        creator:'xxx',
+//                        project_code: '00001',
+//                        department:'引用统筹部'
+//                    },
+//                    {
+//                        project_name: '项目二',
+//                        create_date: '2017-5-18',
+//                        creator:'xxx',
+//                        project_code: '00001',
+//                        department:'引用统筹部'
+//                    },
+//                    {
+//                        project_name: '项目三',
+//                        create_date: '2017-5-18',
+//                        creator:'xxx',
+//                        project_code: '00001',
+//                        department:'引用统筹部'
+//                    }
+//                ]
             }
 
         },
 
         methods: {
+            // 提交删选条件
             handleSubmit (name) {
+                console.log(this.formValidate);
+//
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        this.$Message.success('提交成功!');
-                    } else {
-                        this.$Message.error('表单验证失败!');
-            }
-            })
+                        const url=common.apihost+'iteminfo/iteminfoes/';
+//                     
+                        let query={
+                            user_name: this.formValidate.creator,
+                            start_time: this.formValidate.create_date_begin,
+                            end_time: this.formValidate.create_date_end,
+                            item_name: this.formValidate.project_name,
+                            depart: this.formValidate.department,
+                            item_code: this.formValidate.project_code
+                        };
+                        this.$http.get(url,{params:query})
+                                .then(response => {
+                                    console.log(response);
+                                    if(response.body.code===200) { // 请求成功
+                                        //  将项目信息列表 保存到状态池
+                                        let backDatas=response.body.result.res;
+
+                                    }
+                                });
+                    }
+                });
             },
             handleReset (name) {
                 this.$refs[name].resetFields();
+            },
+
+            //实现分页  改变后的页码
+            changePage (page) {
+                console.log(page);
+            },
+
+            // 返回切换后的每页条数
+            changePageSize (pageSize) {
+               console.log(pageSize);
             }
+
+
         }
     }
 </script>

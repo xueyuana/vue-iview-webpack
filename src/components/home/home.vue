@@ -12,12 +12,13 @@
             </div>
             <div class="user-info fr">
                 <ul>
-                    <li>
+                    <li class="username">
                         用户：
                         <span>{{userInfo.username}}</span>
                     </li>
-                    <li>
-                        <a href="#">修改密码</a>
+                    <li class="department">
+                        所属部门：
+                        <span>{{userInfo.department}}</span>
                     </li>
                     <li>
                         <a href="#">退出</a>
@@ -217,24 +218,25 @@
                 self.$http.get(url)
                         .then(response => {
                                 console.log(response);
-                                if(response.body.code===2002) { // 请求成功
+                                if(response.body.code===200) { // 请求成功
                                     //  将项目信息列表 保存到状态池
                                     let backDatas=response.body.result.res;
-                                    // 处理返回值
-                                    let newDatas=[];
-                                    for (let i=0;i<backDatas.length;i++) {
-                                        let newColumn=[];
-                                        let backDataObj=backDatas[i];
-                                        newColumn.push(backDataObj.column[0]); // 项目名称
-                                        newColumn.push(backDataObj.column[5]); // 创建日期
-                                        newColumn.push(backDataObj.column[4]); // 创建人
-                                        newColumn.push(backDataObj.column[1]); // 项目编号
-                                        newColumn.push(backDataObj.column[2]); // 归属部门
-                                        newDatas.push({
-                                            column:newColumn
-                                        })
-                                    };
-                                    self.$store.commit("getProjectList",newDatas);
+//                                    // 处理返回值
+//                                    let newDatas=[];
+//                                    for (let i=0;i<backDatas.length;i++) {
+//                                        let newColumn=[];
+//                                        let backDataObj=backDatas[i];
+//                                        newColumn.push(backDataObj.column[0]); // 项目名称
+//                                        newColumn.push(backDataObj.column[5]); // 创建日期
+//                                        newColumn.push(backDataObj.column[4]); // 创建人
+//                                        newColumn.push(backDataObj.column[1]); // 项目编号
+//                                        newColumn.push(backDataObj.column[2]); // 归属部门
+//                                        newDatas.push({
+//                                            column:newColumn
+//                                        })
+//                                    };
+//                                    self.$store.commit("getProjectList",newDatas);
+                                    self.$store.commit("getProjectList",backDatas);
                                     console.log(self.$store.state.projectInfo.projectList);
                                 }
                              });
@@ -243,23 +245,23 @@
             // 导航跳转
             go (name) {
                 switch (name){
-                    case '11': //项目申请
+                    case '11': //项目创建
                             // 跳转
                         this.$router.push({name: 'projectApplication'});
                             // 更改面包屑导航的值
                         this.$store.commit('getLevel',{
                             level_1: this.$store.state.breadcrumbData.level.level_1,
-                            level_2: '创建项目'
+                            level_2: '创建部署单元'
                         });
                         break;
-                    case '12': //项目申请历史
+                    case '12': //项目创建历史
                         this.$router.push({name: 'pro_applicationHistory'});
                             // 获取项目信息
                         this.getProjectInfo();
                             // 保存面包屑导航
                         this.$store.commit('getLevel',{
                             level_1: this.$store.state.breadcrumbData.level.level_1,
-                            level_2: '项目查询'
+                            level_2: '部署单元查询'
                         });
                         break;
                     case '21': //资源申请

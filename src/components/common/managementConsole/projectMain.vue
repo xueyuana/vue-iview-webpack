@@ -1,5 +1,6 @@
 <template>
-    <div class="proMain">
+    <div>
+    <div class="proMain clearfix">
         <div class="proCard">
             <div class="proCardTitle">代办事项</div>
             <div class="proCardContent">
@@ -37,69 +38,52 @@
                 </a>
             </div>
         </div>
-
-        <div class="clear proContent">
-            <Menu mode="horizontal" :theme="theme1" active-name="1">
-                <Menu-item name="1">
-                    <Icon type="ios-paper"></Icon>
-                    我的资源
-                </Menu-item>
-            </Menu>
-            <br>
-            <div class="precontents">
-                <Row>
-                    <Col span="8">
-                    <h3>弹性计算</h3>
+    </div>
+    <div class="resource">
+        <div  class="title">
+            <span>我的资源</span>
+        </div>
+        <div class="resource-list">
+            <Row>
+                <Col span="6">
+                <div class="computing-resource" style="text-align: center">
+                    <h3>计算资源</h3>
                     <ul>
-                        <li>云服务器</li>
-                        <li>专有网络</li>
-                        <li>容器服务</li>
+                        <li>
+                            <span class="res-name">容器DOCKER</span>
+                            <span class="res-count">2</span>
+                        </li>
                     </ul>
-                    </Col>
-                    <Col span="8">
+                </div>
+                </Col>
+                <Col span="6">
+                <div class="database" style="text-align: center">
                     <h3>数据库</h3>
                     <ul>
-                        <li>云数据库HyBirdDB for Mysql</li>
-                        <li>云数据库HyBirdDB</li>
-                        <li>数据传输服务</li>
+                        <li>
+                            <span class="res-name">MYSQL</span>
+                            <span class="res-count">2</span>
+                        </li>
+                        <li>
+                            <span class="res-name">REDIS</span>
+                            <span class="res-count">3</span>
+                        </li>
                     </ul>
-                    </Col>
-                    <Col span="8">
-                    <h3>存储与CDN</h3>
-                    <ul>
-                        <li>CDN</li>
-
-                    </ul>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="8">
-                    <h3>网络</h3>
-                    <ul>
-                        <li>专有网络VPC</li>
-                        <li>cdn</li>
-
-                    </ul>
-                    </Col>
-                    <Col span="8">
-                    <h3>分析</h3>
-                    <ul>
-                        <li>云数据库HyBirdDB</li>
-
-                    </ul>
-                    </Col>
-                    <Col span="8">
-                    <h3>监控与管理</h3>
-                    <ul>
-                        <li>云监控</li>
-
-                    </ul>
-                    </Col>
-                </Row>
-            </div>
-
-
+                </div>
+                </Col>
+                <Col span="6">
+                <div class="storage" style="text-align: center">
+                    <h3>存储</h3>
+                </div>
+                </Col>
+                <Col span="6">
+                <div class="domain" style="text-align: center">
+                    <h3>域名</h3>
+                </div>
+                </Col>
+            </Row>
         </div>
+    </div>
     </div>
 </template>
 
@@ -108,6 +92,37 @@
 </script>
 
 <style scoped>
+    .resource {
+        margin-top: 20px;
+
+    }
+    .resource .title {
+        background-color: #0AB7E9;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        width: 80px;
+        text-align: center;
+        height: 30px;
+        line-height: 30px;
+    }
+    .resource .resource-list {
+        border: 1px solid #797979;
+    }
+    .resource-list {
+        margin-top: 10px;
+    }
+    .resource-list h3 {
+        padding: 5px 10px;
+        background-color: #D7D7D7;
+    }
+    .resource-list li {
+        margin: 10px 0px;
+    }
+    .res-count {
+        margin-left: 5px;
+        text-decoration: underline;
+    }
     .clear {
         clear: both
     }
