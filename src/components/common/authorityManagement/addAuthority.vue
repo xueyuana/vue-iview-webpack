@@ -152,7 +152,8 @@
         filterDate: [],
         searchList: [],
         selected: {},
-        formItem: {}
+        formItem: {},
+        index: ''
       }
     },
 
@@ -204,6 +205,7 @@
           this.selected = {}
         } else {
           this.selected = selection[len - 1]
+          this.indexOfSelected(this.selected)
         }
       },
       // 提交和重置
@@ -214,8 +216,8 @@
             'is_admin': this.formItem.autho
           }
           console.log(JSON.stringify(params))
-          this.$http.put(url, JSON.stringify(params)).then(data => {
-            window.location.reload()
+          this.$http.put(url, JSON.stringify(params), {emulateJSON:true}).then(data => {
+            this.filterDate[this.index].autho = this.formItem.autho ? '管理员' : '普通用户'
           }, err => {
             console.log('error', err)
           })
@@ -247,6 +249,13 @@
           })
         }
         return data;
+      },
+      indexOfSelected(selected) {
+        for (let i=0;i<this.filterDate.length;i++) {
+          if (this.filterDate[i].id === selected.id && this.filterDate[i].autho == selected.autho) {
+            this.index = i
+          }
+        }
       }
     }
   }
