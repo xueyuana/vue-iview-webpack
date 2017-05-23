@@ -126,24 +126,22 @@
                                        console.log(response);
                                        if(response.body.code===2002) {
 
-                                           // 2.0 跳转到项目查询页面
-                                           self.$router.push({name: 'pro_applicationHistory'});
-
-                                           // 3.0 修改面包屑导航的数据 修改侧边导航的默认选项
-                                              // 3.0.1  请求项目信息
-//                                           if(window.location.hash==="#/"+'pro_application_history') { //项目查询
-//                                               self.getProjectInfo();
-//                                           }
-                                              // 3.0.2  修改激活项
+                                           // 3.0.1 修改激活项
                                            self.$store.commit('getActiveItem',{
                                                openNames:'1',  // Submenu
                                                activeName:'12'  //Menu-item
                                            });
-                                               // 3.0.3  修改面包屑导航数据
+                                           // 3.0.2  修改面包屑导航数据
                                            self.$store.commit('getLevel',{
                                                level_1: this.$store.state.breadcrumbData.level.level_1,
                                                level_2: '部署单元查询'
                                            });
+
+                                           // 2.0 跳转到项目查询页面
+                                           self.$router.push({name: 'pro_applicationHistory'});
+
+                                           // 3.0 修改面包屑导航的数据 修改侧边导航的默认选项
+                                           
                                        }else if(response.body.code===2017) { // 模型已经存在
                                            self.$Notice.error({
                                                title: response.body.result.msg,
