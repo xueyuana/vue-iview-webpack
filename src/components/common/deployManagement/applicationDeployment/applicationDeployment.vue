@@ -263,9 +263,9 @@
         this.$http.post(url, {
 
         }).then(data => {
-
+          this.$Message.warning('此镜像可用')
         }, err => {
-
+          this.$Message.warning('此镜像可用')
         })
       }
     }

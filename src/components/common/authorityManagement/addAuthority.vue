@@ -48,9 +48,9 @@
           <Input v-model="formItem.department" placeholder="请输入"></Input>
         </Form-item>
         <Form-item label="添加权限:">
-          <Select v-model="formItem.autho" placeholder="请选择">
-            <Option value="true">管理员</Option>
-            <Option value="false">普通用户</Option>
+          <Select v-model="formItem.autho" placeholder="请选择权限">
+            <Option value="True">管理员</Option>
+            <Option value="False">普通用户</Option>
           </Select>
         </Form-item>
         <Form-item label="创建时间:">
@@ -215,7 +215,7 @@
           let url = baseUrl.apihost + 'auth/admindetail/' + this.formItem.id
           let bl = this.booleanString(this.formItem.autho)
           let params = {
-            'admin_user': bl
+            'admin_user': this.formItem.autho
           }
           console.log(params)
           this.$http.put(url, params, {emulateJSON:true}).then(data => {
