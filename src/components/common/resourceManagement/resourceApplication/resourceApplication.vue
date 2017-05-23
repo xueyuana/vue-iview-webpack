@@ -10,7 +10,7 @@
             <div class="addres-container">
                 <Tabs>
                     <Tab-pane label="开发环境" name="develop"><div class="allcontent">
-                        <div class="title"><span>项目信息:</span></div>
+                        <div class="title"><span>部署单元信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
                                 <div><span>资源名称：</span> <Input style="width: 180px" v-model="jsonname.resource_name"  ></Input></div>
@@ -18,7 +18,7 @@
                             </div>
                             <div class="container-right">
                                 <div>
-                                    <span>所属项目：</span>
+                                    <span>所属部署单元：</span>
                                     <Select style="width: 180px" v-model="jsonname.project">
                                         <Option value="应用统筹部"></Option>
                                     </Select>
@@ -297,13 +297,10 @@ import {userinfo} from '../../../../tools/user.js';
 
         console.log(this.$route.query.id);
        if(this.$route.query.id){
-
-          
            console.log( this.jsonname.resource_name);
            const url=common.apihost+'resource/'+this.$route.query.id;
-           this.$http.get(url).then(function (response) {
-
-               console.log(response);
+           this.$http.post(url).then(function (response) {
+               console.log("response:"+response);
 
                if(response.body.code===200 && response.body.res=="success") {
                 this.jsonname= response.body.msg
@@ -333,6 +330,7 @@ import {userinfo} from '../../../../tools/user.js';
                         /*this.$Message.error('登陆失败!');*/
                         // 失败回调
                     });
+            
 
         },
         argToString(arg){
