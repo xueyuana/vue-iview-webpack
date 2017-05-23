@@ -343,13 +343,13 @@
             }
         })*/
             let self=this;
-
+            self.formInline.approval_status="审批中"
+            let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
             //判断是否是第一次提交第一次用post，第二次用put
            if(self.formInline.res_id){
                let newUrl=url+self.formInline.res_id;
-               self.formInline.approval_status="审批中"
-               let newjson=JSON.stringify(self.formInline);
+
                this.$http.put(newUrl,newjson ).then(function (response) {
 
                    console.log(response);
