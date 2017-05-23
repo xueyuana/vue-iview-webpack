@@ -3,9 +3,8 @@
     <div class="addres-wrap">
         <Form ref="jsonname" :model="jsonname">
             <div class="addres-top clearfix">
-                <Button id="returnButton" ><a href="" style="color: #fff">返回</a> </Button>
-                <Button id="submit" type="primary"  @click="save()">提交</Button>
-                <Button id="save"  @click="handleSubmit()" >保存到草稿</Button>
+                <Button id="submit" type="primary"  @click="pass()">通过</Button>
+                <Button id="save"  @click="notPass()" >不通过</Button>
             </div>
             <div class="addres-container">
                 <Tabs>
@@ -312,48 +311,11 @@ import {userinfo} from '../../../../tools/user.js';
 
     },
     methods: {
-        handleSubmit() {
+        pass() {
             let self=this;
-            let newjson=JSON.stringify(self.jsonname);
-            const url=common.apihost+'resource/';
-            self.$router.push({name: 'res_applicationHistory'});
-            this.$http.post(url,newjson, {emulateJSON:true}  ).then(function (response) {
+            self.jsonname
 
-                console.log(response);
-                if(response.body.code===200 && response.body.result.res=="success") {
-                    this.$Message.success('提交成功!');
-                    // 2.0 跳转到资源申请历史页面
-                    self.$router.push({name: 'res_applicationHistory'});
-                }
-                 // 成功回调
-                    }, function () {
-                        /*this.$Message.error('登陆失败!');*/
-                        // 失败回调
-                    });
 
-        },
-        argToString(arg){
-            return(arg.split(","));
-        },
-        changeArr1(arr){
-            console.log(arr);
-            let cupands=this.argToString(arr);
-            this.jsonname.compute_list.cpu=cupands[0];
-            this.jsonname.compute_list.mem=cupands[1];
-        },
-        changeArr2(arr){
-            let mysqlcpus=this.argToString(arr);
-            this.jsonname.resource_list[0].cpu=mysqlcpus[0];
-            this.jsonname.resource_list[0].mem=mysqlcpus[1];
-        },
-        changeArr3(arr){
-            let rediscpus=this.argToString(arr);
-            this.jsonname.resource_list[1].cpu=rediscpus[0];
-            this.jsonname.resource_list[1].mem=rediscpus[1];
-        },changeArr4(arr){
-            let mongocpus=this.argToString(arr);
-            this.jsonname.resource_list[2].cpu=mongocpus[0];
-            this.jsonname.resource_list[2].mem=mongocpus[1];
         }
     }}
 

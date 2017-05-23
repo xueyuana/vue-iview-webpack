@@ -111,7 +111,16 @@
             {
                 title: '资源名称',
                 key: 'resource',
-                align: 'center'
+                align: 'center',
+                render: (h, params) => {
+                return h('a',{on: {
+                    click: () => {
+                    this.gotoCheck(params.index);
+
+    }}},params.row['resource']
+
+                )
+            }
             },
             {
                 title: '表单状态',
@@ -174,10 +183,12 @@
         const url=common.apihost+'resource/?user_id='+userid;
         this.$http.get(url, {emulateJSON:true}  ).then(function (response) {
 
-            console.log(response);
+
             if(response.body.code===200 && response.body.result.res=="success") {
 
-                this.queryData=response.body.result.msg
+                this.queryData=response.body.result.msg;
+
+               this.queryData.approveStatus="流程不存在";
 
 
             }
@@ -190,9 +201,15 @@
     },
 
     methods:{
+        //跳转到编辑页面
         gotoEdit(index){
             console.log(this.queryData[index].id);
             this.$router.push({name: 'resourceApplication',query: { id:  this.queryData[index].id }});
+        },
+        //跳转到审批页面
+        gotoCheck(index){
+            console.log(this.queryData[index].id);
+            this.$router.push({name: 'res_applicationCheck',query: { id:  this.queryData[index].id }});
         }
     }
 
