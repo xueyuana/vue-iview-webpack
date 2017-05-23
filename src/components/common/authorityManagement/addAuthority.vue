@@ -217,8 +217,8 @@
           let params = {
             'admin_user': this.formItem.autho
           }
-          console.log(params)
-          this.$http.put(url, params, {emulateJSON:true}).then(data => {
+          console.log(JSON.stringify(params))
+          this.$http.put(url, JSON.stringify(params), {emulateJSON:true}).then(data => {
             console.log(data)
             this.filterDate[this.index].autho = bl ? '管理员' : '普通用户'
             this.loading = false
