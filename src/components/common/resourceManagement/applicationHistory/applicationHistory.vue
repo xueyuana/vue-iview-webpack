@@ -28,7 +28,7 @@
                 </Col>
                 <Col span="6">
                 <div><span>资源名称：</span><Input style="width: 160px"></Input></div>
-                <div><span>所属项目：</span><Input style="width: 160px"></Input></div>
+                <div><span>所属部署单元：</span><Input style="width: 160px"></Input></div>
                 </Col>
                 <Col span="2" class="contain-button">
                 <Button size="large">查询</Button>
@@ -124,7 +124,7 @@
                 align: 'center'
             },
             {
-                title: '所属项目',
+                title: '所属部署单元',
                 key: 'project',
                 width: 280,
                 align: 'center'
