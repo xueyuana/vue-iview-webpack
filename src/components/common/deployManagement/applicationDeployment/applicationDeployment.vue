@@ -38,14 +38,13 @@
           <Col class="apply-content-form-item" span="12">
           <Form-item label="所属部署单元:">
             <Select class="apply-content-form-select" v-model="project_name" placeholder="请选择">
-              <Option value="用户测试项目">用户测试项目</Option>
-              <Option value="名片测试项目">名片测试项目</Option>
+              <Option v-for="key in project_list" :value="key.item_name">{{key.item_name}}</Option>
             </Select>
           </Form-item>
           </Col>
         </Row>
         <Row>
-          <Form-item label="部署名称:">
+          <Form-item label="部署详情:">
             <Input v-model="deploy_details" type="textarea" :autosize="{minRows: 4, maxRows: 6}"></Input>
           </Form-item>
         </Row>
@@ -69,8 +68,9 @@
       <div class="apply-content-title">应用包：</div>
       <Form class="apply-content-mirror" label-position="left" :label-width="70">
         <Form-item label="镜像:">
-          <Input v-model="mirror" placeholder="请输入镜像URL"></Input>
+          <Input v-model="mirror" placeholder="请输入镜像URL" style="min-width: 250px"></Input>
         </Form-item>
+        <Button type="primary" @click="onTest">检索</Button>
       </Form>
 
     </div>
@@ -120,6 +120,9 @@
       &-mirror {
         margin-top: 10px;
         width: 400px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
       }
       &-upload {
         display: flex;
@@ -136,6 +139,7 @@
 
 <script>
 
+  import baseUrl from 'tools/common.js'
   // 读取cookie
   function getCookie(c_name){
     if (document.cookie.length>0)
@@ -165,17 +169,13 @@
     return userInfo
   }
 
-
-  import {userinfo} from 'tools/user.js'
-  import baseUrl from 'tools/common.js'
-  console.log('userinfo', getCookie('accountInfo'))
-
   export default {
     data() {
       return {
         activeIndex: 0,
         funcBtns: ['返回', '提交', '保存到草稿'],
         tabs: ['开发环境', '测试环境', '生产环境'],
+        project_list: [],
         environment: 'dev',
         deploy_name: '',
         project_name: '',
@@ -187,12 +187,7 @@
     },
 
     mounted() {
-      let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + 147523
-      this.$http.get(url).then(data => {
-        console.log('success', data.body.result.res)
-      }, err => {
-        console.log('error', err)
-      })
+      this.getProjectList()
     },
 
     methods: {
@@ -257,11 +252,22 @@
         let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + getUserInfo().userName
         this.$http.get(url).then(data => {
           console.log('success', data.body.result.res)
+          this.project_list = data.body.result.res
         }, err => {
           console.log('error', err)
         })
-      }
+      },
+      // 检查镜像url
+      onTest() {
+        let url = baseUrl.apihost + ''
+        this.$http.post(url, {
 
+        }).then(data => {
+
+        }, err => {
+
+        })
+      }
     }
   }
 </script>

@@ -113,7 +113,7 @@
           },
           {
             title: '所属部署单元',
-            key: 'deploy_name',
+            key: 'project_name',
             align: 'center'
           },
           {
@@ -190,7 +190,6 @@
           data.push({
             initiator: originData[i].initiator,
             created_time: originData[i].created_time.substring(0, 16),
-            deploy_name: originData[i].deploy_name,
             project_name: originData[i].project_name
           })
         }

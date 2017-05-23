@@ -3,7 +3,7 @@
  */
 
 export const userinfo = {
-    'username':'',
-    'user_id':'',
-    'department':''
+  'username':'',
+  'user_id':'',
+  'department':''
 }
