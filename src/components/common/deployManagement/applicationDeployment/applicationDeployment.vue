@@ -14,6 +14,7 @@
 
     <!--内容区-->
     <div class="apply-content">
+      <!--切换环境-->
       <div>
         <Button class="apply-content-button"
                 :class="{active: activeIndex === index}"
@@ -26,8 +27,8 @@
       </div>
 
       <!--项目信息-->
-      <div class="apply-content-title">项目信息：</div>
-      <Form class="apply-content-form" label-position="right" :label-width="70">
+      <div class="apply-content-title">部署单元信息：</div>
+      <Form class="apply-content-form" label-position="left" :label-width="90">
         <Row :gutter="160">
           <Col class="apply-content-form-item" span="12">
           <Form-item label="部署名称:">
@@ -35,7 +36,7 @@
           </Form-item>
           </Col>
           <Col class="apply-content-form-item" span="12">
-          <Form-item label="所属项目:">
+          <Form-item label="所属部署单元:">
             <Select class="apply-content-form-select" v-model="project_name" placeholder="请选择">
               <Option value="用户测试项目">用户测试项目</Option>
               <Option value="名片测试项目">名片测试项目</Option>
@@ -43,24 +44,27 @@
           </Form-item>
           </Col>
         </Row>
-
+        <Row>
+          <Form-item label="部署名称:">
+            <Input v-model="deploy_details" type="textarea" :autosize="{minRows: 4, maxRows: 6}"></Input>
+          </Form-item>
+        </Row>
       </Form>
 
       <!--数据库-->
       <div class="apply-content-title">数据库：</div>
       <Form class="apply-content-select" label-position="left" :label-width="70">
-        <Form-item label="执行目标:">
+        <Form-item label="执行目标:" style="width: 210px">
           <Select v-model="exec_tag" placeholder="请选择">
             <Option value="mysql-node1">mysql-node1</Option>
             <Option value="mysql-node2">mysql-node2</Option>
           </Select>
         </Form-item>
-      </Form>
-      <Form class="apply-content-textarea" label-position="left" :label-width="70">
         <Form-item label="执行脚本:">
           <Input v-model="exec_context" type="textarea" :autosize="{minRows: 4, maxRows: 6}"></Input>
         </Form-item>
       </Form>
+
       <!--应用包-->
       <div class="apply-content-title">应用包：</div>
       <Form class="apply-content-mirror" label-position="left" :label-width="70">
@@ -112,7 +116,6 @@
       }
       &-select {
         margin-top: 10px;
-        width: 210px;
       }
       &-mirror {
         margin-top: 10px;
@@ -134,7 +137,8 @@
 <script>
 
   import {userinfo} from 'tools/user.js'
-  console.log(userinfo)
+  import baseUrl from 'tools/common.js'
+  console.log('userinfo', userinfo)
 
   export default {
     data() {
@@ -145,11 +149,20 @@
         environment: 'dev',
         deploy_name: '',
         project_name: '',
-        deploy_id: '',
+        deploy_details: '',
         exec_tag: 'mysql-node1',
         exec_context: '',
         mirror: ''
       }
+    },
+
+    mounted() {
+      let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + 147523
+      this.$http.get(url).then(data => {
+        console.log('success', data.body.result.res)
+      }, err => {
+        console.log('error', err)
+      })
     },
 
     methods: {
@@ -159,10 +172,9 @@
             this.$router.go(-1)
             break
           case 1:
-            this.onSubmit()
             break
           default:
-            this.$router.push({name: 'deployHistory'})
+            this.onSaveDraft()
             break
         }
       },
@@ -182,7 +194,7 @@
         }
       },
 
-      onSubmit() {
+      onSaveDraft() {
         if (!this.deploy_name.trim()) {
           this.$Message.warning('部署名称不能为空')
         } else if (!this.project_name.trim()) {
@@ -194,7 +206,7 @@
         }  else if (!this.mirror.trim()) {
           this.$Message.warning('镜像URL不能为空')
         } else {
-          this.$http.post('http://uop-test.syswin.com/api/deployment/deployments', {
+          this.$http.post(baseUrl.apihost + 'deployment/deployments', {
             "environment": this.environment,
             "initiator": "lisi",
             "project_name": this.project_name,
