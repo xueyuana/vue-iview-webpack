@@ -297,13 +297,13 @@ import {userinfo} from '../../../../tools/user.js';
 
         console.log(this.$route.query.id);
        if(this.$route.query.id){
-          
+
            const url=common.apihost+'resource/'+this.$route.query.id;
            this.$http.get(url,{emulateJSON: true}).then(function (response) {
                console.log("response:"+response);
 
-               if(response.body.code===200 && response.body.res=="success") {
-                this.jsonname= response.body.msg
+               if(response.body.code===200 && response.result.res=="success") {
+                this.jsonname= response.body.result.msg
 
                }
                // 成功回调
