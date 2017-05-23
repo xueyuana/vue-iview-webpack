@@ -129,7 +129,7 @@
             },
             {
                 title: '审批状态',
-                key: 'approveStatus',
+                key: 'approval_status',
                 align: 'center'
             },
             {
@@ -169,7 +169,7 @@
             date: 'sdfsf',
             resource: 'sdfsf',
             formStatus: 'sdfdsf',
-            approveStatus: '流程不存在',
+            approval_status: '流程不存在',
             project: 'sdfsf',
             id:'123'
         }

@@ -239,7 +239,7 @@
         return {
             formInline: {
                 resource_name: "",
-                project: "项目名称aaa",
+                project: "",
                 department: "syswin",
                 user_name: userinfo.username,
                 user_id: userinfo.user_id,
@@ -347,7 +347,7 @@
             //判断是否是第一次提交第一次用post，第二次用put
            if(self.formInline.res_id){
                let newUrl=url+self.formInline.res_id;
-               this.$http.put(newUrl,newjson, {emulateJSON:true}  ).then(function (response) {
+               this.$http.put(newUrl,newjson ).then(function (response) {
 
                    console.log(response);
                    if(response.body.code===200 && response.body.result.res=="success") {
