@@ -1,46 +1,88 @@
 <template>
     <div>
-        <div class="asset-profile">
+        <!--概况-->
+        <div class="survey">
             <div  class="title">
-                <span>资产概况</span>
+                <span>概况</span>
             </div>
-            <div class="asset-list">
-                <Row>
+            <div class="survey-list">
+                <Row :gutter="24">
                     <Col span="6">
-                        <div class="computing-resource" style="text-align: center">
-                            <h3>计算资源</h3>
-                            <ul>
-                                <li>
-                                    <span class="res-name">容器DOCKER</span>
-                                    <span class="res-count">2</span>
-                                </li>
-                            </ul>
+                    <div class="deployment public">
+                        <div class="top clearfix">
+                            <div class="top_left fl">
+                                <i class="fa fa-server" aria-hidden="true"></i>
+                            </div>
+                            <div class="top_right fr">
+                                <div class="count">2</div>
+                                <div class="name">部署单元</div>
+                            </div>
                         </div>
+                        <div class="bottom clearfix">
+                            <span class="fl">查看详情</span>
+                            <span class="arrow fr">
+                                <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
                     </Col>
                     <Col span="6">
-                      <div class="database" style="text-align: center">
-                        <h3>数据库</h3>
-                        <ul>
-                            <li>
-                                <span class="res-name">MYSQL</span>
-                                <span class="res-count">2</span>
-                            </li>
-                            <li>
-                                <span class="res-name">REDIS</span>
-                                <span class="res-count">3</span>
-                            </li>
-                        </ul>
-                      </div>
+                    <div class="computer public">
+                        <div class="top clearfix">
+                            <div class="top_left fl">
+                                <i class="fa fa-cubes" aria-hidden="true"></i>
+                            </div>
+                            <div class="top_right fr">
+                                <div class="count">2</div>
+                                <div class="name">计算实例</div>
+                            </div>
+                        </div>
+                        <div class="bottom clearfix">
+                            <span class="fl">查看详情</span>
+                            <span class="arrow fr">
+                                <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
+                            </span>
+                        </div>
+
+                    </div>
                     </Col>
                     <Col span="6">
-                      <div class="storage" style="text-align: center">
-                         <h3>存储</h3>
-                      </div>
+                    <div class="database public">
+                        <div class="top clearfix">
+                            <div class="top_left fl">
+                                <i class="fa fa-database" aria-hidden="true"></i>
+                            </div>
+                            <div class="top_right fr">
+                                <div class="count">2</div>
+                                <div class="name">数据库实例</div>
+                            </div>
+                        </div>
+                        <div class="bottom clearfix">
+                            <span class="fl">查看详情</span>
+                            <span class="arrow fr">
+                               <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
                     </Col>
                     <Col span="6">
-                       <div class="domain" style="text-align: center">
-                         <h3>域名</h3>
-                       </div>
+                    <div class="cache public">
+                        <div class="top clearfix">
+                            <div class="top_left fl">
+                                <i class="fa fa-hdd-o" aria-hidden="true"></i>
+                            </div>
+                            <div class="top_right fr">
+                                <div class="count">2</div>
+                                <div class="name">缓存实例</div>
+                            </div>
+                        </div>
+                        <div class="bottom clearfix">
+                            <span class="fl">查看详情</span>
+                            <span class="arrow fr">
+                               <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
                     </Col>
                 </Row>
             </div>
@@ -50,7 +92,6 @@
         <div class="approved">
             <div class="approved-title">
                 <p>
-                    <Icon type="ios-circle-filled"></Icon>
                     <span>待审批列表</span>
                 </p>
             </div>
@@ -123,12 +164,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="data in datas" :key="data">
-                        <td>{{data.applicant}}</td>
-                        <td>{{data.application_date}}</td>
-                        <td>{{data.project_name}}</td>
-                        <td>{{data.resource_name}}</td>
-                        <td>{{data.approval_status}}</td>
+                    <tr v-for="(data,index) in datas" :key="data">
+                        <td>{{ index+1 }}</td>
+                        <td>{{ data.applicant }}</td>
+                        <td>{{ data.application_date }}</td>
+                        <td>{{ data.project_name }}</td>
+                        <td>{{ data.approval_status }}</td>
                         <td>
                             <Button type="primary">查看</Button>
                         </td>
@@ -144,32 +185,73 @@
 </template>
 
 <style scoped>
-    .asset-profile .title {
+    /*概况*/
+    .survey .title {
         background-color: #0AB7E9;
         color: #fff;
         font-size: 14px;
         font-weight: 700;
-        width: 80px;
+        width: 100px;
         text-align: center;
         height: 30px;
         line-height: 30px;
     }
-    .asset-profile .asset-list {
-        border: 1px solid #797979;
+    .survey .survey-list {
+
     }
-    .asset-list {
+    .survey-list {
         margin-top: 10px;
     }
-    .asset-list h3 {
+    .survey-list h3 {
         padding: 5px 10px;
         background-color: #D7D7D7;
     }
-    .asset-list li {
+    .survey-list li {
         margin: 10px 0px;
     }
-    .res-count {
-        margin-left: 5px;
-        text-decoration: underline;
+
+    .public .top {
+        height: 100px;
+        background-color: #00CCFF;
+        padding: 0 10px;
+        color: #333333;
+        border-radius: 4px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+    .public .bottom {
+        height: 40px;
+        line-height: 40px;
+        border: 1px solid #aaa;
+        padding: 0 10px;
+        cursor: pointer;
+        border-radius: 4px;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+    }
+    .top .top_left {
+        font-size: 40px;
+        line-height: 100px;
+
+    }
+    .top .top_right {
+        font-size: 16px;
+        text-align: center;
+        margin-top: 20px;
+    }
+    .top_right .name {
+        margin-top: 20px;
+    }
+    .bottom {
+        color: #333333;
+    }
+    .bottom .arrow {
+        font-size: 18px;
+    }
+
+    /*待审批列表*/
+    .approved {
+        margin-top: 20px;
     }
     .approved-search {
         padding-top: 15px;
@@ -178,14 +260,15 @@
         border-radius: 10px;
     }
     .approved-title {
+        background-color: #0AB7E9;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        width: 100px;
+        text-align: center;
         height: 30px;
         line-height: 30px;
-        border: 1px solid #E4E4E4;
-        margin-top: 30px;
         margin-bottom: 10px;
-        padding: 0 8px;
-        color: #0AB7E9;
-        font-weight: 700;
     }
     .approved-list {
         padding: 20px;
@@ -247,6 +330,10 @@
                 // 表格数据
                 columns: [
                     {
+                        title: '编号',
+                        key: 'identifier'
+                    },
+                    {
                         title: '发起人',
                         key: 'applicant'
                     },
@@ -255,12 +342,8 @@
                         key: 'application_date'
                     },
                     {
-                        title: '项目名称',
+                        title: '部署单元名称',
                         key: 'project_name'
-                    },
-                    {
-                        title: '资源名称',
-                        key: 'resource_name'
                     },
                     {
                         title: '审批状态',
@@ -276,21 +359,18 @@
                         applicant: 'xxx',
                         application_date: '2017-5-18',
                         project_name:'群组',
-                        resource_name:'部署资源',
                         approval_status: '待审批'
                     },
                     {
                         applicant: 'xxx',
                         application_date: '2017-5-18',
                         project_name:'圈子',
-                        resource_name:'创建REDIS',
                         approval_status: '待审批'
                     },
                     {
                         applicant: 'xxx',
                         application_date: '2017-5-18',
                         project_name:'圈子',
-                        resource_name:'创建MYSQL',
                         approval_status: '审批完成'
                     }
                 ]

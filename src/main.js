@@ -21,6 +21,8 @@ Vue.use(VueRouter);
 import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
+// 导入字体图标库
+import 'font-awesome/less/font-awesome.less';
 //导入初始化的css
 import '../static/css/reset.css';
 
@@ -29,7 +31,7 @@ import login from './components/login/login.vue';
 import home from './components/home/home.vue';
 
 // 导入管理控制台
-import managementConsole from './components/common/managementConsole/projectMain.vue';
+import managementConsole from './components/common/managementConsole/ordinaryConsole.vue';
 // import adminConsole from './components/common/managementConsole/adminConsole.vue';
 
 // 导入项目管理
