@@ -81,7 +81,7 @@ var vueRouters = new VueRouter({
                 {name:'deployHistory',path:'/deploy_history',component:deployHistory},
                 // 工作台
                 {name:'processList',path:'/process_list',component:processList},
-                {name:'myWorkbench',path:'/my_workbench',component:myWorkbench},
+                {name:'myWorkbench',path:'/my_workbench',component:managementConsole}, // 加载管理控制台组件
                 // 权限管理
                 {name:'addAuthority',path:'/add_authority',component:addAuthority}
             ],
