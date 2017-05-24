@@ -63,6 +63,7 @@
                                 </template>
                                 <Menu-item name="41">处理列表</Menu-item>
                                 <Menu-item name="42">我的工作台</Menu-item>
+                                <Menu-item name="43">我的资源</Menu-item>
                             </Submenu>
                             <Submenu name="5">
                                 <template slot="title">
@@ -307,6 +308,13 @@
                         this.$store.commit('getLevel',{
                             level_1: this.$store.state.breadcrumbData.level.level_1,
                             level_2: '我的工作台'
+                        });
+                        break;
+                    case '43': //我的资源
+                        this.$router.push({name: 'myResource'});
+                        this.$store.commit('getLevel',{
+                            level_1: this.$store.state.breadcrumbData.level.level_1,
+                            level_2: '我的资源'
                         });
                         break;
                     case '51': //权限管理

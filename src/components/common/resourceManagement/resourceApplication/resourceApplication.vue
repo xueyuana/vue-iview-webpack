@@ -1,4 +1,4 @@
-<!--资源申请历史-->
+<!--资源申请-->
 <template>
     <div class="addres-wrap">
         <Form ref="formInline" :model="formInline" :rules="ruleInline">
@@ -324,7 +324,7 @@
                 console.log(response);
                 if(response.body.code===200 && response.body.result.res=="success") {
                     this.$Message.success('提交成功!');
-                    // 2.0 跳转到资源申请历史页面
+
                     self.$router.push({name: 'res_applicationHistory'});
                 }
                 // 成功回调
@@ -347,6 +347,7 @@
             self.formInline.approval_status="审批中"
             let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
+
             //判断是否是第一次提交第一次用post，第二次用put
            if(self.formInline.res_id){
                let newUrl=url+self.formInline.res_id+"/";
@@ -356,8 +357,9 @@
                    console.log(response);
                    if(response.body.code===200 && response.body.result.res=="success") {
                        this.$Message.success('提交成功!');
-                       // 2.0 跳转到资源申请历史页面
-                       self.$router.push({name: 'res_applicationHistory'});
+                       //添加一条审批
+                       this.addCheck();
+                      // self.$router.push({name: 'res_applicationHistory'});
                    }
                    // 成功回调
                }, function () {
@@ -370,13 +372,12 @@
                    console.log(response);
                    if(response.body.code===200 && response.body.result.res=="success") {
                        this.$Message.success('提交成功!');
-                       // 2.0 跳转到资源申请历史页面
-                       self.$router.push({name: 'res_applicationHistory'});
+                       //添加一条审批
+                       this.addCheck();
                    }
                    // 成功回调
                }, function () {
-                   /*this.$Message.error('登陆失败!');*/
-                   // 失败回调
+
                });
            }
 
@@ -385,6 +386,27 @@
     },
     argToString(arg){
         return(arg.split(","));
+    },
+    addCheck(){
+            const url=common.apihost+'approval/approvals';
+            let checkJson={
+                resource_id:this.formInline.res_id,
+                  project_id:this.formInline.project,
+                department_id:userinfo.user_id,
+                creator_id:userinfo.department
+            };
+            console.log("tianjiashenpi"+checkJson);
+            this.$http.post(url,checkJson, {emulateJSON:true}  ).then(function (response) {
+
+                console.log(response);
+                if(response.body.code===200 ) {
+
+                    this.$router.push({name: 'res_applicationHistory'});
+                }
+                // 成功回调
+            }, function () {
+
+            });
     },
     changeArr1(arr){
         console.log(arr);
@@ -401,12 +423,14 @@
         let rediscpus=this.argToString(arr);
         this.formInline.resource_list[1].cpu=rediscpus[0];
         this.formInline.resource_list[1].mem=rediscpus[1];
-    },changeArr4(arr){
+    },
+        changeArr4(arr){
         let mongocpus=this.argToString(arr);
         this.formInline.resource_list[2].cpu=mongocpus[0];
         this.formInline.resource_list[2].mem=mongocpus[1];
     }
-    }}
+    }
+    }
 
 
 

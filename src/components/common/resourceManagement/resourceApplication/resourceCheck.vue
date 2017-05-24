@@ -1,4 +1,4 @@
-<!--资源申请历史-->
+<!--资源审批-->
 <template>
     <div class="addres-wrap">
         <Form ref="jsonname" :model="jsonname">
@@ -12,13 +12,13 @@
                         <div class="title"><span>部署单元信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
-                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="jsonname.resource_name"  ></Input></div>
+                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="jsonname.resource_name"  disabled ></Input></div>
 
                             </div>
                             <div class="container-right">
                                 <div>
                                     <span>所属部署单元：</span>
-                                    <Select style="width: 180px" v-model="jsonname.project">
+                                    <Select style="width: 180px" v-model="jsonname.project" disabled>
                                         <Option value="应用统筹部"></Option>
                                     </Select>
                                 </div>
@@ -27,7 +27,7 @@
                         </div>
                         <div class="title"><span>域名:</span></div>
                         <div class="container">
-                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="jsonname.domain"></Input>.syswin.com</div>
+                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="jsonname.domain" disabled></Input>.syswin.com</div>
                         </div>
 
                         <div class="title"><span>计算信息:</span></div>
@@ -35,11 +35,11 @@
                             <div class="clearfix" style="margin-bottom: 10px">
                                 <div class="container-left">
                                     <span>实例名称:</span>
-                                    <Input style="width: 180px" v-model="jsonname.compute_list.ins_name"></Input>
+                                    <Input style="width: 180px" v-model="jsonname.compute_list.ins_name" disabled></Input>
                                  </div>
                                 <div class="container-right">
                                     <span>实例规格：</span>
-                                    <Select style="width: 180px" v-model="jsonname.compute_list.cpu" @on-change="changeArr1">
+                                    <Select style="width: 180px" v-model="jsonname.compute_list.cpu"  disabled>
                                         <Option value="2C,4G">2C 4G</Option>
                                         <Option value="4C,8G">4C 8G</Option>
                                     </Select>
@@ -47,7 +47,7 @@
                             </div>
                                 <div style="padding-top: 20px " class="clearfix">
                                     <span>镜像：</span>
-                                    <Input style="width: 380px" v-model="jsonname.compute_list.url"></Input>
+                                    <Input style="width: 380px" v-model="jsonname.compute_list.url" disabled></Input>
                                 </div>
 
 
@@ -60,28 +60,28 @@
                                     <div class="container-left" style="height: 100px">
                                         <div>
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="jsonname.resource_list[0].res_name"></Input>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[0].res_name" disabled></Input>
                                         </div>
                                         <div>
                                             <span>实例数量：</span>
-                                            <Input-number v-model="jsonname.resource_list[0].quantity"></Input-number>
+                                            <Input-number v-model="jsonname.resource_list[0].quantity" disabled></Input-number>
                                         </div>
                                         <div >
                                             <span>存储空间：</span>
-                                            <Input-number v-model="jsonname.resource_list[0].disk"></Input-number>
+                                            <Input-number v-model="jsonname.resource_list[0].disk" disabled></Input-number>
                                         </div>
                                     </div>
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px"  @change="changeArr2" v-model="jsonname.resource_list[0].cpu">
+                                            <Select style="width: 180px"   v-model="jsonname.resource_list[0].cpu" disabled>
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="4C,8G">4C 8G</Option>
                                             </Select>
                                         </div>
                                         <div>
                                             <span>实例版本: </span>
-                                            <Select style="width: 180px" v-model="jsonname.resource_list[0].version">
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[0].version" disabled>
                                                 <Option value="MYSQL5.5">MYSQL5.5</Option>
                                                 <Option value="MYSQL5.6">MYSQL5.6</Option>
                                             </Select>
@@ -92,11 +92,11 @@
                                     <div class="container-left">
                                         <div>
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="jsonname.resource_list[1].res_name"></Input>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[1].res_name" disabled></Input>
                                         </div>
                                         <div>
                                             <span>实例版本：</span>
-                                            <Select style="width: 180px" v-model="jsonname.resource_list[1].version">
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[1].version" disabled>
                                                 <Option value="Redis2.8">Redis2.8</Option>
                                                 <Option value="Redis3.0">Redis3.0</Option>
                                             </Select>
@@ -106,7 +106,7 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;height:50px"  v-model="jsonname.resource_list[1].cpu" @change="changeArr3">
+                                            <Select style="width: 180px;height:50px"  v-model="jsonname.resource_list[1].cpu" disabled>
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="2C,8G">2C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
@@ -116,7 +116,7 @@
                                             <span>实例数量: </span>
                                             <Select style="width: 180px">
 
-                                                <Input-number v-model="jsonname.resource_list[1].quantity"></Input-number>
+                                                <Input-number v-model="jsonname.resource_list[1].quantity" disabled></Input-number>
                                             </Select>
                                         </div>
                                     </div>
@@ -125,21 +125,21 @@
                                     <div class="container-left" style="height:100px;">
                                         <div>
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="jsonname.resource_list[2].res_name"></Input>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[2].res_name" disabled></Input>
                                         </div>
                                         <div>
                                             <span>实例数量：</span>
-                                            <Input-number v-model="jsonname.resource_list[2].quantity" ></Input-number>
+                                            <Input-number v-model="jsonname.resource_list[2].quantity" disabled></Input-number>
                                         </div>
                                         <div >
                                             <span>存储空间：</span>
-                                            <Input-number v-model="jsonname.resource_list[2].disk"></Input-number>
+                                            <Input-number v-model="jsonname.resource_list[2].disk" disabled></Input-number>
                                         </div>
                                     </div>
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px"  v-model="jsonname.resource_list[2].cpu" @change="changeArr4">
+                                            <Select style="width: 180px"  v-model="jsonname.resource_list[2].cpu" disabled>
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="4C,8G">4C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
@@ -147,7 +147,7 @@
                                         </div>
                                         <div>
                                             <span>实例版本: </span>
-                                            <Select style="width: 180px" v-model="jsonname.resource_list[2].version">
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[2].version" disabled>
                                                 <option value="Mongo3.2">Mongo3.2</option>
                                             </Select>
                                         </div>
@@ -157,6 +157,8 @@
 
 
                         </div>
+                        <div class="title"><span>审批意见:</span></div>
+                        <div ><textarea style="width: 100%" id="annotation" v-model="checkjson.annotation" ></textarea></div>
                     </div></Tab-pane>
 
                 </Tabs>
@@ -283,7 +285,7 @@ import {userinfo} from '../../../../tools/user.js';
                     }
                 ]
             },
-
+            checkjson:{"approve_uid":userinfo.user_id,"agree":true,"annotation":""},
             ruleInline: {
                 resource_name: [
                     { required: true, message: '请填写用户名', trigger: 'blur' }
@@ -313,10 +315,35 @@ import {userinfo} from '../../../../tools/user.js';
     methods: {
         pass() {
             let self=this;
-            self.jsonname
+            self.checkjson.agree=true;
+            const url=common.apihost+'approval/approvals/'+this.$route.query.id;
+            this.$http.put(url,self.checkjson).then(function (response) {
 
 
+                if(response.body.code===200) {
+                   //
+                    console.log("审批通过");
+                    this.$router.push({name: 'res_applicationHistory'});
+                }
+                // 成功回调
+            });
+        },
+        notPass() {
+            let self=this;
+            self.checkjson.agree=false;
+            console.log("审批:"+ self.checkjson);
+            const url=common.apihost+'approval/approvals'+this.$route.query.id;
+            this.$http.put(url,self.checkjson).then(function (response) {
+
+                if(response.body.code===200) {
+                  //  this.jsonname.application_status="审批不通过";
+                    console.log("审批不通过");
+                    this.$router.push({name: 'res_applicationHistory'});
+                }
+                // 成功回调
+            });
         }
+
     }}
 
 
