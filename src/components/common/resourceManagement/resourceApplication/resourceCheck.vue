@@ -332,7 +332,7 @@ import {userinfo} from '../../../../tools/user.js';
             let self=this;
             self.checkjson.agree=false;
             console.log("审批:"+ self.checkjson);
-            const url=common.apihost+'approval/approvals'+this.$route.query.id;
+            const url=common.apihost+'approval/approvals/'+this.$route.query.id;
             this.$http.put(url,self.checkjson).then(function (response) {
 
                 if(response.body.code===200) {
