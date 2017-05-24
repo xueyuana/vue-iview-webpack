@@ -49,7 +49,7 @@
       <Table border size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
-          <Page :total="this.data1.length" :page-size="pageSize" :current="1" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
+          <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
         </div>
       </div>
     </div>
@@ -142,7 +142,8 @@
         ],
         data1: [],
         filterDate: [],
-        pageSize: 10
+        pageSize: 10,
+        num: 1
       }
     },
     methods: {
@@ -162,7 +163,8 @@
         }).then(data => {
           console.log('success', data)
           this.data1 = data.body
-          this.filterDate = this.mockTableData(data.body, this.pageSize, 1)
+          this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
+          this.num = 1
         }, err => {
           console.log('error', err)
         })

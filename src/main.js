@@ -90,14 +90,82 @@ var vueRouters = new VueRouter({
     ]
 });
 
-// vueRouters.beforeEach((to, from, next) => {
-//   console.log(to, from)
-//   next()
-// })
-
 // 导入状态池
 import {store} from './store/store.js';
 
+vueRouters.beforeEach((to, from, next) => {
+  let nav = {}
+  let bread = {}
+  bread.level_1 = '主页'
+  switch (to.name) {
+    // 管理控制台 > 普通用户
+    case 'managementConsole':
+        break
+    // 管理员账户
+    case 'adminConsole':
+      break
+    // 部署单元管理
+    case 'projectApplication':
+      nav.openNames = '1'
+      nav.activeName = '11'
+      bread.level_2 = '部署单元管理'
+      break
+    case 'pro_applicationHistory':
+      nav.openNames = '1'
+      nav.activeName = '12'
+      bread.level_2 = '部署单元管理'
+      break
+    // 资源管理
+    case 'resourceApplication':
+      nav.openNames = '2'
+      nav.activeName = '21'
+      bread.level_2 = '资源管理'
+      break
+    case 'res_applicationHistory':
+      nav.openNames = '2'
+      nav.activeName = '22'
+      bread.level_2 = '资源管理'
+      break
+    // 持续交付
+    case 'applicationDeployment':
+      nav.openNames = '3'
+      nav.activeName = '31'
+      bread.level_2 = '持续交付'
+      break
+    case 'deployHistory':
+      nav.openNames = '3'
+      nav.activeName = '32'
+      bread.level_2 = '持续交付'
+      break
+    // 工作台
+    case 'processList':
+      nav.openNames = '4'
+      nav.activeName = '41'
+      bread.level_2 = '工作台'
+      break
+    case 'myWorkbench':
+      nav.openNames = '4'
+      nav.activeName = '42'
+      bread.level_2 = '工作台'
+      break
+    case 'myResource':
+      nav.openNames = '4'
+      nav.activeName = '43'
+      bread.level_2 = '工作台'
+      break
+    // 权限管理
+    case 'addAuthority':
+      nav.openNames = '5'
+      nav.activeName = '51'
+      bread.level_2 = '权限管理'
+      break
+    default:
+        break
+  }
+  store.commit('getActiveItem', nav)
+  store.commit('getLevel', bread)
+  next()
+})
 
 
 //创建Vue对象

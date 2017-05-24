@@ -101,6 +101,7 @@
 </style>
 
 <script>
+  import {setStroage, getStroage} from 'tools/cookieAction.js';
   import baseUrl from 'tools/common.js'
 
   export default {
@@ -204,7 +205,14 @@
         if (len === 0) {
           this.selected = {}
         } else {
-          this.selected = selection[len - 1]
+          console.log(selection[len - 1])
+          for(let item in selection[len - 1]) {
+            if (item == 'autho') {
+              this.selected[item] = selection[len - 1][item] == '管理员' ? 'True' : 'False'
+            }else {
+              this.selected[item] = selection[len - 1][item]
+            }
+          }
           this.indexOfSelected(this.selected)
         }
       },
@@ -221,10 +229,10 @@
             console.log(data)
             this.filterDate[this.index].autho = data.body.is_admin ? '管理员' : '普通用户'
 
-            let userinfo = JSON.parse(window.localStorage.getItem('userInfo'))
+            let userinfo = getStroage('userInfo')
             userinfo.is_admin= data.body.is_admin
             console.log(userinfo)
-            window.localStorage.setItem('userInfo', JSON.stringify(userinfo))
+            setStroage('userInfo', userinfo)
             this.loading = false
             this.confirm = false
           }, err => {
