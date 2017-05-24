@@ -372,6 +372,7 @@
                    console.log(response);
                    if(response.body.code===200 && response.body.result.res=="success") {
                        this.$Message.success('提交成功!');
+                       this.formInline.res_id= response.body.result.res_id;
                        //添加一条审批
                        this.addCheck();
                    }
