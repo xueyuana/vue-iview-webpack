@@ -2,10 +2,15 @@
     <div class="my-resource">
         <div class="my-resource-header">
             <div class="search-list">
-                <div class="search-title">查询类型</div>
+                <div class="search-title">
+                    <span style="color: #3399FF">
+                        <Icon type="ios-circle-filled"></Icon>
+                    </span>
+                    <span>查询类型</span>
+                </div>
                 <div class="search-tabs">
-                    <Tabs value="deployment_unit" :animated="false">
-                        <Tab-pane label="部署单元" name="deployment_unit">
+                    <Tabs value="deployUnit" :animated="false" @on-click="getTabName">
+                        <Tab-pane label="部署单元" name="deployUnit">
                             <!--集成部署单元内容组件-->
                             <deployUnit></deployUnit>
                         </Tab-pane>
@@ -49,21 +54,21 @@
     }
     .search-title {
         font-size: 15px;
-        padding: 0 16px;
+        /*padding: 0 16px;*/
         position: absolute;
         font-weight: 700;
         top: -30px;
     }
-    .search-title::before {
-        content: '';
-        display: block;
-        height: 16px;
-        width: 2px;
-        background-color: #88B7E0;
-        position: absolute;
-        left: 5px;
-        top: 11px;
-    }
+    /*.search-title::before {*/
+        /*content: '';*/
+        /*display: block;*/
+        /*height: 16px;*/
+        /*width: 2px;*/
+        /*background-color: #88B7E0;*/
+        /*position: absolute;*/
+        /*left: 5px;*/
+        /*top: 11px;*/
+    /*}*/
     .search-right {
         top: -6px;
         right: 0px;
@@ -93,9 +98,43 @@
     import mysql from './subcomponents/mysql.vue';
     import redis from './subcomponents/redis.vue';
     import mongodb from './subcomponents/mongodb.vue';
+    import common from '../../../../tools/common.js'
     export default {
+        // 默认请求部署单元的数据
+        mounted() {
+           this.getData(common.apihost+'bench/source_unit');
+        },
         data () {
             return {
+              
+            }
+
+        },
+        methods: {
+            // 获取被点击的tab的数据
+            getData (url) {
+                this.$http.get(url)
+                        .then(response => {
+                            console.log(response);
+                            if (response.body.code === 2002) { // 请求成功
+                                datas= response.body.result.res;
+                                // 保存数据到状态池
+                                this.$store.commit('getResourceData',datas);
+                                console.log(this.$store.state.resourceData.datas);
+                            }
+                       });
+            },
+            // 获取点击tab触发的值
+            getTabName (name) {
+                console.log(name);
+                let url=""
+                // 根据不同的name，请求不同的数据
+                switch (name) {
+                    case "deployUnit":
+                        url=common.apihost+'bench/source_unit';
+                        this.getData(url);
+                        break;
+                }
             }
         },
         components: {
@@ -105,6 +144,5 @@
             redis,
             mongodb
         }
-
     }
 </script>

@@ -9,11 +9,14 @@ import { breadcrumbData } from './breadcrumbData.js';
 import { projectInfo } from './projectList.js';
 /* 导入侧边导航的激活状态*/
 import { openMenu } from './openMenu.js';
+// 我的资源数据
+import { resourceData } from './resourceData.js';
 
 export const store = new Vuex.Store({
     modules: {
         breadcrumbData:breadcrumbData,
         projectInfo:projectInfo,
-        openMenu:openMenu
+        openMenu:openMenu,
+        resourceData:resourceData
     }
 });
