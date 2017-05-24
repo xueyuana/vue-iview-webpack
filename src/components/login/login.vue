@@ -109,9 +109,7 @@
 
 <script>
     import {setCookie, getCookie, delCookie, setStroage} from 'tools/cookieAction.js';
-
-    import common from '../../tools/common.js';
-    import {userinfo} from '../../tools/user.js';
+    import common from 'tools/common.js';
 
     export default {
         data () {
@@ -173,6 +171,7 @@
                                   if(response.body.code===200){
                                     this.$Message.success('提交成功!');
                                     console.log(response)
+                                    let userinfo = {}
                                     userinfo.username=response.body.result.msg.username;
                                     userinfo.user_id=response.body.result.msg.user_id;
                                     userinfo.is_admin=response.body.result.msg.is_admin;

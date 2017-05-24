@@ -242,87 +242,30 @@
                         break;
                     case '12': //项目创建历史
                         this.$router.push({name: 'pro_applicationHistory'});
-                            // 保存面包屑导航
-//                        this.$store.commit('getLevel',{
-//                            level_1: this.$store.state.breadcrumbData.level.level_1,
-//                            level_2: '部署单元查询'
-//                        });
-//                        // 打开项设置
-//                        this.$store.commit('getActiveItem',{
-//                            openNames:'1',  // Submenu
-//                            activeName:'12'  //Menu-item
-//                        });
                         break;
                     case '21': //资源申请
                         this.$router.push({name: 'resourceApplication'});
-//                        this.$store.commit('getLevel',{
-//                            level_1: this.$store.state.breadcrumbData.level.level_1,
-//                            level_2: '资源申请'
-//                        });
-//                        // 打开项设置
-//                        this.$store.commit('getActiveItem',{
-//                            openNames:'2',  // Submenu
-//                            activeName:'21'  //Menu-item
-//                        });
                         break;
                     case '22': //资源申请历史
                         this.$router.push({name: 'res_applicationHistory'});
-//                        this.$store.commit('getLevel',{
-//                            level_1: this.$store.state.breadcrumbData.level.level_1,
-//                            level_2: '申请历史'
-//                        });
-//                        // 打开项设置
-//                        this.$store.commit('getActiveItem',{
-//                            openNames:'2',  // Submenu
-//                            activeName:'22'  //Menu-item
-//                        });
                         break;
                     case '31': //应用部署
                         this.$router.push({name: 'applicationDeployment'});
-//                        this.$store.commit('getLevel',{
-//                            level_1: this.$store.state.breadcrumbData.level.level_1,
-//                            level_2: '应用部署'
-//                        });
-//                        // 打开项设置
-//                        this.$store.commit('getActiveItem',{
-//                            openNames:'3',  // Submenu
-//                            activeName:'31'  //Menu-item
-//                        });
                         break;
                     case '32': //部署历史
                         this.$router.push({name: 'deployHistory'});
-//                        this.$store.commit('getLevel',{
-//                            level_1: this.$store.state.breadcrumbData.level.level_1,
-//                            level_2: '部署历史'
-//                        });
                         break;
                     case '41': //处理列表
                         this.$router.push({name: 'processList'});
-//                        this.$store.commit('getLevel',{
-//                            level_1: this.$store.state.breadcrumbData.level.level_1,
-//                            level_2: '处理列表'
-//                        });
                         break;
                     case '42': //我的工作台
                         this.$router.push({name: 'myWorkbench'});
-//                        this.$store.commit('getLevel',{
-//                            level_1: this.$store.state.breadcrumbData.level.level_1,
-//                            level_2: '我的工作台'
-//                        });
                         break;
                     case '43': //我的资源
                         this.$router.push({name: 'myResource'});
-//                        this.$store.commit('getLevel',{
-//                            level_1: this.$store.state.breadcrumbData.level.level_1,
-//                            level_2: '我的资源'
-//                        });
                         break;
                     case '51': //权限管理
                         this.$router.push({name: 'addAuthority'});
-//                        this.$store.commit('getLevel',{
-//                            level_1: this.$store.state.breadcrumbData.level.level_1,
-//                            level_2: '权限管理'
-//                        });
                         break;
                 }
             }
