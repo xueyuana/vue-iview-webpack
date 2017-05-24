@@ -24,11 +24,11 @@
                 <tbody>
                     <tr v-for="(data,index) in $store.state.resourceData.datas" :key="data">
                         <td>{{ index+1 }}</td>
-                        <td><a href="#">{{data.project_name}}</a></td>
-                        <td>{{ data.create_date }}</td>
-                        <td>{{data.creator}}</td>
-                        <td>{{data.project_code}}</td>
-                        <td>{{data.department}}</td>
+                        <td><a href="#">{{data.item_name}}</a></td>
+                        <td>{{data.create_date}}</td>
+                        <td>{{data.user}}</td>
+                        <td>{{data.item_code}}</td>
+                        <td>{{data.item_depart}}</td>
                         <td>
                             <Button type="primary">查看详情</Button>
                         </td>

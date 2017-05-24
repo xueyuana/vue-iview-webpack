@@ -89,10 +89,9 @@
             getData (url) {
                 this.$http.get(url)
                         .then(response => {
-                            let body=JSON.parse(response.body);
-                            console.log(body);
-                            if (body.code === 2002) { // 请求成功
-                              let datas= body.result.res;
+                            console.log(response);
+                            if (response.body.code === 2002) { // 请求成功
+                              let datas=  response.body.result.res;
                                 // 保存数据到状态池
                                 this.$store.commit('getResourceData',datas);
                                 console.log(this.$store.state.resourceData.datas);
