@@ -192,13 +192,13 @@
                     if(msgs[index].approval_status == "unsubmit"){
                         this.queryData.approval_status="流程不存在";
                     }
-                    if(msgs[index].msg.approval_status == "processing"){
+                    if(msgs[index].approval_status == "processing"){
                         this.queryData.approval_status="审批中";
                     }
-                    if(msgs[index].msg.approval_status == "success"){
+                    if(msgs[index].approval_status == "success"){
                         this.queryData.approval_status="审批完成";
                     }
-                    if(msgs[index].msg.approval_status == "false"){
+                    if(msgs[index].approval_status == "false"){
                         this.queryData.approval_status="审批不通过";
                     }
                 }
