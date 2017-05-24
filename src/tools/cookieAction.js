@@ -36,6 +36,24 @@ function delCookie(c_name) {
   }
 }
 
+// 设置localStroage
+function setStroage(key, val) {
+  if (key && val) {
+    if (typeof val === 'object') {
+      window.localStorage.setItem(key, JSON.stringify(val))
+    } else {
+      window.localStorage.setItem(key, val)
+    }
+  }
+}
+
+// 获取localStroage
+function getStroage(key) {
+  let val = null
+  val = key && JSON.parse(window.localStorage.getItem(key))
+  if (val) return val
+}
+
 // 获取用户信息
 function getUserInfo() {
   let userInfo = {}
@@ -54,5 +72,7 @@ export {
   setCookie,
   getCookie,
   delCookie,
+  setStroage,
+  getStroage,
   getUserInfo
 }

@@ -138,36 +138,8 @@
 </style>
 
 <script>
-
+  import {setStroage, getStroage} from 'tools/cookieAction.js'
   import baseUrl from 'tools/common.js'
-  // 读取cookie
-//  function getCookie(c_name){
-//    if (document.cookie.length>0)
-//    {
-//      var c_start=document.cookie.indexOf(c_name + "=");
-//      if (c_start!=-1)
-//      {
-//        c_start=c_start + c_name.length+1;
-//        var c_end=document.cookie.indexOf(";",c_start);
-//        if (c_end==-1)
-//          c_end = document.cookie.length
-//        return unescape(document.cookie.substring(c_start, c_end))
-//      }
-//    }
-//    return ""
-//  }
-  // 获取用户信息
-//  function getUserInfo() {
-//    let userInfo = {}
-//    let accountInfo = getCookie('accountInfo')
-//
-//    let index = accountInfo.indexOf("&");
-//
-//    userInfo.userName = accountInfo.substring(0,index)
-//    userInfo.passWord = accountInfo.substring(index+1)
-//
-//    return userInfo
-//  }
 
   export default {
     data() {
@@ -249,9 +221,9 @@
       },
       // 请求部署单元列表
       getProjectList() {
-        let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+        let userInfo = getStroage('userInfo')
         console.log(userInfo)
-        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + userInfo.username
+        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + userInfo.user_id
         this.$http.get(url).then(data => {
           console.log('ProjectList', data)
           this.project_list = data.body.result.res

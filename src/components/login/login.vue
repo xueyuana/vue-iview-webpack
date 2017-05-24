@@ -108,7 +108,7 @@
 </style>
 
 <script>
-    import {setCookie, getCookie, delCookie} from '../../tools/cookieAction.js';
+    import {setCookie, getCookie, delCookie, setStroage} from 'tools/cookieAction.js';
 
     import common from '../../tools/common.js';
     import {userinfo} from '../../tools/user.js';
@@ -178,7 +178,7 @@
                                     userinfo.is_admin=response.body.result.msg.is_admin;
                                     userinfo.department=response.body.result.msg.department;
 
-                                    window.localStorage.setItem('userInfo', JSON.stringify(userinfo))
+                                    setStroage('userInfo', userinfo)
 
                                     // 根据身份跳转不同界面
                                     if (response.body.result.msg.is_admin) {

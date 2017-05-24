@@ -101,6 +101,7 @@
 </style>
 
 <script>
+  import {setStroage, getStroage} from 'tools/cookieAction.js';
   import baseUrl from 'tools/common.js'
 
   export default {
@@ -221,10 +222,10 @@
             console.log(data)
             this.filterDate[this.index].autho = data.body.is_admin ? '管理员' : '普通用户'
 
-            let userinfo = JSON.parse(window.localStorage.getItem('userInfo'))
+            let userinfo = getStroage('userInfo')
             userinfo.is_admin= data.body.is_admin
             console.log(userinfo)
-            window.localStorage.setItem('userInfo', JSON.stringify(userinfo))
+            setStroage('userInfo', userinfo)
             this.loading = false
             this.confirm = false
           }, err => {

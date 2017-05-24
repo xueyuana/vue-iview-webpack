@@ -183,8 +183,8 @@
 
 </style>
 <script>
+    import {setStroage, getStroage} from 'tools/cookieAction.js';
     import common from '../../tools/common.js';
-
     import {userinfo} from '../../tools/user.js';
 
     export default {
@@ -197,8 +197,6 @@
         },
         mounted () {
            this.getUserInfo();
-          let userInfo = JSON.parse(localStorage.getItem('userInfo'))
-          console.log('用户信息', userInfo)
         },
         methods: {
             // 获取用户名
@@ -208,7 +206,7 @@
             // 跳转到管理控制台
             goConsole () {
                 // 根据不同身份跳转不同界面
-                let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+                let userInfo = getStroage('userInfo')
                 console.log('用户权限', userInfo.is_admin)
                 if (userInfo.is_admin) {
                   this.$router.push({path:'/admin_console'});
