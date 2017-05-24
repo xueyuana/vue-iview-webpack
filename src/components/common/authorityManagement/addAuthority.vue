@@ -205,7 +205,14 @@
         if (len === 0) {
           this.selected = {}
         } else {
-          this.selected = selection[len - 1]
+          console.log(selection[len - 1])
+          for(let item in selection[len - 1]) {
+            if (item == 'autho') {
+              this.selected[item] = selection[len - 1][item] == '管理员' ? 'True' : 'False'
+            }else {
+              this.selected[item] = selection[len - 1][item]
+            }
+          }
           this.indexOfSelected(this.selected)
         }
       },
