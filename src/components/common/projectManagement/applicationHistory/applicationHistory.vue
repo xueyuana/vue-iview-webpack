@@ -59,14 +59,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!--<tr v-for="(data,trIndex) in $store.state.projectInfo.projectList" :key="data">-->
-                    <!--<td>{{trIndex+1}}</td>-->
-                    <!--<td>{{data.item_name}}</td>-->
-                    <!--<td>{{data.create_date}}</td>-->
-                    <!--<td>{{data.user}}</td>-->
-                    <!--<td>{{data.item_code}}</td>-->
-                    <!--<td>{{data.item_depart}}</td>-->
-                <!--</tr>-->
 
                 <tr v-for="(data,trIndex) in filterDate" :key="data">
                     <td>{{trIndex+1}}</td>
