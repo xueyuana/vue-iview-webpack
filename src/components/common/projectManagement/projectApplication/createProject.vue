@@ -111,15 +111,15 @@
                                        if(response.body.code===2002) {
                                            // 2.0 修改面包屑导航的数据 修改侧边导航的默认选项
                                             // 2.0.1 修改激活项
-                                           self.$store.commit('getActiveItem',{
-                                               openNames:'1',  // Submenu
-                                               activeName:'12'  //Menu-item
-                                           });
-                                            // 2.0.2  修改面包屑导航数据
-                                           self.$store.commit('getLevel',{
-                                               level_1: this.$store.state.breadcrumbData.level.level_1,
-                                               level_2: '部署单元查询'
-                                           });
+//                                           self.$store.commit('getActiveItem',{
+//                                               openNames:'1',  // Submenu
+//                                               activeName:'12'  //Menu-item
+//                                           });
+//                                            // 2.0.2  修改面包屑导航数据
+//                                           self.$store.commit('getLevel',{
+//                                               level_1: this.$store.state.breadcrumbData.level.level_1,
+//                                               level_2: '部署单元查询'
+//                                           });
 
                                             // 3.0 跳转到项目查询页面
                                            self.$router.push({name: 'pro_applicationHistory'});
