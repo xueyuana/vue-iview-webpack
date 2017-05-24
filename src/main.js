@@ -111,56 +111,56 @@ vueRouters.beforeEach((to, from, next) => {
     case 'projectApplication':
       nav.openNames = '1'
       nav.activeName = '11'
-      bread.level_2 = '部署单元管理'
+      bread.level_2 = '创建部署单元'
       break
     case 'pro_applicationHistory':
       nav.openNames = '1'
       nav.activeName = '12'
-      bread.level_2 = '部署单元管理'
+      bread.level_2 = '部署单元查询'
       break
     // 资源管理
     case 'resourceApplication':
       nav.openNames = '2'
       nav.activeName = '21'
-      bread.level_2 = '资源管理'
+      bread.level_2 = '资源申请'
       break
     case 'res_applicationHistory':
       nav.openNames = '2'
       nav.activeName = '22'
-      bread.level_2 = '资源管理'
+      bread.level_2 = '申请历史'
       break
     // 持续交付
     case 'applicationDeployment':
       nav.openNames = '3'
       nav.activeName = '31'
-      bread.level_2 = '持续交付'
+      bread.level_2 = '应用部署'
       break
     case 'deployHistory':
       nav.openNames = '3'
       nav.activeName = '32'
-      bread.level_2 = '持续交付'
+      bread.level_2 = '部署历史'
       break
     // 工作台
     case 'processList':
       nav.openNames = '4'
       nav.activeName = '41'
-      bread.level_2 = '工作台'
+      bread.level_2 = '处理列表'
       break
     case 'myWorkbench':
       nav.openNames = '4'
       nav.activeName = '42'
-      bread.level_2 = '工作台'
+      bread.level_2 = '我的工作台'
       break
     case 'myResource':
       nav.openNames = '4'
       nav.activeName = '43'
-      bread.level_2 = '工作台'
+      bread.level_2 = '我的资源'
       break
     // 权限管理
     case 'addAuthority':
       nav.openNames = '5'
       nav.activeName = '51'
-      bread.level_2 = '权限管理'
+      bread.level_2 = '添加权限'
       break
     default:
         break
