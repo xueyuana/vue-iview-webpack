@@ -76,7 +76,7 @@
     export default {
         // 默认请求部署单元的数据
         mounted() {
-           this.getData(common.apihost+'bench/source_unit');
+           this.getData(common.apihost+'iteminfo/iteminfoes/project_item');
         },
         data () {
             return {
@@ -106,7 +106,7 @@
                 // 根据不同的name，请求不同的数据
                 switch (name) {
                     case "deployUnit":
-                        url=common.apihost+'bench/source_unit';
+                        url=common.apihost+'iteminfo/iteminfoes/project_item';
                         this.getData(url);
                         break;
                 }
