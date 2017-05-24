@@ -61,8 +61,6 @@
 <script>
     import common from '../../../../tools/common.js';
 
-    import {userinfo} from '../../../../tools/user.js';
-
     export default {
         data () {
             return {
@@ -88,15 +86,18 @@
         methods: {
             handleSubmit (name) {
                 let self=this;
+                // 从localStorage中获取用户信息
+                let userInfo=JSON.parse(localStorage.getItem('userInfo'));
+
                 self.$refs[name].validate((valid) => {
                     if (valid) {
                         // 1.0 将表单数据提交到后台
                         let newProject={
-                            user_id : userinfo.user_id ,
-                            user_name : userinfo.username,
+                            user_id : userInfo.user_id ,
+                            user_name : userInfo.username,
                             item_name : self.formValidate.project_name,
                             item_code : self.formValidate.project_code,
-                            item_department  : userinfo.department,
+                            item_department  : userInfo.department,
                             item_description : self.formValidate.project_desc
                         };
 
