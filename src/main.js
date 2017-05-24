@@ -91,6 +91,11 @@ var vueRouters = new VueRouter({
     ]
 });
 
+vueRouters.beforeEach((to, from, next) => {
+  console.log(to, from)
+  next()
+})
+
 // 导入状态池
 import {store} from './store/store.js';
 
