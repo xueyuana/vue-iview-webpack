@@ -254,13 +254,13 @@
         }
         return data;
       },
+      // 返回改变数据的index
       indexOfSelected(selected) {
         for (let i=0;i<this.filterDate.length;i++) {
           if (this.filterDate[i].id === selected.id && this.filterDate[i].autho == selected.autho) {
             this.index = i
           }
         }
-        console.log(this.index)
       }
     }
   }

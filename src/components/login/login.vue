@@ -108,41 +108,11 @@
 </style>
 
 <script>
+    import {setCookie, getCookie, delCookie} from '../../tools/cookieAction.js';
+
     import common from '../../tools/common.js';
     import {userinfo} from '../../tools/user.js';
-    // 设置cookie
-    function setCookie (c_name,value,expiremMinutes){
-        var exdate = new Date();
-        exdate.setTime(exdate.getTime() + expiremMinutes * 60 * 1000);
-        document.cookie= c_name + "=" + escape(value)+((expiremMinutes==null) ? "" : ";expires="+exdate.toGMTString());
-    }
 
-    // 读取cookie
-    function getCookie(c_name){
-        if (document.cookie.length>0)
-        {
-            var c_start=document.cookie.indexOf(c_name + "=");
-            if (c_start!=-1)
-            {
-                c_start=c_start + c_name.length+1;
-                var c_end=document.cookie.indexOf(";",c_start);
-                if (c_end==-1)
-                    c_end = document.cookie.length
-                return unescape(document.cookie.substring(c_start, c_end))
-            }
-        }
-        return ""
-    }
-
-    // 删除cookie
-    function delCookie(c_name){
-        var exp = new Date();
-        exp.setTime(exp.getTime() - 1);
-        var cval = getCookie(c_name);
-        if(cval!=null){
-            document.cookie = c_name + "=" + cval + ";expires=" + exp.toGMTString();
-        }
-    }
     export default {
         data () {
         return {
@@ -183,7 +153,7 @@
                     accountInfo = userName + "&" + passWord;
                     console.log(this.formInline.userName);
 
-                        const url=common.apihost+'auth/userlist';
+                    const url=common.apihost+'auth/userlist';
                     this.$http.post(
                             url,
                             {
@@ -191,7 +161,7 @@
                                 'password':passWord
 
                             }, {emulateJSON:true} ).then(response=>{
-                        console.log(response);
+                                console.log('账号密码', response);
                                 if (rememberStatus){
                                     console.log("勾选了记住密码，现在开始写入cookie");
                                     setCookie('accountInfo',accountInfo,1440*3);
@@ -200,14 +170,21 @@
                                     console.log("没有勾选记住密码，现在开始删除账号cookie");
                                     delCookie('accountInfo');
                                 }
-                                if(response.body.code===200 || response.body.code===304){
+                                  if(response.body.code===200){
                                     this.$Message.success('提交成功!');
-                                    this.$router.push({name: 'home'});
                                     console.log(response)
                                     userinfo.username=response.body.result.msg.username;
                                     userinfo.user_id=response.body.result.msg.user_id;
+                                    userinfo.is_admin=response.body.result.msg.is_admin;
                                     userinfo.department=response.body.result.msg.department;
-                                    console.log(userinfo);
+                                    window.localStorage.setItem('userInfo', JSON.stringify(userinfo))
+
+                                    // 根据身份跳转不同界面
+                                    if (response.body.result.msg.is_admin) {
+                                      this.$router.push({path:'/admin_console'})
+                                    }else {
+                                      this.$router.push({path:'/management_console'})
+                                    }
                                 }
 
                                 // 成功回调

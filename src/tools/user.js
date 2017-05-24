@@ -5,5 +5,6 @@
 export const userinfo = {
   'username':'',
   'user_id':'',
+  'is_admin': '',
   'department':''
 }

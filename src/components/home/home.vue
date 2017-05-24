@@ -194,7 +194,7 @@
                userInfo:{}
             }
         },
-        created () {
+        mounted () {
            this.getUserInfo();
         },
         methods: {
@@ -204,6 +204,13 @@
             },
             // 跳转到管理控制台
             goConsole () {
+                // 根据不同身份跳转不同界面
+                let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+                if (userInfo.is_admin) {
+                  this.$router.push({name: 'adminConsole'});
+                } else {
+                  this.$router.push({name: 'managementConsole'});
+                }
                 this.$router.push({name: 'managementConsole'});
                 this.$store.commit('getLevel',{
                     level_1: this.$store.state.breadcrumbData.level.level_1,
