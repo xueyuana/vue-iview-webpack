@@ -344,7 +344,7 @@
         save(name) {
 
             let self=this;
-            self.formInline.application_status="审批中";
+            self.formInline.application_status="已提交";
             let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
 

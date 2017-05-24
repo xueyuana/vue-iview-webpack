@@ -143,24 +143,50 @@
                 key: 'operate',
                 align: 'center',
                 render: (h,params) => {
-                return h('div',[
-                    h('Button',{
-                        props: {
-                            type: 'primary',
-                            size: 'small'
-                        },
-                        style: {
-                            marginRight: '5px'
-                        },
-                        on: {
-                            click: () => {
-                            this.gotoEdit(params.index);
+               if(this.queryData[params.index].approval_status == "success"){
+                   return h('div',[
+                       h('Button',{
+                           props: {
+                               type: 'primary',
+                               size: 'small'
+                           },
+                           style: {
+                               marginRight: '5px'
+                           },
+                           on: {
+                               click: () => {
+                               this.gotoAdd(params.index);
+               }}},'创建')])
+             }else if(this.queryData[params.index].approval_status == "processing"){
+        return h('div',[
+            h('Button',{
+                props: {
 
-                    }
+                    size: 'small'
+                },
+                style: {
+                    marginRight: '5px'
+                }
+              },'创建')])
+            }{
+        return h('div',[
+            h('Button',{
+                props: {
+                    type: 'primary',
+                    size: 'small'
+                },
+                style: {
+                    marginRight: '5px'
+                },
+                on: {
+                    click: () => {
+                    this.gotoEdit(params.index);
+    }}},'编辑')])
             }
-    },'编辑')
-    ])
-    }
+
+
+
+                 }
     }
     ],
     queryData: [
@@ -169,7 +195,25 @@
             date: 'sdfsf',
             resource: 'sdfsf',
             formStatus: 'sdfdsf',
+            approval_status: 'success',
+            project: 'sdfsf',
+            id:'123'
+        },
+        {
+            name: 'sdfsd',
+            date: 'sdfsf',
+            resource: 'sdfsf',
+            formStatus: 'sdfdsf',
             approval_status: '流程不存在',
+            project: 'sdfsf',
+            id:'123'
+        },
+        {
+            name: 'sdfsd',
+            date: 'sdfsf',
+            resource: 'sdfsf',
+            formStatus: 'sdfdsf',
+            approval_status: 'processing',
             project: 'sdfsf',
             id:'123'
         }
@@ -214,6 +258,23 @@
     },
 
     methods:{
+
+        //新增一条资源
+        gotoAdd(index){
+            const url=common.apihost+'approval/reservation';
+            let resourcejson={"resource_id": this.queryData[index].id}
+            this.$http.post(url,resourcejson, {emulateJSON:true}  ).then(function (response) {
+
+
+                if(response.body.code===200 ) {
+                   // this.$Message.success('提交成功!');
+                    console.log("添加资源预留");
+                }
+                // 成功回调
+            }, function () {
+
+            });
+        },
         //跳转到编辑页面
         gotoEdit(index){
             console.log(this.queryData[index].id);
