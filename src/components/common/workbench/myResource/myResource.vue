@@ -90,7 +90,7 @@
                 this.$http.get(url)
                         .then(response => {
                             console.log(response);
-                            if (response.body.code === 2002) { // 请求成功
+                            if (response.body.code === 200) { // 请求成功
                               let datas=  response.body.result.res;
                                 // 保存数据到状态池
                                 this.$store.commit('getResourceData',datas);
