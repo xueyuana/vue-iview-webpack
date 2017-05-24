@@ -190,16 +190,16 @@
 
                 for (var index in msgs) { // 千万别这样做
                     if(msgs[index].approval_status == "unsubmit"){
-                        this.queryData.approval_status="流程不存在";
+                        this.queryData[index].approval_status="流程不存在";
                     }
                     if(msgs[index].approval_status == "processing"){
-                        this.queryData.approval_status="审批中";
+                        this.queryData[index].approval_status="审批中";
                     }
                     if(msgs[index].approval_status == "success"){
-                        this.queryData.approval_status="审批完成";
+                        this.queryData[index].approval_status="审批完成";
                     }
                     if(msgs[index].approval_status == "false"){
-                        this.queryData.approval_status="审批不通过";
+                        this.queryData[index].approval_status="审批不通过";
                     }
                 }
 
