@@ -183,12 +183,12 @@
         const url=common.apihost+'resource/?user_id='+userid;
         this.$http.get(url, {emulateJSON:true}  ).then(function (response) {
 
-
+             console.log(response.body.result.msg);
             if(response.body.code===200 && response.body.result.res=="success") {
 
                 this.queryData=response.body.result.msg;
 
-               this.queryData.approveStatus="流程不存在";
+              // this.queryData.approveStatus="流程不存在";
 
 
             }
