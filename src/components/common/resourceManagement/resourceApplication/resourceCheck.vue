@@ -316,7 +316,7 @@ import {userinfo} from '../../../../tools/user.js';
         pass() {
             let self=this;
             self.checkjson.agree=true;
-            const url=common.apihost+'approval/approvals'+this.$route.query.id;
+            const url=common.apihost+'approval/approvals/'+this.$route.query.id;
             this.$http.put(url,self.checkjson).then(function (response) {
 
 
