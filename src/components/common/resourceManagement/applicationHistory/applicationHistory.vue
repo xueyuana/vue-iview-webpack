@@ -242,7 +242,7 @@
                     if(msgs[index].approval_status == "success"){
                         this.queryData[index].approval_status="审批完成";
                     }
-                    if(msgs[index].approval_status == "false"){
+                    if(msgs[index].approval_status == "failed"){
                         this.queryData[index].approval_status="审批不通过";
                     }
                 }
