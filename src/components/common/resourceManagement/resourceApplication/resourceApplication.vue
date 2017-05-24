@@ -344,7 +344,7 @@
             }
         })*/
             let self=this;
-            self.formInline.approval_status="审批中"
+            self.formInline.application_status="审批中";
             let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
 

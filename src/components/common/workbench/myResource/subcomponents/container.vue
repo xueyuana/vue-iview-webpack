@@ -193,6 +193,7 @@
                 pageSize: 10
             }
         },
+
         methods:{
             //实现分页  改变后的页码
             changePage (page) {
