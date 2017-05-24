@@ -21,6 +21,8 @@ Vue.use(VueRouter);
 import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
+// 导入字体图标库
+import 'font-awesome/less/font-awesome.less';
 //导入初始化的css
 import '../static/css/reset.css';
 
@@ -29,7 +31,7 @@ import login from './components/login/login.vue';
 import home from './components/home/home.vue';
 
 // 导入管理控制台
-import managementConsole from './components/common/managementConsole/projectMain.vue';
+import managementConsole from './components/common/managementConsole/ordinaryConsole.vue';
 // import adminConsole from './components/common/managementConsole/adminConsole.vue';
 
 // 导入项目管理
@@ -48,7 +50,7 @@ import deployHistory from 'components/common/deployManagement/deployHistory/depl
 //工作台
 import processList from './components/common/workbench/processList/processList.vue';
 import myWorkbench from './components/common/workbench/myWorkbench/myWorkbranch.vue';
-
+import myResource from './components/common/workbench/myResource/myResource.vue';
 //权限管理
 import addAuthority from './components/common/authorityManagement/addAuthority.vue';
 
@@ -79,7 +81,8 @@ var vueRouters = new VueRouter({
                 {name:'deployHistory',path:'/deploy_history',component:deployHistory},
                 // 工作台
                 {name:'processList',path:'/process_list',component:processList},
-                {name:'myWorkbench',path:'/my_workbench',component:myWorkbench},
+                {name:'myWorkbench',path:'/my_workbench',component:managementConsole}, // 加载管理控制台组件
+                {name:'myResource',path:'/my_resource',component:myResource},
                 // 权限管理
                 {name:'addAuthority',path:'/add_authority',component:addAuthority}
             ],

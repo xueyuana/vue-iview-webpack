@@ -152,7 +152,8 @@
         filterDate: [],
         searchList: [],
         selected: {},
-        formItem: {}
+        formItem: {},
+        index: ''
       }
     },
 
@@ -204,18 +205,24 @@
           this.selected = {}
         } else {
           this.selected = selection[len - 1]
+          this.indexOfSelected(this.selected)
         }
       },
       // 提交和重置
       onSubmit() {
         if (this.formItem.id) {
+          this.loading = true
           let url = baseUrl.apihost + 'auth/admindetail/' + this.formItem.id
+          let bl = this.booleanString(this.formItem.autho)
           let params = {
-            'is_admin': this.formItem.autho
+            'admin_user': bl
           }
-          console.log(JSON.stringify(params))
-          this.$http.put(url, JSON.stringify(params)).then(data => {
-            window.location.reload()
+          console.log(params)
+          this.$http.put(url, params, {emulateJSON:true}).then(data => {
+            console.log(data)
+            this.filterDate[this.index].autho = bl ? '管理员' : '普通用户'
+            this.loading = false
+            this.confirm = false
           }, err => {
             console.log('error', err)
           })
@@ -247,6 +254,24 @@
           })
         }
         return data;
+      },
+      indexOfSelected(selected) {
+        for (let i=0;i<this.filterDate.length;i++) {
+          if (this.filterDate[i].id === selected.id && this.filterDate[i].autho == selected.autho) {
+            this.index = i
+          }
+        }
+        console.log(this.index)
+      },
+      booleanString(Boolean) {
+        switch (Boolean) {
+          case 'true':
+            return true
+            break
+          case 'false':
+            return false
+            break
+        }
       }
     }
   }

@@ -63,6 +63,7 @@
                                 </template>
                                 <Menu-item name="41">处理列表</Menu-item>
                                 <Menu-item name="42">我的工作台</Menu-item>
+                                <Menu-item name="43">我的资源</Menu-item>
                             </Submenu>
                             <Submenu name="5">
                                 <template slot="title">
@@ -209,6 +210,10 @@
                     level_1: this.$store.state.breadcrumbData.level.level_1,
                     level_2: '管理控制台'
                 });
+                this.$store.commit('getActiveItem',{
+                    openNames:'',  // Submenu
+                    activeName:''  //Menu-item
+                });
             },
 
             // 导航跳转
@@ -247,6 +252,11 @@
                             level_1: this.$store.state.breadcrumbData.level.level_1,
                             level_2: '资源申请'
                         });
+                        // 打开项设置
+                        this.$store.commit('getActiveItem',{
+                            openNames:'2',  // Submenu
+                            activeName:'21'  //Menu-item
+                        });
                         break;
                     case '22': //资源申请历史
                         this.$router.push({name: 'res_applicationHistory'});
@@ -254,12 +264,22 @@
                             level_1: this.$store.state.breadcrumbData.level.level_1,
                             level_2: '申请历史'
                         });
+                        // 打开项设置
+                        this.$store.commit('getActiveItem',{
+                            openNames:'2',  // Submenu
+                            activeName:'22'  //Menu-item
+                        });
                         break;
                     case '31': //应用部署
                         this.$router.push({name: 'applicationDeployment'});
                         this.$store.commit('getLevel',{
                             level_1: this.$store.state.breadcrumbData.level.level_1,
                             level_2: '应用部署'
+                        });
+                        // 打开项设置
+                        this.$store.commit('getActiveItem',{
+                            openNames:'3',  // Submenu
+                            activeName:'31'  //Menu-item
                         });
                         break;
                     case '32': //部署历史
@@ -281,6 +301,13 @@
                         this.$store.commit('getLevel',{
                             level_1: this.$store.state.breadcrumbData.level.level_1,
                             level_2: '我的工作台'
+                        });
+                        break;
+                    case '43': //我的资源
+                        this.$router.push({name: 'myResource'});
+                        this.$store.commit('getLevel',{
+                            level_1: this.$store.state.breadcrumbData.level.level_1,
+                            level_2: '我的资源'
                         });
                         break;
                     case '51': //权限管理
