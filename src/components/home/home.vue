@@ -64,6 +64,7 @@
                                 <Menu-item name="41">处理列表</Menu-item>
                                 <Menu-item name="42">我的工作台</Menu-item>
                                 <Menu-item name="43">我的资源</Menu-item>
+                                <Menu-item name="44">资源视图</Menu-item>
                             </Submenu>
                             <Submenu name="5">
                                 <template slot="title">

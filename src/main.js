@@ -51,6 +51,8 @@ import deployHistory from 'components/common/deployManagement/deployHistory/depl
 import processList from './components/common/workbench/processList/processList.vue';
 import myWorkbench from './components/common/workbench/myWorkbench/myWorkbranch.vue';
 import myResource from './components/common/workbench/myResource/myResource.vue';
+import resourceView from './components/common/workbench/resourceView/resourceView.vue';
+
 //权限管理
 import addAuthority from './components/common/authorityManagement/addAuthority.vue';
 
@@ -83,6 +85,7 @@ var vueRouters = new VueRouter({
                 {name:'processList',path:'/process_list',component:processList},
                 {name:'myWorkbench',path:'/my_workbench',component:managementConsole}, // 加载管理控制台组件
                 {name:'myResource',path:'/my_resource',component:myResource},
+                {name:'resourceView',path:'/resource_view',component:resourceView},
                 // 权限管理
                 {name:'addAuthority',path:'/add_authority',component:addAuthority}
             ]
