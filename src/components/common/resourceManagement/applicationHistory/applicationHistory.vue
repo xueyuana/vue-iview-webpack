@@ -143,7 +143,7 @@
                 key: 'operate',
                 align: 'center',
                 render: (h,params) => {
-               if(this.queryData[params.index].approval_status == "success"){
+               if(this.queryData[params.index].approval_status == "审批完成"){
                    return h('div',[
                        h('Button',{
                            props: {
@@ -157,7 +157,7 @@
                                click: () => {
                                this.gotoAdd(params.index);
                }}},'创建')])
-             }else if(this.queryData[params.index].approval_status == "processing"){
+             }else if(this.queryData[params.index].approval_status == "审批中"){
         return h('div',[
             h('Button',{
                 props: {
@@ -242,7 +242,7 @@
                     if(msgs[index].approval_status == "success"){
                         this.queryData[index].approval_status="审批完成";
                     }
-                    if(msgs[index].approval_status == "false"){
+                    if(msgs[index].approval_status == "failed"){
                         this.queryData[index].approval_status="审批不通过";
                     }
                 }
