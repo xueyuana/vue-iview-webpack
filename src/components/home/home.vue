@@ -268,6 +268,9 @@
                     case '43': //我的资源
                         this.$router.push({name: 'myResource'});
                         break;
+                    case '44': //资源视图
+                        this.$router.push({name: 'resourceView'});
+                        break;
                     case '51': //权限管理
                         this.$router.push({name: 'addAuthority'});
                         break;

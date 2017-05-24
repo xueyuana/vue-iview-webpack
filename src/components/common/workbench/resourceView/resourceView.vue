@@ -21,7 +21,7 @@
           </Menu>
       </div>
         <div class="view-right">
-            
+
         </div>
     </div>
 </template>
