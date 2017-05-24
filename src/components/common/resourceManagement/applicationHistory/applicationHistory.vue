@@ -183,14 +183,21 @@
         const url=common.apihost+'resource/?user_id='+userid;
         this.$http.get(url, {emulateJSON:true}  ).then(function (response) {
 
-
+             console.log(response.body.result.msg);
             if(response.body.code===200 && response.body.result.res=="success") {
-
                 this.queryData=response.body.result.msg;
-
-               this.queryData.approveStatus="流程不存在";
-
-
+                if(response.body.result.msg.approval_status == "unsubmit"){
+                    this.queryData.approval_status="流程不存在";
+                }
+                if(response.body.result.msg.approval_status == "processing"){
+                    this.queryData.approval_status="审批中";
+                }
+                if(response.body.result.msg.approval_status == "success"){
+                    this.queryData.approval_status="审批完成";
+                }
+                if(response.body.result.msg.approval_status == "false"){
+                    this.queryData.approval_status="审批不通过";
+                }
             }
 
             // 成功回调

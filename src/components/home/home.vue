@@ -195,8 +195,10 @@
                userInfo:{}
             }
         },
-        created () {
+        mounted () {
            this.getUserInfo();
+          let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+          console.log('用户信息', userInfo)
         },
         methods: {
             // 获取用户名
@@ -205,7 +207,14 @@
             },
             // 跳转到管理控制台
             goConsole () {
-                this.$router.push({name: 'managementConsole'});
+                // 根据不同身份跳转不同界面
+                let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+                console.log('用户权限', userInfo.is_admin)
+                if (userInfo.is_admin) {
+                  this.$router.push({path:'/admin_console'});
+                } else {
+                  this.$router.push({path:'/management_console'});
+                }
                 this.$store.commit('getLevel',{
                     level_1: this.$store.state.breadcrumbData.level.level_1,
                     level_2: '管理控制台'

@@ -48,9 +48,9 @@
           <Input v-model="formItem.department" placeholder="请输入"></Input>
         </Form-item>
         <Form-item label="添加权限:">
-          <Select v-model="formItem.autho" placeholder="请选择">
-            <Option value="true">管理员</Option>
-            <Option value="false">普通用户</Option>
+          <Select v-model="formItem.autho" placeholder="请选择权限">
+            <Option value="True">管理员</Option>
+            <Option value="False">普通用户</Option>
           </Select>
         </Form-item>
         <Form-item label="创建时间:">
@@ -213,14 +213,18 @@
         if (this.formItem.id) {
           this.loading = true
           let url = baseUrl.apihost + 'auth/admindetail/' + this.formItem.id
-          let bl = this.booleanString(this.formItem.autho)
           let params = {
-            'admin_user': bl
+            'admin_user': this.formItem.autho
           }
-          console.log(params)
-          this.$http.put(url, params, {emulateJSON:true}).then(data => {
+          console.log(JSON.stringify(params))
+          this.$http.put(url, JSON.stringify(params), {emulateJSON:true}).then(data => {
             console.log(data)
-            this.filterDate[this.index].autho = bl ? '管理员' : '普通用户'
+            this.filterDate[this.index].autho = data.body.is_admin ? '管理员' : '普通用户'
+
+            let userinfo = JSON.parse(window.localStorage.getItem('userInfo'))
+            userinfo.is_admin= data.body.is_admin
+            console.log(userinfo)
+            window.localStorage.setItem('userInfo', JSON.stringify(userinfo))
             this.loading = false
             this.confirm = false
           }, err => {
@@ -255,22 +259,12 @@
         }
         return data;
       },
+      // 返回改变数据的index
       indexOfSelected(selected) {
         for (let i=0;i<this.filterDate.length;i++) {
           if (this.filterDate[i].id === selected.id && this.filterDate[i].autho == selected.autho) {
             this.index = i
           }
-        }
-        console.log(this.index)
-      },
-      booleanString(Boolean) {
-        switch (Boolean) {
-          case 'true':
-            return true
-            break
-          case 'false':
-            return false
-            break
         }
       }
     }

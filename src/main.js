@@ -32,7 +32,7 @@ import home from './components/home/home.vue';
 
 // 导入管理控制台
 import managementConsole from './components/common/managementConsole/ordinaryConsole.vue';
-// import adminConsole from './components/common/managementConsole/adminConsole.vue';
+import adminConsole from './components/common/managementConsole/adminConsole.vue';
 
 // 导入项目管理
 import projectApplication from './components/common/projectManagement/projectApplication/createProject.vue';
@@ -66,7 +66,7 @@ var vueRouters = new VueRouter({
                 // 普通用户
                 {name:'managementConsole',path:'/management_console',component:managementConsole},
                 //管理员账户
-                // {name:'managementConsole',path:'/management_console',component:adminConsole},
+                {name:'adminConsole',path:'/admin_console',component:adminConsole},
                 // 项目管理
                 {name:'projectApplication',path:'/project_application',component:projectApplication},
                 {name:'pro_applicationHistory',path:'/pro_application_history',component:pro_applicationHistory},
@@ -85,12 +85,15 @@ var vueRouters = new VueRouter({
                 {name:'myResource',path:'/my_resource',component:myResource},
                 // 权限管理
                 {name:'addAuthority',path:'/add_authority',component:addAuthority}
-            ],
-            // 默认跳转到管理控制台
-            redirect:{name:'managementConsole'}
+            ]
         }
     ]
 });
+
+// vueRouters.beforeEach((to, from, next) => {
+//   console.log(to, from)
+//   next()
+// })
 
 // 导入状态池
 import {store} from './store/store.js';
