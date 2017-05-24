@@ -85,17 +85,15 @@ var vueRouters = new VueRouter({
                 {name:'myResource',path:'/my_resource',component:myResource},
                 // 权限管理
                 {name:'addAuthority',path:'/add_authority',component:addAuthority}
-            ],
-            // 默认跳转到管理控制台
-            redirect:{name:'managementConsole'}
+            ]
         }
     ]
 });
 
-vueRouters.beforeEach((to, from, next) => {
-  console.log(to, from)
-  next()
-})
+// vueRouters.beforeEach((to, from, next) => {
+//   console.log(to, from)
+//   next()
+// })
 
 // 导入状态池
 import {store} from './store/store.js';

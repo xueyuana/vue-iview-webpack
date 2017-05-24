@@ -220,6 +220,11 @@
           this.$http.put(url, JSON.stringify(params), {emulateJSON:true}).then(data => {
             console.log(data)
             this.filterDate[this.index].autho = data.body.is_admin ? '管理员' : '普通用户'
+
+            let userinfo = JSON.parse(window.localStorage.getItem('userInfo'))
+            userinfo.is_admin= data.body.is_admin
+            console.log(userinfo)
+            window.localStorage.setItem('userInfo', JSON.stringify(userinfo))
             this.loading = false
             this.confirm = false
           }, err => {

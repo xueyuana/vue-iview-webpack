@@ -177,6 +177,7 @@
                                     userinfo.user_id=response.body.result.msg.user_id;
                                     userinfo.is_admin=response.body.result.msg.is_admin;
                                     userinfo.department=response.body.result.msg.department;
+
                                     window.localStorage.setItem('userInfo', JSON.stringify(userinfo))
 
                                     // 根据身份跳转不同界面
