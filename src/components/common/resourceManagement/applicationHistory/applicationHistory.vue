@@ -186,18 +186,24 @@
              console.log(response.body.result.msg);
             if(response.body.code===200 && response.body.result.res=="success") {
                 this.queryData=response.body.result.msg;
-                if(response.body.result.msg.approval_status == "unsubmit"){
-                    this.queryData.approval_status="流程不存在";
+               let msgs= response.body.result.msg;
+
+                for (var index in msgs) { // 千万别这样做
+                    if(msgs[index].approval_status == "unsubmit"){
+                        this.queryData.approval_status="流程不存在";
+                    }
+                    if(msgs[index].msg.approval_status == "processing"){
+                        this.queryData.approval_status="审批中";
+                    }
+                    if(msgs[index].msg.approval_status == "success"){
+                        this.queryData.approval_status="审批完成";
+                    }
+                    if(msgs[index].msg.approval_status == "false"){
+                        this.queryData.approval_status="审批不通过";
+                    }
                 }
-                if(response.body.result.msg.approval_status == "processing"){
-                    this.queryData.approval_status="审批中";
-                }
-                if(response.body.result.msg.approval_status == "success"){
-                    this.queryData.approval_status="审批完成";
-                }
-                if(response.body.result.msg.approval_status == "false"){
-                    this.queryData.approval_status="审批不通过";
-                }
+
+
             }
 
             // 成功回调
