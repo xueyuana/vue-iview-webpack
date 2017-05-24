@@ -117,7 +117,7 @@
                         .then(response => {
                             console.log(response);
                             if (response.body.code === 2002) { // 请求成功
-                                datas= response.body.result.res;
+                              let datas= response.body.result.res;
                                 // 保存数据到状态池
                                 this.$store.commit('getResourceData',datas);
                                 console.log(this.$store.state.resourceData.datas);
