@@ -22,13 +22,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(data,index) in datas" :key="data">
+                    <tr v-for="(data,index) in $store.state.resourceData.datas" :key="data">
                         <td>{{ index+1 }}</td>
-                        <td><a href="#">{{data.project_name}}</a></td>
-                        <td>{{ data.create_date }}</td>
-                        <td>{{data.creator}}</td>
-                        <td>{{data.project_code}}</td>
-                        <td>{{data.department}}</td>
+                        <td><a href="#">{{data.item_name}}</a></td>
+                        <td>{{data.create_date}}</td>
+                        <td>{{data.user}}</td>
+                        <td>{{data.item_code}}</td>
+                        <td>{{data.item_depart}}</td>
                         <td>
                             <Button type="primary">查看详情</Button>
                         </td>
@@ -136,37 +136,37 @@
                         key: 'action'
                     }
                 ],
-                datas:[
-                    {
-                        project_name: '企通签到',
-                        create_date: '2017-5-24',
-                        creator: '赵舜东',
-                        project_code: 'qitong-0001',
-                        department: '应用统筹部'
-                    },
-                    {
-                        project_name: '用户中心1',
-                        create_date: '2017-5-24',
-                        creator: '赵舜东',
-                        project_code: 'user-0001',
-                        department: '应用统筹部'
-                    },
-                    {
-                        project_name: '用户中心2',
-                        create_date: '2017-5-24',
-                        creator: '赵舜东',
-                        project_code: 'user-0002',
-                        department: '应用统筹部'
-                    },
-                    {
-                        project_name: '用户中心3',
-                        create_date: '2017-5-24',
-                        creator: '赵舜东',
-                        project_code: 'user-0003',
-                        department: '应用统筹部'
-                    }
-
-                ],
+//                datas:[
+//                    {
+//                        project_name: '企通签到',
+//                        create_date: '2017-5-24',
+//                        creator: '赵舜东',
+//                        project_code: 'qitong-0001',
+//                        department: '应用统筹部'
+//                    },
+//                    {
+//                        project_name: '用户中心1',
+//                        create_date: '2017-5-24',
+//                        creator: '赵舜东',
+//                        project_code: 'user-0001',
+//                        department: '应用统筹部'
+//                    },
+//                    {
+//                        project_name: '用户中心2',
+//                        create_date: '2017-5-24',
+//                        creator: '赵舜东',
+//                        project_code: 'user-0002',
+//                        department: '应用统筹部'
+//                    },
+//                    {
+//                        project_name: '用户中心3',
+//                        create_date: '2017-5-24',
+//                        creator: '赵舜东',
+//                        project_code: 'user-0003',
+//                        department: '应用统筹部'
+//                    }
+//
+//                ],
                 // 分页数据
                 pageSize: 10
             }

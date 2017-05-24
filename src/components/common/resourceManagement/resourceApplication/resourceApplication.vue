@@ -19,8 +19,9 @@
                             <div class="container-right">
                                 <div>
                                     <span>所属部署单元：</span>
-                                    <Select style="width: 180px" v-model="formInline.project">
-                                        <Option value="应用统筹部"></Option>
+
+                                    <Select style="width: 180px;"  v-model="formInline.project" :placeholder="project_list.length? '请选择' : '空'">
+                                        <Option v-for="key in project_list" :value="key.item_name">{{key.item_name}}</Option>
                                     </Select>
                                 </div>
 
@@ -285,6 +286,8 @@
                     }
                 ]
             },
+            //部署单元名称列表
+            project_list: [],
             ruleInline: {
                 resource_name: [
                     { required: true, message: '请填资源名称', trigger: 'blur' }
@@ -312,6 +315,9 @@
         }
 
     },
+    mounted() {
+        this.getProjectList()
+    },
     methods: {
         //保存到草稿箱
         handleSubmit() {
@@ -336,15 +342,9 @@
         },
         //提交
         save(name) {
-           /* this.$refs[name].validate((valid) => {
-                if (valid) {
-                this.$Message.success('提交成功!');
-            } else {
-                this.$Message.error('表单验证失败!');
-            }
-        })*/
+
             let self=this;
-            self.formInline.application_status="审批中";
+            self.formInline.application_status="已提交";
             let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
 
@@ -388,6 +388,7 @@
     argToString(arg){
         return(arg.split(","));
     },
+        //添加审批
     addCheck(){
             const url=common.apihost+'approval/approvals';
             let checkJson={
@@ -408,6 +409,18 @@
             }, function () {
 
             });
+    },
+      //取得所属部门信息
+   getProjectList() {
+           // let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+           // console.log(userInfo)
+            let url = common.apihost + 'iteminfo/iteminfoes/local/' + userinfo.username
+            this.$http.get(url).then(data => {
+                console.log('ProjectList', data)
+            this.project_list = data.body.result.res
+        }, err => {
+            console.log('error', err)
+        })
     },
     changeArr1(arr){
         console.log(arr);
