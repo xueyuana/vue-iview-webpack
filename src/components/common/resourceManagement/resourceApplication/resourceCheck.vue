@@ -157,6 +157,8 @@
 
 
                         </div>
+                        <div class="title"><span>审批意见:</span></div>
+                        <div ><textarea style="width: 100%" v-model="checkJson.annitation"></textarea></div>
                     </div></Tab-pane>
 
                 </Tabs>
@@ -313,7 +315,7 @@ import {userinfo} from '../../../../tools/user.js';
     methods: {
         pass() {
             let self=this;
-            self.jsonname
+
 
 
         }
