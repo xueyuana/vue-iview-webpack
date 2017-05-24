@@ -197,13 +197,13 @@
         },
         mounted () {
            this.getUserInfo();
-          let userInfo = JSON.parse(localStorage.getItem('userInfo'))
-          console.log('用户信息', userInfo)
+           let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+           console.log('用户信息', userInfo)
         },
         methods: {
             // 获取用户名
             getUserInfo () {
-               this.userInfo=userinfo;
+               this.userInfo=JSON.parse(localStorage.getItem('userInfo'));
             },
             // 跳转到管理控制台
             goConsole () {

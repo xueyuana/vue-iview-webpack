@@ -133,7 +133,7 @@
                             </Form-item>
                             </Col>
                             <Col span="6">
-                                <Form-item label="项目名称" prop="project_name">
+                                <Form-item label="部署单元名称" prop="project_name">
                                     <Input v-model="formValidate.project_name"></Input>
                                 </Form-item>
                                 <Form-item label="归属部门" prop="department">

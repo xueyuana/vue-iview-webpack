@@ -54,42 +54,16 @@
     }
     .search-title {
         font-size: 15px;
-        /*padding: 0 16px;*/
         position: absolute;
         font-weight: 700;
         top: -30px;
     }
-    /*.search-title::before {*/
-        /*content: '';*/
-        /*display: block;*/
-        /*height: 16px;*/
-        /*width: 2px;*/
-        /*background-color: #88B7E0;*/
-        /*position: absolute;*/
-        /*left: 5px;*/
-        /*top: 11px;*/
-    /*}*/
+
     .search-right {
         top: -6px;
         right: 0px;
         position: absolute;
     }
-    .ivu-tabs-bar {
-         border-bottom: 0 none;
-         margin-bottom: 0px;
-    }
-    .ivu-tabs-bar .ivu-tabs-nav-container {
-        margin-bottom: -1px;
-        line-height: 2.5;
-        font-size: 14px;
-        box-sizing: border-box;
-        white-space: nowrap;
-        overflow: hidden;
-        position: relative;
-        zoom: 1;
-    }
-
-
 </style>
 <script>
     // 导入部署单元子组件
@@ -128,7 +102,7 @@
             // 获取点击tab触发的值
             getTabName (name) {
                 console.log(name);
-                let url=""
+                let url="";
                 // 根据不同的name，请求不同的数据
                 switch (name) {
                     case "deployUnit":
