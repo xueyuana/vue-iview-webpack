@@ -1,4 +1,4 @@
-<!--资源申请历史-->
+<!--资源申请-->
 <template>
     <div class="addres-wrap">
         <Form ref="formInline" :model="formInline" :rules="ruleInline">
@@ -347,7 +347,7 @@
             self.formInline.approval_status="审批中"
             let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
-          
+
             //判断是否是第一次提交第一次用post，第二次用put
            if(self.formInline.res_id){
                let newUrl=url+self.formInline.res_id+"/";
@@ -392,7 +392,7 @@
             let checkJson={
                 resource_id:this.formInline.res_id,
                   project_id:this.formInline.project,
-                department_id:userinfo.username,
+                department_id:userinfo.user_id,
                 creator_id:userinfo.department
             };
             console.log("tianjiashenpi"+checkJson);
@@ -401,7 +401,7 @@
                 console.log(response);
                 if(response.body.code===200 ) {
 
-                    self.$router.push({name: 'res_applicationHistory'});
+                    this.$router.push({name: 'res_applicationHistory'});
                 }
                 // 成功回调
             }, function () {

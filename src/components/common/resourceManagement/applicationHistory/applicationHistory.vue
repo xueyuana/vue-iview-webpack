@@ -188,9 +188,6 @@
 
                 this.queryData=response.body.result.msg;
 
-              // this.queryData.approveStatus="流程不存在";
-
-
             }
 
             // 成功回调
