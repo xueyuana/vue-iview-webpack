@@ -154,12 +154,14 @@
         searchList: [],
         selected: {},
         formItem: {},
-        index: ''
+        index: '',
+        userinfo: ''
       }
     },
 
     mounted() {
       this.getUserList()
+      this.userinfo = getStroage('userInfo')
     },
 
     methods: {
@@ -173,8 +175,10 @@
               id: item.id,
               username: item.username,
               department: item.department,
-              autho: item.is_admin ? '管理员' : '普通用户',
-              time: item.created_time.substring(0, 10)
+              autho: item.is_root ? 'Root' : (item.is_admin ? '管理员' : '普通用户'),
+              time: item.created_time.substring(0, 10),
+              is_admin: item.is_admin,
+              _disabled: !this.userinfo.is_root
             }
           })
           this.filterDate = this.mockTableData(this.searchList, this.pageSize, 1)
@@ -192,8 +196,12 @@
           case 0:
             break
           case 1:
-            this.formItem = this.selected
-            this.confirm = true
+            if (this.selected.id) {
+              this.formItem = this.selected
+              this.confirm = true
+            } else {
+              this.$Message.warning('请选择用户')
+            }
             break
           default:
             break
@@ -202,37 +210,35 @@
       // 选项
       onSelectChange(selection) {
         let len = selection.length
-        if (len === 0) {
-          this.selected = {}
-        } else {
-          console.log(selection[len - 1])
+        if (len > 0) {
           for(let item in selection[len - 1]) {
             if (item == 'autho') {
-              this.selected[item] = selection[len - 1][item] == '管理员' ? 'True' : 'False'
+              this.selected[item] = selection[len - 1][item].is_admin ? 'True' : 'False'
             }else {
               this.selected[item] = selection[len - 1][item]
             }
+            this.indexOfSelected(this.selected)
           }
-          this.indexOfSelected(this.selected)
         }
       },
       // 提交和重置
       onSubmit() {
         if (this.formItem.id) {
           this.loading = true
-          let url = baseUrl.apihost + 'auth/admindetail/' + this.formItem.id
+          let url = baseUrl.apihost + 'auth/admindetail/' + this.userinfo.user_id
           let params = {
+            'user_id': this.formItem.id,
             'admin_user': this.formItem.autho
           }
-          console.log(JSON.stringify(params))
           this.$http.put(url, JSON.stringify(params), {emulateJSON:true}).then(data => {
             console.log(data)
-            this.filterDate[this.index].autho = data.body.is_admin ? '管理员' : '普通用户'
-
-            let userinfo = getStroage('userInfo')
-            userinfo.is_admin= data.body.is_admin
-            console.log(userinfo)
-            setStroage('userInfo', userinfo)
+            if (data.body.code === 300 ) {
+              this.$Message.warning(data.body.msg)
+            } else if (data.body.code === 200 && data.body.is_root){
+              this.filterDate[this.index].autho = data.body.is_admin ? '管理员' : '普通用户'
+              this.userinfo.is_admin= data.body.is_admin
+              setStroage('userInfo', this.userinfo)
+            }
             this.loading = false
             this.confirm = false
           }, err => {
@@ -262,7 +268,9 @@
             department: originData[i].department,
             userId: originData[i].userId,
             autho: originData[i].autho,
-            time: originData[i].time
+            time: originData[i].time,
+            is_admin: originData[i].is_admin,
+            _disabled: originData[i]._disabled
           })
         }
         return data;

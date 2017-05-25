@@ -120,25 +120,25 @@
             title: '部署状态',
             key: 'status',
             align: 'center'
-          },
-          {
-            title: '操作',
-            key: 'action',
-            align: 'center',
-            render: (h, params) => {
-              return h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                on: {
-                  click: () => {
-                    console.log(111)
-                  }
-                }
-              }, '重新部署');
-            }
           }
+//          {
+//            title: '操作',
+//            key: 'action',
+//            align: 'center',
+//            render: (h, params) => {
+//              return h('Button', {
+//                props: {
+//                  type: 'primary',
+//                  size: 'small'
+//                },
+//                on: {
+//                  click: () => {
+//                    console.log(111)
+//                  }
+//                }
+//              }, '重新部署');
+//            }
+//          }
         ],
         data1: [],
         filterDate: [],

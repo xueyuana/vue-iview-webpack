@@ -279,6 +279,7 @@
                 if(response.body.code===200 ) {
                    // this.$Message.success('提交成功!');
                     console.log("添加资源预留");
+                    this.$router.push({name: 'myResource'});
                 }
                 // 成功回调
             }, function () {
@@ -288,12 +289,12 @@
         //跳转到编辑页面
         gotoEdit(index){
             console.log(this.queryData[index].id);
-            this.$router.push({name: 'resourceApplication',query: { id:  this.queryData[index].id }});
+            this.$router.push({name: 'resourceApplication',query: { id:  this.filterDate[index].id }});
         },
         //跳转到审批页面
         gotoCheck(index){
             console.log(this.queryData[index].id);
-            this.$router.push({name: 'res_applicationCheck',query: { id:  this.queryData[index].id }});
+            this.$router.push({name: 'res_applicationCheck',query: { id:  this.filterDate[index].id }});
         },
 
       // 分页
@@ -315,7 +316,8 @@
             resource: originData[i].resource,
             formStatus: originData[i].formStatus,
             approval_status: originData[i].approval_status,
-            project: originData[i].project
+            project: originData[i].project,
+             id: originData[i].id
           })
         }
         return data;
