@@ -56,6 +56,7 @@
                                                     :page-size="pageSize"
                                                     :current="1"
                                                     show-sizer
+                                                    show-total
                                                     @on-change="changePage"
                                                     @on-page-size-change="changePageSize"
                                             ></Page>
@@ -268,7 +269,7 @@
             // 下拉框的值发生改变的时候触发
             getSelectedValue (selectedObj) {
                 console.log(selectedObj);
-                this.placeholderValue="请输入"+selectedObj.label;
+                this.placeholderValue="请输入"+selectedObj.label+"查询";
                 this.inputValue='';
             },
 

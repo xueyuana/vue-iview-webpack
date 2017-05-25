@@ -26,6 +26,10 @@ import 'font-awesome/less/font-awesome.less';
 //导入初始化的css
 import '../static/css/reset.css';
 
+// 导入echarts2
+import echarts from 'echarts2';
+Vue.use(echarts);
+
 //导入组件
 import login from './components/login/login.vue';
 import home from './components/home/home.vue';
