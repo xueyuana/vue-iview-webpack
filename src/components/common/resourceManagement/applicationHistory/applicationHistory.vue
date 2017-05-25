@@ -36,7 +36,12 @@
             </Row>
         </div>
         <div class="result">
-            <Table size="large" :columns="columns" :data="queryData" border :width="1200"></Table>
+            <Table :columns="columns" :data="filterDate" border :width="1200"></Table>
+            <div style="margin: 10px;overflow: hidden">
+                <div style="float: right;">
+                    <Page :total="this.queryData.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -96,7 +101,7 @@
                 disabledDate: (date) => {
                 return date && date.valueOf() < this.startDate.valueOf()
             }
-        },
+            },
                 columns: [
             {
                 title: '发起人',
@@ -143,7 +148,7 @@
                 key: 'operate',
                 align: 'center',
                 render: (h,params) => {
-               if(this.queryData[params.index].approval_status == "审批完成"){
+               if(this.filterDate[params.index].approval_status == "审批完成"){
                    return h('div',[
                        h('Button',{
                            props: {
@@ -157,7 +162,7 @@
                                click: () => {
                                this.gotoAdd(params.index);
                }}},'创建')])
-             }else if(this.queryData[params.index].approval_status == "审批中"){
+             }else if(this.filterDate[params.index].approval_status == "审批中"){
         return h('div',[
             h('Button',{
                 props: {
@@ -217,7 +222,12 @@
             project: 'sdfsf',
             id:'123'
         }
-    ]
+    ],
+
+        // 分页数据
+        filterDate: [],
+        pageSize: 10,
+        num: 1
     }
     },
     beforeCreate(){
@@ -229,7 +239,7 @@
 
              console.log(response.body.result.msg);
             if(response.body.code===200 && response.body.result.res=="success") {
-                this.queryData=response.body.result.msg;
+                    this.queryData=response.body.result.msg;
                let msgs= response.body.result.msg;
 
                 for (var index in msgs) { // 千万别这样做
@@ -247,7 +257,7 @@
                     }
                 }
 
-
+              this.filterDate = this.mockTableData(this.queryData, this.pageSize, 1)
             }
 
             // 成功回调
@@ -278,16 +288,42 @@
         //跳转到编辑页面
         gotoEdit(index){
             console.log(this.queryData[index].id);
-            this.$router.push({name: 'resourceApplication',query: { id:  this.queryData[index].id }});
+            this.$router.push({name: 'resourceApplication',query: { id:  this.filterDate[index].id }});
         },
         //跳转到审批页面
         gotoCheck(index){
             console.log(this.queryData[index].id);
             this.$router.push({name: 'res_applicationCheck',query: { id:  this.queryData[index].id }});
+        },
+
+      // 分页
+      changePage(val) {
+        this.filterDate = this.mockTableData(this.queryData, this.pageSize, val)
+      },
+      changePageSize(val) {
+        this.pageSize = val
+        this.changePage(1)
+      },
+      mockTableData (originData, pageSize, index) {
+        let data = [];
+        let num = (index - 1) * pageSize
+        let maxNum = (num + pageSize) > this.queryData.length ? this.queryData.length : (num + pageSize)
+        for (let i = num; i < maxNum; i++) {
+          data.push({
+            name: originData[i].name,
+            date: originData[i].date.substring(0, 16),
+            resource: originData[i].resource,
+            formStatus: originData[i].formStatus,
+            approval_status: originData[i].approval_status,
+            project: originData[i].project
+          })
         }
+        return data;
+      }
+
+
+
     }
-
-
 
     }
 
