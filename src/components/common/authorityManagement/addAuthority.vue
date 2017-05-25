@@ -210,7 +210,9 @@
       // 选项
       onSelectChange(selection) {
         let len = selection.length
-        if (len > 0) {
+        if (len === 0) {
+          this.selected = {}
+        } else {
           for(let item in selection[len - 1]) {
             if (item == 'autho') {
               this.selected[item] = selection[len - 1][item].is_admin ? 'True' : 'False'
