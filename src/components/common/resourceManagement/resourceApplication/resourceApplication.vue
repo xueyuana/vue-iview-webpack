@@ -242,8 +242,8 @@
                 resource_name: "",
                 project: "",
                 department: "syswin",
-                user_name: userinfo.username,
-                user_id: userinfo.user_id,
+                user_name:  getStroage('userInfo').username,
+                user_id:  getStroage('userInfo').user_id,
                 domain: "",
                 env: "develop",
                 application_status: "待提交",
@@ -394,8 +394,8 @@
             let checkJson={
                 resource_id:this.formInline.res_id,
                   project_id:this.formInline.project,
-                department_id:userinfo.user_id,
-                creator_id:userinfo.department
+                department_id: getStroage('userInfo').user_id,
+                creator_id: getStroage('userInfo').department
             };
             console.log("tianjiashenpi"+checkJson);
             this.$http.post(url,checkJson, {emulateJSON:true}  ).then(function (response) {
