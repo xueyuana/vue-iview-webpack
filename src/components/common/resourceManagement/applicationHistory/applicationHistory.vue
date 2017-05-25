@@ -293,7 +293,7 @@
         //跳转到审批页面
         gotoCheck(index){
             console.log(this.queryData[index].id);
-            this.$router.push({name: 'res_applicationCheck',query: { id:  this.queryData[index].id }});
+            this.$router.push({name: 'res_applicationCheck',query: { id:  this.filterDate[index].id }});
         },
 
       // 分页
