@@ -170,11 +170,12 @@
                                 }
                                   if(response.body.code===200){
                                     this.$Message.success('提交成功!');
-                                    console.log(response)
+                                    console.log('登录成功', response)
                                     let userinfo = {}
                                     userinfo.username=response.body.result.msg.username;
                                     userinfo.user_id=response.body.result.msg.user_id;
                                     userinfo.is_admin=response.body.result.msg.is_admin;
+                                    userinfo.is_root=response.body.result.msg.is_root;
                                     userinfo.department=response.body.result.msg.department;
 
                                     setStroage('userInfo', userinfo)
