@@ -72,7 +72,7 @@
     import mysql from './subcomponents/mysql.vue';
     import redis from './subcomponents/redis.vue';
     import mongodb from './subcomponents/mongodb.vue';
-    import common from '../../../../tools/common.js'
+    import common from '../../../../tools/common.js';
     export default {
         // 默认请求部署单元的数据
         mounted() {
@@ -91,13 +91,14 @@
                         .then(response => {
                             console.log(response);
                             if (response.body.code === 200) { // 请求成功
-                              let datas=  response.body.result.res;
+                                let backDatas = response.body.result.res;
                                 // 保存数据到状态池
-                                this.$store.commit('getResourceData',datas);
+                                this.$store.commit('getOriginData',backDatas);
                                 console.log(this.$store.state.resourceData.datas);
                             }
                        });
             },
+
             // 获取点击tab触发的值
             getTabName (name) {
                 console.log(name);

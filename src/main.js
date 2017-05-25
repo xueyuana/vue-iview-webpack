@@ -50,7 +50,7 @@ import deployHistory from 'components/common/deployManagement/deployHistory/depl
 //工作台
 import processList from './components/common/workbench/processList/processList.vue';
 import myWorkbench from './components/common/workbench/myWorkbench/myWorkbranch.vue';
-import myResource from './components/common/workbench/myResource/myResource.vue';
+import myResource from './components/common/workbench/myResource/myResource1.vue';
 import resourceView from './components/common/workbench/resourceView/resourceView.vue';
 
 //权限管理

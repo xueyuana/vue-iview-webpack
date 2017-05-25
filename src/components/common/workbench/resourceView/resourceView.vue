@@ -1,9 +1,9 @@
 <template>
     <div>
         <Row>
-            <Col span="6">
+            <Col span="4">
               <div class="view-left">
-                <Menu :theme="light" active-name="1" width="auto">
+                <Menu :theme="theme" active-name="1" width="auto">
                     <Menu-item name="1">
                         <Icon type="document-text"></Icon>
                         文章管理
@@ -23,7 +23,7 @@
                 </Menu>
             </div>
             </Col>
-            <Col span="18">
+            <Col span="20">
                 <div class="view-right">
 
                 </div>
@@ -37,5 +37,11 @@
 
 </style>
 <script>
-
+    export default {
+        data () {
+            return {
+                theme: 'light'
+            }
+        }
+    }
 </script>
