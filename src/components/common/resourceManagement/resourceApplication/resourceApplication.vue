@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="container-right">
                                     <span>实例规格：</span>
-                                    <Select style="width: 180px" v-model="formInline.compute_list.cpu" @on-change="changeArr1">
+                                    <Select style="width: 180px" v-model="formInline.compute_list[0].cpu" >
                                         <Option value="2C,4G">2C 4G</Option>
                                         <Option value="4C,8G">4C 8G</Option>
                                     </Select>
@@ -76,7 +76,7 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px"  @change="changeArr2" v-model="formInline.resource_list[0].cpu">
+                                            <Select style="width: 180px"  v-model="formInline.resource_list[0].cpu">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="4C,8G">4C 8G</Option>
                                             </Select>
@@ -108,7 +108,7 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;height:50px"  v-model="formInline.resource_list[1].cpu" @change="changeArr3">
+                                            <Select style="width: 180px;height:50px"  v-model="formInline.resource_list[1].cpu">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="2C,8G">2C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
@@ -141,7 +141,7 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px"  v-model="formInline.resource_list[2].cpu" @change="changeArr4">
+                                            <Select style="width: 180px"  v-model="formInline.resource_list[2].cpu" >
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="4C,8G">4C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
@@ -242,8 +242,8 @@
                 resource_name: "",
                 project: "",
                 department: "syswin",
-                user_name:  getStroage('userInfo').username,
-                user_id:  getStroage('userInfo').user_id,
+                user_name:getStroage('userInfo').username,
+                user_id: getStroage('userInfo').user_id,
                 domain: "",
                 env: "develop",
                 application_status: "待提交",
@@ -321,10 +321,12 @@
     methods: {
         //保存到草稿箱
         handleSubmit() {
+            this.changeArr();
             let self=this;
             let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
             self.$router.push({name: 'res_applicationHistory'});
+            console.log(this.formInline.compute_list);
             this.$http.post(url,newjson, {emulateJSON:true}  ).then(function (response) {
 
                 console.log(response);
@@ -344,6 +346,9 @@
         save(name) {
 
             let self=this;
+
+
+        this.changeArr();
             self.formInline.application_status="已提交";
             let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
@@ -423,27 +428,27 @@
             console.log('error', err)
         })
     },
-    changeArr1(arr){
-        console.log(arr);
-        let cupands=this.argToString(arr);
-        this.formInline.compute_list.cpu=cupands[0];
-        this.formInline.compute_list.mem=cupands[1];
-    },
-    changeArr2(arr){
-        let mysqlcpus=this.argToString(arr);
+    changeArr(){
+        let cupands=this.argToString(this.formInline.compute_list[0].cpu);
+        this.formInline.compute_list[0].cpu=cupands[0];
+        this.formInline.compute_list[0].mem=cupands[1];
+
+
+        let mysqlcpus=this.argToString( this.formInline.resource_list[0].cpu);
         this.formInline.resource_list[0].cpu=mysqlcpus[0];
         this.formInline.resource_list[0].mem=mysqlcpus[1];
-    },
-    changeArr3(arr){
-        let rediscpus=this.argToString(arr);
-        this.formInline.resource_list[1].cpu=rediscpus[0];
-        this.formInline.resource_list[1].mem=rediscpus[1];
-    },
-        changeArr4(arr){
-        let mongocpus=this.argToString(arr);
-        this.formInline.resource_list[2].cpu=mongocpus[0];
-        this.formInline.resource_list[2].mem=mongocpus[1];
+
+
+        let mysqlcpus1=this.argToString( this.formInline.resource_list[1].cpu);
+        this.formInline.resource_list[1].cpu=mysqlcpus[1];
+        this.formInline.resource_list[1].mem=mysqlcpus[1];
+
+        let mysqlcpus2=this.argToString( this.formInline.resource_list[2].cpu);
+        this.formInline.resource_list[2].cpu=mysqlcpus[2];
+        this.formInline.resource_list[2].mem=mysqlcpus[2];
+        console.log("型号":this.formInline);
     }
+
     }
     }
 
