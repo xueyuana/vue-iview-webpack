@@ -51,7 +51,7 @@
         padding: 10px 20px;
     }
     .query {
-        width: 1200px;
+        width: 100%;
         height: 130px;
         border: 1px solid #e4e4e4;
         background-image: linear-gradient(to bottom,#fff,#e4e4e4);
@@ -288,7 +288,7 @@
         //跳转到编辑页面
         gotoEdit(index){
             console.log(this.queryData[index].id);
-            this.$router.push({name: 'resourceApplication',query: { id:  this.filterDate[index].id }});
+            this.$router.push({name: 'resourceApplication',query: { id:  this.queryData[index].id }});
         },
         //跳转到审批页面
         gotoCheck(index){
