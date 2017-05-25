@@ -154,12 +154,14 @@
         searchList: [],
         selected: {},
         formItem: {},
-        index: ''
+        index: '',
+        userinfo: ''
       }
     },
 
     mounted() {
       this.getUserList()
+      this.userinfo = getStroage('userInfo')
     },
 
     methods: {
@@ -220,19 +222,18 @@
       onSubmit() {
         if (this.formItem.id) {
           this.loading = true
-          let url = baseUrl.apihost + 'auth/admindetail/' + this.formItem.id
+          let url = baseUrl.apihost + 'auth/admindetail/' + this.userinfo.id
           let params = {
+            'user_id': this.formItem.id,
             'admin_user': this.formItem.autho
           }
-          console.log(JSON.stringify(params))
           this.$http.put(url, JSON.stringify(params), {emulateJSON:true}).then(data => {
             console.log(data)
             this.filterDate[this.index].autho = data.body.is_admin ? '管理员' : '普通用户'
 
-            let userinfo = getStroage('userInfo')
-            userinfo.is_admin= data.body.is_admin
-            console.log(userinfo)
-            setStroage('userInfo', userinfo)
+            this.userinfo.is_admin= data.body.is_admin
+            console.log(this.userinfo)
+            setStroage('userInfo', this.userinfo)
             this.loading = false
             this.confirm = false
           }, err => {

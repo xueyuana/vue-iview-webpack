@@ -11,68 +11,155 @@
         </Button>
       </div>
     </div>
-
     <!--内容区-->
     <div class="apply-content">
       <!--切换环境-->
-      <div>
-        <Button class="apply-content-button"
-                :class="{active: activeIndex === index}"
-                v-for="(item, index) in tabs"
-                @click="onTabs(index)"
-                size="large"
-                shape="circle">{{item}}
+      <Tabs type="card" @on-click="onTabs">
+        <Tab-pane label="开发环境" name="dev">
+          <!--项目信息-->
+          <div class="apply-content-title">部署单元信息：</div>
+          <Form class="apply-content-form" label-position="left" :label-width="95">
+            <Row :gutter="160">
+              <Col class="apply-content-form-item" span="12">
+              <Form-item label="部署名称:">
+                <Input v-model="deploy_name"></Input>
+              </Form-item>
+              </Col>
+              <Col class="apply-content-form-item" span="12">
+              <Form-item label="所属部署单元:">
+                <Select class="apply-content-form-select" v-model="project_name" :placeholder="project_list.length? '请选择' : '空'">
+                  <Option v-for="key in project_list" :value="key.item_name">{{key.item_name}}</Option>
+                </Select>
+              </Form-item>
+              </Col>
+            </Row>
+            <Row>
+              <Form-item label="部署详情:">
+                <Input v-model="deploy_details" type="textarea" :autosize="{minRows: 4, maxRows: 6}"></Input>
+              </Form-item>
+            </Row>
+          </Form>
 
-        </Button>
-      </div>
+          <!--数据库-->
+          <div class="apply-content-title">数据库：</div>
+          <Form class="apply-content-select" label-position="left" :label-width="70">
+            <Form-item label="执行目标:" style="width: 210px">
+              <Select v-model="exec_tag" placeholder="请选择">
+                <Option value="mysql-node1">mysql-node1</Option>
+                <Option value="mysql-node2">mysql-node2</Option>
+              </Select>
+            </Form-item>
+            <Form-item label="执行脚本:">
+              <Input v-model="exec_context" type="textarea" :autosize="{minRows: 4, maxRows: 6}"></Input>
+            </Form-item>
+          </Form>
 
-      <!--项目信息-->
-      <div class="apply-content-title">部署单元信息：</div>
-      <Form class="apply-content-form" label-position="left" :label-width="90">
-        <Row :gutter="160">
-          <Col class="apply-content-form-item" span="12">
-          <Form-item label="部署名称:">
-            <Input v-model="deploy_name"></Input>
-          </Form-item>
-          </Col>
-          <Col class="apply-content-form-item" span="12">
-          <Form-item label="所属部署单元:">
-            <Select class="apply-content-form-select" v-model="project_name" :placeholder="project_list.length? '请选择' : '空'">
-              <Option v-for="key in project_list" :value="key.item_name">{{key.item_name}}</Option>
-            </Select>
-          </Form-item>
-          </Col>
-        </Row>
-        <Row>
-          <Form-item label="部署详情:">
-            <Input v-model="deploy_details" type="textarea" :autosize="{minRows: 4, maxRows: 6}"></Input>
-          </Form-item>
-        </Row>
-      </Form>
+          <!--应用包-->
+          <div class="apply-content-title">应用包：</div>
+          <Form class="apply-content-mirror" label-position="left" :label-width="70">
+            <Form-item label="镜像:">
+              <Input v-model="mirror" placeholder="请输入镜像URL" style="min-width: 250px"></Input>
+            </Form-item>
+            <Button type="primary" @click="onTest">检测</Button>
+          </Form>
+        </Tab-pane>
+        <Tab-pane label="测试环境" name="test">
+          <!--项目信息-->
+          <div class="apply-content-title">部署单元信息：</div>
+          <Form class="apply-content-form" label-position="left" :label-width="95">
+            <Row :gutter="160">
+              <Col class="apply-content-form-item" span="12">
+              <Form-item label="部署名称:">
+                <Input v-model="deploy_name"></Input>
+              </Form-item>
+              </Col>
+              <Col class="apply-content-form-item" span="12">
+              <Form-item label="所属部署单元:">
+                <Select class="apply-content-form-select" v-model="project_name" :placeholder="project_list.length? '请选择' : '空'">
+                  <Option v-for="key in project_list" :value="key.item_name">{{key.item_name}}</Option>
+                </Select>
+              </Form-item>
+              </Col>
+            </Row>
+            <Row>
+              <Form-item label="部署详情:">
+                <Input v-model="deploy_details" type="textarea" :autosize="{minRows: 4, maxRows: 6}"></Input>
+              </Form-item>
+            </Row>
+          </Form>
 
-      <!--数据库-->
-      <div class="apply-content-title">数据库：</div>
-      <Form class="apply-content-select" label-position="left" :label-width="70">
-        <Form-item label="执行目标:" style="width: 210px">
-          <Select v-model="exec_tag" placeholder="请选择">
-            <Option value="mysql-node1">mysql-node1</Option>
-            <Option value="mysql-node2">mysql-node2</Option>
-          </Select>
-        </Form-item>
-        <Form-item label="执行脚本:">
-          <Input v-model="exec_context" type="textarea" :autosize="{minRows: 4, maxRows: 6}"></Input>
-        </Form-item>
-      </Form>
+          <!--数据库-->
+          <div class="apply-content-title">数据库：</div>
+          <Form class="apply-content-select" label-position="left" :label-width="70">
+            <Form-item label="执行目标:" style="width: 210px">
+              <Select v-model="exec_tag" placeholder="请选择">
+                <Option value="mysql-node1">mysql-node1</Option>
+                <Option value="mysql-node2">mysql-node2</Option>
+              </Select>
+            </Form-item>
+            <Form-item label="执行脚本:">
+              <Input v-model="exec_context" type="textarea" :autosize="{minRows: 4, maxRows: 6}"></Input>
+            </Form-item>
+          </Form>
 
-      <!--应用包-->
-      <div class="apply-content-title">应用包：</div>
-      <Form class="apply-content-mirror" label-position="left" :label-width="70">
-        <Form-item label="镜像:">
-          <Input v-model="mirror" placeholder="请输入镜像URL" style="min-width: 250px"></Input>
-        </Form-item>
-        <Button type="primary" @click="onTest">检测</Button>
-      </Form>
+          <!--应用包-->
+          <div class="apply-content-title">应用包：</div>
+          <Form class="apply-content-mirror" label-position="left" :label-width="70">
+            <Form-item label="镜像:">
+              <Input v-model="mirror" placeholder="请输入镜像URL" style="min-width: 250px"></Input>
+            </Form-item>
+            <Button type="primary" @click="onTest">检测</Button>
+          </Form>
+        </Tab-pane>
+        <Tab-pane label="生产环境" name="product">
+          <!--项目信息-->
+          <div class="apply-content-title">部署单元信息：</div>
+          <Form class="apply-content-form" label-position="left" :label-width="95">
+            <Row :gutter="160">
+              <Col class="apply-content-form-item" span="12">
+              <Form-item label="部署名称:">
+                <Input v-model="deploy_name"></Input>
+              </Form-item>
+              </Col>
+              <Col class="apply-content-form-item" span="12">
+              <Form-item label="所属部署单元:">
+                <Select class="apply-content-form-select" v-model="project_name" :placeholder="project_list.length? '请选择' : '空'">
+                  <Option v-for="key in project_list" :value="key.item_name">{{key.item_name}}</Option>
+                </Select>
+              </Form-item>
+              </Col>
+            </Row>
+            <Row>
+              <Form-item label="部署详情:">
+                <Input v-model="deploy_details" type="textarea" :autosize="{minRows: 4, maxRows: 6}"></Input>
+              </Form-item>
+            </Row>
+          </Form>
 
+          <!--数据库-->
+          <div class="apply-content-title">数据库：</div>
+          <Form class="apply-content-select" label-position="left" :label-width="70">
+            <Form-item label="执行目标:" style="width: 210px">
+              <Select v-model="exec_tag" placeholder="请选择">
+                <Option value="mysql-node1">mysql-node1</Option>
+                <Option value="mysql-node2">mysql-node2</Option>
+              </Select>
+            </Form-item>
+            <Form-item label="执行脚本:">
+              <Input v-model="exec_context" type="textarea" :autosize="{minRows: 4, maxRows: 6}"></Input>
+            </Form-item>
+          </Form>
+
+          <!--应用包-->
+          <div class="apply-content-title">应用包：</div>
+          <Form class="apply-content-mirror" label-position="left" :label-width="70">
+            <Form-item label="镜像:">
+              <Input v-model="mirror" placeholder="请输入镜像URL" style="min-width: 250px"></Input>
+            </Form-item>
+            <Button type="primary" @click="onTest">检测</Button>
+          </Form>
+        </Tab-pane>
+      </Tabs>
     </div>
   </div>
 
@@ -146,7 +233,6 @@
       return {
         activeIndex: 0,
         funcBtns: ['返回', '提交', '保存到草稿'],
-        tabs: ['开发环境', '测试环境', '生产环境'],
         project_list: [],
         environment: 'dev',
         deploy_name: '',
@@ -176,19 +262,8 @@
         }
       },
       // 环境切换
-      onTabs(index) {
-        this.activeIndex = index
-        switch (index) {
-          case 0:
-            this.environment = 'dev'
-            break
-          case 1:
-            this.environment = 'test'
-            break
-          default:
-            this.environment = 'product'
-            break
-        }
+      onTabs(name) {
+        this.environment = name
       },
       // 保存到草稿
       onSaveDraft() {
@@ -224,6 +299,7 @@
         let userInfo = getStroage('userInfo')
         console.log(userInfo)
         let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + userInfo.user_id
+
         this.$http.get(url).then(data => {
           console.log('ProjectList', data)
           this.project_list = data.body.result.res
