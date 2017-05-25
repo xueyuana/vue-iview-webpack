@@ -537,7 +537,7 @@
 </style>
 <script>
     import common from '../../../../tools/common.js';
-import {userinfo} from '../../../../tools/user.js';
+    import {setStroage, getStroage} from 'tools/cookieAction.js'
     export default {
         data () {
         return {
@@ -545,8 +545,8 @@ import {userinfo} from '../../../../tools/user.js';
                 resource_name: "qq",
                 project: "项目名称aaa",
                 department: "syswin",
-                user_name: userinfo.username,
-                user_id: userinfo.user_id,
+                user_name: getStroage('userInfo').username,
+                user_id: getStroage('userInfo').user_id,
                 domain: "",
                 env: "develop",
                 application_status: "待提交",
@@ -594,7 +594,7 @@ import {userinfo} from '../../../../tools/user.js';
                 'resourcecr2':'0C,0G',
                 'resourcecr3':'0C,0G'
             },
-            checkjson:{"approve_uid":userinfo.user_id,"agree":true,"annotation":""}
+            checkjson:{"approve_uid":getStroage('userInfo').user_id,"agree":true,"annotation":""}
 
         }
     },
@@ -627,7 +627,7 @@ import {userinfo} from '../../../../tools/user.js';
         pass() {
             let self=this;
             self.checkjson.agree=true;
-            const url=common.apihost+'approval/approvals/'+this.$route.query.id;
+            const url=common.apihost+'approval/approvals/'+this.$route.query.id+"/";
             this.$http.put(url,self.checkjson).then(function (response) {
 
 
@@ -643,7 +643,7 @@ import {userinfo} from '../../../../tools/user.js';
             let self=this;
             self.checkjson.agree=false;
             console.log("审批:"+ self.checkjson);
-            const url=common.apihost+'approval/approvals/'+this.$route.query.id;
+            const url=common.apihost+'approval/approvals/'+this.$route.query.id+"/";
             this.$http.put(url,self.checkjson).then(function (response) {
 
                 if(response.body.code===200) {

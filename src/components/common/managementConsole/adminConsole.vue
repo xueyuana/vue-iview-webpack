@@ -97,7 +97,7 @@
             </div>
             <div class="approved-search">
                 <div class="search-form">
-                    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+                    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
                         <Row>
                             <Col span="6">
                             <Form-item label="创建人" prop="creator">
@@ -146,7 +146,7 @@
                             </Col>
                             <Col span="4">
                                 <Form-item>
-                                    <Button type="primary" @click="handleSubmit('formValidate')">查询</Button>
+                                    <Button type="primary" @click="goQuery">查询</Button>
                                     <Button type="ghost" @click="handleReset('formValidate')" style="margin-top: 24px">重置</Button>
                                 </Form-item>
                             </Col>
@@ -164,19 +164,32 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(data,index) in datas" :key="data">
+                    <tr v-for="(data,index) in filterDate" :key="data">
                         <td>{{ index+1 }}</td>
-                        <td>{{ data.applicant }}</td>
-                        <td>{{ data.application_date }}</td>
-                        <td>{{ data.project_name }}</td>
+                        <td>{{ data.name }}</td>
+                        <td>{{ data.date }}</td>
+                        <td>{{ data.resource }}</td>
                         <td>{{ data.approval_status }}</td>
                         <td>
                             <Button type="primary">查看</Button>
                         </td>
                     </tr>
                     </tbody>
-
                 </table>
+
+                <div style="margin: 10px;overflow: hidden">
+                    <div style="float: right;">
+                        <Page
+                                :total="this.data1.length"
+                                :page-size="pageSize"
+                                :current="1"
+                                show-sizer
+                                show-total
+                                @on-change="changePage"
+                                @on-page-size-change="changePageSize"
+                        ></Page>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -280,7 +293,7 @@
     }
     table td, table th{
         text-align: center;
-        border: 1px solid #D7DDE4;
+        /*border: 1px solid #D7DDE4;*/
     }
     table tr {
         height: 50px;
@@ -295,6 +308,7 @@
 
 </style>
 <script>
+    import common from '../../../tools/common.js';
     export default {
         data () {
             return {
@@ -354,38 +368,73 @@
                         key: 'action'
                     }
                 ],
-                datas: [
-                    {
-                        applicant: 'xxx',
-                        application_date: '2017-5-18',
-                        project_name:'群组',
-                        approval_status: '待审批'
-                    },
-                    {
-                        applicant: 'xxx',
-                        application_date: '2017-5-18',
-                        project_name:'圈子',
-                        approval_status: '待审批'
-                    },
-                    {
-                        applicant: 'xxx',
-                        application_date: '2017-5-18',
-                        project_name:'圈子',
-                        approval_status: '审批完成'
-                    }
-                ]
+                // 保存未审批的数据
+                data1: [],
+                filterDate: [],
+                pageSize: 10
             }
         },
+
+        mounted() {
+            this.goQuery();
+        },
+
         methods: {
-            handleSubmit (name) {
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        this.$Message.success('提交成功!');
-                    } else {
-                        this.$Message.error('表单验证失败!');
-            }
-            })
+            // 提交删选条件
+            goQuery () {
+                let userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+                const url = common.apihost + 'resource/';
+                // 查询条件
+                let query = userInfo.user_id;
+
+                this.$http.get(url, {params: query})
+                        .then(response => {
+                                console.log(response);
+                                if (response.body.code === 200) { // 请求成功
+                                    let backDatas = response.body.result.msg;
+                                    for(let i=0;i<backDatas.length;i++) {
+                                        let backDataObj=backDatas[i];
+                                        if(backDataObj.approval_status==="processing") {
+                                            backDataObj.approval_status="未审批";
+                                            this.data1.push(backDataObj);
+                                        }
+                                    }
+                                    console.log(this.data1);
+                                    this.filterDate = this.mockTableData(this.data1, this.pageSize, 1);
+                                }
+                        });
             },
+
+            //实现分页  改变后的页码
+            changePage (page) {
+                console.log(page);
+                this.filterDate = this.mockTableData(this.data1, this.pageSize, page)
+            },
+
+            // 返回切换后的每页条数
+            changePageSize (pageSize) {
+                console.log(pageSize);
+
+                this.pageSize = pageSize
+                this.changePage(1)
+            },
+            // 构造删选之后的数据
+            mockTableData (originData, pageSize, index) {
+                let data = [];
+                let num = (index - 1) * pageSize
+                let maxNum = (num + pageSize) > this.data1.length ? this.data1.length : (num + pageSize)
+                for (let i = num; i < maxNum; i++) {
+                    data.push({
+                        name: originData[i].name,
+                        date: originData[i].date.substring(0, 16),
+                        resource: originData[i].resource,
+                        approval_status: originData[i].approval_status
+                    });
+                }
+                return data;
+            },
+
             handleReset (name) {
                 this.$refs[name].resetFields();
             }
