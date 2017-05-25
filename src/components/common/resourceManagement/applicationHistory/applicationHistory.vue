@@ -315,7 +315,8 @@
             resource: originData[i].resource,
             formStatus: originData[i].formStatus,
             approval_status: originData[i].approval_status,
-            project: originData[i].project
+            project: originData[i].project,
+              id: originData[i].id
           })
         }
         return data;
