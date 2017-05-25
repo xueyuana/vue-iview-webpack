@@ -35,8 +35,160 @@
                             <div class="clearfix" style="margin-bottom: 10px">
                                 <div class="container-left">
                                     <span>实例名称:</span>
-                                    <Input style="width: 180px" v-model="jsonname.compute_list.ins_name" disabled></Input>
+                                    <Input style="width: 180px" v-model="jsonname.compute_list[0].ins_name" disabled></Input>
                                  </div>
+                                <div class="container-right">
+                                    <span>实例规格：</span>
+                                    <Select style="width: 180px" v-model="cpuandrem.cpuandrem1"  disabled>
+                                        <Option value="2C,4G">2C 4G</Option>
+                                        <Option value="4C,8G">4C 8G</Option>
+                                    </Select>
+                                </div>
+                            </div>
+                                <div style="padding-top: 20px " class="clearfix">
+                                    <span>镜像：</span>
+                                    <Input style="width: 380px" v-model="jsonname.compute_list[0].url" disabled></Input>
+                                </div>
+
+
+                        </div>
+
+                        <div class="title"><span>数据库信息:</span></div>
+                        <div class="container database">
+                            <Tabs>
+                                <Tab-pane label="MYSQL" name="mysql">
+                                    <div class="container-left" style="height: 100px">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[0].res_name" disabled></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例数量：</span>
+                                            <Input-number v-model="jsonname.resource_list[0].quantity" disabled></Input-number>
+                                        </div>
+                                        <div >
+                                            <span>存储空间：</span>
+                                            <Input-number v-model="jsonname.resource_list[0].disk" disabled></Input-number>
+                                        </div>
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px"   v-model="cpuandrem.resourcecr1" disabled>
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="4C,8G">4C 8G</Option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例版本: </span>
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[0].version" disabled>
+                                                <Option value="MYSQL5.5">MYSQL5.5</Option>
+                                                <Option value="MYSQL5.6">MYSQL5.6</Option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                                <Tab-pane label="REDIS" name="redis">
+                                    <div class="container-left">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[1].res_name" disabled></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例版本：</span>
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[1].version" disabled>
+                                                <Option value="Redis2.8">Redis2.8</Option>
+                                                <Option value="Redis3.0">Redis3.0</Option>
+                                            </Select>
+                                        </div>
+
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2" disabled>
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="2C,8G">2C 8G</Option>
+                                                <Option value="4C,16G">4C 16G</Option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例数量: </span>
+                                            <Select style="width: 180px">
+
+                                                <Input-number v-model="jsonname.resource_list[1].quantity" disabled></Input-number>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                                <Tab-pane label="MONGODB" name="mongo">
+                                    <div class="container-left" style="height:100px;">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[2].res_name" disabled></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例数量：</span>
+                                            <Input-number v-model="jsonname.resource_list[2].quantity" disabled></Input-number>
+                                        </div>
+                                        <div >
+                                            <span>存储空间：</span>
+                                            <Input-number v-model="jsonname.resource_list[2].disk" disabled></Input-number>
+                                        </div>
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px"  v-model="cpuandrem.resourcecr3" disabled>
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="4C,8G">4C 8G</Option>
+                                                <Option value="4C,16G">4C 16G</Option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例版本: </span>
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[2].version" disabled>
+                                                <option value="Mongo3.2">Mongo3.2</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                            </Tabs>
+
+
+                        </div>
+                        <div class="title"><span>审批意见:</span></div>
+                        <div ><textarea style="width: 100%" id="annotation" v-model="checkjson.annotation" ></textarea></div>
+                    </div></Tab-pane>
+                    <Tab-pane label="测试环境" name="test"><div class="allcontent">
+                        <div class="title"><span>部署单元信息:</span></div>
+                        <div class="container clearfix">
+                            <div class="container-left">
+                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="jsonname.resource_name"  disabled ></Input></div>
+
+                            </div>
+                            <div class="container-right">
+                                <div>
+                                    <span>所属部署单元：</span>
+                                    <Select style="width: 180px" v-model="jsonname.project" disabled>
+                                        <Option value="应用统筹部"></Option>
+                                    </Select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="title"><span>域名:</span></div>
+                        <div class="container">
+                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="jsonname.domain" disabled></Input>.syswin.com</div>
+                        </div>
+
+                        <div class="title"><span>计算信息:</span></div>
+                        <div class="container">
+                            <div class="clearfix" style="margin-bottom: 10px">
+                                <div class="container-left">
+                                    <span>实例名称:</span>
+                                    <Input style="width: 180px" v-model="jsonname.compute_list.ins_name" disabled></Input>
+                                </div>
                                 <div class="container-right">
                                     <span>实例规格：</span>
                                     <Select style="width: 180px" v-model="jsonname.compute_list.cpu"  disabled>
@@ -45,10 +197,10 @@
                                     </Select>
                                 </div>
                             </div>
-                                <div style="padding-top: 20px " class="clearfix">
-                                    <span>镜像：</span>
-                                    <Input style="width: 380px" v-model="jsonname.compute_list.url" disabled></Input>
-                                </div>
+                            <div style="padding-top: 20px " class="clearfix">
+                                <span>镜像：</span>
+                                <Input style="width: 380px" v-model="jsonname.compute_list.url" disabled></Input>
+                            </div>
 
 
                         </div>
@@ -160,7 +312,158 @@
                         <div class="title"><span>审批意见:</span></div>
                         <div ><textarea style="width: 100%" id="annotation" v-model="checkjson.annotation" ></textarea></div>
                     </div></Tab-pane>
+                    <Tab-pane label="生产环境" name="product"><div class="allcontent">
+                        <div class="title"><span>部署单元信息:</span></div>
+                        <div class="container clearfix">
+                            <div class="container-left">
+                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="jsonname.resource_name"  disabled ></Input></div>
 
+                            </div>
+                            <div class="container-right">
+                                <div>
+                                    <span>所属部署单元：</span>
+                                    <Select style="width: 180px" v-model="jsonname.project" disabled>
+                                        <Option value="应用统筹部"></Option>
+                                    </Select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="title"><span>域名:</span></div>
+                        <div class="container">
+                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="jsonname.domain" disabled></Input>.syswin.com</div>
+                        </div>
+
+                        <div class="title"><span>计算信息:</span></div>
+                        <div class="container">
+                            <div class="clearfix" style="margin-bottom: 10px">
+                                <div class="container-left">
+                                    <span>实例名称:</span>
+                                    <Input style="width: 180px" v-model="jsonname.compute_list.ins_name" disabled></Input>
+                                </div>
+                                <div class="container-right">
+                                    <span>实例规格：</span>
+                                    <Select style="width: 180px" v-model="jsonname.compute_list.cpu"  disabled>
+                                        <Option value="2C,4G">2C 4G</Option>
+                                        <Option value="4C,8G">4C 8G</Option>
+                                    </Select>
+                                </div>
+                            </div>
+                            <div style="padding-top: 20px " class="clearfix">
+                                <span>镜像：</span>
+                                <Input style="width: 380px" v-model="jsonname.compute_list.url" disabled></Input>
+                            </div>
+
+
+                        </div>
+
+                        <div class="title"><span>数据库信息:</span></div>
+                        <div class="container database">
+                            <Tabs>
+                                <Tab-pane label="MYSQL" name="mysql">
+                                    <div class="container-left" style="height: 100px">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[0].res_name" disabled></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例数量：</span>
+                                            <Input-number v-model="jsonname.resource_list[0].quantity" disabled></Input-number>
+                                        </div>
+                                        <div >
+                                            <span>存储空间：</span>
+                                            <Input-number v-model="jsonname.resource_list[0].disk" disabled></Input-number>
+                                        </div>
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px"   v-model="jsonname.resource_list[0].cpu" disabled>
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="4C,8G">4C 8G</Option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例版本: </span>
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[0].version" disabled>
+                                                <Option value="MYSQL5.5">MYSQL5.5</Option>
+                                                <Option value="MYSQL5.6">MYSQL5.6</Option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                                <Tab-pane label="REDIS" name="redis">
+                                    <div class="container-left">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[1].res_name" disabled></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例版本：</span>
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[1].version" disabled>
+                                                <Option value="Redis2.8">Redis2.8</Option>
+                                                <Option value="Redis3.0">Redis3.0</Option>
+                                            </Select>
+                                        </div>
+
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px;height:50px"  v-model="jsonname.resource_list[1].cpu" disabled>
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="2C,8G">2C 8G</Option>
+                                                <Option value="4C,16G">4C 16G</Option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例数量: </span>
+                                            <Select style="width: 180px">
+
+                                                <Input-number v-model="jsonname.resource_list[1].quantity" disabled></Input-number>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                                <Tab-pane label="MONGODB" name="mongo">
+                                    <div class="container-left" style="height:100px;">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="jsonname.resource_list[2].res_name" disabled></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例数量：</span>
+                                            <Input-number v-model="jsonname.resource_list[2].quantity" disabled></Input-number>
+                                        </div>
+                                        <div >
+                                            <span>存储空间：</span>
+                                            <Input-number v-model="jsonname.resource_list[2].disk" disabled></Input-number>
+                                        </div>
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px"  v-model="jsonname.resource_list[2].cpu" disabled>
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="4C,8G">4C 8G</Option>
+                                                <Option value="4C,16G">4C 16G</Option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例版本: </span>
+                                            <Select style="width: 180px" v-model="jsonname.resource_list[2].version" disabled>
+                                                <option value="Mongo3.2">Mongo3.2</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                            </Tabs>
+
+
+                        </div>
+                        <div class="title"><span>审批意见:</span></div>
+                        <div ><textarea style="width: 100%" id="annotation" v-model="checkjson.annotation" ></textarea></div>
+                    </div></Tab-pane>
                 </Tabs>
 
 
@@ -285,12 +588,14 @@ import {userinfo} from '../../../../tools/user.js';
                     }
                 ]
             },
-            checkjson:{"approve_uid":userinfo.user_id,"agree":true,"annotation":""},
-            ruleInline: {
-                resource_name: [
-                    { required: true, message: '请填写用户名', trigger: 'blur' }
-                ]
-            }
+            cpuandrem:{
+                'cpuandrem1':'0C,0G',
+                'resourcecr1':'0C,0G',
+                'resourcecr2':'0C,0G',
+                'resourcecr3':'0C,0G'
+            },
+            checkjson:{"approve_uid":userinfo.user_id,"agree":true,"annotation":""}
+
         }
     },
     beforeCreate(){
@@ -305,7 +610,7 @@ import {userinfo} from '../../../../tools/user.js';
 
                if(response.body.code===200 && response.body.result.res=="success") {
                 this.jsonname= response.body.result.msg
-
+                   this. arrToString();
                }
                // 成功回调
            });
@@ -313,6 +618,12 @@ import {userinfo} from '../../../../tools/user.js';
 
     },
     methods: {
+        arrToString(){
+            this.cpuandrem.cpuandrem1= this.jsonname.compute_list[0].cpu+"C,"+ this.jsonname.compute_list[0].mem+"G";
+            this.cpuandrem.resourcecr1= this.jsonname.resource_list[0].cpu+"C,"+ this.jsonname.resource_list[0].mem+"G"
+            this.cpuandrem.resourcecr2= this.jsonname.resource_list[1].cpu+"C,"+ this.jsonname.resource_list[1].mem+"G"
+            this.cpuandrem.resourcecr3= this.jsonname.resource_list[2].cpu+"C,"+ this.jsonname.resource_list[2].mem+"G"
+        },
         pass() {
             let self=this;
             self.checkjson.agree=true;
