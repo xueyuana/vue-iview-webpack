@@ -27,7 +27,7 @@
                         </div>
                         <div class="title"><span>域名:</span></div>
                         <div class="container">
-                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="jsonname.domain" disabled></Input>.syswin.com</div>
+                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="jsonname.domain" disabled></Input></div>
                         </div>
 
                         <div class="title"><span>计算信息:</span></div>
@@ -114,10 +114,7 @@
                                         </div>
                                         <div>
                                             <span>实例数量: </span>
-                                            <Select style="width: 180px">
-
-                                                <Input-number v-model="jsonname.resource_list[1].quantity" disabled></Input-number>
-                                            </Select>
+                                            <Input-number v-model="jsonname.resource_list[1].quantity" disabled></Input-number>
                                         </div>
                                     </div>
                                 </Tab-pane>
