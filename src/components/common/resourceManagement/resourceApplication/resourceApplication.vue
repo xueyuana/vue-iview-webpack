@@ -446,7 +446,7 @@
         let mysqlcpus2=this.argToString( this.formInline.resource_list[2].cpu);
         this.formInline.resource_list[2].cpu=mysqlcpus[2];
         this.formInline.resource_list[2].mem=mysqlcpus[2];
-        console.log("型号":this.formInline);
+        console.log("型号"+this.formInline);
     }
 
     }
