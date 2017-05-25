@@ -178,7 +178,7 @@
               autho: item.is_root ? 'Root' : (item.is_admin ? '管理员' : '普通用户'),
               time: item.created_time.substring(0, 10),
               is_admin: item.is_admin,
-              _disabled: !this.userinfo.is_root
+              _disabled: this.userinfo.is_root && item.is_root
             }
           })
           this.filterDate = this.mockTableData(this.searchList, this.pageSize, 1)
@@ -236,6 +236,7 @@
             if (data.body.code === 200){
               this.filterDate[this.index].autho = data.body.is_admin ? '管理员' : '普通用户'
               this.$Message.success('成功更改为' + this.filterDate[this.index].autho)
+              this.selected = {}
               this.userinfo.is_admin= data.body.is_admin
               setStroage('userInfo', this.userinfo)
             }
