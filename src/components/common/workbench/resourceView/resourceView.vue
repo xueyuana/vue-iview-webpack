@@ -3,29 +3,17 @@
         <Row>
             <Col span="4">
               <div class="view-left">
-                <Menu :theme="theme" active-name="1" width="auto">
-                    <Menu-item name="1">
-                        <Icon type="document-text"></Icon>
-                        文章管理
-                    </Menu-item>
-                    <Menu-item name="2">
-                        <Icon type="chatbubbles"></Icon>
-                        评论管理
-                    </Menu-item>
-                    <Menu-item name="3">
-                        <Icon type="heart"></Icon>
-                        用户留存
-                    </Menu-item>
-                    <Menu-item name="4">
-                        <Icon type="heart-broken"></Icon>
-                        流失用户
+                <Menu :theme="theme" active-name="1" width="auto" @on-select="goResourceTree">
+                    <Menu-item :name="data.item_id" v-for="(data,index) in datas" :key="data">
+                        <Icon type="star"></Icon>
+                        {{ data.item_name }}
                     </Menu-item>
                 </Menu>
             </div>
             </Col>
             <Col span="20">
                 <div class="view-right">
-
+                    <router-view></router-view>
                 </div>
             </Col>
         </Row>
@@ -37,10 +25,34 @@
 
 </style>
 <script>
+    import common from '../../../../tools/common.js';
     export default {
         data () {
             return {
-                theme: 'light'
+                theme: 'light',
+                datas:[]
+            }
+        },
+        mounted() {
+            this.getDeployUit();
+        },
+        methods:{
+            getDeployUit() {
+                const url = common.apihost + 'iteminfo/iteminfoes/project_item';
+                // 查询条件
+                this.$http.get(url)
+                        .then(response => {
+                                console.log(response);
+                                if (response.body.code === 200) { // 请求成功
+                                    let backDatas = response.body.result.res;
+                                    this.datas=backDatas;
+                                }
+                        });
+            },
+            // 跳转到相应的资源架构图
+            goResourceTree (name) {
+                console.log(name);
+                this.$router.push({ name:"resourceTree",params:{ resource_id:name}})
             }
         }
     }

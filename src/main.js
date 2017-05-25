@@ -27,8 +27,8 @@ import 'font-awesome/less/font-awesome.less';
 import '../static/css/reset.css';
 
 // 导入echarts2
-//import echarts from 'echarts2';
-//Vue.use(echarts);
+import echarts from 'echarts2';
+Vue.use(echarts);
 
 //导入组件
 import login from './components/login/login.vue';
@@ -56,6 +56,8 @@ import processList from './components/common/workbench/processList/processList.v
 import myWorkbench from './components/common/workbench/myWorkbench/myWorkbranch.vue';
 import myResource from './components/common/workbench/myResource/myResource1.vue';
 import resourceView from './components/common/workbench/resourceView/resourceView.vue';
+// 导入资源架构图子组件
+import resourceTree from './components/common/workbench/resourceView/subcomponent/resourceTree.vue';
 
 //权限管理
 import addAuthority from './components/common/authorityManagement/addAuthority.vue';
@@ -89,7 +91,11 @@ var vueRouters = new VueRouter({
                 {name:'processList',path:'/process_list',component:processList},
                 {name:'myWorkbench',path:'/my_workbench',component:managementConsole}, // 加载管理控制台组件
                 {name:'myResource',path:'/my_resource',component:myResource},
-                {name:'resourceView',path:'/resource_view',component:resourceView},
+                {name:'resourceView',path:'/resource_view',component:resourceView,
+                    children:[
+                        {name: 'resourceTree',path:'/resource_view/tree_map/:resource_id',component:resourceTree}
+                        ]
+                },
                 // 权限管理
                 {name:'addAuthority',path:'/add_authority',component:addAuthority}
             ]
