@@ -229,11 +229,13 @@
           }
           this.$http.put(url, JSON.stringify(params), {emulateJSON:true}).then(data => {
             console.log(data)
-            this.filterDate[this.index].autho = data.body.is_admin ? '管理员' : '普通用户'
-
-            this.userinfo.is_admin= data.body.is_admin
-            console.log(this.userinfo)
-            setStroage('userInfo', this.userinfo)
+            if (data.body.code === 300 ) {
+              this.$Message.warning(data.body.msg)
+            } else if (data.body.code === 200){
+              this.filterDate[this.index].autho = data.body.is_admin ? '管理员' : '普通用户'
+              this.userinfo.is_admin= data.body.is_admin
+              setStroage('userInfo', this.userinfo)
+            }
             this.loading = false
             this.confirm = false
           }, err => {
