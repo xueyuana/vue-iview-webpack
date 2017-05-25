@@ -51,12 +51,12 @@
                                     position: 'right',
                                     formatter: "{b}",
                                     textStyle: {
-                                        color: '#000',
+                                        color: 'blue',
                                         fontSize: 5
                                     }
                                 },
                                 lineStyle: {
-                                    color: '#ccc',
+                                    color: 'pink',
                                     type: 'curve' // 'curve'|'broken'|'solid'|'dotted'|'dashed'
 
                                 }
