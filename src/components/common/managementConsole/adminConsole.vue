@@ -126,9 +126,8 @@
 
                             <Form-item label="审批状态" prop="approval_status">
                                 <Select v-model="formValidate.approval_status" placeholder="审批状态">
-                                    <Option value="approving">审批中</Option>
+                                    <Option value="approving">未审批</Option>
                                     <Option value="approved">审批完成</Option>
-                                    <Option value="no_exist">流程不存在</Option>
                                 </Select>
                             </Form-item>
                             </Col>
@@ -164,16 +163,16 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(data,index) in filterDate" :key="data">
-                        <td>{{ index+1 }}</td>
-                        <td>{{ data.name }}</td>
-                        <td>{{ data.date }}</td>
-                        <td>{{ data.resource }}</td>
-                        <td>{{ data.approval_status }}</td>
-                        <td>
-                            <Button type="primary">查看</Button>
-                        </td>
-                    </tr>
+                        <tr v-for="(data,index) in filterDate" :key="data">
+                            <td>{{ index+1 }}</td>
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.date }}</td>
+                            <td>{{ data.resource }}</td>
+                            <td>{{ data.approval_status }}</td>
+                            <td>
+                                <Button type="primary" @click="goCheck(data.id)">查看</Button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
 
@@ -397,10 +396,10 @@
                                         let backDataObj=backDatas[i];
                                         if(backDataObj.approval_status==="processing") {
                                             backDataObj.approval_status="未审批";
-                                            this.data1.push(backDataObj);
                                         }
+                                        this.data1.push(backDataObj);
                                     }
-                                    console.log(this.data1);
+
                                     this.filterDate = this.mockTableData(this.data1, this.pageSize, 1);
                                 }
                         });
@@ -437,6 +436,12 @@
 
             handleReset (name) {
                 this.$refs[name].resetFields();
+            },
+
+            // 跳转到资源审批页面
+            goCheck (id) {
+                console.log(id);
+                this.$router.push({name: 'res_applicationCheck',query: { id: id}});
             }
         }
     }

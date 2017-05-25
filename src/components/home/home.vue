@@ -61,7 +61,6 @@
                                 <template slot="title">
                                     工作台
                                 </template>
-                                <Menu-item name="41">处理列表</Menu-item>
                                 <Menu-item name="42">我的工作台</Menu-item>
                                 <Menu-item name="43">我的资源</Menu-item>
                                 <Menu-item name="44">资源视图</Menu-item>
@@ -258,9 +257,6 @@
                         break;
                     case '32': //部署历史
                         this.$router.push({name: 'deployHistory'});
-                        break;
-                    case '41': //处理列表
-                        this.$router.push({name: 'processList'});
                         break;
                     case '42': //我的工作台
                         this.$router.push({name: 'myWorkbench'});
