@@ -546,9 +546,9 @@
             formInline: {
                 resource_name: "",
                 project: "",
-                department:'',// getStroage('userInfo').department,
-                user_name:'12',//getStroage('userInfo').username,
-                user_id:'12', //getStroage('userInfo').user_id,
+                department: getStroage('userInfo').department,
+                user_name:getStroage('userInfo').username,
+                user_id:getStroage('userInfo').user_id,
                 domain: "",
                 env: "develop",
                 application_status: "待提交",
@@ -610,6 +610,7 @@
         //取得资源申请列表数据
 
         console.log(this.$route.query.id);
+
         if(this.$route.query.id){
 
             const url=common.apihost+'resource/'+this.$route.query.id;

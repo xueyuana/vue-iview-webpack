@@ -288,7 +288,7 @@
         //跳转到编辑页面
         gotoEdit(index){
             console.log(this.queryData[index].id);
-            this.$router.push({name: 'resourceApplication',query: { id:  this.filterDate[index].id }});
+            this.$router.push({name: 'resourceApplication',query: { id:  this.queryData[index].id }});
         },
         //跳转到审批页面
         gotoCheck(index){

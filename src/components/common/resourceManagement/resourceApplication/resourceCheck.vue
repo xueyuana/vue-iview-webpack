@@ -537,7 +537,7 @@
 </style>
 <script>
     import common from '../../../../tools/common.js';
-import {userinfo} from '../../../../tools/user.js';
+    import {setStroage, getStroage} from 'tools/cookieAction.js'
     export default {
         data () {
         return {
@@ -594,7 +594,7 @@ import {userinfo} from '../../../../tools/user.js';
                 'resourcecr2':'0C,0G',
                 'resourcecr3':'0C,0G'
             },
-            checkjson:{"approve_uid":userinfo.user_id,"agree":true,"annotation":""}
+            checkjson:{"approve_uid":getStroage('userInfo').user_id,"agree":true,"annotation":""}
 
         }
     },
