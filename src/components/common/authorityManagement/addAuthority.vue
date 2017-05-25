@@ -215,7 +215,7 @@
         } else {
           for(let item in selection[len - 1]) {
             if (item == 'autho') {
-              this.selected[item] = selection[len - 1][item].is_admin ? 'True' : 'False'
+              this.selected[item] = selection[len - 1].is_admin ? 'True' : 'False'
             }else {
               this.selected[item] = selection[len - 1][item]
             }
