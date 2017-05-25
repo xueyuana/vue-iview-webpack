@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="container-right">
                                     <span>实例规格：</span>
-                                    <Select style="width: 180px" v-model="formInline.compute_list.cpu" @on-change="changeArr1">
+                                    <Select style="width: 180px" v-model="cpuandrem.cpuandrem1" >
                                         <Option value="2C,4G">2C 4G</Option>
                                         <Option value="4C,8G">4C 8G</Option>
                                     </Select>
@@ -76,7 +76,7 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px"  @change="changeArr2" v-model="formInline.resource_list[0].cpu">
+                                            <Select style="width: 180px"  v-model="cpuandrem.resourcecr1">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="4C,8G">4C 8G</Option>
                                             </Select>
@@ -108,7 +108,7 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;height:50px"  v-model="formInline.resource_list[1].cpu" @change="changeArr3">
+                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="2C,8G">2C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
@@ -141,7 +141,7 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px"  v-model="formInline.resource_list[2].cpu" @change="changeArr4">
+                                            <Select style="width: 180px"  v-model="cpuandrem.resourcecr3" >
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="4C,8G">4C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
@@ -160,7 +160,308 @@
 
                         </div>
                     </div></Tab-pane>
+                    <Tab-pane label="测试环境" name="test"><div class="allcontent">
+                        <div class="title"><span>部署单元信息:</span></div>
+                        <div class="container clearfix">
+                            <div class="container-left">
+                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
 
+                            </div>
+                            <div class="container-right">
+                                <div>
+                                    <span>所属部署单元：</span>
+
+                                    <Select style="width: 180px;"  v-model="formInline.project" :placeholder="project_list.length? '请选择' : '空'">
+                                        <Option v-for="key in project_list" :value="key.item_name">{{key.item_name}}</Option>
+                                    </Select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="title"><span>域名:</span></div>
+                        <div class="container">
+                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="formInline.domain"></Input>.syswin.com</div>
+                        </div>
+
+                        <div class="title"><span>计算信息:</span></div>
+                        <div class="container">
+                            <div class="clearfix" style="margin-bottom: 10px">
+                                <div class="container-left">
+                                    <span>实例名称:</span>
+                                    <Input style="width: 180px" v-model="formInline.compute_list.ins_name"></Input>
+                                </div>
+                                <div class="container-right">
+                                    <span>实例规格：</span>
+                                    <Select style="width: 180px" v-model="cpuandrem.cpuandrem1" >
+                                        <Option value="2C,4G">2C 4G</Option>
+                                        <Option value="4C,8G">4C 8G</Option>
+                                    </Select>
+                                </div>
+                            </div>
+                            <div style="padding-top: 20px " class="clearfix">
+                                <span>镜像：</span>
+                                <Input style="width: 380px" v-model="formInline.compute_list.url"></Input>
+                            </div>
+
+
+                        </div>
+
+                        <div class="title"><span>数据库信息:</span></div>
+                        <div class="container database">
+                            <Tabs>
+                                <Tab-pane label="MYSQL" name="mysql">
+                                    <div class="container-left" style="height: 100px">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[0].res_name"></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例数量：</span>
+                                            <Input-number v-model="formInline.resource_list[0].quantity"></Input-number>
+                                        </div>
+                                        <div >
+                                            <span>存储空间：</span>
+                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>
+                                        </div>
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px"  v-model="cpuandrem.resourcecr1">
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="4C,8G">4C 8G</Option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例版本: </span>
+                                            <Select style="width: 180px" v-model="formInline.resource_list[0].version">
+                                                <Option value="MYSQL5.5">MYSQL5.5</Option>
+                                                <Option value="MYSQL5.6">MYSQL5.6</Option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                                <Tab-pane label="REDIS" name="redis">
+                                    <div class="container-left">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[1].res_name"></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例版本：</span>
+                                            <Select style="width: 180px" v-model="formInline.resource_list[1].version">
+                                                <Option value="Redis2.8">Redis2.8</Option>
+                                                <Option value="Redis3.0">Redis3.0</Option>
+                                            </Select>
+                                        </div>
+
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2">
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="2C,8G">2C 8G</Option>
+                                                <Option value="4C,16G">4C 16G</Option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例数量: </span>
+                                            <Select style="width: 180px">
+
+                                                <Input-number v-model="formInline.resource_list[1].quantity"></Input-number>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                                <Tab-pane label="MONGODB" name="mongo">
+                                    <div class="container-left" style="height:100px;">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[2].res_name"></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例数量：</span>
+                                            <Input-number v-model="formInline.resource_list[2].quantity" ></Input-number>
+                                        </div>
+                                        <div >
+                                            <span>存储空间：</span>
+                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number>
+                                        </div>
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px"  v-model="cpuandrem.resourcecr3" >
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="4C,8G">4C 8G</Option>
+                                                <Option value="4C,16G">4C 16G</Option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例版本: </span>
+                                            <Select style="width: 180px" v-model="formInline.resource_list[2].version">
+                                                <option value="Mongo3.2">Mongo3.2</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                            </Tabs>
+
+
+                        </div>
+                    </div></Tab-pane>
+                    <Tab-pane label="生产环境" name="produce"><div class="allcontent">
+                        <div class="title"><span>部署单元信息:</span></div>
+                        <div class="container clearfix">
+                            <div class="container-left">
+                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
+
+                            </div>
+                            <div class="container-right">
+                                <div>
+                                    <span>所属部署单元：</span>
+
+                                    <Select style="width: 180px;"  v-model="formInline.project" :placeholder="project_list.length? '请选择' : '空'">
+                                        <Option v-for="key in project_list" :value="key.item_name">{{key.item_name}}</Option>
+                                    </Select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="title"><span>域名:</span></div>
+                        <div class="container">
+                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="formInline.domain"></Input>.syswin.com</div>
+                        </div>
+
+                        <div class="title"><span>计算信息:</span></div>
+                        <div class="container">
+                            <div class="clearfix" style="margin-bottom: 10px">
+                                <div class="container-left">
+                                    <span>实例名称:</span>
+                                    <Input style="width: 180px" v-model="formInline.compute_list.ins_name"></Input>
+                                </div>
+                                <div class="container-right">
+                                    <span>实例规格：</span>
+                                    <Select style="width: 180px" v-model="cpuandrem.cpuandrem1" >
+                                        <Option value="2C,4G">2C 4G</Option>
+                                        <Option value="4C,8G">4C 8G</Option>
+                                    </Select>
+                                </div>
+                            </div>
+                            <div style="padding-top: 20px " class="clearfix">
+                                <span>镜像：</span>
+                                <Input style="width: 380px" v-model="formInline.compute_list.url"></Input>
+                            </div>
+
+
+                        </div>
+
+                        <div class="title"><span>数据库信息:</span></div>
+                        <div class="container database">
+                            <Tabs>
+                                <Tab-pane label="MYSQL" name="mysql">
+                                    <div class="container-left" style="height: 100px">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[0].res_name"></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例数量：</span>
+                                            <Input-number v-model="formInline.resource_list[0].quantity"></Input-number>
+                                        </div>
+                                        <div >
+                                            <span>存储空间：</span>
+                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>
+                                        </div>
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px"  v-model="cpuandrem.resourcecr1">
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="4C,8G">4C 8G</Option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例版本: </span>
+                                            <Select style="width: 180px" v-model="formInline.resource_list[0].version">
+                                                <Option value="MYSQL5.5">MYSQL5.5</Option>
+                                                <Option value="MYSQL5.6">MYSQL5.6</Option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                                <Tab-pane label="REDIS" name="redis">
+                                    <div class="container-left">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[1].res_name"></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例版本：</span>
+                                            <Select style="width: 180px" v-model="formInline.resource_list[1].version">
+                                                <Option value="Redis2.8">Redis2.8</Option>
+                                                <Option value="Redis3.0">Redis3.0</Option>
+                                            </Select>
+                                        </div>
+
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2">
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="2C,8G">2C 8G</Option>
+                                                <Option value="4C,16G">4C 16G</Option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例数量: </span>
+                                            <Select style="width: 180px">
+
+                                                <Input-number v-model="formInline.resource_list[1].quantity"></Input-number>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                                <Tab-pane label="MONGODB" name="mongo">
+                                    <div class="container-left" style="height:100px;">
+                                        <div>
+                                            <span>实例名称：</span>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[2].res_name"></Input>
+                                        </div>
+                                        <div>
+                                            <span>实例数量：</span>
+                                            <Input-number v-model="formInline.resource_list[2].quantity" ></Input-number>
+                                        </div>
+                                        <div >
+                                            <span>存储空间：</span>
+                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number>
+                                        </div>
+                                    </div>
+                                    <div class="container-right">
+                                        <div>
+                                            <span>实例规格：</span>
+                                            <Select style="width: 180px"  v-model="cpuandrem.resourcecr3" >
+                                                <Option value="2C,4G">2C 4G</Option>
+                                                <Option value="4C,8G">4C 8G</Option>
+                                                <Option value="4C,16G">4C 16G</Option>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <span>实例版本: </span>
+                                            <Select style="width: 180px" v-model="formInline.resource_list[2].version">
+                                                <option value="Mongo3.2">Mongo3.2</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </Tab-pane>
+                            </Tabs>
+
+
+                        </div>
+                    </div></Tab-pane>
                 </Tabs>
 
 
@@ -241,9 +542,9 @@
             formInline: {
                 resource_name: "",
                 project: "",
-                department: "syswin",
-                user_name:  getStroage('userInfo').username,
-                user_id:  getStroage('userInfo').user_id,
+                department:'1',// getStroage('userInfo').department,
+                user_name:"sd",//getStroage('userInfo').username,
+                user_id:"12",// getStroage('userInfo').user_id,
                 domain: "",
                 env: "develop",
                 application_status: "待提交",
@@ -286,6 +587,12 @@
                     }
                 ]
             },
+            cpuandrem:{
+                'cpuandrem1':'0C,0G',
+                'resourcecr1':'0C,0G',
+                'resourcecr2':'0C,0G',
+                'resourcecr3':'0C,0G'
+            },
             //部署单元名称列表
             project_list: [],
             ruleInline: {
@@ -309,6 +616,7 @@
                     console.log("res_id"+ response.body.result.msg.res_id);
                     this.formInline= response.body.result.msg;
                     this.formInline.res_id=response.body.result.msg.res_id;
+                   this. arrToString();
                 }
                 // 成功回调
             });
@@ -321,10 +629,12 @@
     methods: {
         //保存到草稿箱
         handleSubmit() {
+            this.changeArr();
             let self=this;
             let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
             self.$router.push({name: 'res_applicationHistory'});
+            console.log(this.formInline.compute_list);
             this.$http.post(url,newjson, {emulateJSON:true}  ).then(function (response) {
 
                 console.log(response);
@@ -344,43 +654,55 @@
         save(name) {
 
             let self=this;
+            this.changeArr();
             self.formInline.application_status="已提交";
             let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
+            //表单验证
+            if (!this.formInline.resource_name.trim()) {
+                this.$Message.warning('资源名称不能为空')
+            } else if (!this.formInline.project.trim()) {
+                this.$Message.warning('部署单元不能为空')
+            } else if (!this.formInline.compute_list.ins_name.trim()) {
+                this.$Message.warning('实例名称不能为空')
+            } else {
+                //判断是否是第一次提交第一次用post，第二次用put
+                if(self.formInline.res_id){
+                    let newUrl=url+self.formInline.res_id+"/";
 
-            //判断是否是第一次提交第一次用post，第二次用put
-           if(self.formInline.res_id){
-               let newUrl=url+self.formInline.res_id+"/";
+                    this.$http.put(newUrl,newjson ).then(function (response) {
 
-               this.$http.put(newUrl,newjson ).then(function (response) {
+                        console.log(response);
+                        if(response.body.code===200 && response.body.result.res=="success") {
+                            this.$Message.success('提交成功!');
+                            //添加一条审批
+                            this.addCheck();
+                            // self.$router.push({name: 'res_applicationHistory'});
+                        }
+                        // 成功回调
+                    }, function () {
+                        /*this.$Message.error('登陆失败!');*/
+                        // 失败回调
+                    });
+                }else{
+                    this.$http.post(url,newjson, {emulateJSON:true}  ).then(function (response) {
 
-                   console.log(response);
-                   if(response.body.code===200 && response.body.result.res=="success") {
-                       this.$Message.success('提交成功!');
-                       //添加一条审批
-                       this.addCheck();
-                      // self.$router.push({name: 'res_applicationHistory'});
-                   }
-                   // 成功回调
-               }, function () {
-                   /*this.$Message.error('登陆失败!');*/
-                   // 失败回调
-               });
-           }else{
-               this.$http.post(url,newjson, {emulateJSON:true}  ).then(function (response) {
+                        console.log(response);
+                        if(response.body.code===200 && response.body.result.res=="success") {
+                            this.$Message.success('提交成功!');
+                            this.formInline.res_id= response.body.result.res_id;
+                            //添加一条审批
+                            this.addCheck();
+                        }
+                        // 成功回调
+                    }, function () {
 
-                   console.log(response);
-                   if(response.body.code===200 && response.body.result.res=="success") {
-                       this.$Message.success('提交成功!');
-                       this.formInline.res_id= response.body.result.res_id;
-                       //添加一条审批
-                       this.addCheck();
-                   }
-                   // 成功回调
-               }, function () {
+                    });
+                }
 
-               });
-           }
+
+            }
+
 
 
 
@@ -423,27 +745,33 @@
             console.log('error', err)
         })
     },
-    changeArr1(arr){
-        console.log(arr);
-        let cupands=this.argToString(arr);
-        this.formInline.compute_list.cpu=cupands[0];
-        this.formInline.compute_list.mem=cupands[1];
+    changeArr(){
+        let cupands=this.argToString(this.cpuandrem.cpuandrem1);
+        this.formInline.compute_list[0].cpu=parseInt(cupands[0]);
+        this.formInline.compute_list[0].mem=parseInt(cupands[1]);
+
+
+        let mysqlcpus=this.argToString( this.cpuandrem.resourcecr1);
+        this.formInline.resource_list[0].cpu=parseInt(mysqlcpus[0]);
+        this.formInline.resource_list[0].mem=parseInt(mysqlcpus[1]);
+
+
+        let mysqlcpus1=this.argToString( this.cpuandrem.resourcecr2);
+        this.formInline.resource_list[1].cpu=parseInt(mysqlcpus[0]);
+        this.formInline.resource_list[1].mem=parseInt(mysqlcpus[1]);
+
+        let mysqlcpus2=this.argToString( this.cpuandrem.resourcecr3);
+        this.formInline.resource_list[2].cpu=parseInt(mysqlcpus[0]);
+        this.formInline.resource_list[2].mem=parseInt(mysqlcpus[1]);
+        console.log("型号"+this.formInline.compute_list);
     },
-    changeArr2(arr){
-        let mysqlcpus=this.argToString(arr);
-        this.formInline.resource_list[0].cpu=mysqlcpus[0];
-        this.formInline.resource_list[0].mem=mysqlcpus[1];
-    },
-    changeArr3(arr){
-        let rediscpus=this.argToString(arr);
-        this.formInline.resource_list[1].cpu=rediscpus[0];
-        this.formInline.resource_list[1].mem=rediscpus[1];
-    },
-        changeArr4(arr){
-        let mongocpus=this.argToString(arr);
-        this.formInline.resource_list[2].cpu=mongocpus[0];
-        this.formInline.resource_list[2].mem=mongocpus[1];
+    arrToString(){
+        this.cpuandrem.cpuandrem1= this.formInline.compute_list[0].cpu+"C,"+ this.formInline.compute_list[0].mem+"G";
+        this.cpuandrem.resourcecr1= this.formInline.resource_list[0].cpu+"C,"+ this.formInline.resource_list[0].mem+"G"
+        this.cpuandrem.resourcecr2= this.formInline.resource_list[1].cpu+"C,"+ this.formInline.resource_list[1].mem+"G"
+        this.cpuandrem.resourcecr3= this.formInline.resource_list[2].cpu+"C,"+ this.formInline.resource_list[2].mem+"G"
     }
+
     }
     }
 
