@@ -1,6 +1,6 @@
 <template>
     <div class="create-project">
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
             <div class="form-main">
                 <div class="submit">
                     <Form-item>
