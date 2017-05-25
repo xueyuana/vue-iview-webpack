@@ -3,15 +3,15 @@
         <!--部署单元内容-->
         <div class="table-search clearfix">
             <div class="search-select fl">
-                <Select v-model="selectedValue" style="width:200px">
-                    <Option v-for="item in selectList" :value="item.value" :key="item">{{ item.label }}</Option>
+                <Select v-model="selectedValue" style="width:200px" @on-change="getSelectedValue" :label-in-value="true">
+                    <Option v-for="item in selectList" :value="item.value" :label="item.label" :key="item"></Option>
                 </Select>
             </div>
             <div class="search-input fl">
-                <Input v-model="inputValue" placeholder="请输入实例名称模糊查询" style="width: 300px"></Input>
+                <Input v-model="inputValue" :placeholder="placeholderValue" style="width: 300px"></Input>
             </div>
             <div class="search-btn fl">
-                <Button type="primary" icon="ios-search">搜索</Button>
+                <Button type="primary" icon="ios-search" @click="goSearch">搜索</Button>
             </div>
         </div>
         <div class="table-content">
@@ -39,7 +39,7 @@
             <div style="margin: 10px;overflow: hidden">
                 <div style="float: right;">
                     <Page
-                            :total="100"
+                            :total="this.data1.length"
                             :page-size="pageSize"
                             :current="1"
                             show-sizer
@@ -86,6 +86,7 @@
 
 </style>
 <script>
+    import common from '../../../../../tools/common.js';
     export default {
         data () {
             return {
@@ -94,16 +95,30 @@
                 // 下拉列表内容
                 selectList: [
                     {
-                        value: 'instanceName',
-                        label: '实例名称'
+                        value: 'item_name',
+                        label: '部署单元名称'
                     },
                     {
-                        value: 'ip',
-                        label: 'ip地址'
+                        value: 'create_date',
+                        label: '创建日期'
+                    },
+                    {
+                        value: 'user',
+                        label: '创建人'
+                    },
+                    {
+                        value: 'item_code',
+                        label: '部署单元编号'
+                    },
+                    {
+                        value: 'item_depart',
+                        label: '归属部门'
                     }
                 ],
                 // 下拉列表选中的值
                 selectedValue: '',
+                // 搜索输入框的值
+                placeholderValue:'请输入',
 
                 // 表格数据
                 columns: [
@@ -113,7 +128,7 @@
                     },
                     {
                         title: '部署单元名称',
-                        key: 'project_name'
+                        key: 'item_name'
                     },
                     {
                         title: '创建日期',
@@ -121,15 +136,15 @@
                     },
                     {
                         title: '创建人',
-                        key: 'creator'
+                        key: 'user'
                     },
                     {
                         title: '部署单元编号',
-                        key: 'project_code'
+                        key: 'item_code'
                     },
                     {
                         title: '归属部门',
-                        key: 'department'
+                        key: 'item_depart'
                     },
                     {
                         title: '操作',
@@ -168,19 +183,69 @@
 //
 //                ],
                 // 分页数据
+                data1: [],
+                filterDate: [],
                 pageSize: 10
             }
         },
         methods:{
+            // 下拉框的值发生改变的时候触发
+            getSelectedValue (selectedObj) {
+                console.log(selectedObj);
+                this.placeholderValue="请输入"+selectedObj.label;
+            },
+
+            // 搜索查询
+            goSearch  () {
+                const url = common.apihost + 'iteminfo/iteminfoes/project_item';
+                // 查询条件
+                let query = {};
+                this.inputValue && (query[this.selectedValue] = this.inputValue);
+
+                console.log(query);
+
+                this.$http.get(url, {params: query})
+                        .then(response => {
+                            console.log(response);
+                            if (response.body.code === 200) { // 请求成功
+                                let backDatas = response.body.result.res;
+                                this.data1 = backDatas;
+                                this.filterDate = this.mockTableData(backDatas, this.pageSize, 1)
+                                this.$store.commit('getOriginData', this.filterDate);
+                            }
+                        });
+            },
+
             //实现分页  改变后的页码
             changePage (page) {
                 console.log(page);
-
+                this.filterDate = this.mockTableData(this.data1, this.pageSize, page);
+                this.$store.commit('getOriginData', this.filterDate);
             },
+
             // 返回切换后的每页条数
             changePageSize (pageSize) {
                 console.log(pageSize);
+                this.pageSize = pageSize;
+                this.changePage(1);
+            },
+            // 构造删选之后的数据
+            mockTableData (originData, pageSize, index) {
+                let data = [];
+                let num = (index - 1) * pageSize;
+                let maxNum = (num + pageSize) > this.data1.length ? this.data1.length : (num + pageSize);
+                for (let i = num; i < maxNum; i++) {
+                    data.push({
+                        item_name: originData[i].item_name,
+                        create_date: originData[i].create_date.substring(0, 16),
+                        user: originData[i].user,
+                        item_code: originData[i].item_code,
+                        item_depart: originData[i].item_depart
+                    })
+                }
+                return data;
             }
+
         }
     }
 </script>

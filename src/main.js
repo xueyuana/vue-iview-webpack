@@ -26,6 +26,10 @@ import 'font-awesome/less/font-awesome.less';
 //导入初始化的css
 import '../static/css/reset.css';
 
+// 导入echarts2
+import echarts from 'echarts2';
+Vue.use(echarts);
+
 //导入组件
 import login from './components/login/login.vue';
 import home from './components/home/home.vue';
@@ -50,7 +54,7 @@ import deployHistory from 'components/common/deployManagement/deployHistory/depl
 //工作台
 import processList from './components/common/workbench/processList/processList.vue';
 import myWorkbench from './components/common/workbench/myWorkbench/myWorkbranch.vue';
-import myResource from './components/common/workbench/myResource/myResource.vue';
+import myResource from './components/common/workbench/myResource/myResource1.vue';
 import resourceView from './components/common/workbench/resourceView/resourceView.vue';
 
 //权限管理
