@@ -234,7 +234,7 @@
 </style>
 <script>
     import common from '../../../../tools/common.js';
-    import {userinfo} from '../../../../tools/user.js';
+    import {setStroage, getStroage} from 'tools/cookieAction.js'
     export default {
         data () {
         return {
@@ -412,9 +412,10 @@
     },
       //取得所属部门信息
    getProjectList() {
-           // let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+          // let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+            let userInfo = getStroage('userInfo');
            // console.log(userInfo)
-            let url = common.apihost + 'iteminfo/iteminfoes/local/' + userinfo.username
+            let url = common.apihost + 'iteminfo/iteminfoes/local/' + userInfo.user_id;
             this.$http.get(url).then(data => {
                 console.log('ProjectList', data)
             this.project_list = data.body.result.res
