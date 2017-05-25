@@ -19,7 +19,7 @@
                                 <div>
                                     <span>所属部署单元：</span>
                                     <Select style="width: 180px" v-model="jsonname.project" disabled>
-                                        <Option value="应用统筹部"></Option>
+                                        <Option value=""></Option>
                                     </Select>
                                 </div>
 
@@ -339,7 +339,7 @@
                             <div class="clearfix" style="margin-bottom: 10px">
                                 <div class="container-left">
                                     <span>实例名称:</span>
-                                    <Input style="width: 180px" v-model="jsonname.compute_list.ins_name" disabled></Input>
+                                    <Input style="width: 180px" v-model="jsonname.compute_list[0].ins_name" disabled></Input>
                                 </div>
                                 <div class="container-right">
                                     <span>实例规格：</span>
@@ -351,7 +351,7 @@
                             </div>
                             <div style="padding-top: 20px " class="clearfix">
                                 <span>镜像：</span>
-                                <Input style="width: 380px" v-model="jsonname.compute_list.url" disabled></Input>
+                                <Input style="width: 380px" v-model="jsonname.compute_list[0].url" disabled></Input>
                             </div>
 
 
@@ -627,7 +627,7 @@
         pass() {
             let self=this;
             self.checkjson.agree=true;
-            const url=common.apihost+'approval/approvals/'+this.$route.query.id+"/";
+            const url=common.apihost+'approval/approvals/'+this.$route.query.id;
             this.$http.put(url,self.checkjson).then(function (response) {
 
 
@@ -643,7 +643,7 @@
             let self=this;
             self.checkjson.agree=false;
             console.log("审批:"+ self.checkjson);
-            const url=common.apihost+'approval/approvals/'+this.$route.query.id+"/";
+            const url=common.apihost+'approval/approvals/'+this.$route.query.id;
             this.$http.put(url,self.checkjson).then(function (response) {
 
                 if(response.body.code===200) {
