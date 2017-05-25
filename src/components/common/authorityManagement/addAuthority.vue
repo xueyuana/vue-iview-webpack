@@ -210,10 +210,12 @@
       // 选项
       onSelectChange(selection) {
         let len = selection.length
-        if (len > 0) {
+        if (len === 0) {
+          this.selected = {}
+        } else {
           for(let item in selection[len - 1]) {
             if (item == 'autho') {
-              this.selected[item] = selection[len - 1][item].is_admin ? 'True' : 'False'
+              this.selected[item] = selection[len - 1].is_admin ? 'True' : 'False'
             }else {
               this.selected[item] = selection[len - 1][item]
             }
@@ -231,11 +233,9 @@
             'admin_user': this.formItem.autho
           }
           this.$http.put(url, JSON.stringify(params), {emulateJSON:true}).then(data => {
-            console.log(data)
-            if (data.body.code === 300 ) {
-              this.$Message.warning(data.body.msg)
-            } else if (data.body.code === 200 && data.body.is_root){
+            if (data.body.code === 200){
               this.filterDate[this.index].autho = data.body.is_admin ? '管理员' : '普通用户'
+              this.$Message.success('成功更改为' + this.filterDate[this.index].autho)
               this.userinfo.is_admin= data.body.is_admin
               setStroage('userInfo', this.userinfo)
             }
