@@ -255,9 +255,10 @@
             this.$router.go(-1)
             break
           case 1:
+            this.onSubmit(index)
             break
           default:
-            this.onSaveDraft()
+            this.onSubmit(index)
             break
         }
       },
@@ -266,32 +267,34 @@
         this.environment = name
       },
       // 保存到草稿
-      onSaveDraft() {
+      onSubmit(index) {
         if (!this.deploy_name.trim()) {
           this.$Message.warning('部署名称不能为空')
         } else if (!this.project_name.trim()) {
-          this.$Message.warning('所属项目不能为空')
+          this.$Message.warning('所属部署单元不能为空')
         } else if (!this.exec_tag.trim()) {
           this.$Message.warning('执行目标不能为空')
-        } else if (!this.exec_context.trim()) {
-          this.$Message.warning('执行脚本不能为空')
         }  else if (!this.mirror.trim()) {
           this.$Message.warning('镜像URL不能为空')
         } else {
-          this.$http.post(baseUrl.apihost + 'deployment/deployments', {
-            "environment": this.environment,
-            "initiator": "lisi",
-            "project_name": this.project_name,
-            "exec_tag": this.exec_tag,
-            "exec_context": this.exec_context,
-            "app_image": this.mirror,
-            "deploy_name": this.deploy_name
-          }).then(res => {
-            console.log('success', res)
-            this.$router.push({name: 'deployHistory'})
-          }, res => {
-            console.log('error', res)
-          })
+          if (index === 1) {  // 提交
+
+          } else if (index === 2){ // 保存到草稿
+            this.$http.post(baseUrl.apihost + 'deployment/deployments', {
+              "environment": this.environment,
+              "initiator": USER.username,
+              "project_name": this.project_name,
+              "exec_tag": this.exec_tag,
+              "exec_context": this.exec_context,
+              "app_image": this.mirror,
+              "deploy_name": this.deploy_name
+            }).then(res => {
+              console.log('保存到草稿', res)
+              this.$router.push({name: 'deployHistory'})
+            }, res => {
+              console.log('error', res)
+            })
+          }
         }
       },
       // 请求部署单元列表

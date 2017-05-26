@@ -161,7 +161,7 @@
         this.$http.get(url, {
           params: query
         }).then(data => {
-          console.log('success', data)
+          console.log('部署列表', data)
           this.data1 = data.body
           this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
           this.num = 1
@@ -192,7 +192,8 @@
           data.push({
             initiator: originData[i].initiator,
             created_time: originData[i].created_time.substring(0, 16),
-            project_name: originData[i].project_name
+            project_name: originData[i].project_name,
+            deploy_id: originData[i].deploy_id
           })
         }
         return data;
