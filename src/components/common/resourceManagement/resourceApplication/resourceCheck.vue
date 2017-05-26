@@ -633,7 +633,7 @@
                    //
                     console.log("审批通过");
 //                    this.$router.push({name: 'res_applicationHistory'});
-                    const url2=common.apihost+'/approval/reservation';
+                    const url2=common.apihost+'approval/reservation';
                     let json2={
                         "resource_id":this.$route.query.id
                     };
