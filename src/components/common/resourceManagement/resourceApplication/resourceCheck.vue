@@ -18,8 +18,8 @@
                             <div class="container-right">
                                 <div>
                                     <span>所属部署单元：</span>
-                                    <Select style="width: 180px" v-model="item" disabled>
-                                        <Option v-for="key in project_list" :value="key" :key="key" >{{key.item_name}}</Option>
+                                    <Select style="width: 180px" v-model="jsonname.project" disabled>
+                                        <Option value="" ></Option>
                                     </Select>
                                 </div>
 
@@ -592,6 +592,8 @@
                 'resourcecr2':'0C,0G',
                 'resourcecr3':'0C,0G'
             },
+            //部署单元名称列表
+            project_list: [],
             checkjson:{"approve_uid":getStroage('userInfo').user_id,"agree":true,"annotation":""}
 
         }
@@ -627,19 +629,27 @@
             self.checkjson.agree=true;
             const url=common.apihost+'approval/approvals/'+this.$route.query.id;
             this.$http.put(url,self.checkjson).then(function (response) {
-
-
                 if(response.body.code===200) {
                    //
                     console.log("审批通过");
 //                    this.$router.push({name: 'res_applicationHistory'});
+                    const url2=common.apihost+'approval/reservation';
+                    let json2={
+                        "resource_id":this.$route.query.id
+                    };
+                    this.$http.post(url2,json2).then(function (response) {
+                        if(response.body.code===200) {
+                            console.log("资源预留通过");
+                            if(this.$store.state.path.originPath==="/res_application_history") { //从资源申请历史页面进入
+                             this.$router.push({name: 'res_applicationHistory'});
 
-                    if(this.$store.state.path.originPath==="/res_application_history") { //从资源申请历史页面进入
-                        this.$router.push({name: 'res_applicationHistory'});
+                             }else if(this.$store.state.path.originPath==="/admin_console"){  // 从管理员控制台进入
+                             this.$router.push({name: 'adminConsole'});
+                             }
+                        }
+                    });
 
-                    }else if(this.$store.state.path.originPath==="/admin_console"){  // 从管理员控制台进入
-                        this.$router.push({name: 'adminConsole'});
-                    }
+
                 }
                 // 成功回调
             });
