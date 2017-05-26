@@ -379,7 +379,6 @@
             },
             // 提交删选条件
             goQuery () {
-                // 获取审批状态
 
                 let userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
