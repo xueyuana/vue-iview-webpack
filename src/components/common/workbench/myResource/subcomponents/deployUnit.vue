@@ -62,14 +62,16 @@
    .table-content {
        margin-top: 20px;
    }
-   table {
-       width: 100%;
-       border-collapse: collapse;
-   }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
 
-   table td {
-       text-align: center;
-   }
+    table td, table th{
+        text-align: center;
+        border: 1px solid #D7DDE4;
+    }
 
    table tr {
        height: 50px;
@@ -123,7 +125,7 @@
                 // 表格数据
                 columns: [
                     {
-                        title: '编号',
+                        title: '序号',
                         key: 'identifier'
                     },
                     {

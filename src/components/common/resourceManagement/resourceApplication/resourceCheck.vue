@@ -459,7 +459,7 @@
 
                         </div>
                         <div class="title"><span>审批意见:</span></div>
-                        <div ><textarea style="width: 100%" id="annotation" v-model="checkjson.annotation" ></textarea></div>
+                        <div ><textarea style="width: 100%" id="annotation" v-model="checkjson.annotation"></textarea></div>
                     </div></Tab-pane>
                 </Tabs>
 
@@ -490,17 +490,26 @@
 
 
     .title {
+        /*width: 100%;*/
+        /*height: 24px;*/
+        /*line-height: 24px;*/
+        /*background-color: #f2f2f2;*/
+        /*margin-bottom: 10px;*/
+
         width: 100%;
-        height: 24px;
-        line-height: 24px;
-        background-color: #f2f2f2;
+        height: 20px;
+        padding-left: 5px;
+        background-color: rgba(242, 242, 242, 1);
+        font-size: 14px;
+        line-height: 20px;
         margin-bottom: 10px;
+        margin-top: 10px;
     }
 
     .title span {
-        color: #000;
-        font-weight: 500;
-        font-size: 18px;
+        /*color: #000;*/
+        /*font-weight: 500;*/
+        /*font-size: 18px;*/
     }
 
     .container {

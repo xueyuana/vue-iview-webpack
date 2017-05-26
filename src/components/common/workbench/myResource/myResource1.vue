@@ -196,7 +196,7 @@
                 // 表格数据
                 columns: [
                     {
-                        title: '编号',
+                        title: '序号',
                         key: 'identifier'
                     },
                     {

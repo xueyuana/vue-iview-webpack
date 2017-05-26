@@ -2,44 +2,106 @@
 <template>
     <div class="wrap">
         <div class="query">
-            <Row class="query-row">
-                <Col span="6">
-                <div><span>发起人:</span><Input style="width: 160px"></Input></div>
-                <div>
-                    <span>审批状态:</span>
-                    <Select style="width: 160px">
-                        <option></option>
-                    </Select>
-                </div>
-                </Col>
-                <Col span="10">
+            <Form  :label-width="100">
                 <Row>
-                    <Col span="4"><span>发起日期：</span></Col>
-                    <Col span="7"><Date-picker type="date" style="width: 160px" v-model="startDate"></Date-picker></Col>
-                    <Col span="3"><span>至</span></Col>
-                    <Col span="8"><Date-picker type="date" style="width: 160px" :options="option" v-model="endDate" ></Date-picker></Col>
+                    <Col span="6">
+                        <Form-item label="发起人" prop="name">
+                            <Input placeholder="请输入"></Input>
+                        </Form-item>
+
+                        <!--<div><span>发起人:</span><Input style="width: 160px" placeholder="请输入"></Input></div>-->
+                        <Form-item label="审批状态" prop="approval_status">
+                            <Select placeholder="请选择">
+                                <Option></Option>
+                            </Select>
+                        </Form-item>
+
+                        <!--<div>-->
+                            <!--<span>审批状态:</span>-->
+                            <!--<Select style="width: 160px">-->
+                                <!--<option></option>-->
+                            <!--</Select>-->
+                        <!--</div>-->
+                    </Col>
+                    <Col span="8">
+                        <Form-item label="发起日期">
+                            <Row>
+                                <Col span="11">
+                                    <Form-item prop="startDate">
+                                        <Date-picker type="datetime" placeholder="选择日期" v-model="startDate"></Date-picker>
+                                    </Form-item>
+                                </Col>
+                                <Col span="2" style="text-align: center">至</Col>
+                                <Col span="11">
+                                    <Form-item prop="endDate">
+                                        <Date-picker type="datetime" placeholder="选择日期" v-model="endDate"></Date-picker>
+                                    </Form-item>
+                                </Col>
+                            </Row>
+                        </Form-item>
+
+                        <!--<Row>-->
+                            <!--<Col span="4">-->
+                            <!--<span>发起日期：</span>-->
+                            <!--</Col>-->
+                            <!--<Col span="7">-->
+                            <!--<Date-picker type="date" style="width: 160px" v-model="startDate" placeholder="选择日期"></Date-picker>-->
+                            <!--</Col>-->
+                            <!--<Col span="3">-->
+                            <!--<span>至</span>-->
+                            <!--</Col>-->
+                            <!--<Col span="8">-->
+                            <!--<Date-picker type="date" style="width: 160px" :options="option" v-model="endDate" placeholder="选择日期"></Date-picker>-->
+                            <!--</Col>-->
+                    <!--</Row>-->
+
+                        <Form-item label="表单状态" prop="formStatus">
+                            <Select placeholder="请选择">
+                                <Option></Option>
+                            </Select>
+                        </Form-item>
+
+                    <!---->
+                    <!--<div>-->
+                        <!--<span>表单状态：</span>-->
+                        <!--<Select style="width: 160px">-->
+                            <!--<option></option>-->
+                        <!--</Select>-->
+                    <!--</div>-->
+
+                    </Col>
+                    <Col span="6">
+                        <Form-item label="资源名称" prop="resource">
+                            <Input placeholder="请输入"></Input>
+                        </Form-item>
+
+                    <!--<div><span>资源名称：</span><Input style="width: 160px" placeholder="请输入"></Input></div>-->
+                        <Form-item label="所属部署单元" prop="project">
+                            <Input placeholder="请输入"></Input>
+                        </Form-item>
+
+                    <!--<div><span>所属部署单元：</span><Input style="width: 160px" placeholder="请输入"></Input></div>-->
+                    </Col>
+                    <Col span="4">
+                        <Form-item>
+                            <Button type="primary">查询</Button>
+                        </Form-item>
+
+                        <Form-item>
+                            <Button type="ghost">重置</Button>
+                        </Form-item>
+                       <!--<Button type="primary">查询</Button>-->
+                    </Col>
                 </Row>
-                <div>
-                    <span>表单状态：</span>
-                    <Select style="width: 160px">
-                        <option></option>
-                    </Select>
-                </div>
-                </Col>
-                <Col span="6">
-                <div><span>资源名称：</span><Input style="width: 160px"></Input></div>
-                <div><span>所属部署单元：</span><Input style="width: 160px"></Input></div>
-                </Col>
-                <Col span="2" class="contain-button">
-                <Button size="large">查询</Button>
-                </Col>
-            </Row>
+            </Form>
+
         </div>
+
         <div class="result">
-            <Table :columns="columns" :data="filterDate" border :width="1200"></Table>
+            <Table :columns="columns" :data="filterDate" border></Table>
             <div style="margin: 10px;overflow: hidden">
                 <div style="float: right;">
-                    <Page :total="this.queryData.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
+                    <Page :total="this.queryData.length" :page-size="pageSize" :current="num" show-sizer show-total @on-change="changePage" @on-page-size-change="changePageSize"></Page>
                 </div>
             </div>
         </div>
@@ -48,39 +110,44 @@
 <style scoped>
 
     .wrap {
-        padding: 10px 20px;
+        /*padding: 10px 20px;*/
     }
     .query {
-        width: 100%;
-        height: 130px;
-        border: 1px solid #e4e4e4;
-        background-image: linear-gradient(to bottom,#fff,#e4e4e4);
-        padding: 10px 0;
+        /*width: 100%;*/
+        /*height: 130px;*/
+        /*border: 1px solid #e4e4e4;*/
+        /*background-image: linear-gradient(to bottom,#fff,#e4e4e4);*/
+        /*padding: 10px 0;*/
+
+        padding-top: 15px;
+        background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);
+        border: 1px solid rgb(228, 228, 228);
+        border-radius: 10px;
     }
 
-    .query span {
-        color: #000;
-        display: inline-block;
-        width: 80px;
-        text-align: center;
-    }
+    /*.query span {*/
+        /*color: #000;*/
+        /*display: inline-block;*/
+        /*width: 100px;*/
+        /*text-align: center;*/
+    /*}*/
 
-    .query-row >.ivu-col {
-        height: 110px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-    }
+    /*.query-row >.ivu-col {*/
+        /*height: 110px;*/
+        /*display: flex;*/
+        /*flex-direction: column;*/
+        /*justify-content: space-around;*/
+    /*}*/
 
-    .query-row > .ivu-col.contain-button {
-        height: 110px;
-        flex-direction: row;
-        align-items: flex-end;
+    /*.query-row > .ivu-col.contain-button {*/
+        /*height: 110px;*/
+        /*flex-direction: row;*/
+        /*align-items: flex-end;*/
 
-    }
+    /*}*/
 
     .result {
-        margin-top: 50px;
+        padding: 20px;
     }
 
 
@@ -142,7 +209,7 @@
             {
                 title: '所属部署单元',
                 key: 'project',
-                width: 280,
+//                width: 280,
                 align: 'center'
             },
             {
