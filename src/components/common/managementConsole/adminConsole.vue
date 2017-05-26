@@ -99,50 +99,40 @@
                 <div class="search-form">
                     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
                         <Row>
-                            <Col span="6">
-                            <Form-item label="创建人" prop="creator">
-                                <Input v-model="formValidate.creator"></Input>
-                            </Form-item>
-                            <Form-item label="资源名称" prop="resource_name">
-                                <Input v-model="formValidate.resource_name"></Input>
-                            </Form-item>
-                            </Col>
-                            <Col span="8">
-                            <Form-item label="创建日期">
-                                <Row>
-                                    <Col span="11">
-                                    <Form-item prop="create_date_begin">
-                                        <Date-picker type="date" placeholder="选择日期" v-model="formValidate.create_date_begin"></Date-picker>
-                                    </Form-item>
-                                    </Col>
-                                    <Col span="2" style="text-align: center">至</Col>
-                                    <Col span="11">
-                                    <Form-item prop="create_date_end">
-                                        <Date-picker type="date" placeholder="选择日期" v-model="formValidate.create_date_end"></Date-picker>
-                                    </Form-item>
-                                    </Col>
-                                </Row>
-                            </Form-item>
-
-                            <Form-item label="审批状态" prop="approval_status">
-                                <Select v-model="formValidate.approval_status" placeholder="审批状态" @on-change="getApprovalStatus">
-                                    <Option value="unapproved">未审批</Option>
-                                    <Option value="approved">审批完成</Option>
-                                </Select>
-                            </Form-item>
-                            </Col>
-                            <Col span="6">
-                                <Form-item label="部署单元名称" prop="project_name">
-                                    <Input v-model="formValidate.project_name"></Input>
+                            <Col span="10">
+                                <Form-item label="发起人" prop="creator">
+                                    <Input v-model="formValidate.creator" placeholder="请输入"></Input>
                                 </Form-item>
-                                <Form-item label="归属部门" prop="department">
-                                    <Select v-model="formValidate.department" placeholder="请选择归属部门">
-                                        <Option value="beijing">大数据部</Option>
-                                        <Option value="shanghai">运维部</Option>
-                                        <Option value="shenzhen">云服务</Option>
+
+                                <Form-item label="部署单元名称" prop="project_name">
+                                    <Input v-model="formValidate.project_name" placeholder="请输入"></Input>
+                                </Form-item>
+                            </Col>
+
+                            <Col span="10">
+                                <Form-item label="发起日期">
+                                    <Row>
+                                        <Col span="11">
+                                            <Form-item prop="create_date_begin">
+                                                <Date-picker type="date" placeholder="选择日期" v-model="formValidate.create_date_begin"></Date-picker>
+                                            </Form-item>
+                                        </Col>
+                                        <Col span="2" style="text-align: center">至</Col>
+                                        <Col span="11">
+                                            <Form-item prop="create_date_end">
+                                                <Date-picker type="date" placeholder="选择日期" v-model="formValidate.create_date_end"></Date-picker>
+                                            </Form-item>
+                                        </Col>
+                                    </Row>
+                                </Form-item>
+                                <Form-item label="审批状态" prop="approval_status">
+                                    <Select v-model="formValidate.approval_status" placeholder="审批状态" @on-change="getApprovalStatus">
+                                        <Option value="unapproved">未审批</Option>
+                                        <Option value="approved">审批完成</Option>
                                     </Select>
                                 </Form-item>
                             </Col>
+
                             <Col span="4">
                                 <Form-item>
                                     <Button type="primary" @click="goQuery">查询</Button>
@@ -389,7 +379,6 @@
             },
             // 提交删选条件
             goQuery () {
-                // 获取审批状态
 
                 let userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
@@ -416,6 +405,10 @@
                                         }else if(this.selectedStatus==="approved"){ //查询已经审批的
                                             if(backDataObj.approval_status==="success") {
                                                 backDataObj.approval_status="审批完成";
+                                                this.data1.push(backDataObj);
+                                            }
+                                            if(backDataObj.approval_status==="failed") {
+                                                backDataObj.approval_status="审批不通过";
                                                 this.data1.push(backDataObj);
                                             }
                                         }

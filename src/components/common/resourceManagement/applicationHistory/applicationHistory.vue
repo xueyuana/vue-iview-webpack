@@ -116,13 +116,17 @@
                 key: 'resource',
                 align: 'center',
                 render: (h, params) => {
+                //判断是否是管理员只有管理员才能点击
+                if(getStroage('userInfo').is_admin){
                 return h('a',{on: {
                     click: () => {
-                    this.gotoCheck(params.index);
+                    this.gotoCheck(params.index);}
+                   }
+                },params.row['resource'])
+            }else{
+                return h('div',params.row['resource'])
+    }
 
-    }}},params.row['resource']
-
-                )
             }
             },
             {
@@ -184,9 +188,9 @@
                 on: {
                     click: () => {
                     this.gotoEdit(params.index);
-    }}},'编辑')])
-            } }
-    }
+                    }}},'编辑')])
+                   } }
+                 }
     ],
     queryData: [
         {
@@ -232,9 +236,14 @@
 
         //取得资源申请列表数据
         let userid= getStroage('userInfo').user_id;
-        //  console.log(this.queryData)
-
-        const url=common.apihost+'resource/?user_id='+userid;
+        let ifadmin = getStroage('userInfo').is_admin;
+        let url="";
+        if( ifadmin ){
+            url=common.apihost+'resource/';
+        }else{
+            url=common.apihost+'resource/?user_id='+userid;
+        }
+        console.log(url);
         this.$http.get(url, {emulateJSON:true}  ).then(function (response) {
 
              console.log(response.body.result.msg);
@@ -279,7 +288,7 @@
                 if(response.body.code===200 ) {
                    // this.$Message.success('提交成功!');
                     console.log("添加资源预留");
-                    this.$router.push({name: 'myResource'});
+                    this.$router.push({name: 'applicationDeployment',query: { id:  this.filterDate[index].id }});
                 }
                 // 成功回调
             }, function () {

@@ -596,7 +596,7 @@
 
         }
     },
-    beforeCreate(){
+        beforeCreate(){
         //取得资源申请列表数据
 
         console.log(this.$route.query.id);
@@ -615,7 +615,7 @@
        }
 
     },
-    methods: {
+        methods: {
         arrToString(){
             this.cpuandrem.cpuandrem1= this.jsonname.compute_list[0].cpu+"C,"+ this.jsonname.compute_list[0].mem+"G";
             this.cpuandrem.resourcecr1= this.jsonname.resource_list[0].cpu+"C,"+ this.jsonname.resource_list[0].mem+"G"
@@ -632,7 +632,23 @@
                 if(response.body.code===200) {
                    //
                     console.log("审批通过");
-                    this.$router.push({name: 'res_applicationHistory'});
+//                    this.$router.push({name: 'res_applicationHistory'});
+                    const url2=common.apihost+'/approval/reservation';
+                    let json2={
+                        "resource_id":this.$route.query.id
+                    };
+                    this.$http.put(url2,json2).then(function (response) {
+                        if(response.body.code===200) {
+                            console.log("资源预留通过");
+                        }
+                    });
+
+                    /*if(this.$store.state.path.originPath==="/res_application_history") { //从资源申请历史页面进入
+                        this.$router.push({name: 'res_applicationHistory'});
+
+                    }else if(this.$store.state.path.originPath==="/admin_console"){  // 从管理员控制台进入
+                        this.$router.push({name: 'adminConsole'});
+                    }*/
                 }
                 // 成功回调
             });
@@ -647,13 +663,22 @@
                 if(response.body.code===200) {
                   //  this.jsonname.application_status="审批不通过";
                     console.log("审批不通过");
-                    this.$router.push({name: 'res_applicationHistory'});
+//                    this.$router.push({name: 'res_applicationHistory'});
+                    
+                    if(this.$store.state.path.originPath==="/res_application_history") { //从资源申请历史页面进入
+                        this.$router.push({name: 'res_applicationHistory'});
+
+                    }else if(this.$store.state.path.originPath==="/admin_console"){  // 从管理员控制台进入
+                        this.$router.push({name: 'adminConsole'});
+                    }
                 }
                 // 成功回调
             });
         }
 
-    }}
+    }
+
+    }
 
 
 

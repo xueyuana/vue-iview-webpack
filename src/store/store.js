@@ -11,12 +11,15 @@ import { projectInfo } from './projectList.js';
 import { openMenu } from './openMenu.js';
 // 我的资源数据
 import { resourceData } from './resourceData.js';
+// 进入审批页面的源路径
+import { path } from './originPath.js';
 
 export const store = new Vuex.Store({
     modules: {
         breadcrumbData:breadcrumbData,
         projectInfo:projectInfo,
         openMenu:openMenu,
-        resourceData:resourceData
+        resourceData:resourceData,
+        path:path,
     }
 });
