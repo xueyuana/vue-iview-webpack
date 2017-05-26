@@ -68,6 +68,7 @@ var vueRouters = new VueRouter({
     routes:[
         {path:'/',redirect:'login'}, //一开始就重定向到登录页面
         {name:'login',path:'/login',component:login},
+
         {name:'home',path:'/home',component:home,
             children: [
                 // 管理控制台

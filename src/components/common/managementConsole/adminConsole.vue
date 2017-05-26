@@ -163,14 +163,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(data,index) in filterDate" :key="data">
+                        <tr v-for="(dataObj,index) in filterDate" :key="dataObj">
                             <td>{{ index+1 }}</td>
-                            <td>{{ data.name }}</td>
-                            <td>{{ data.date }}</td>
-                            <td>{{ data.resource }}</td>
-                            <td>{{ data.approval_status }}</td>
+                            <td>{{ dataObj.name }}</td>
+                            <td>{{ dataObj.date }}</td>
+                            <td>{{ dataObj.project }}</td>
+                            <td>{{ dataObj.approval_status }}</td>
                             <td>
-                                <Button type="primary" @click="goCheck(data.id)">查看</Button>
+                                <Button type="primary" @click="goCheck(dataObj.id)">查看</Button>
                             </td>
                         </tr>
                     </tbody>
@@ -396,10 +396,13 @@
                                         let backDataObj=backDatas[i];
                                         if(backDataObj.approval_status==="processing") {
                                             backDataObj.approval_status="未审批";
+                                            this.data1.push(backDataObj);
                                         }
-                                        this.data1.push(backDataObj);
+                                        if(backDataObj.approval_status==="success") {
+                                            backDataObj.approval_status="审批完成";
+                                            this.data1.push(backDataObj);
+                                        }
                                     }
-
                                     this.filterDate = this.mockTableData(this.data1, this.pageSize, 1);
                                 }
                         });
@@ -427,8 +430,10 @@
                     data.push({
                         name: originData[i].name,
                         date: originData[i].date.substring(0, 16),
-                        resource: originData[i].resource,
-                        approval_status: originData[i].approval_status
+                        project: originData[i].project, //部署单元名称
+                        resource: originData[i].resource, // 资源名称
+                        approval_status: originData[i].approval_status,
+                        id: originData[i].id
                     });
                 }
                 return data;
