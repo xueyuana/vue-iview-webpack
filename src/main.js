@@ -114,7 +114,7 @@ vueRouters.beforeEach((to, from, next) => {
     // 管理控制台 > 普通用户
     case 'managementConsole':
         break
-    // 管理员账户
+    // 管理控制台 > 管理员账户
     case 'adminConsole':
       break
     // 部署单元管理
@@ -139,6 +139,9 @@ vueRouters.beforeEach((to, from, next) => {
       nav.activeName = '22'
       bread.level_2 = '申请历史'
       break
+    case 'res_applicationCheck':
+      bread.level_2 = '资源审批'
+      break
     // 持续交付
     case 'applicationDeployment':
       nav.openNames = '3'
@@ -151,20 +154,20 @@ vueRouters.beforeEach((to, from, next) => {
       bread.level_2 = '部署历史'
       break
     // 工作台
-    case 'processList':
-      nav.openNames = '4'
-      nav.activeName = '41'
-      bread.level_2 = '处理列表'
-      break
     case 'myWorkbench':
       nav.openNames = '4'
-      nav.activeName = '42'
+      nav.activeName = '41'
       bread.level_2 = '我的工作台'
       break
     case 'myResource':
       nav.openNames = '4'
-      nav.activeName = '43'
+      nav.activeName = '42'
       bread.level_2 = '我的资源'
+      break
+    case 'resourceView':
+      nav.openNames = '4'
+      nav.activeName = '43'
+      bread.level_2 = '资源视图'
       break
     // 权限管理
     case 'addAuthority':

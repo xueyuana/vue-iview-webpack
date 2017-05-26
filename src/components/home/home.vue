@@ -61,9 +61,9 @@
                                 <template slot="title">
                                     工作台
                                 </template>
-                                <Menu-item name="42">我的工作台</Menu-item>
-                                <Menu-item name="43">我的资源</Menu-item>
-                                <Menu-item name="44">资源视图</Menu-item>
+                                <Menu-item name="41">我的工作台</Menu-item>
+                                <Menu-item name="42">我的资源</Menu-item>
+                                <Menu-item name="43">资源视图</Menu-item>
                             </Submenu>
                             <Submenu name="5">
                                 <template slot="title">
@@ -263,13 +263,13 @@
                     case '32': //部署历史
                         this.$router.push({name: 'deployHistory'});
                         break;
-                    case '42': //我的工作台
+                    case '41': //我的工作台
                         this.$router.push({name: 'myWorkbench'});
                         break;
-                    case '43': //我的资源
+                    case '42': //我的资源
                         this.$router.push({name: 'myResource'});
                         break;
-                    case '44': //资源视图
+                    case '43': //资源视图
                         this.$router.push({name: 'resourceView'});
                         break;
                     case '51': //权限管理
