@@ -84,13 +84,11 @@
     }
 
 
-
-
 </style>
 <script>
 
     import common from '../../../../tools/common.js';
-    import {userinfo} from '../../../../tools/user.js';
+    import {setStroage, getStroage} from 'tools/cookieAction.js'
     export default {
 
         data () {
@@ -187,11 +185,7 @@
                     click: () => {
                     this.gotoEdit(params.index);
     }}},'编辑')])
-            }
-
-
-
-                 }
+            } }
     }
     ],
     queryData: [
@@ -231,9 +225,15 @@
     }
     },
     beforeCreate(){
+
       //取得资源申请列表数据
-        let userid= userinfo.user_id;
+//        let userid= userinfo.user_id;
         console.log(this.queryData)
+
+        //取得资源申请列表数据
+        let userid= getStroage('userInfo').user_id;
+        //  console.log(this.queryData)
+
         const url=common.apihost+'resource/?user_id='+userid;
         this.$http.get(url, {emulateJSON:true}  ).then(function (response) {
 
@@ -242,7 +242,7 @@
                     this.queryData=response.body.result.msg;
                let msgs= response.body.result.msg;
 
-                for (var index in msgs) { // 千万别这样做
+                for (var index in msgs) {
                     if(msgs[index].approval_status == "unsubmit"){
                         this.queryData[index].approval_status="流程不存在";
                     }

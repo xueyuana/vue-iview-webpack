@@ -101,7 +101,7 @@
 </style>
 
 <script>
-  import {setStroage, getStroage} from 'tools/cookieAction.js';
+  import {setStroage} from 'tools/cookieAction.js';
   import baseUrl from 'tools/common.js'
   import USER from 'tools/user.js'
 

@@ -404,7 +404,7 @@
                                     let backDatas = response.body.result.msg;
                                     // 每次请求的时候，清空data1的值
                                     this.data1=[];
-                                    
+
                                     for(let i=0;i<backDatas.length;i++) {
                                         let backDataObj=backDatas[i];
 

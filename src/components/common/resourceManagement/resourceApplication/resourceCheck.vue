@@ -18,8 +18,8 @@
                             <div class="container-right">
                                 <div>
                                     <span>所属部署单元：</span>
-                                    <Select style="width: 180px" v-model="jsonname.project" disabled>
-                                        <Option value=""></Option>
+                                    <Select style="width: 180px" v-model="item" disabled>
+                                        <Option v-for="key in project_list" :value="key" :key="key" >{{key.item_name}}</Option>
                                     </Select>
                                 </div>
 
@@ -541,6 +541,7 @@
             jsonname: {
                 resource_name: "qq",
                 project: "项目名称aaa",
+                project_id:"",
                 department: "syswin",
                 user_name: getStroage('userInfo').username,
                 user_id: getStroage('userInfo').user_id,
