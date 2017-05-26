@@ -252,7 +252,11 @@
                         this.$router.push({name: 'deployHistory'});
                         break;
                     case '41': //我的工作台
-                        this.$router.push({name: 'myWorkbench'});
+                            if(this.userInfo.is_admin) {
+                                this.$router.push({name: 'myWorkbench_admin'});
+                            }else {
+                                this.$router.push({name: 'myWorkbench_ordinary'});
+                            }
                         break;
                     case '42': //我的资源
                         this.$router.push({name: 'myResource'});

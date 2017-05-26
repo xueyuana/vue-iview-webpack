@@ -655,7 +655,7 @@
                   //  this.jsonname.application_status="审批不通过";
                     console.log("审批不通过");
 //                    this.$router.push({name: 'res_applicationHistory'});
-                    
+
                     if(this.$store.state.path.originPath==="/res_application_history") { //从资源申请历史页面进入
                         this.$router.push({name: 'res_applicationHistory'});
 
