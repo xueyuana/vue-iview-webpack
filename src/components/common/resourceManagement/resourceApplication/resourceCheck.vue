@@ -633,13 +633,22 @@
                    //
                     console.log("审批通过");
 //                    this.$router.push({name: 'res_applicationHistory'});
+                    const url2=common.apihost+'/approval/reservation';
+                    let json2={
+                        "resource_id":this.$route.query.id
+                    };
+                    this.$http.put(url2,json2).then(function (response) {
+                        if(response.body.code===200) {
+                            console.log("资源预留通过");
+                        }
+                    });
 
-                    if(this.$store.state.path.originPath==="/res_application_history") { //从资源申请历史页面进入
+                    /*if(this.$store.state.path.originPath==="/res_application_history") { //从资源申请历史页面进入
                         this.$router.push({name: 'res_applicationHistory'});
 
                     }else if(this.$store.state.path.originPath==="/admin_console"){  // 从管理员控制台进入
                         this.$router.push({name: 'adminConsole'});
-                    }
+                    }*/
                 }
                 // 成功回调
             });
