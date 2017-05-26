@@ -20,7 +20,7 @@
                         所属部门：
                         <span>{{userInfo.department}}</span>
                     </li>
-                    <li>
+                    <li @click="toLogOut">
                         <a href="#">退出</a>
                     </li>
                 </ul>
@@ -183,7 +183,7 @@
 
 </style>
 <script>
-    import {setStroage, getStroage} from 'tools/cookieAction.js';
+    import {setStroage, getStroage, removeStroage} from 'tools/cookieAction.js';
     import common from '../../tools/common.js';
     import {userinfo} from '../../tools/user.js';
 
@@ -224,6 +224,11 @@
                     openNames:'',  // Submenu
                     activeName:''  //Menu-item
                 });
+            },
+            // 退出登录
+            toLogOut() {
+                console.log('logput')
+                removeStroage('userInfo')
             },
 
             // 导航跳转

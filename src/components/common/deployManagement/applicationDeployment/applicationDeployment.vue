@@ -225,8 +225,8 @@
 </style>
 
 <script>
-  import {setStroage, getStroage} from 'tools/cookieAction.js'
   import baseUrl from 'tools/common.js'
+  import USER from 'tools/user.js'
 
   export default {
     data() {
@@ -296,9 +296,7 @@
       },
       // 请求部署单元列表
       getProjectList() {
-        let userInfo = getStroage('userInfo')
-        console.log(userInfo)
-        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + userInfo.user_id
+        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + USER.user_id
 
         this.$http.get(url).then(data => {
           console.log('ProjectList', data)

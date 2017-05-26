@@ -103,6 +103,7 @@
 <script>
   import {setStroage, getStroage} from 'tools/cookieAction.js';
   import baseUrl from 'tools/common.js'
+  import USER from 'tools/user.js'
 
   export default {
     data() {
@@ -154,14 +155,12 @@
         searchList: [],
         selected: {},
         formItem: {},
-        index: '',
-        userinfo: ''
+        index: ''
       }
     },
 
     mounted() {
       this.getUserList()
-      this.userinfo = getStroage('userInfo')
     },
 
     methods: {
@@ -178,7 +177,7 @@
               autho: item.is_root ? 'Root' : (item.is_admin ? '管理员' : '普通用户'),
               time: item.created_time.substring(0, 10),
               is_admin: item.is_admin,
-              _disabled: this.userinfo.is_root && item.is_root
+              _disabled: USER.is_root && item.is_root
             }
           })
           this.filterDate = this.mockTableData(this.searchList, this.pageSize, 1)
@@ -227,7 +226,7 @@
       onSubmit() {
         if (this.formItem.id) {
           this.loading = true
-          let url = baseUrl.apihost + 'auth/admindetail/' + this.userinfo.user_id
+          let url = baseUrl.apihost + 'auth/admindetail/' + this.USER.user_id
           let params = {
             'user_id': this.formItem.id,
             'admin_user': this.formItem.autho
@@ -237,8 +236,8 @@
               this.filterDate[this.index].autho = data.body.is_admin ? '管理员' : '普通用户'
               this.$Message.success('成功更改为' + this.filterDate[this.index].autho)
               this.selected = {}
-              this.userinfo.is_admin= data.body.is_admin
-              setStroage('userInfo', this.userinfo)
+              USER.is_admin= data.body.is_admin
+              setStroage('userInfo', USER)
             }
             this.loading = false
             this.confirm = false

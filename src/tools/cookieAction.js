@@ -54,6 +54,11 @@ function getStroage(key) {
   if (val) return val
 }
 
+// 移除localStroage
+function removeStroage(key) {
+  window.localStorage.removeItem(key)
+}
+
 // 获取用户信息
 function getUserInfo() {
   let userInfo = {}
@@ -74,5 +79,6 @@ export {
   delCookie,
   setStroage,
   getStroage,
+  removeStroage,
   getUserInfo
 }
