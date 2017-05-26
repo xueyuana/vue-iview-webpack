@@ -116,13 +116,17 @@
                 key: 'resource',
                 align: 'center',
                 render: (h, params) => {
+                //判断是否是管理员只有管理员才能点击
+                if(getStroage('userInfo').is_admin){
                 return h('a',{on: {
                     click: () => {
-                    this.gotoCheck(params.index);
+                    this.gotoCheck(params.index);}
+                   }
+                },params.row['resource'])
+            }else{
+                return h('div',params.row['resource'])
+    }
 
-    }}},params.row['resource']
-
-                )
             }
             },
             {
@@ -184,9 +188,9 @@
                 on: {
                     click: () => {
                     this.gotoEdit(params.index);
-    }}},'编辑')])
-            } }
-    }
+                    }}},'编辑')])
+                   } }
+                 }
     ],
     queryData: [
         {
