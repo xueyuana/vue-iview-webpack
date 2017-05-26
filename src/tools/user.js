@@ -2,9 +2,8 @@
  * Created by 143174 on 2017/5/19.
  */
 
-export const userinfo = {
-  'username':'',
-  'user_id':'',
-  'is_admin': '',
-  'department':''
-}
+import {getStroage} from 'tools/cookieAction.js'
+
+
+
+export default getStroage('userInfo')
