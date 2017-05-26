@@ -18,7 +18,7 @@
                             <div class="container-right">
                                 <div>
                                     <span>所属部署单元：</span>
-                                    <Select style="width: 180px" v-model="jsonname.project" disabled>
+                                    <Select style="width: 180px" v-model="jsonname.project"  disabled>
                                         <Option value="" ></Option>
                                     </Select>
                                 </div>
@@ -637,7 +637,7 @@
                     let json2={
                         "resource_id":this.$route.query.id
                     };
-                    this.$http.post(url2,json2).then(function (response) {
+                    this.$http.post(url2,json2, {emulateJSON:true}).then(function (response) {
                         if(response.body.code===200) {
                             console.log("资源预留通过");
                             if(this.$store.state.path.originPath==="/res_application_history") { //从资源申请历史页面进入
