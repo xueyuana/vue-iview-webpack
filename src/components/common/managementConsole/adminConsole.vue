@@ -407,6 +407,10 @@
                                                 backDataObj.approval_status="审批完成";
                                                 this.data1.push(backDataObj);
                                             }
+                                            if(backDataObj.approval_status==="failed") {
+                                                backDataObj.approval_status="审批不通过";
+                                                this.data1.push(backDataObj);
+                                            }
                                         }
                                     }
                                     this.filterDate = this.mockTableData(this.data1, this.pageSize, 1);
