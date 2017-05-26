@@ -232,9 +232,14 @@
 
         //取得资源申请列表数据
         let userid= getStroage('userInfo').user_id;
-        //  console.log(this.queryData)
-
-        const url=common.apihost+'resource/?user_id='+userid;
+        let ifadmin = getStroage('userInfo').is_admin;
+        let url="";
+        if( ifadmin ){
+            url=common.apihost+'resource/';
+        }else{
+            url=common.apihost+'resource/?user_id='+userid;
+        }
+        console.log(url);
         this.$http.get(url, {emulateJSON:true}  ).then(function (response) {
 
              console.log(response.body.result.msg);

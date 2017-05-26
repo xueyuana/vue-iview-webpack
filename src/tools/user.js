@@ -3,7 +3,4 @@
  */
 
 import {getStroage} from 'tools/cookieAction.js'
-
-
-
 export default getStroage('userInfo')
