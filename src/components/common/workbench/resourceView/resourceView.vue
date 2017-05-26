@@ -38,9 +38,17 @@
         },
         methods:{
             getDeployUit() {
+                let userInfo = JSON.parse(localStorage.getItem('userInfo'));
                 const url = common.apihost + 'iteminfo/iteminfoes/project_item';
                 // 查询条件
-                this.$http.get(url)
+                let query = {};
+
+                if (!userInfo.is_admin) { //普通用户
+                    query.user_id=userInfo.user_id; // 默认按照登录用户进行查询
+                }
+
+                // 查询条件
+                this.$http.get(url,{params: query})
                         .then(response => {
                                 console.log(response);
                                 if (response.body.code === 200) { // 请求成功

@@ -324,8 +324,8 @@
                                 <div>
                                     <span>所属部署单元：</span>
 
-                                    <Select style="width: 180px;"  v-model="formInline.project" :placeholder="project_list.length? '请选择' : '空'">
-                                        <Option v-for="key in project_list" :value="key.item_name">{{key.item_name}}</Option>
+                                    <Select style="width: 180px;"  v-model="project_list" :placeholder="project_list.length? '请选择' : '空'">
+                                        <Option v-for="key in project_list" :value="key" >{{key.item_name}}</Option>
                                     </Select>
                                 </div>
 
@@ -635,6 +635,8 @@
         //保存到草稿箱
         handleSubmit() {
             this.changeArr();
+            this.tounit();
+            console.log(this.formInline);
             let self=this;
             let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
@@ -660,6 +662,7 @@
 
             let self=this;
             this.changeArr();
+            this.tounit();
             self.formInline.application_status="已提交";
             let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
@@ -710,9 +713,14 @@
 
 
     },
-     argToString(arg){
-            return(arg.split(","));
-    },
+         argToString(arg){
+                return(arg.split(","));
+        },
+        //所属部署单元赋值
+        tounit(index){
+            this.formInline.project=this.project_list[0].item_name;
+            this.formInline.project_id=this.project_list[0].item_id;
+        },
     // 环境切换
     onTabs(name) {
             this.formInline.env =name;

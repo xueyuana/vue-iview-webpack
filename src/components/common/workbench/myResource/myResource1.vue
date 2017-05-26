@@ -275,9 +275,16 @@
 
             // 搜索查询
             goSearch  () {
+                let userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
                 const url = common.apihost + 'iteminfo/iteminfoes/project_item';
                 // 查询条件
                 let query = {};
+
+                if (!userInfo.is_admin) { //普通用户
+                    query.user_id=userInfo.user_id; // 默认按照登录用户进行查询
+                }
+
                 this.inputValue && (query[this.selectedValue] = this.inputValue);
 
                 console.log(query);
