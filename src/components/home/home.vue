@@ -197,34 +197,21 @@
         },
         mounted () {
            this.getUserInfo();
-
-           let userInfo = JSON.parse(localStorage.getItem('userInfo'))
-           console.log('用户信息', userInfo)
         },
         methods: {
             // 获取用户名
             getUserInfo () {
-               this.userInfo=JSON.parse(localStorage.getItem('userInfo'));
+               this.userInfo = getStroage('userInfo');
+               console.log('用户信息', this.userInfo)
             },
             // 跳转到管理控制台
             goConsole () {
                 // 根据不同身份跳转不同界面
-                let userInfo = getStroage('userInfo')
-                console.log('用户权限', userInfo.is_admin)
-
-                if (userInfo.is_admin) {
+                if (this.userInfo.is_admin) {
                   this.$router.push({path:'/admin_console'});
                 } else {
                   this.$router.push({path:'/management_console'});
                 }
-                this.$store.commit('getLevel',{
-                    level_1: this.$store.state.breadcrumbData.level.level_1,
-                    level_2: '管理控制台'
-                });
-                this.$store.commit('getActiveItem',{
-                    openNames:'',  // Submenu
-                    activeName:''  //Menu-item
-                });
             },
             // 退出登录
             toLogOut() {
