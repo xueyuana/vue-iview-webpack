@@ -72,7 +72,7 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>存储空间：</span>
-                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>
+                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>G
                                         </div>
                                     </div>
                                     <div class="container-right">
@@ -117,10 +117,8 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例数量: </span>
-                                            <Select style="width: 180px;">
+                                            <Input style="width: 180px" v-model="formInline.resource_list[1].quantity"></Input>
 
-                                                <Input-number v-model="formInline.resource_list[1].quantity"></Input-number>
-                                            </Select>
                                         </div>
                                     </div>
                                 </Tab-pane>
@@ -136,7 +134,7 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>存储空间：</span>
-                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number>
+                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number>G
                                         </div>
                                     </div>
                                     <div class="container-right">
@@ -224,7 +222,7 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>存储空间：</span>
-                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>
+                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>G
                                         </div>
                                     </div>
                                     <div class="container-right">
@@ -269,10 +267,7 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例数量: </span>
-                                            <Select style="width: 180px;">
-
-                                                <Input-number v-model="formInline.resource_list[1].quantity"></Input-number>
-                                            </Select>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[1].quantity"></Input>
                                         </div>
                                     </div>
                                 </Tab-pane>
@@ -288,7 +283,7 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>存储空间：</span>
-                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number>
+                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number> G
                                         </div>
                                     </div>
                                     <div class="container-right">
@@ -376,7 +371,7 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>存储空间：</span>
-                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>
+                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>G
                                         </div>
                                     </div>
                                     <div class="container-right">
@@ -421,10 +416,7 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例数量: </span>
-                                            <Select style="width: 180px;">
-
-                                                <Input-number v-model="formInline.resource_list[1].quantity"></Input-number>
-                                            </Select>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[1].quantity"></Input>
                                         </div>
                                     </div>
                                 </Tab-pane>
@@ -440,7 +432,7 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>存储空间：</span>
-                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number>
+                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number>G
                                         </div>
                                     </div>
                                     <div class="container-right">
