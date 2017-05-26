@@ -136,7 +136,9 @@
                             <Col span="4">
                                 <Form-item>
                                     <Button type="primary" @click="goQuery">查询</Button>
-                                    <Button type="ghost" @click="handleReset('formValidate')" style="margin-top: 24px">重置</Button>
+                                </Form-item>
+                                <Form-item>
+                                    <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
                                 </Form-item>
                             </Col>
                         </Row>
