@@ -129,10 +129,12 @@
     table {
         width: 100%;
         border-collapse: collapse;
+        table-layout: fixed;
     }
 
-    table td {
+    table td, table th{
         text-align: center;
+        border: 1px solid #D7DDE4;
     }
 
     table tr {

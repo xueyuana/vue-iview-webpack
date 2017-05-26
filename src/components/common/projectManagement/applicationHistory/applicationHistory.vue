@@ -104,14 +104,16 @@
     table {
         width: 100%;
         border-collapse: collapse;
-    }
-
-    table td {
-        text-align: center;
+        table-layout: fixed;
     }
 
     table tr {
         height: 50px;
+        border: 1px solid #D7DDE4;
+    }
+
+    table td, table th{
+        text-align: center;
         border: 1px solid #D7DDE4;
     }
 
@@ -147,7 +149,7 @@
                 // 表格数据
                 columns: [
                     {
-                        title: '编号',
+                        title: '序号',
                         key: 'identifier'
                     },
                     {
