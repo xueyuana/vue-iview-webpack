@@ -211,6 +211,7 @@
                 // 根据不同身份跳转不同界面
                 let userInfo = getStroage('userInfo')
                 console.log('用户权限', userInfo.is_admin)
+
                 if (userInfo.is_admin) {
                   this.$router.push({path:'/admin_console'});
                 } else {

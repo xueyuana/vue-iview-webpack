@@ -233,7 +233,7 @@
     beforeCreate(){
       //取得资源申请列表数据
         let userid= userinfo.user_id;
-      console.log(this.queryData)
+        console.log(this.queryData)
         const url=common.apihost+'resource/?user_id='+userid;
         this.$http.get(url, {emulateJSON:true}  ).then(function (response) {
 

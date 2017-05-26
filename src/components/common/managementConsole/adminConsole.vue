@@ -125,8 +125,8 @@
                             </Form-item>
 
                             <Form-item label="审批状态" prop="approval_status">
-                                <Select v-model="formValidate.approval_status" placeholder="审批状态">
-                                    <Option value="approving">未审批</Option>
+                                <Select v-model="formValidate.approval_status" placeholder="审批状态" @on-change="getApprovalStatus">
+                                    <Option value="unapproved">未审批</Option>
                                     <Option value="approved">审批完成</Option>
                                 </Select>
                             </Form-item>
@@ -318,7 +318,7 @@
                     create_date_end:'',
                     project_name:'',
                     department: '',
-                    approval_status:'',
+                    approval_status:'unapproved', // 默认显示未审批
                     resource_name:''
                 },
                 ruleValidate: {
@@ -367,6 +367,9 @@
                         key: 'action'
                     }
                 ],
+                // 获取审批状态
+                selectedStatus:'unapproved',
+
                 // 保存未审批的数据
                 data1: [],
                 filterDate: [],
@@ -379,8 +382,15 @@
         },
 
         methods: {
+            // 获取审批状态
+            getApprovalStatus (approval_status) {
+               console.log(approval_status);
+                this.selectedStatus=approval_status;
+            },
             // 提交删选条件
             goQuery () {
+                // 获取审批状态
+
                 let userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
                 const url = common.apihost + 'resource/';
@@ -392,15 +402,22 @@
                                 console.log(response);
                                 if (response.body.code === 200) { // 请求成功
                                     let backDatas = response.body.result.msg;
+                                    // 每次请求的时候，清空data1的值
+                                    this.data1=[];
+                                    
                                     for(let i=0;i<backDatas.length;i++) {
                                         let backDataObj=backDatas[i];
-                                        if(backDataObj.approval_status==="processing") {
-                                            backDataObj.approval_status="未审批";
-                                            this.data1.push(backDataObj);
-                                        }
-                                        if(backDataObj.approval_status==="success") {
-                                            backDataObj.approval_status="审批完成";
-                                            this.data1.push(backDataObj);
+
+                                        if(this.selectedStatus==="unapproved") { //查询未审批的
+                                            if(backDataObj.approval_status==="processing") {
+                                                backDataObj.approval_status="未审批";
+                                                this.data1.push(backDataObj);
+                                            }
+                                        }else if(this.selectedStatus==="approved"){ //查询已经审批的
+                                            if(backDataObj.approval_status==="success") {
+                                                backDataObj.approval_status="审批完成";
+                                                this.data1.push(backDataObj);
+                                            }
                                         }
                                     }
                                     this.filterDate = this.mockTableData(this.data1, this.pageSize, 1);
