@@ -399,13 +399,13 @@
                                         let backDataObj=backDatas[i];
 
                                         if(this.selectedStatus==="unapproved") { //查询未审批的
-                                            if(backDataObj.approval_status==="未审批") {
-//                                                backDataObj.approval_status="未审批";
+                                            if(backDataObj.approval_status==="processing") {
+                                                backDataObj.approval_status="未审批";
                                                 this.data1.push(backDataObj);
                                             }
                                         }else if(this.selectedStatus==="approved"){ //查询已经审批的
-                                            if(backDataObj.approval_status==="审批完成") {
-//                                                backDataObj.approval_status="审批完成";
+                                            if(backDataObj.approval_status==="success") {
+                                                backDataObj.approval_status="审批完成";
                                                 this.data1.push(backDataObj);
                                             }
                                         }
