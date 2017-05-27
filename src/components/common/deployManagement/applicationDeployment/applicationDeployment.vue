@@ -360,7 +360,7 @@
       initInfo(data) {
         this.project_name = data.project
         this.project_id = data.project_id
-        this.deploy_name = data.domain
+        this.deploy_name = data.resource_name
         this.environment = data.env
       },
       // 环境切换
