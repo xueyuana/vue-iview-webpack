@@ -14,7 +14,6 @@
                         <div class="container clearfix">
                             <div class="container-left">
                                 <div><span>部署实例名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
-
                             </div>
                             <div class="container-right">
                                 <div>
@@ -29,7 +28,7 @@
                         </div>
                         <div class="title"><span>域名:</span></div>
                         <div class="container">
-                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="formInline.domain"></Input></div>
+                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="formInline.domain" placeholder="请输入域名"></Input></div>
                         </div>
 
                         <div class="title"><span>计算信息:</span></div>
@@ -37,11 +36,11 @@
                             <div class="clearfix" style="margin-bottom: 10px">
                                 <div class="container-left">
                                     <span>实例名称:</span>
-                                    <Input style="width: 180px" v-model="formInline.compute_list[0].ins_name"></Input>
+                                    <Input style="width: 180px" v-model="formInline.compute_list[0].ins_name" placeholder="请输入实例名称"></Input>
                                 </div>
                                 <div class="container-right">
                                     <span>实例规格：</span>
-                                    <Select style="width: 180px" v-model="cpuandrem.cpuandrem1" >
+                                    <Select style="width: 180px" v-model="cpuandrem.cpuandrem1" placeholder="请选择">
                                         <Option value="2C,4G">2C 4G</Option>
                                         <Option value="4C,8G">4C 8G</Option>
                                     </Select>
@@ -49,7 +48,7 @@
                             </div>
                             <div style="padding-top: 20px " class="clearfix">
                                 <span>镜像：</span>
-                                <Input style="width: 380px" v-model="formInline.compute_list[0].url"></Input>
+                                <Input style="width: 380px" v-model="formInline.compute_list[0].url" placeholder="请输入镜像"></Input>
 
                                 <Button type="primary"  @click="onTest">检测</Button>
                             </div>
@@ -64,7 +63,7 @@
                                     <div class="container-left" >
                                         <div style="height: 50px">
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="formInline.resource_list[0].res_name"></Input>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[0].res_name" placeholder="请输入实例名称"></Input>
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例数量：</span>
@@ -72,21 +71,22 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>存储空间：</span>
-                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>G
+                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>
+                                            <span style="margin-left: 5px;color: #3399FF">G</span>
                                         </div>
                                     </div>
                                     <div class="container-right">
                                         <div style="height: 50px">
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;"  v-model="cpuandrem.resourcecr1">
+                                            <Select style="width: 180px;"  v-model="cpuandrem.resourcecr1" placeholder="请选择">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="4C,8G">4C 8G</Option>
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例版本: </span>
-                                            <Select style="width: 180px;" v-model="formInline.resource_list[0].version">
-                                               <Option value="MYSQL5.6">MYSQL5.6</Option>
+                                            <Select style="width: 180px;" v-model="formInline.resource_list[0].version" placeholder="请选择">
+                                                <Option value="MYSQL5.6">MYSQL5.6</Option>
                                             </Select>
                                         </div>
                                     </div>
@@ -95,11 +95,11 @@
                                     <div class="container-left">
                                         <div style="height: 50px">
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="formInline.resource_list[1].res_name"></Input>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[1].res_name" placeholder="请输入实例名称"></Input>
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例版本：</span>
-                                            <Select style="width: 180px" v-model="formInline.resource_list[1].version">
+                                            <Select style="width: 180px" v-model="formInline.resource_list[1].version" placeholder="请选择">
                                                 <Option value="Redis2.8">Redis2.8</Option>
                                                 <Option value="Redis3.0">Redis3.0</Option>
                                             </Select>
@@ -109,7 +109,7 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2">
+                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2" placeholder="请选择">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="2C,8G">2C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
@@ -126,7 +126,7 @@
                                     <div class="container-left" >
                                         <div style="height: 50px">
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="formInline.resource_list[2].res_name"></Input>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[2].res_name" placeholder="请输入实例名称"></Input>
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例数量：</span>
@@ -134,7 +134,8 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>存储空间：</span>
-                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number>G
+                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number>
+                                            <span style="margin-left: 5px;color: #3399FF">G</span>
                                         </div>
                                     </div>
                                     <div class="container-right">
@@ -148,7 +149,7 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例版本: </span>
-                                            <Select style="width: 180px;" v-model="formInline.resource_list[2].version">
+                                            <Select style="width: 180px;" v-model="formInline.resource_list[2].version" placeholder="请选择">
                                                 <option value="Mongo3.2">Mongo3.2</option>
                                             </Select>
                                         </div>
@@ -165,6 +166,7 @@
                             <div class="container-left">
                                 <div><span>部署实例名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
 
+
                             </div>
                             <div class="container-right">
                                 <div>
@@ -179,7 +181,7 @@
                         </div>
                         <div class="title"><span>域名:</span></div>
                         <div class="container">
-                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="formInline.domain"></Input>.syswin.com</div>
+                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="formInline.domain" placeholder="请输入域名"></Input></div>
                         </div>
 
                         <div class="title"><span>计算信息:</span></div>
@@ -187,11 +189,11 @@
                             <div class="clearfix" style="margin-bottom: 10px">
                                 <div class="container-left">
                                     <span>实例名称:</span>
-                                    <Input style="width: 180px" v-model="formInline.compute_list[0].ins_name"></Input>
+                                    <Input style="width: 180px" v-model="formInline.compute_list[0].ins_name" placeholder="请输入实例名称"></Input>
                                 </div>
                                 <div class="container-right">
                                     <span>实例规格：</span>
-                                    <Select style="width: 180px" v-model="cpuandrem.cpuandrem1" >
+                                    <Select style="width: 180px" v-model="cpuandrem.cpuandrem1" placeholder="请选择">
                                         <Option value="2C,4G">2C 4G</Option>
                                         <Option value="4C,8G">4C 8G</Option>
                                     </Select>
@@ -199,7 +201,7 @@
                             </div>
                             <div style="padding-top: 20px " class="clearfix">
                                 <span>镜像：</span>
-                                <Input style="width: 380px" v-model="formInline.compute_list[0].url"></Input>
+                                <Input style="width: 380px" v-model="formInline.compute_list[0].url" placeholder="请输入镜像"></Input>
 
                                 <Button type="primary"  @click="onTest">检测</Button>
                             </div>
@@ -214,28 +216,29 @@
                                     <div class="container-left" >
                                         <div style="height: 50px">
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="formInline.resource_list[0].res_name"></Input>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[0].res_name" placeholder="请输入实例名称"></Input>
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例数量：</span>
-                                            <Input-number v-model="formInline.resource_list[0].quantity"></Input-number>
+                                            <Input-number v-model="formInline.resource_list[0].quantity" placeholder="请选择"></Input-number>
                                         </div>
                                         <div style="height: 50px">
                                             <span>存储空间：</span>
-                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>G
+                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>
+                                            <span style="margin-left: 5px;color: #3399FF">G</span>
                                         </div>
                                     </div>
                                     <div class="container-right">
                                         <div style="height: 50px">
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;"  v-model="cpuandrem.resourcecr1">
+                                            <Select style="width: 180px;"  v-model="cpuandrem.resourcecr1" placeholder="请选择">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="4C,8G">4C 8G</Option>
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例版本: </span>
-                                            <Select style="width: 180px;" v-model="formInline.resource_list[0].version">
+                                            <Select style="width: 180px;" v-model="formInline.resource_list[0].version" placeholder="请选择">
                                                 <Option value="MYSQL5.6">MYSQL5.6</Option>
                                             </Select>
                                         </div>
@@ -245,11 +248,11 @@
                                     <div class="container-left">
                                         <div style="height: 50px">
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="formInline.resource_list[1].res_name"></Input>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[1].res_name" placeholder="请输入实例名称"></Input>
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例版本：</span>
-                                            <Select style="width: 180px" v-model="formInline.resource_list[1].version">
+                                            <Select style="width: 180px" v-model="formInline.resource_list[1].version" placeholder="请选择">
                                                 <Option value="Redis2.8">Redis2.8</Option>
                                                 <Option value="Redis3.0">Redis3.0</Option>
                                             </Select>
@@ -259,7 +262,7 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2">
+                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2" placeholder="请选择">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="2C,8G">2C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
@@ -267,7 +270,7 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例数量: </span>
-                                            <Input style="width: 180px" v-model="formInline.resource_list[1].quantity"></Input>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[1].quantity" ></Input>
                                         </div>
                                     </div>
                                 </Tab-pane>
@@ -275,7 +278,7 @@
                                     <div class="container-left" >
                                         <div style="height: 50px">
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="formInline.resource_list[2].res_name"></Input>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[2].res_name" placeholder="请输入实例名称"></Input>
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例数量：</span>
@@ -283,13 +286,14 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>存储空间：</span>
-                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number> G
+                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number>
+                                            <span style="margin-left: 5px;color: #3399FF">G</span>
                                         </div>
                                     </div>
                                     <div class="container-right">
                                         <div style="height: 50px">
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;"  v-model="cpuandrem.resourcecr3" >
+                                            <Select style="width: 180px;"  v-model="cpuandrem.resourcecr3"  placeholder="请选择">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="4C,8G">4C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
@@ -297,7 +301,7 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例版本: </span>
-                                            <Select style="width: 180px;" v-model="formInline.resource_list[2].version">
+                                            <Select style="width: 180px;" v-model="formInline.resource_list[2].version"  placeholder="请选择">
                                                 <option value="Mongo3.2">Mongo3.2</option>
                                             </Select>
                                         </div>
@@ -313,7 +317,6 @@
                         <div class="container clearfix">
                             <div class="container-left">
                                 <div><span>部署实例名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
-
                             </div>
                             <div class="container-right">
                                 <div>
@@ -328,7 +331,7 @@
                         </div>
                         <div class="title"><span>域名:</span></div>
                         <div class="container">
-                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="formInline.domain"></Input>.syswin.com</div>
+                            <div><span>自定义域名：</span> <Input style="width: 180px" v-model="formInline.domain" placeholder="请输入域名"></Input></div>
                         </div>
 
                         <div class="title"><span>计算信息:</span></div>
@@ -336,11 +339,11 @@
                             <div class="clearfix" style="margin-bottom: 10px">
                                 <div class="container-left">
                                     <span>实例名称:</span>
-                                    <Input style="width: 180px" v-model="formInline.compute_list[0].ins_name"></Input>
+                                    <Input style="width: 180px" v-model="formInline.compute_list[0].ins_name" placeholder="请输入实例名称"></Input>
                                 </div>
                                 <div class="container-right">
                                     <span>实例规格：</span>
-                                    <Select style="width: 180px" v-model="cpuandrem.cpuandrem1" >
+                                    <Select style="width: 180px" v-model="cpuandrem.cpuandrem1" placeholder="请选择">
                                         <Option value="2C,4G">2C 4G</Option>
                                         <Option value="4C,8G">4C 8G</Option>
                                     </Select>
@@ -348,7 +351,7 @@
                             </div>
                             <div style="padding-top: 20px " class="clearfix">
                                 <span>镜像：</span>
-                                <Input style="width: 380px" v-model="formInline.compute_list[0].url"></Input>
+                                <Input style="width: 380px" v-model="formInline.compute_list[0].url" placeholder="请输入镜像"></Input>
 
                                 <Button type="primary"  @click="onTest">检测</Button>
                             </div>
@@ -363,7 +366,7 @@
                                     <div class="container-left" >
                                         <div style="height: 50px">
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="formInline.resource_list[0].res_name"></Input>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[0].res_name" placeholder="请输入实例名称"></Input>
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例数量：</span>
@@ -371,20 +374,21 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>存储空间：</span>
-                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>G
+                                            <Input-number v-model="formInline.resource_list[0].disk"></Input-number>
+                                            <span style="margin-left: 5px;color: #3399FF">G</span>
                                         </div>
                                     </div>
                                     <div class="container-right">
                                         <div style="height: 50px">
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;"  v-model="cpuandrem.resourcecr1">
+                                            <Select style="width: 180px;"  v-model="cpuandrem.resourcecr1"  placeholder="请选择">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="4C,8G">4C 8G</Option>
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例版本: </span>
-                                            <Select style="width: 180px;" v-model="formInline.resource_list[0].version">
+                                            <Select style="width: 180px;" v-model="formInline.resource_list[0].version" placeholder="请选择">
                                                 <Option value="MYSQL5.6">MYSQL5.6</Option>
                                             </Select>
                                         </div>
@@ -394,11 +398,11 @@
                                     <div class="container-left">
                                         <div style="height: 50px">
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="formInline.resource_list[1].res_name"></Input>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[1].res_name" placeholder="请输入实例名称"></Input>
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例版本：</span>
-                                            <Select style="width: 180px" v-model="formInline.resource_list[1].version">
+                                            <Select style="width: 180px" v-model="formInline.resource_list[1].version"  placeholder="请选择">
                                                 <Option value="Redis2.8">Redis2.8</Option>
                                                 <Option value="Redis3.0">Redis3.0</Option>
                                             </Select>
@@ -408,7 +412,7 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2">
+                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2"  placeholder="请选择">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="2C,8G">2C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
@@ -424,7 +428,7 @@
                                     <div class="container-left" >
                                         <div style="height: 50px">
                                             <span>实例名称：</span>
-                                            <Input style="width: 180px" v-model="formInline.resource_list[2].res_name"></Input>
+                                            <Input style="width: 180px" v-model="formInline.resource_list[2].res_name"  placeholder="请输入实例名称"></Input>
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例数量：</span>
@@ -432,13 +436,14 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>存储空间：</span>
-                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number>G
+                                            <Input-number v-model="formInline.resource_list[2].disk"></Input-number>
+                                            <span style="margin-left: 5px;color: #3399FF">G</span>
                                         </div>
                                     </div>
                                     <div class="container-right">
                                         <div style="height: 50px">
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;"  v-model="cpuandrem.resourcecr3" >
+                                            <Select style="width: 180px;"  v-model="cpuandrem.resourcecr3"  placeholder="请选择">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="4C,8G">4C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
@@ -446,7 +451,7 @@
                                         </div>
                                         <div style="height: 50px">
                                             <span>实例版本: </span>
-                                            <Select style="width: 180px;" v-model="formInline.resource_list[2].version">
+                                            <Select style="width: 180px;" v-model="formInline.resource_list[2].version"  placeholder="请选择">
                                                 <option value="Mongo3.2">Mongo3.2</option>
                                             </Select>
                                         </div>
@@ -486,17 +491,26 @@
 
 
     .title {
+        /*width: 100%;*/
+        /*height: 24px;*/
+        /*line-height: 24px;*/
+        /*!*background-color: #f2f2f2;*!*/
+        /*margin-bottom: 10px;*/
+        /*padding-left: 10px;*/
+
         width: 100%;
-        height: 24px;
-        line-height: 24px;
-        background-color: #f2f2f2;
+        height: 20px;
+        padding-left: 5px;
+        background-color: rgba(242, 242, 242, 1);
+        font-size: 14px;
+        line-height: 20px;
         margin-bottom: 10px;
     }
 
     .title span {
-        color: #000;
-        font-weight: 500;
-        font-size: 18px;
+        /*color: #000;*/
+        /*font-weight: 500;*/
+        /*font-size: 18px;*/
     }
 
     .container {
@@ -613,7 +627,7 @@
                     console.log("res_id"+ response.body.result.msg.res_id);
                     this.formInline= response.body.result.msg;
                     this.formInline.res_id=response.body.result.msg.res_id;
-                   this. arrToString();
+                    this. arrToString();
                 }
                 // 成功回调
             });
@@ -704,17 +718,17 @@
 
 
 
-    },
-         argToString(arg){
-                return(arg.split(","));
+        },
+        argToString(arg){
+            return(arg.split(","));
         },
         //所属部署单元赋值
         tounit(index){
             this.formInline.project=this.project_list[0].item_name;
             this.formInline.project_id=this.project_list[0].item_id;
         },
-    // 环境切换
-    onTabs(name) {
+        // 环境切换
+        onTabs(name) {
             this.formInline.env =name;
 
         },
@@ -729,40 +743,40 @@
             this.$Message.warning('此镜像可用')
         })
     },
-        //添加审批
+    //添加审批
     addCheck(){
-            const url=common.apihost+'approval/approvals';
-            let checkJson={
-                resource_id:this.formInline.res_id,
-                  project_id:this.formInline.project,
-                department_id: getStroage('userInfo').user_id,
-                creator_id: getStroage('userInfo').department
-            };
-            console.log("tianjiashenpi"+checkJson);
-            this.$http.post(url,checkJson, {emulateJSON:true}  ).then(function (response) {
+        const url=common.apihost+'approval/approvals';
+        let checkJson={
+            resource_id:this.formInline.res_id,
+            project_id:this.formInline.project,
+            department_id: getStroage('userInfo').user_id,
+            creator_id: getStroage('userInfo').department
+        };
+        console.log("tianjiashenpi"+checkJson);
+        this.$http.post(url,checkJson, {emulateJSON:true}  ).then(function (response) {
 
-                console.log(response);
-                if(response.body.code===200 ) {
+            console.log(response);
+            if(response.body.code===200 ) {
 
-                    this.$router.push({name: 'res_applicationHistory'});
-                }
-                // 成功回调
-            }, function () {
+                this.$router.push({name: 'res_applicationHistory'});
+            }
+            // 成功回调
+        }, function () {
 
-            });
+        });
     },
-      //取得所属部门信息
-   getProjectList() {
-          // let userInfo = JSON.parse(localStorage.getItem('userInfo'))
-            let userInfo = getStroage('userInfo');
-           // console.log(userInfo)
-            let url = common.apihost + 'iteminfo/iteminfoes/local/' + userInfo.user_id;
-            this.$http.get(url).then(data => {
-                console.log('ProjectList', data)
-            this.project_list = data.body.result.res
-        }, err => {
-            console.log('error', err)
-        })
+    //取得所属部门信息
+    getProjectList() {
+        // let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+        let userInfo = getStroage('userInfo');
+        // console.log(userInfo)
+        let url = common.apihost + 'iteminfo/iteminfoes/local/' + userInfo.user_id;
+        this.$http.get(url).then(data => {
+            console.log('ProjectList', data)
+        this.project_list = data.body.result.res
+    }, err => {
+        console.log('error', err)
+    })
     },
     changeArr(){
         let cupands=this.argToString(this.cpuandrem.cpuandrem1);
