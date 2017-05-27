@@ -345,7 +345,7 @@
       // 获取申请资源信息
       getRrsource() {
 //        if (this.resource_id) {
-          const url = baseUrl.apihost + 'resource/' + '85574524-41f3-11e7-ac05-fa163e9474c9'
+          const url = baseUrl.apihost + 'resource/' + 'e4b8d3b6-41f3-11e7-ac05-fa163e9474c9'
           this.$http.get(url, {emulateJSON: true}).then(res => {
             console.log("获取申请资源信息:", res)
             if (res.body.code === 200 && res.body.result.res == "success") {
@@ -376,7 +376,6 @@
           this.$Message.warning('镜像URL不能为空')
         } else {
           let body = {
-            "action": '',
             "initiator": USER.username,
             "deploy_name": this.deploy_name,
             "resource_id": this.resource_id,
@@ -394,8 +393,8 @@
             body.action = "save_to_db"
           }
           console.log(body)
-          let url = 'http://172.31.30.43:5000/api/' + 'deployment/deployments'
-          this.$http.post(url, body, {method: 'POST'}).then(res => {
+          let url = baseUrl.apihost + 'deployment/deployments'
+          this.$http.post(url, JSON.stringify(body)).then(res => {
             console.log('保存到草稿', res)
             if (index === 1) {
               this.$router.push({name: 'deployHistory'})
