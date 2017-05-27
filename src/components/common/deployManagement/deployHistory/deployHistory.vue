@@ -121,24 +121,27 @@
             key: 'status',
             align: 'center'
           }
-//          {
-//            title: '操作',
-//            key: 'action',
-//            align: 'center',
-//            render: (h, params) => {
-//              return h('Button', {
-//                props: {
-//                  type: 'primary',
-//                  size: 'small'
-//                },
-//                on: {
-//                  click: () => {
-//                    console.log(111)
-//                  }
-//                }
-//              }, '重新部署');
-//            }
-//          }
+          ,
+          {
+            title: '操作',
+            key: 'action',
+            align: 'center',
+            render: (h, params) => {
+              if (params.row.status === "未部署") {
+                return h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      console.log(params.row)
+                    }
+                  }
+                }, '重新部署');
+              }
+            }
+          }
         ],
         data1: [],
         filterDate: [],
@@ -149,7 +152,7 @@
     methods: {
       // 查找
       onInquire() {
-        let url = baseUrl.apihost + 'deployment/deployments'
+        let url = 'http://172.31.30.43:5000/api/' + 'deployment/deployments'
         let query = {}
 
         this.formItem.initiator && (query.initiator = this.formItem.initiator)
@@ -193,10 +196,25 @@
             initiator: originData[i].initiator,
             created_time: originData[i].created_time.substring(0, 16),
             project_name: originData[i].project_name,
+            status: this.formatStatus(originData[i].deploy_result),
             deploy_id: originData[i].deploy_id
           })
         }
         return data;
+      },
+      formatStatus(val){
+        switch (val) {
+          case 'deploying':
+            return '部署中'
+          case 'not_deployed':
+            return '未部署'
+          case 'fail':
+            return '失败'
+          case 'success':
+            return '成功'
+          default:
+            break
+        }
       }
     }
   }

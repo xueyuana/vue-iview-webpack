@@ -13,7 +13,11 @@
                         <div class="title"><span>部署单元信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
+
                                 <div><span>资源名称：</span> <Input style="width: 180px" v-model="formInline.resource_name" placeholder="请输入资源名称"></Input></div>
+
+
+                                <div><span>部署实例名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
 
                             </div>
                             <div class="container-right">
@@ -87,7 +91,11 @@
                                         <div style="height: 50px">
                                             <span>实例版本: </span>
                                             <Select style="width: 180px;" v-model="formInline.resource_list[0].version" placeholder="请选择">
+
                                                <Option value="MYSQL5.6">MYSQL5.6</Option>
+
+                                                <Option value="MYSQL5.6">MYSQL5.6</Option>
+
                                             </Select>
                                         </div>
                                     </div>
@@ -165,7 +173,12 @@
                         <div class="title"><span>部署单元信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
+
                                 <div><span>资源名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  placeholder="请输入资源名称"></Input></div>
+
+                                <div><span>部署实例名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
+
+
 
                             </div>
                             <div class="container-right">
@@ -316,7 +329,11 @@
                         <div class="title"><span>部署单元信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
+
                                 <div><span>资源名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  placeholder="请输入资源名称" ></Input></div>
+
+
+                                <div><span>部署实例名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
 
                             </div>
                             <div class="container-right">
@@ -628,7 +645,7 @@
                     console.log("res_id"+ response.body.result.msg.res_id);
                     this.formInline= response.body.result.msg;
                     this.formInline.res_id=response.body.result.msg.res_id;
-                   this. arrToString();
+                    this. arrToString();
                 }
                 // 成功回调
             });
@@ -719,17 +736,17 @@
 
 
 
-    },
-         argToString(arg){
-                return(arg.split(","));
+        },
+        argToString(arg){
+            return(arg.split(","));
         },
         //所属部署单元赋值
         tounit(index){
             this.formInline.project=this.project_list[0].item_name;
             this.formInline.project_id=this.project_list[0].item_id;
         },
-    // 环境切换
-    onTabs(name) {
+        // 环境切换
+        onTabs(name) {
             this.formInline.env =name;
 
         },
@@ -744,40 +761,40 @@
             this.$Message.warning('此镜像可用')
         })
     },
-        //添加审批
+    //添加审批
     addCheck(){
-            const url=common.apihost+'approval/approvals';
-            let checkJson={
-                resource_id:this.formInline.res_id,
-                  project_id:this.formInline.project,
-                department_id: getStroage('userInfo').user_id,
-                creator_id: getStroage('userInfo').department
-            };
-            console.log("tianjiashenpi"+checkJson);
-            this.$http.post(url,checkJson, {emulateJSON:true}  ).then(function (response) {
+        const url=common.apihost+'approval/approvals';
+        let checkJson={
+            resource_id:this.formInline.res_id,
+            project_id:this.formInline.project,
+            department_id: getStroage('userInfo').user_id,
+            creator_id: getStroage('userInfo').department
+        };
+        console.log("tianjiashenpi"+checkJson);
+        this.$http.post(url,checkJson, {emulateJSON:true}  ).then(function (response) {
 
-                console.log(response);
-                if(response.body.code===200 ) {
+            console.log(response);
+            if(response.body.code===200 ) {
 
-                    this.$router.push({name: 'res_applicationHistory'});
-                }
-                // 成功回调
-            }, function () {
+                this.$router.push({name: 'res_applicationHistory'});
+            }
+            // 成功回调
+        }, function () {
 
-            });
+        });
     },
-      //取得所属部门信息
-   getProjectList() {
-          // let userInfo = JSON.parse(localStorage.getItem('userInfo'))
-            let userInfo = getStroage('userInfo');
-           // console.log(userInfo)
-            let url = common.apihost + 'iteminfo/iteminfoes/local/' + userInfo.user_id;
-            this.$http.get(url).then(data => {
-                console.log('ProjectList', data)
-            this.project_list = data.body.result.res
-        }, err => {
-            console.log('error', err)
-        })
+    //取得所属部门信息
+    getProjectList() {
+        // let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+        let userInfo = getStroage('userInfo');
+        // console.log(userInfo)
+        let url = common.apihost + 'iteminfo/iteminfoes/local/' + userInfo.user_id;
+        this.$http.get(url).then(data => {
+            console.log('ProjectList', data)
+        this.project_list = data.body.result.res
+    }, err => {
+        console.log('error', err)
+    })
     },
     changeArr(){
         let cupands=this.argToString(this.cpuandrem.cpuandrem1);
