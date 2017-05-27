@@ -13,7 +13,7 @@
                         <div class="title"><span>部署单元信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
-                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
+                                <div><span>部署实例名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
 
                             </div>
                             <div class="container-right">
@@ -163,7 +163,7 @@
                         <div class="title"><span>部署单元信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
-                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
+                                <div><span>部署实例名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
 
                             </div>
                             <div class="container-right">
@@ -312,7 +312,7 @@
                         <div class="title"><span>部署单元信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
-                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
+                                <div><span>部署实例名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
 
                             </div>
                             <div class="container-right">

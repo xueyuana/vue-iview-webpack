@@ -149,7 +149,7 @@
     methods: {
       // 查找
       onInquire() {
-        let url = baseUrl.apihost + 'deployment/deployments'
+        let url = 'http://172.31.30.43:5000/api/' + 'deployment/deployments'
         let query = {}
 
         this.formItem.initiator && (query.initiator = this.formItem.initiator)
@@ -158,6 +158,7 @@
         this.formItem.project_name && (query.project_name = this.formItem.project_name)
         this.formItem.deploy_name && (query.deploy_name = this.formItem.deploy_name)
 
+        console.log('query', query)
         this.$http.get(url, {
           params: query
         }).then(data => {
@@ -192,8 +193,7 @@
           data.push({
             initiator: originData[i].initiator,
             created_time: originData[i].created_time.substring(0, 16),
-            project_name: originData[i].project_name,
-            deploy_id: originData[i].deploy_id
+            project_name: originData[i].project_name
           })
         }
         return data;

@@ -280,6 +280,7 @@
 
         //新增一条资源
         gotoAdd(index){
+          console.log(1111111111)
             const url=common.apihost+'approval/reservation';
             let resourcejson={"resource_id": this.queryData[index].id}
             this.$http.post(url,resourcejson, {emulateJSON:true}  ).then(function (response) {
