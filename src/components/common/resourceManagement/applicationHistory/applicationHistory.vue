@@ -242,6 +242,16 @@
                         marginRight: '5px'
                     }
                 },'编辑')])
+        }else if(this.filterDate[params.index].approval_status == "审批完成"){
+            return h('div',[
+                h('Button',{
+                    props: {
+                        size: 'small'
+                    },
+                    style: {
+                        marginRight: '5px'
+                    }
+                },'创建')]);
         }else{
             return h('div',[
                 h('Button',{
@@ -262,7 +272,6 @@
         return h('div',[
             h('Button',{
                 props: {
-
                     size: 'small'
                 },
                 style: {
