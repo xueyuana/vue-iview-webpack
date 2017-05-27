@@ -288,11 +288,15 @@
         border: 1px solid #D7DDE4;
     }
     table tr {
-        height: 50px;
         border: 1px solid #D7DDE4;
     }
     table thead tr{
         background-color: #F5F7F9;
+        height: 40px;
+    }
+    table tbody tr{
+        height: 48px;
+        display: table-row;
     }
     table tbody tr:hover {
         background-color: #F3FAFF;

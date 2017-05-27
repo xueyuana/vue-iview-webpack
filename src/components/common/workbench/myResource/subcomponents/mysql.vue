@@ -80,14 +80,16 @@
     }
 
    table tr {
-       height: 50px;
        border: 1px solid #D7DDE4;
    }
 
    table thead tr {
+       height: 40px;
        background-color: #F5F7F9;
    }
-
+    table tbody tr {
+        height: 48px;
+    }
    table tbody tr:hover {
        background-color: #F3FAFF;
    }

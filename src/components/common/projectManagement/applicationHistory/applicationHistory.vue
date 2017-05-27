@@ -63,7 +63,8 @@
 
                 <tr v-for="(data,trIndex) in filterDate" :key="data">
                     <td>{{trIndex+1}}</td>
-                    <td><a href="#">{{data.item_name}}</a></td>
+                    <!--<td><a href="#">{{data.item_name}}</a></td>-->
+                    <td>{{data.item_name}}</td>
                     <td>{{data.create_date}}</td>
                     <td>{{data.user}}</td>
                     <td>{{data.item_code}}</td>
@@ -109,8 +110,11 @@
     }
 
     table tr {
-        height: 50px;
         border: 1px solid #D7DDE4;
+    }
+    table tbody tr{
+        height: 48px;
+        display: table-row;
     }
 
     table td, table th{
@@ -119,6 +123,7 @@
     }
 
     table thead tr {
+        height: 40px;
         background-color: #F5F7F9;
     }
 
