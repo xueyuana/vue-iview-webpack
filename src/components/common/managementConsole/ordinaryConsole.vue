@@ -9,7 +9,7 @@
                             <ul>
                                 <li @click="goResourceHistory">
                                     <span class="name">待审批</span>
-                                    <span class="number fr">2</span>
+                                    <span class="number fr">{{ unapprovedNum }}</span>
                                 </li>
                             </ul>
                         </div>
@@ -328,67 +328,101 @@
     }
 </style>
 <script>
+    import common from '../../../tools/common.js';
+
     export default {
         data () {
             return {
+                unapprovedNum:0
 
             }
         },
+
+        mounted() {
+            this.getApprovedNum();
+        },
         methods: {
+            // 获取资源待审批数量
+
+            getApprovedNum () {
+                let userInfo = JSON.parse(localStorage.getItem('userInfo'));
+                let query = userInfo.user_id;
+
+                const url = common.apihost + 'resource/?user_id='+query;
+
+                // 查询条件
+                this.$http.get(url)
+                        .then(response => {
+                            console.log(response);
+                            if (response.body.code === 200) { // 请求成功
+                                let backDatas = response.body.result.msg;
+
+                                for(let i=0;i<backDatas.length;i++) {
+                                    let backDataObj=backDatas[i];
+                                    // 审批中和保存到草稿的
+                                    if(backDataObj.approval_status==="processing" || backDataObj.approval_status==="unsubmit") {
+                                        this.unapprovedNum++;
+                                    }
+
+                                }
+                            }
+                        });
+            },
+
             // 点击待办事项 跳转到资源申请历史页面
             goResourceHistory () {
                 this.$router.push({name: 'res_applicationHistory'});
-
-                this.$store.commit('getLevel',{
-                    level_1: this.$store.state.breadcrumbData.level.level_1,
-                    level_2: '申请历史'
-                });
-
-                // 打开项设置
-                this.$store.commit('getActiveItem',{
-                    openNames:'2',  // Submenu
-                    activeName:'22'  //Menu-item
-                });
+//
+//                this.$store.commit('getLevel',{
+//                    level_1: this.$store.state.breadcrumbData.level.level_1,
+//                    level_2: '申请历史'
+//                });
+//
+//                // 打开项设置
+//                this.$store.commit('getActiveItem',{
+//                    openNames:'2',  // Submenu
+//                    activeName:'22'  //Menu-item
+//                });
             },
             // 点击跳转到创建部署单元
             goCreateProject () {
                 this.$router.push({name: 'projectApplication'});
-
-                this.$store.commit('getLevel',{
-                    level_1: this.$store.state.breadcrumbData.level.level_1,
-                    level_2: '创建部署单元'
-                });
-                // 打开项设置
-                this.$store.commit('getActiveItem',{
-                    openNames:'1',  // Submenu
-                    activeName:'11'  //Menu-item
-                });
+//
+//                this.$store.commit('getLevel',{
+//                    level_1: this.$store.state.breadcrumbData.level.level_1,
+//                    level_2: '创建部署单元'
+//                });
+//                // 打开项设置
+//                this.$store.commit('getActiveItem',{
+//                    openNames:'1',  // Submenu
+//                    activeName:'11'  //Menu-item
+//                });
             },
             // 点击跳转到资源申请
             goResourceApp () {
                 this.$router.push({name: 'resourceApplication'});
-                this.$store.commit('getLevel',{
-                    level_1: this.$store.state.breadcrumbData.level.level_1,
-                    level_2: '资源申请'
-                });
-                // 打开项设置
-                this.$store.commit('getActiveItem',{
-                    openNames:'2',  // Submenu
-                    activeName:'21'  //Menu-item
-                });
+//                this.$store.commit('getLevel',{
+//                    level_1: this.$store.state.breadcrumbData.level.level_1,
+//                    level_2: '资源申请'
+//                });
+//                // 打开项设置
+//                this.$store.commit('getActiveItem',{
+//                    openNames:'2',  // Submenu
+//                    activeName:'21'  //Menu-item
+//                });
             },
             // 点击跳转到应用部署
             goApplcationDeploy () {
                 this.$router.push({name: 'applicationDeployment'});
-                this.$store.commit('getLevel',{
-                    level_1: this.$store.state.breadcrumbData.level.level_1,
-                    level_2: '应用部署'
-                });
-                // 打开项设置
-                this.$store.commit('getActiveItem',{
-                    openNames:'3',  // Submenu
-                    activeName:'31'  //Menu-item
-                });
+//                this.$store.commit('getLevel',{
+//                    level_1: this.$store.state.breadcrumbData.level.level_1,
+//                    level_2: '应用部署'
+//                });
+//                // 打开项设置
+//                this.$store.commit('getActiveItem',{
+//                    openNames:'3',  // Submenu
+//                    activeName:'31'  //Menu-item
+//                });
             }
         }
     }

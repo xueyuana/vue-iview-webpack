@@ -90,7 +90,10 @@ var vueRouters = new VueRouter({
                 {name:'deployHistory',path:'/deploy_history',component:deployHistory},
                 // 工作台
                 {name:'processList',path:'/process_list',component:processList},
-                {name:'myWorkbench',path:'/my_workbench',component:managementConsole}, // 加载管理控制台组件
+
+                {name:'myWorkbench_ordinary',path:'/my_workbench',component:managementConsole}, // 加载普通用户管理控制台组件
+                {name:'myWorkbench_admin',path:'/my_workbench',component:adminConsole}, // 加载管理员管理控制台组件
+
                 {name:'myResource',path:'/my_resource',component:myResource},
                 {name:'resourceView',path:'/resource_view',component:resourceView,
                     children:[
@@ -114,9 +117,11 @@ vueRouters.beforeEach((to, from, next) => {
   switch (to.name) {
     // 管理控制台 > 普通用户
     case 'managementConsole':
+        bread.level_2 = '管理控制台'
         break
     // 管理控制台 > 管理员账户
     case 'adminConsole':
+        bread.level_2 = '管理控制台'
       break
     // 部署单元管理
     case 'projectApplication':
@@ -155,11 +160,16 @@ vueRouters.beforeEach((to, from, next) => {
       bread.level_2 = '部署历史'
       break
     // 工作台
-    case 'myWorkbench':
+    case 'myWorkbench_ordinary':
       nav.openNames = '4'
       nav.activeName = '41'
       bread.level_2 = '我的工作台'
       break
+      case 'myWorkbench_admin':
+          nav.openNames = '4'
+          nav.activeName = '41'
+          bread.level_2 = '我的工作台'
+          break
     case 'myResource':
       nav.openNames = '4'
       nav.activeName = '42'
