@@ -235,17 +235,6 @@
         return h('div',[
             h('Button',{
                 props: {
-
-                    size: 'small'
-                },
-                style: {
-                    marginRight: '5px'
-                }
-            },'创建')]);
-    }else {
-        return h('div',[
-            h('Button',{
-                props: {
                     type: 'primary',
                     size: 'small'
                 },
@@ -256,6 +245,19 @@
                     click: () => {
                     this.gotoEdit(params.index);
     }}},'编辑')])
+
+
+    }else {
+        return h('div',[
+            h('Button',{
+                props: {
+
+                    size: 'small'
+                },
+                style: {
+                    marginRight: '5px'
+                }
+            },'创建')]);
     } }
     }
     ],
