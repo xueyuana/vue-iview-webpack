@@ -82,6 +82,7 @@
 
   export default {
     mounted() {
+      console.log('mounted执行了')
       this.onInquire()
     },
     data() {
@@ -135,7 +136,7 @@
                   },
                   on: {
                     click: () => {
-                      console.log(params.row)
+                      this.$router.push({name: 'applicationDeployment',query: {reset: params.row.deploy_id} })
                     }
                   }
                 }, '重新部署');
@@ -152,9 +153,8 @@
     methods: {
       // 查找
       onInquire() {
-        let url = 'http://172.31.30.43:5000/api/' + 'deployment/deployments'
+        let url = baseUrl.apihost + 'deployment/deployments'
         let query = {}
-
         this.formItem.initiator && (query.initiator = this.formItem.initiator)
         this.formItem.created_time && (query.start_time = this.formItem.created_time)
         this.formItem.end_time && (query.end_time = this.formItem.end_time)

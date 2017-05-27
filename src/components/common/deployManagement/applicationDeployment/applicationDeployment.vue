@@ -52,13 +52,23 @@
 
       <!--数据库-->
       <div class="apply-content-title">数据库：</div>
-      <Form class="apply-content-select" label-position="left" :label-width="70">
-        <Form-item label="执行目标:" style="width: 210px">
-          <Select v-model="exec_tag" placeholder="请选择">
-            <Option value="mysql-node1">mysql-node1</Option>
-            <Option value="mysql-node2">mysql-node2</Option>
-          </Select>
-        </Form-item>
+      <Form class="apply-content-select" label-position="left" :label-width="70" v-for="key in database">
+        <Row :gutter="16">
+          <Col class="apply-content-form-item" span="8">
+            <Form-item label="执行目标:" style="width: 210px">
+              <Input v-model="key.res_type" disabled></Input>
+              <!--<Select v-model="exec_tag" placeholder="请选择">-->
+              <!--<Option value="mysql-node1">mysql-node1</Option>-->
+              <!--<Option value="mysql-node2">mysql-node2</Option>-->
+              <!--</Select>-->
+            </Form-item>
+          </Col>
+          <Col class="apply-content-form-item" span="8">
+            <Form-item label="ID:" style="width: 210px">
+              <Input v-model="key.res_id" disabled></Input>
+            </Form-item>
+          </Col>
+        </Row>
         <Form-item label="执行脚本:">
           <Input v-model="exec_context" type="textarea" :autosize="{minRows: 4, maxRows: 6}"></Input>
         </Form-item>
@@ -305,9 +315,25 @@
         project_name: '',
         project_id: '',
         deploy_details: '',
+
         exec_tag: 'mysql-node1',
         exec_context: '',
-        mirror: ''
+
+        mirror: '',
+        database: [
+          {
+            res_type: 'mysql',
+            res_id: ''
+          },
+          {
+            res_type: 'mongo',
+            res_id: ''
+          },
+          {
+            res_type: 'redis',
+            res_id: ''
+          }
+        ]
       }
     },
 
@@ -353,6 +379,7 @@
         this.$http.get(url, {emulateJSON: true}).then(res => {
           console.log("资源信息获取成功:", res)
           if (res.body.code === 200 && res.body.result.res == "success") {
+            // 初始化数据
             this.initInfo(res.data.result.msg)
           }
         })
@@ -362,6 +389,8 @@
         this.project_id = data.project_id
         this.deploy_name = data.resource_name
         this.environment = data.env
+        // 数据库
+        this.database = data.resource_list
       },
       // 环境切换
       onTabs(name) {
@@ -412,9 +441,8 @@
       // 请求部署单元列表
       getProjectList() {
         let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + USER.user_id
-
         this.$http.get(url).then(data => {
-          console.log('部署列表', data)
+          console.log('所属单元列表', data)
           this.project_list = data.body.result.res
         }, err => {
           console.log('error', err)
