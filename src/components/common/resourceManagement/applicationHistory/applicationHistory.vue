@@ -150,7 +150,7 @@
                 key: 'operate',
                 align: 'center',
                 render: (h,params) => {
-               if(this.filterDate[params.index].approval_status == "审批完成"){
+               if(this.filterDate[params.index].reservation_status == "ok"){
                    return h('div',[
                        h('Button',{
                            props: {
@@ -164,18 +164,18 @@
                                click: () => {
                                this.gotoAdd(params.index);
                }}},'创建')])
-             }else if(this.filterDate[params.index].approval_status == "审批中"){
-        return h('div',[
-            h('Button',{
-                props: {
+             }else if(this.filterDate[params.index].reservation_status == "unreserved"){
+                    return h('div',[
+                        h('Button',{
+                            props: {
 
-                    size: 'small'
-                },
-                style: {
-                    marginRight: '5px'
-                }
-              },'创建')])
-            }{
+                                size: 'small'
+                            },
+                            style: {
+                                marginRight: '5px'
+                            }
+                          },'创建')]);
+            }else {
         return h('div',[
             h('Button',{
                 props: {
@@ -200,7 +200,8 @@
             formStatus: 'sdfdsf',
             approval_status: 'success',
             project: 'sdfsf',
-            id:'123'
+            id:'123',
+            reservation_status:false
         },
         {
             name: 'sdfsd',
