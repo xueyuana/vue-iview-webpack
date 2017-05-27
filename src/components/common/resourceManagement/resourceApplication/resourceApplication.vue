@@ -13,7 +13,12 @@
                         <div class="title"><span>部署单元信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
+
+                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="formInline.resource_name" placeholder="请输入资源名称"></Input></div>
+
+
                                 <div><span>部署实例名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
+
                             </div>
                             <div class="container-right">
                                 <div>
@@ -86,7 +91,11 @@
                                         <div style="height: 50px">
                                             <span>实例版本: </span>
                                             <Select style="width: 180px;" v-model="formInline.resource_list[0].version" placeholder="请选择">
+
+                                               <Option value="MYSQL5.6">MYSQL5.6</Option>
+
                                                 <Option value="MYSQL5.6">MYSQL5.6</Option>
+
                                             </Select>
                                         </div>
                                     </div>
@@ -164,7 +173,11 @@
                         <div class="title"><span>部署单元信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
+
+                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  placeholder="请输入资源名称"></Input></div>
+
                                 <div><span>部署实例名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
+
 
 
                             </div>
@@ -316,7 +329,12 @@
                         <div class="title"><span>部署单元信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
+
+                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  placeholder="请输入资源名称" ></Input></div>
+
+
                                 <div><span>部署实例名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
+
                             </div>
                             <div class="container-right">
                                 <div>

@@ -129,21 +129,26 @@
     table {
         width: 100%;
         border-collapse: collapse;
+        table-layout: fixed;
     }
 
-    table td {
+    table td, table th{
         text-align: center;
+        border: 1px solid #D7DDE4;
     }
 
     table tr {
-        height: 50px;
+
         border: 1px solid #D7DDE4;
     }
 
     table thead tr {
+        height: 40px;
         background-color: #F5F7F9;
     }
-
+    table tbody tr {
+        height: 48px;
+    }
     table tbody tr:hover {
         background-color: #F3FAFF;
     }
@@ -194,7 +199,7 @@
                 // 表格数据
                 columns: [
                     {
-                        title: '编号',
+                        title: '序号',
                         key: 'identifier'
                     },
                     {

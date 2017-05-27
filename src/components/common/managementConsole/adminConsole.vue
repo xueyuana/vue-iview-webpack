@@ -136,7 +136,9 @@
                             <Col span="4">
                                 <Form-item>
                                     <Button type="primary" @click="goQuery">查询</Button>
-                                    <Button type="ghost" @click="handleReset('formValidate')" style="margin-top: 24px">重置</Button>
+                                </Form-item>
+                                <Form-item>
+                                    <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
                                 </Form-item>
                             </Col>
                         </Row>
@@ -279,17 +281,22 @@
     table {
         width: 100%;
         border-collapse: collapse;
+        table-layout: fixed;
     }
     table td, table th{
         text-align: center;
-        /*border: 1px solid #D7DDE4;*/
+        border: 1px solid #D7DDE4;
     }
     table tr {
-        height: 50px;
         border: 1px solid #D7DDE4;
     }
     table thead tr{
         background-color: #F5F7F9;
+        height: 40px;
+    }
+    table tbody tr{
+        height: 48px;
+        display: table-row;
     }
     table tbody tr:hover {
         background-color: #F3FAFF;
@@ -333,7 +340,7 @@
                 // 表格数据
                 columns: [
                     {
-                        title: '编号',
+                        title: '序号',
                         key: 'identifier'
                     },
                     {

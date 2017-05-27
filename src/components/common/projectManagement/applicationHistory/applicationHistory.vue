@@ -39,11 +39,12 @@
 
                         </Col>
                         <Col span="4">
-                        <Form-item>
-                            <Button type="primary" @click="goQuery">查询</Button>
-                            <Button type="ghost" @click="handleReset('formValidate')" style="margin-top: 24px">重置
-                            </Button>
-                        </Form-item>
+                            <Form-item>
+                                <Button type="primary" @click="goQuery">查询</Button>
+                            </Form-item>
+                            <Form-item>
+                                <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
+                            </Form-item>
                         </Col>
                     </Row>
                 </Form>
@@ -62,7 +63,8 @@
 
                 <tr v-for="(data,trIndex) in filterDate" :key="data">
                     <td>{{trIndex+1}}</td>
-                    <td><a href="#">{{data.item_name}}</a></td>
+                    <!--<td><a href="#">{{data.item_name}}</a></td>-->
+                    <td>{{data.item_name}}</td>
                     <td>{{data.create_date}}</td>
                     <td>{{data.user}}</td>
                     <td>{{data.item_code}}</td>
@@ -104,18 +106,24 @@
     table {
         width: 100%;
         border-collapse: collapse;
-    }
-
-    table td {
-        text-align: center;
+        table-layout: fixed;
     }
 
     table tr {
-        height: 50px;
+        border: 1px solid #D7DDE4;
+    }
+    table tbody tr{
+        height: 48px;
+        display: table-row;
+    }
+
+    table td, table th{
+        text-align: center;
         border: 1px solid #D7DDE4;
     }
 
     table thead tr {
+        height: 40px;
         background-color: #F5F7F9;
     }
 
@@ -147,7 +155,7 @@
                 // 表格数据
                 columns: [
                     {
-                        title: '编号',
+                        title: '序号',
                         key: 'identifier'
                     },
                     {
