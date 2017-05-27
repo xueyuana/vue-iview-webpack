@@ -400,9 +400,9 @@
           this.$http.post(url, JSON.stringify(body)).then(res => {
             console.log('保存到草稿', res)
             if (index === 1) {
-              this.$router.push({name: 'deployHistory'})
-            } else if (index === 2) {
               this.$router.push({name: 'myResource'})
+            } else if (index === 2) {
+              this.$router.push({name: 'deployHistory'})
             }
           }, err => {
             console.log('error', err)
