@@ -16,31 +16,22 @@
     <div class="apply-content">
       <!--项目信息-->
       <div class="apply-content-title">部署单元信息：</div>
-      <Form class="apply-content-form" label-position="left" :label-width="95">
+      <Form class="apply-content-form" label-position="left" :label-width="100">
         <Row :gutter="16">
           <Col class="apply-content-form-item" span="8">
-          <Form-item label="部署实例名称:">
-            <Input v-model="deploy_name" disabled></Input>
-          </Form-item>
+            <Form-item label="部署实例名称:">
+              <Input v-model="deploy_name" disabled></Input>
+            </Form-item>
           </Col>
           <Col class="apply-content-form-item" span="8">
-          <Form-item label="所属部署单元:">
-            <Input v-model="project_name" disabled></Input>
-            <!--<Select class="apply-content-form-select" v-model="project_name"-->
-                    <!--:placeholder="project_list.length? '请选择' : '空'">-->
-              <!--<Option v-for="key in project_list" :value="key.item_name">{{key.item_name}}</Option>-->
-            <!--</Select>-->
-          </Form-item>
+            <Form-item label="所属部署单元:">
+              <Input v-model="project_name" disabled></Input>
+            </Form-item>
           </Col>
           <Col class="apply-content-form-item" span="8">
-          <Form-item label="部署实例类型:">
-            <Input :value="environment | filterEnv" disabled></Input>
-            <!--<Select class="apply-content-form-select" v-model="environment">-->
-              <!--<Option value="develop">开发环境</Option>-->
-              <!--<Option value="test">测试环境</Option>-->
-              <!--<Option value="product">生产环境</Option>-->
-            <!--</Select>-->
-          </Form-item>
+            <Form-item label="部署实例类型:">
+              <Input :value="environment | filterEnv" disabled></Input>
+            </Form-item>
           </Col>
         </Row>
         <Row>
@@ -64,7 +55,7 @@
             </Form-item>
           </Col>
           <Col class="apply-content-form-item" span="8">
-            <Form-item label="ID:" style="width: 210px">
+            <Form-item label="IP:" style="width: 210px">
               <Input v-model="key.res_id" disabled></Input>
             </Form-item>
           </Col>
@@ -323,7 +314,7 @@
         database: [
           {
             res_type: 'mysql',
-            res_id: ''
+            res_id: '172.28.29.120'
           },
           {
             res_type: 'mongo',
@@ -331,7 +322,7 @@
           },
           {
             res_type: 'redis',
-            res_id: ''
+            res_id: '172.28.29.125'
           }
         ]
       }
@@ -390,7 +381,7 @@
         this.deploy_name = data.resource_name
         this.environment = data.env
         // 数据库
-        this.database = data.resource_list
+//        this.database = data.resource_list
       },
       // 环境切换
       onTabs(name) {
