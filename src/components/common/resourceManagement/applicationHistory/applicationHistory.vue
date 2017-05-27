@@ -232,20 +232,31 @@
                         this.gotoAdd(params.index);
         }}},'创建')])
     }else if(this.filterDate[params.index].reservation_status == "unreserved"){
-        return h('div',[
-            h('Button',{
-                props: {
-                    type: 'primary',
-                    size: 'small'
-                },
-                style: {
-                    marginRight: '5px'
-                },
-                on: {
-                    click: () => {
-                    this.gotoEdit(params.index);
-    }}},'编辑')])
-
+        if(this.filterDate[params.index].approval_status == "审批中"){
+            return h('div',[
+                h('Button',{
+                    props: {
+                        size: 'small'
+                    },
+                    style: {
+                        marginRight: '5px'
+                    }
+                },'编辑')])
+        }else{
+            return h('div',[
+                h('Button',{
+                    props: {
+                        type: 'primary',
+                        size: 'small'
+                    },
+                    style: {
+                        marginRight: '5px'
+                    },
+                    on: {
+                        click: () => {
+                        this.gotoEdit(params.index);
+        }}},'编辑')])
+        }
 
     }else {
         return h('div',[
