@@ -121,24 +121,27 @@
             key: 'status',
             align: 'center'
           }
-//          {
-//            title: '操作',
-//            key: 'action',
-//            align: 'center',
-//            render: (h, params) => {
-//              return h('Button', {
-//                props: {
-//                  type: 'primary',
-//                  size: 'small'
-//                },
-//                on: {
-//                  click: () => {
-//                    console.log(111)
-//                  }
-//                }
-//              }, '重新部署');
-//            }
-//          }
+          ,
+          {
+            title: '操作',
+            key: 'action',
+            align: 'center',
+            render: (h, params) => {
+              if (params.row.status === "未部署") {
+                return h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      console.log(params.row)
+                    }
+                  }
+                }, '重新部署');
+              }
+            }
+          }
         ],
         data1: [],
         filterDate: [],
@@ -158,7 +161,6 @@
         this.formItem.project_name && (query.project_name = this.formItem.project_name)
         this.formItem.deploy_name && (query.deploy_name = this.formItem.deploy_name)
 
-        console.log('query', query)
         this.$http.get(url, {
           params: query
         }).then(data => {
@@ -193,10 +195,26 @@
           data.push({
             initiator: originData[i].initiator,
             created_time: originData[i].created_time.substring(0, 16),
-            project_name: originData[i].project_name
+            project_name: originData[i].project_name,
+            status: this.formatStatus(originData[i].deploy_result),
+            deploy_id: originData[i].deploy_id
           })
         }
         return data;
+      },
+      formatStatus(val){
+        switch (val) {
+          case 'deploying':
+            return '部署中'
+          case 'not_deployed':
+            return '未部署'
+          case 'fail':
+            return '失败'
+          case 'success':
+            return '成功'
+          default:
+            break
+        }
       }
     }
   }

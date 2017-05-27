@@ -313,9 +313,12 @@
 
     mounted() {
       this.getProjectList()
-
-      this.resource_id = this.$route.query.id || '85574524-41f3-11e7-ac05-fa163e9474c9'
-      this.getRrsource()
+      if (this.$route.query.id) {
+        this.resource_id = this.$route.query.id
+        this.getRrsource()
+      } else {
+        this.$Message.warning('没有获取到ID')
+      }
     },
 
     filters: {
@@ -325,8 +328,10 @@
             return '开发环境'
           case 'test':
             return '测试环境'
-          default:
+          case 'produce':
             return '生产环境'
+          default:
+            break
         }
       }
     },
@@ -344,15 +349,13 @@
       },
       // 获取申请资源信息
       getRrsource() {
-//        if (this.resource_id) {
-          const url = baseUrl.apihost + 'resource/' + 'e4b8d3b6-41f3-11e7-ac05-fa163e9474c9'
-          this.$http.get(url, {emulateJSON: true}).then(res => {
-            console.log("获取申请资源信息:", res)
-            if (res.body.code === 200 && res.body.result.res == "success") {
-              this.initInfo(res.data.result.msg)
-            }
-          })
-//        }
+        const url = baseUrl.apihost + 'resource/' + this.resource_id
+        this.$http.get(url, {emulateJSON: true}).then(res => {
+          console.log("资源信息获取成功:", res)
+          if (res.body.code === 200 && res.body.result.res == "success") {
+            this.initInfo(res.data.result.msg)
+          }
+        })
       },
       initInfo(data) {
         this.project_name = data.project
@@ -387,12 +390,12 @@
             "exec_context": this.exec_context,
             "app_image": this.mirror
           }
-          if (index === 1) {  // 提交
+          if (index === 1) {            // 提交
             body.action = "deploy_to_crp"
-          } else if (index === 2) { // 保存到草稿
+          } else if (index === 2) {     // 保存到草稿
             body.action = "save_to_db"
           }
-          console.log(body)
+          console.log('POST数据', body)
           let url = baseUrl.apihost + 'deployment/deployments'
           this.$http.post(url, JSON.stringify(body)).then(res => {
             console.log('保存到草稿', res)
@@ -411,7 +414,7 @@
         let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + USER.user_id
 
         this.$http.get(url).then(data => {
-          console.log('ProjectList', data)
+          console.log('部署列表', data)
           this.project_list = data.body.result.res
         }, err => {
           console.log('error', err)
