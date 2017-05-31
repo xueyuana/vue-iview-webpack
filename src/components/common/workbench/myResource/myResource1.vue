@@ -37,7 +37,8 @@
                                         <tbody>
                                         <tr v-for="(data,index) in filterDate" :key="data">
                                             <td>{{ index+1 }}</td>
-                                            <td><a href="#">{{data.item_name}}</a></td>
+                                            <!--<td><a href="#">{{data.item_name}}</a></td>-->
+                                            <td>{{data.item_name}}</td>
                                             <td>{{data.create_date}}</td>
                                             <td>{{data.user}}</td>
                                             <td>{{data.item_code}}</td>
@@ -336,6 +337,16 @@
                 return data;
             },
 
+            getResourceData (url) {
+                this.$http.get(url)
+                        .then(response => {
+                             console.log(response);
+                            if (response.body.code === 200) { // 请求成功
+                                let backDatas = response.body.result.res;
+                            }
+                       });
+            },
+
             // 获取点击tab触发的值
             getTabName (name) {
                 console.log(name);
@@ -345,6 +356,11 @@
                     case "deployUnit":
                         url=common.apihost+'iteminfo/iteminfoes/project_item';
                         break;
+                    case "container":
+                        url=common.apihost+'res_callback/res';
+                        this.getResourceData(url);
+                        break;
+
                 }
             }
         },
