@@ -36,7 +36,7 @@
             let myChart = echarts.init(document.getElementById('treeContent'));
 
             let option = {
-                // backgroundColor:'#000',
+                backgroundColor:'#5cff8f',
                 width:  600,
                 height: 600,
                 tooltip: {},
@@ -48,8 +48,9 @@
                         layout: 'none',
                         symbolSize: 50,
                         roam: true,
-                        symbol:'roundRect', //'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow'
-                        symbolSize:[100,50],
+                        draggable:true,
+                        symbol:'circle', //'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow'
+                        symbolSize:[100,100],
                         label: {
                             normal: {
                                 show: true
@@ -67,20 +68,43 @@
                         data: [
                             // 域名
                             {
-                                name: 'uop-test.syswin.com',
+                                name: '部署实例',
                                 x: 500,
                                 y: 100,
-                                tooltip: {
-                                    formatter:'域名'
+                                symbol: 'image://../../../../../../static/image/Y_Project-v1.png',
+                                symbolSize:[80,80],
+                                itemStyle:{
+                                    normal: {
+                                        color: 'blue',
+                                        label: {
+                                            show: true,
+                                            position: 'right',
+
+                                        }
+                                    }
                                 },
-                                symbol:'rect',
-                                symbolSize:[200,50]
+                                // 提示信息
+                                tooltip: {
+                                    formatter:'uop-test.syswin.com'
+                                }
                             },
                             // 集群层数据
                             {
                                 name: 'Mysql',
                                 x: 100,
                                 y: 400,
+                                symbol: 'image://../../../../../../static/image/Y_Cluster-v1.png',
+                                symbolSize:[80,80],
+                                itemStyle:{
+                                    normal: {
+                                        color: 'blue',
+                                        label: {
+                                            show: true,
+                                            position: 'right',
+
+                                        }
+                                    }
+                                },
                                 tooltip: {
                                     formatter:'Mysql集群'
                                 }
@@ -90,6 +114,18 @@
                                 name: '应用',
                                 x: 500,
                                 y: 400,
+                                symbol: 'image://../../../../../../static/image/Y_Application-v1.png',
+                                symbolSize:[80,80],
+                                itemStyle:{
+                                    normal: {
+                                        color: 'blue',
+                                        label: {
+                                            show: true,
+                                            position: 'right',
+
+                                        }
+                                    }
+                                },
                                 tooltip: {
                                     formatter:'应用集群'
                                 }
@@ -100,6 +136,18 @@
                                 name: 'Redis',
                                 x: 900,
                                 y: 400,
+                                symbol: 'image://../../../../../../static/image/Y_Redis-v1.png',
+                                symbolSize:[80,80],
+                                itemStyle:{
+                                    normal: {
+                                        color: 'blue',
+                                        label: {
+                                            show: true,
+                                            position: 'right',
+
+                                        }
+                                    }
+                                },
                                 tooltip: {
                                     formatter:'Redis集群'
                                 }
@@ -111,6 +159,18 @@
                                 // x: 50,   // 100-50
                                 x: 100,   // 100-50
                                 y: 700,
+                                symbol: 'image://../../../../../../static/image/Y_VM-v1.png',
+                                symbolSize:[80,80],
+                                itemStyle:{
+                                    normal: {
+                                        color: 'blue',
+                                        label: {
+                                            show: true,
+                                            position: 'right',
+
+                                        }
+                                    }
+                                },
                                 tooltip: {
                                     formatter:'VM1 192.168.33.77'
                                 }
@@ -122,6 +182,18 @@
                                 // x: 450, // 500-50
                                 x: 500, // 500-50
                                 y: 700,
+                                symbol: 'image://../../../../../../static/image/Y_VM-v1.png',
+                                symbolSize:[80,80],
+                                itemStyle:{
+                                    normal: {
+                                        color: 'blue',
+                                        label: {
+                                            show: true,
+                                            position: 'right',
+
+                                        }
+                                    }
+                                },
                                 tooltip: {
                                     formatter:'VM2 192.168.33.78'
                                 }
@@ -133,17 +205,40 @@
                                 // x: 850, // 900-50
                                 x: 900, // 900-50
                                 y: 700,
+                                symbol: 'image://../../../../../../static/image/Y_VM-v1.png',
+                                symbolSize:[80,80],
+                                itemStyle:{
+                                    normal: {
+                                        color: 'blue',
+                                        label: {
+                                            show: true,
+                                            position: 'right',
+
+                                        }
+                                    }
+                                },
                                 tooltip: {
                                     formatter:'VM3 192.168.33.38'
                                 }
                             },
                             //   物理机层数据
-
                             {
                                 name: '物理机1',
                                 // x: 850, // 900-50
                                 x: 300, // 900-50
                                 y: 900,
+                                symbol: 'image://../../../../../../static/image/Y_LoadBalance-v2.png',
+                                symbolSize:[80,80],
+                                itemStyle:{
+                                    normal: {
+                                        color: 'blue',
+                                        label: {
+                                            show: true,
+                                            position: 'right',
+
+                                        }
+                                    }
+                                },
                                 tooltip: {
                                     formatter:'物理机1'
                                 }
@@ -154,6 +249,18 @@
                                 // x: 850, // 900-50
                                 x: 700, // 900-50
                                 y: 900,
+                                symbol: 'image://../../../../../../static/image/Y_LoadBalance-v2.png',
+                                symbolSize:[80,80],
+                                itemStyle:{
+                                    normal: {
+                                        color: 'blue',
+                                        label: {
+                                            show: true,
+                                            position: 'right',
+
+                                        }
+                                    }
+                                },
                                 tooltip: {
                                     formatter:'物理机2'
                                 }
@@ -165,6 +272,18 @@
                                 // x: 850, // 900-50
                                 x: 500, // 900-50
                                 y: 1100,
+                                symbol: 'circle',
+                                symbolSize:[80,80],
+                                itemStyle:{
+                                    normal: {
+                                        color: 'blue',
+                                        label: {
+                                            show: true,
+                                            position: 'right',
+
+                                        }
+                                    }
+                                },
                                 tooltip: {
                                     formatter:'机架'
                                 }
@@ -174,6 +293,18 @@
                                 // x: 850, // 900-50
                                 x: 500, // 900-50
                                 y: 1400,
+                                symbol: 'image://../../../../../../static/image/Y_ResDomain-v1.png',
+                                symbolSize:[80,80],
+                                itemStyle:{
+                                    normal: {
+                                        color: 'blue',
+                                        label: {
+                                            show: true,
+                                            position: 'right',
+
+                                        }
+                                    }
+                                },
                                 tooltip: {
                                     formatter:'资源池'
                                 }
@@ -183,8 +314,20 @@
                                 // x: 850, // 900-50
                                 x: 500, // 900-50
                                 y: 1700,
+                                symbol: 'image://../../../../../../static/image/Y_VirtualDC-v1.png',
+                                symbolSize:[80,80],
+                                itemStyle:{
+                                    normal: {
+                                        color: 'blue',
+                                        label: {
+                                            show: true,
+                                            position: 'right',
+
+                                        }
+                                    }
+                                },
                                 tooltip: {
-                                    formatter:'数据中心'
+                                    formatter:'数据总心'
                                 }
                             }
 
@@ -193,8 +336,8 @@
                         links: [
                             // 一级到二级
                             {
-                                source: 'uop-test.syswin.com',
-                                target: 'Mysql',
+                                source: '部署实例',
+                                target: '应用',
                                 lineStyle: {
                                     normal: { curveness: 0 }
                                 }

@@ -333,7 +333,7 @@
     export default {
         data () {
             return {
-                unapprovedNum:''
+                unapprovedNum:0
 
             }
         },
