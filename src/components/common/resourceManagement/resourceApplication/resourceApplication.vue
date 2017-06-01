@@ -13,10 +13,6 @@
                         <div class="title"><span>部署单元信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
-
-                                <div><span>资源名称：</span> <Input style="width: 180px" v-model="formInline.resource_name" placeholder="请输入资源名称"></Input></div>
-
-
                                 <div><span>部署实例名称：</span> <Input style="width: 180px" v-model="formInline.resource_name"  ></Input></div>
 
                             </div>
@@ -659,19 +655,17 @@
         //保存到草稿箱
         handleSubmit() {
             this.changeArr();
-            this.tounit();
             console.log(this.formInline);
             let self=this;
             let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
-            self.$router.push({name: 'res_applicationHistory'});
+          //  self.$router.push({name: 'res_applicationHistory'});
             console.log(this.formInline.compute_list);
             this.$http.post(url,newjson, {emulateJSON:true}  ).then(function (response) {
 
                 console.log(response);
                 if(response.body.code===200 && response.body.result.res=="success") {
                     this.$Message.success('提交成功!');
-
                     self.$router.push({name: 'res_applicationHistory'});
                 }
                 // 成功回调
@@ -683,10 +677,8 @@
         },
         //提交
         save(name) {
-
             let self=this;
             this.changeArr();
-            this.tounit();
             self.formInline.application_status="已提交";
             let newjson=JSON.stringify(self.formInline);
             const url=common.apihost+'resource/';
@@ -732,23 +724,13 @@
 
 
             }
-
-
-
-
         },
         argToString(arg){
             return(arg.split(","));
         },
-        //所属部署单元赋值
-        tounit(index){
-            this.formInline.project=this.project_list[0].item_name;
-            this.formInline.project_id=this.project_list[0].item_id;
-        },
         // 环境切换
         onTabs(name) {
             this.formInline.env =name;
-
         },
         // 检查镜像url
         onTest() {

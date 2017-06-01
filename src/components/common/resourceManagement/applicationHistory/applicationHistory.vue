@@ -15,13 +15,6 @@
                             <Option></Option>
                         </Select>
                     </Form-item>
-
-                    <!--<div>-->
-                    <!--<span>审批状态:</span>-->
-                    <!--<Select style="width: 160px">-->
-                    <!--<option></option>-->
-                    <!--</Select>-->
-                    <!--</div>-->
                     </Col>
                     <Col span="8">
                     <Form-item label="发起日期">
@@ -108,49 +101,15 @@
     </div>
 </template>
 <style scoped>
-
-    .wrap {
-        /*padding: 10px 20px;*/
-    }
     .query {
-        /*width: 100%;*/
-        /*height: 130px;*/
-        /*border: 1px solid #e4e4e4;*/
-        /*background-image: linear-gradient(to bottom,#fff,#e4e4e4);*/
-        /*padding: 10px 0;*/
-
         padding-top: 15px;
         background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);
         border: 1px solid rgb(228, 228, 228);
         border-radius: 10px;
     }
-
-    /*.query span {*/
-    /*color: #000;*/
-    /*display: inline-block;*/
-    /*width: 100px;*/
-    /*text-align: center;*/
-    /*}*/
-
-    /*.query-row >.ivu-col {*/
-    /*height: 110px;*/
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*justify-content: space-around;*/
-    /*}*/
-
-    /*.query-row > .ivu-col.contain-button {*/
-    /*height: 110px;*/
-    /*flex-direction: row;*/
-    /*align-items: flex-end;*/
-
-    /*}*/
-
     .result {
         padding: 20px;
     }
-
-
 </style>
 <script>
 
@@ -191,7 +150,7 @@
     }
     },params.row['resource'])
     }else{
-        return h('div',params.row['resource'])
+        return h('div',params.row['resource']);
     }
 
     }
@@ -208,15 +167,14 @@
     },
     {
         title: '所属部署单元',
-                key: 'project',
-//                width: 280,
-            align: 'center'
+        key: 'project',
+       align: 'center'
     },
     {
         title: '操作',
-                key: 'operate',
-            align: 'center',
-            render: (h,params) => {
+       key: 'operate',
+       align: 'center',
+      render: (h,params) => {
         if(this.filterDate[params.index].reservation_status == "ok"){
             return h('div',[
                 h('Button',{
@@ -375,8 +333,6 @@
             const url=common.apihost+'approval/reservation';
             let resourcejson={"resource_id": this.queryData[index].id}
             this.$http.post(url,resourcejson, {emulateJSON:true}  ).then(function (response) {
-
-
                 if(response.body.code===200 ) {
                     // this.$Message.success('提交成功!');
                     console.log("添加资源预留");
