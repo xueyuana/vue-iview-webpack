@@ -192,7 +192,7 @@
     }else if(this.filterDate[params.index].reservation_status == "unreserved"){
         if(this.filterDate[params.index].approval_status == "审批中"){
             return h('div',[
-                h('Button',{
+                h('div',{
                     props: {
                         size: 'small'
                     },
@@ -202,7 +202,7 @@
                 },'编辑')])
         }else if(this.filterDate[params.index].approval_status == "审批完成"){
             return h('div',[
-                h('Button',{
+                h('div',{
                     props: {
                         size: 'small'
                     },
@@ -227,8 +227,9 @@
         }
 
     }else {
+        this.filterDate[params.index].approval_status = "资源不足";
         return h('div',[
-            h('Button',{
+            h('div',{
                 props: {
                     size: 'small'
                 },
