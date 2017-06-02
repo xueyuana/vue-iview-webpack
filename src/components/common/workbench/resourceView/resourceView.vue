@@ -4,22 +4,15 @@
             <Col span="4">
               <div class="view-left scrollbar">
                 <Menu :theme="theme" active-name="1" width="auto" @on-select="goResourceTree">
-                    <Submenu :name="menuData.item_id" v-for="(menuData,index) in menuDatas" :key="menuData">
+                    <Submenu :name="menuData._id.project" v-for="(menuData,index) in menuDatas" :key="menuData">
                         <template slot="title">
-                           {{menuData.item_name}}
+                           {{menuData._id.project}}
                         </template>
-                        <Menu-item :name="0">
-                            {{1}}
+                        <Menu-item :name="instanceObj.res_id" v-for="instanceObj in menuData.ret" :key="instanceObj">
+                            {{ instanceObj.resource_name }}
                         </Menu-item>
-                        <!--<Menu-item :name="instanceObj.id" v-for="instanceObj in menuData.instance" :key="instanceObj">-->
-                            <!--{{ instanceObj.resource }}-->
-                        <!--</Menu-item>-->
 
                     </Submenu>
-                    <!--<Menu-item :name="data.item_id" v-for="(data,index) in menuDatas" :key="data">-->
-                        <!--<Icon type="star"></Icon>-->
-                        <!--{{ data.item_name }}-->
-                    <!--</Menu-item>-->
                 </Menu>
             </div>
             </Col>
@@ -73,41 +66,30 @@
         },
         methods:{
             getDeployUit() {
+                // agg_by=project&agg_expr=res_id&agg_expr=resource_name
                 let userInfo = JSON.parse(localStorage.getItem('userInfo'));
-                const url = common.apihost + 'iteminfo/iteminfoes/project_item';
+                let url='';
                 // 查询条件
-                let query = {};
-
+//                let query = {
+//                    agg_by: "project",
+//                    agg_expr: "res_id",
+//                    agg_expr: "resource_name"
+//                };
                 if (!userInfo.is_admin) { //普通用户
-                    query.user_id=userInfo.user_id; // 默认按照登录用户进行查询
+                    url = common.apihost + 'resource/?user_id='+userInfo.user_id+'&agg_by=project&agg_expr=res_id&agg_expr=resource_name';
+                }else  {
+                    url = common.apihost + 'resource/?agg_by=project&agg_expr=res_id&agg_expr=resource_name';
                 }
 
                 // 查询条件
-                this.$http.get(url,{params: query})
+                this.$http.get(url)
                         .then(response => {
                                 console.log(response);
                                 if (response.body.code === 200) { // 请求成功
-                                    let backDatas = response.body.result.res;
-//                                    this.menuDatas=backDatas;
-                                    return backDatas;
-                                }
-                        }).then(menuDatas=>{
-                            // 根据部署单元名称查询所有的部署实例
-                           for(let i=0;i<menuDatas.length;i++) {
-                               let menuDataObj=menuDatas[i];
-                               let urlInstance=common.apihost+'resource/?project='+menuDataObj.item_name;
-                               this.$http.get(urlInstance)
-                                       .then(response=>{
-                                           if( response.body.code===200){
-                                               // 给menuDatas添加实例属性
-                                                 menuDataObj.instance=response.body.result.msg;
+                                    let backDatas = response.body.result.msg;
+                                    this.menuDatas=backDatas;
 //
-                                           }
-                                       })
-                           }
-                          this.menuDatas=menuDatas;
-                          console.log(this.menuDatas);
-//                          console.log(this.submenuDatas);
+                                }
                         });
             },
             // 跳转到相应的资源架构图

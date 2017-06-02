@@ -113,7 +113,7 @@
                         children:[
                             {
                                 name: "机架",
-                                imageUrl:'',
+                                imageUrl:'frame',
                                 tooltip:'机架',
                                 target:['资源池']
                             }
@@ -269,7 +269,7 @@
                 let myChart = echarts.init(document.getElementById('treeContent'));
                 //  myChart.showLoading();
                 let option = {
-                    backgroundColor:'#5cff8f',
+//                    backgroundColor:'#5cff8f',
                     width:  width,
                     height: height,
                     tooltip: {},
@@ -744,7 +744,7 @@
                         // 设置data
                         let symbol="";
                         if(child.imageUrl){
-                            symbol='image://../../../../../../static/image/'+child.imageUrl+".png";
+                            symbol='image://../../../../../../static/image/'+child.imageUrl+".svg";
                         }else {
                             symbol="circle";
                         }
@@ -754,7 +754,7 @@
                             y: child.y,
                             category: i,
                             symbol: symbol,
-                            symbolSize:[60,60],
+                            symbolSize:[100,100],
                             itemStyle:{
                                 normal: {
 //                                    color: 'blue',
