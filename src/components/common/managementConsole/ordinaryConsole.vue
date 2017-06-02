@@ -9,7 +9,7 @@
                             <ul>
                                 <li @click="goResourceHistory">
                                     <span class="name">待审批</span>
-                                    <span class="number fr">{{ unapprovedNum }}</span>
+                                    <span class="number fr"  v-cloak>{{ unapprovedNum }}</span>
                                 </li>
                             </ul>
                         </div>

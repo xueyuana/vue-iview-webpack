@@ -27,8 +27,8 @@ import 'font-awesome/less/font-awesome.less';
 import '../static/css/reset.css';
 
 // 导入echarts2
-import echarts from 'echarts2';
-Vue.use(echarts);
+// import echarts from 'echarts2';
+// Vue.use(echarts);
 
 //导入组件
 import login from './components/login/login.vue';
@@ -145,7 +145,7 @@ vueRouters.beforeEach((to, from, next) => {
     case 'res_applicationHistory':
       nav.openNames = '2'
       nav.activeName = '22'
-      bread.level_2 = '申请历史'
+      bread.level_2 = '资源列表'
       break
     case 'res_applicationCheck':
       bread.level_2 = '资源审批'

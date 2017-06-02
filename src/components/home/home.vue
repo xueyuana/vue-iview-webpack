@@ -48,7 +48,7 @@
                                    资源管理
                                 </template>
                                 <Menu-item name="21">资源申请</Menu-item>
-                                <Menu-item name="22">申请历史</Menu-item>
+                                <Menu-item name="22">资源列表</Menu-item>
                             </Submenu>
                             <Submenu name="3">
                                 <template slot="title">
@@ -73,7 +73,7 @@
                             </Submenu>
                         </Menu>
                     </i-col>
-                    <i-col span="20" offset="0">
+                    <i-col span="20" offset="4">
                         <div class="layout-header">
                             <Breadcrumb separator=">">
                                 <Breadcrumb-item href="#">{{ $store.state.breadcrumbData.level.level_1 }}</Breadcrumb-item>
@@ -99,10 +99,15 @@
 <style scoped>
     .uop-header {
         height: 60px;
+        width: 100%;
         line-height: 60px;
         padding: 0 20px;
-        border-bottom: 1px solid #ECECEC;
+        /*border-bottom: 1px solid #ECECEC;*/
         box-sizing: border-box;
+        position: fixed;
+        background: #f5f7f9;
+        z-index: 999;
+        top: 0px;
     }
 
     .uop-header .logo {
@@ -129,7 +134,7 @@
     /*主题内容布局*/
     .uop-main {
         width: 100%;
-        margin-top: 15px;
+        margin-top: 60px;
     }
 
     .layout{
@@ -160,6 +165,7 @@
         background: #464c5b;
         color: #fff;
         min-height: 800px;
+        position: fixed;
     }
     .layout-header{
         margin-left: 15px;
