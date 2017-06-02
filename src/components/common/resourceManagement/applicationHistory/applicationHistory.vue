@@ -6,7 +6,7 @@
                 <Row>
                     <Col span="6">
                     <Form-item label="发起人">
-                        <Input placeholder="请输入" v-model="formItem.resource_name"></Input>
+                        <Input placeholder="请输入" v-model="formItem.name"></Input>
                     </Form-item>
                     <Form-item label="审批状态" >
                         <Select placeholder="请选择" v-model="formItem.approval_status">
@@ -225,11 +225,12 @@
     ],
 
     formItem:{
-        resource_name:"",
-                approval_status:"",
-                start_time:"",
-                start_time:"",
-                project:""
+        name:"",//发起人
+        resource_name:"",//资源名称
+        approval_status:"",//审批状态
+        start_time:"",//开始时间
+        end_time:"",//结束时间
+        project:""//所属部署单元
     },
     queryData: [
         {
@@ -295,12 +296,13 @@
         let query = {};
 
         this.formItem.userid && (query.userid = userid);
+        this.formItem.name && (query.name = this.formItem.name)
         this.formItem.resource_name && (query.resource_name = this.formItem.resource_name)
         this.formItem.start_time && (query.start_time = this.formItem.start_time)
         this.formItem.end_time && (query.end_time = this.formItem.end_time)
         this.formItem.project && (query.project = this.formItem.project)
 
-
+       console.log("query"+query);
         this.$http.get(url, {params: query} ,{emulateJSON:true}  ).then(function (response) {
 
             console.log(response.body.result.msg);
@@ -334,7 +336,7 @@
 
 
         },
-        //重置
+       //重置
         onReset() {
             //取得资源申请列表数据
 //        let userid= userinfo.user_id;
