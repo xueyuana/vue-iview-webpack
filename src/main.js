@@ -48,6 +48,7 @@ import res_applicationHistory from './components/common/resourceManagement/appli
 //资源审批
 import res_applicationCheck from './components/common/resourceManagement/resourceApplication/resourceCheck.vue';
 // 部署管理
+import deployment from './components/common/deployManagement/applicationDeployment/deployment.vue';
 import applicationDeployment from './components/common/deployManagement/applicationDeployment/applicationDeployment.vue';
 import deployHistory from 'components/common/deployManagement/deployHistory/deployHistory.vue';
 
@@ -82,10 +83,11 @@ var vueRouters = new VueRouter({
                 // 资源管理
                 {name:'resourceApplication',path:'/resource_application',query: { id: 'ss' },component:resourceApplication},
                 {name:'res_applicationHistory',path:'/res_application_history',component:res_applicationHistory},
-                //资源审批
+                // 资源审批
                 {name:'res_applicationCheck',path:'/res_applicationCheck',component:res_applicationCheck},
 
                 // 部署管理
+                {name:'deployment',path:'/deployment',component:deployment},
                 {name:'applicationDeployment',path:'/application_deployment',component:applicationDeployment},
                 {name:'deployHistory',path:'/deploy_history',component:deployHistory},
                 // 工作台

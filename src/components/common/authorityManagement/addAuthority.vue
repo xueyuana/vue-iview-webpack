@@ -168,16 +168,15 @@
       getUserList() {
         let url = baseUrl.apihost + (this.searchData ? ('auth/admindetail/' + this.searchData) : 'auth/all_user')
         this.$http.get(url).then(data => {
-          console.log('success', data)
+          console.log('用户列表', data)
           this.searchList = data.body.map(item => {
             return {
               id: item.id,
               username: item.username,
               department: item.department,
-              autho: item.is_root ? 'Root' : (item.is_admin ? '管理员' : '普通用户'),
+              autho: item.is_admin ? '管理员' : '普通用户',
               time: item.created_time.substring(0, 10),
-              is_admin: item.is_admin,
-              _disabled: USER.is_root && item.is_root
+              is_admin: item.is_admin
             }
           })
           this.filterDate = this.mockTableData(this.searchList, this.pageSize, 1)
@@ -269,8 +268,7 @@
             userId: originData[i].userId,
             autho: originData[i].autho,
             time: originData[i].time,
-            is_admin: originData[i].is_admin,
-            _disabled: originData[i]._disabled
+            is_admin: originData[i].is_admin
           })
         }
         return data;

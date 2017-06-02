@@ -5,12 +5,12 @@
       <Form :model="formItem" :label-width="90">
         <Row :gutter="16">
           <Col span="5">
-          <Form-item label="发起人:">
+            <Form-item label="发起人:">
             <Input v-model="formItem.initiator" placeholder="请输入"></Input>
           </Form-item>
           </Col>
           <Col span="10">
-          <Form-item label="发起日期:">
+            <Form-item label="发起日期:">
             <Row>
               <Col span="11">
                 <Date-picker type="datetime" placeholder="选择起始日期" @on-change="formatCreateData"></Date-picker>
@@ -23,19 +23,26 @@
           </Form-item>
           </Col>
           <Col span="6">
-          <Form-item label="部署名称:">
+            <Form-item label="部署编号:">
             <Input v-model="formItem.deploy_name" placeholder="请输入"></Input>
           </Form-item>
           </Col>
           <Col span="3"></Col>
         </Row>
         <Row :gutter="16">
-          <Col span="21">
-          <div class="inquire-form-project_name">
+          <Col span="6">
             <Form-item label="所属部署单元:">
-              <Input v-model="formItem.project_name" placeholder="请输入"></Input>
+              <Select v-model="formItem.project_name" :placeholder="project_list.length ? '请选择' : '无'" @on-change="onUnitChange" style="max-width: 120px">
+                <Option v-for="item in project_list" :value="item.item_name">{{item.item_name}}</Option>
+              </Select>
             </Form-item>
-          </div>
+          </Col>
+          <Col span="15">
+            <Form-item label="部署实例名称:">
+              <Select v-model="formItem.resource_name" :placeholder="resource_list.length ? '请选择' : '无'" @on-change="onDeployChange" style="max-width: 120px">
+                <Option v-for="item in resource_list" :value="item.resource">{{item.resource}}</Option>
+              </Select>
+            </Form-item>
           </Col>
           <Col span="3">
             <Button type="primary" @click.native="onInquire">查询</Button>
@@ -79,12 +86,9 @@
 
 <script>
   import baseUrl from 'tools/common.js'
+  import USER from 'tools/user.js'
 
   export default {
-    mounted() {
-      console.log('mounted执行了')
-      this.onInquire()
-    },
     data() {
       return {
         formItem: {
@@ -94,12 +98,26 @@
           deploy_name: '',
           proStatus: '',
           formStatus: '',
-          project_name: ''
+          project_name: '',
+          resource_name: ''
+
         },
+        project_list: [],
+        resource_list: [],
         columns: [
           {
             title: '编号',
             type: 'index',
+            align: 'center'
+          },
+          {
+            title: '部署编号',
+            key: 'deploy_name',
+            align: 'center'
+          },
+          {
+            title: '部署实例名称',
+            key: 'resource_name',
             align: 'center'
           },
           {
@@ -122,27 +140,6 @@
             key: 'status',
             align: 'center'
           }
-          ,
-          {
-            title: '操作',
-            key: 'action',
-            align: 'center',
-            render: (h, params) => {
-              if (params.row.status === "未部署") {
-                return h('Button', {
-                  props: {
-                    type: 'primary',
-                    size: 'small'
-                  },
-                  on: {
-                    click: () => {
-                      this.$router.push({name: 'applicationDeployment',query: {reset: params.row.deploy_id} })
-                    }
-                  }
-                }, '重新部署');
-              }
-            }
-          }
         ],
         data1: [],
         filterDate: [],
@@ -150,15 +147,25 @@
         num: 1
       }
     },
+
+    mounted() {
+      this.onInquire()
+      this.getProjectList()
+      this.getDeployList()
+    },
+
     methods: {
       // 查找
       onInquire() {
+//        let url = 'http://172.31.30.43:5000/api/' + 'deployment/deployments'
+
         let url = baseUrl.apihost + 'deployment/deployments'
         let query = {}
         this.formItem.initiator && (query.initiator = this.formItem.initiator)
         this.formItem.created_time && (query.start_time = this.formItem.created_time)
         this.formItem.end_time && (query.end_time = this.formItem.end_time)
         this.formItem.project_name && (query.project_name = this.formItem.project_name)
+        this.formItem.resource_name && (query.resource_name = this.formItem.resource_name)
         this.formItem.deploy_name && (query.deploy_name = this.formItem.deploy_name)
 
         this.$http.get(url, {
@@ -175,6 +182,16 @@
       // 时间选择器
       formatCreateData(value) {
         this.formItem.created_time = value
+      },
+      onUnitChange(val) {
+        if (!val) return
+        this.formItem.resource_name = ''
+        this.getDeployList()
+        this.onInquire()
+      },
+      onDeployChange(val) {
+        if (!val) return
+        this.onInquire()
       },
       formatEndData(value) {
         this.formItem.end_time = value
@@ -197,10 +214,38 @@
             created_time: originData[i].created_time.substring(0, 16),
             project_name: originData[i].project_name,
             status: this.formatStatus(originData[i].deploy_result),
-            deploy_id: originData[i].deploy_id
+            deploy_id: originData[i].deploy_id,
+            deploy_name: originData[i].deploy_name,
+            resource_name: originData[i].resource_name
           })
         }
         return data;
+      },
+        // 请求部署单元列表
+      getProjectList() {
+        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + USER.user_id
+        this.$http.get(url).then(data => {
+          console.log('部署单元列表', data)
+          this.project_list = data.body.result.res
+        }, err => {
+          console.log('error', err)
+        })
+      },
+        // 获取部署单元下对应部署列表
+      getDeployList() {
+        let url = baseUrl.apihost + 'resource/'
+        let query = {}
+        USER.user_id && (query.user_id = USER.user_id)
+        this.formItem.project_name && (query.project = this.formItem.project_name)
+
+        this.$http.get(url, {
+          params: query
+        }).then(data => {
+          console.log('资源列表', data)
+          this.resource_list = data.body.result.msg.filter(item => item.reservation_status === 'ok')
+        }, err => {
+          console.log('error', err)
+        })
       },
       formatStatus(val){
         switch (val) {

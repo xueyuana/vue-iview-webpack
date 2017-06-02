@@ -54,7 +54,7 @@
                                 <template slot="title">
                                    持续交付
                                 </template>
-                                <!--<Menu-item name="31">应用部署</Menu-item>-->
+                                <Menu-item name="31">应用部署</Menu-item>
                                 <Menu-item name="32">部署历史</Menu-item>
                             </Submenu>
                             <Submenu name="4">
@@ -65,7 +65,7 @@
                                 <Menu-item name="42">我的资源</Menu-item>
                                 <Menu-item name="43">资源视图</Menu-item>
                             </Submenu>
-                            <Submenu name="5">
+                            <Submenu name="5" v-if="userInfo">
                                 <template slot="title">
                                     权限管理
                                 </template>
