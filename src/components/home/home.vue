@@ -67,9 +67,6 @@
                             </Submenu>
 
                             <Submenu name="5" v-if="userInfo.is_admin">
-
-                            <Submenu name="5" v-if="userInfo">
-
                                 <template slot="title">
                                     权限管理
                                 </template>
