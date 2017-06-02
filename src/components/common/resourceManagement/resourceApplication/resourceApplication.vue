@@ -491,12 +491,7 @@
 
 
     .title {
-        /*width: 100%;*/
-        /*height: 24px;*/
-        /*line-height: 24px;*/
-        /*!*background-color: #f2f2f2;*!*/
-        /*margin-bottom: 10px;*/
-        /*padding-left: 10px;*/
+
 
         width: 100%;
         height: 20px;
@@ -507,11 +502,6 @@
         margin-bottom: 10px;
     }
 
-    .title span {
-        /*color: #000;*/
-        /*font-weight: 500;*/
-        /*font-size: 18px;*/
-    }
 
     .container {
         width: 100%;

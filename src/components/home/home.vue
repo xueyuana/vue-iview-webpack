@@ -48,7 +48,7 @@
                                    资源管理
                                 </template>
                                 <Menu-item name="21">资源申请</Menu-item>
-                                <Menu-item name="22">申请历史</Menu-item>
+                                <Menu-item name="22">资源列表</Menu-item>
                             </Submenu>
                             <Submenu name="3">
                                 <template slot="title">

@@ -5,14 +5,16 @@
             <Form  :label-width="100">
                 <Row>
                     <Col span="6">
-                    <Form-item label="发起人" prop="name">
-                        <Input placeholder="请输入"></Input>
+                    <Form-item label="发起人">
+                        <Input placeholder="请输入" v-model="formItem.resource_name"></Input>
                     </Form-item>
+                    <Form-item label="审批状态" >
+                        <Select placeholder="请选择" v-model="formItem.approval_status">
+                            <Option value=""> 流程不存在</Option>
+                            <Option value=""> 审批完成</Option>
+                            <Option value=""> 资源不足</Option>
+                            <Option value="">审批不通过</Option>
 
-                    <!--<div><span>发起人:</span><Input style="width: 160px" placeholder="请输入"></Input></div>-->
-                    <Form-item label="审批状态" prop="approval_status">
-                        <Select placeholder="请选择">
-                            <Option></Option>
                         </Select>
                     </Form-item>
                     </Col>
@@ -20,70 +22,48 @@
                     <Form-item label="发起日期">
                         <Row>
                             <Col span="11">
-                            <Form-item prop="startDate">
-                                <Date-picker type="datetime" placeholder="选择日期" v-model="startDate"></Date-picker>
+                            <Form-item >
+                                <Date-picker type="datetime" placeholder="选择日期" v-model="formItem.start_time"></Date-picker>
                             </Form-item>
                             </Col>
                             <Col span="2" style="text-align: center">至</Col>
                             <Col span="11">
-                            <Form-item prop="endDate">
-                                <Date-picker type="datetime" placeholder="选择日期" v-model="endDate"></Date-picker>
+                            <Form-item >
+                                <Date-picker type="datetime" placeholder="选择日期" v-model="formItem.end_time"></Date-picker>
                             </Form-item>
                             </Col>
                         </Row>
                     </Form-item>
-
-                    <!--<Row>-->
-                    <!--<Col span="4">-->
-                    <!--<span>发起日期：</span>-->
-                    <!--</Col>-->
-                    <!--<Col span="7">-->
-                    <!--<Date-picker type="date" style="width: 160px" v-model="startDate" placeholder="选择日期"></Date-picker>-->
-                    <!--</Col>-->
-                    <!--<Col span="3">-->
-                    <!--<span>至</span>-->
-                    <!--</Col>-->
-                    <!--<Col span="8">-->
-                    <!--<Date-picker type="date" style="width: 160px" :options="option" v-model="endDate" placeholder="选择日期"></Date-picker>-->
-                    <!--</Col>-->
-                    <!--</Row>-->
-
-                    <Form-item label="表单状态" prop="formStatus">
-                        <Select placeholder="请选择">
-                            <Option></Option>
+                    <Form-item label="表单状态" >
+                        <Select placeholder="请选择" v-model="formItem.formStatus">
+                            <Option value="待提交">待提交</Option>
+                            <Option value="已提交">已提交</Option>
                         </Select>
                     </Form-item>
-
-                    <!---->
-                    <!--<div>-->
-                    <!--<span>表单状态：</span>-->
-                    <!--<Select style="width: 160px">-->
-                    <!--<option></option>-->
-                    <!--</Select>-->
-                    <!--</div>-->
-
                     </Col>
                     <Col span="6">
-                    <Form-item label="资源名称" prop="resource">
-                        <Input placeholder="请输入"></Input>
+                    <Form-item label="资源名称" >
+                        <Input placeholder="请输入" v-model="formItem.resource_name"></Input>
                     </Form-item>
 
-                    <!--<div><span>资源名称：</span><Input style="width: 160px" placeholder="请输入"></Input></div>-->
-                    <Form-item label="所属部署单元" prop="project">
-                        <Input placeholder="请输入"></Input>
+
+                    <Form-item label="所属部署单元" >
+                        <Input v-model="formItem.project" placeholder="请输入"></Input>
+
                     </Form-item>
 
-                    <!--<div><span>所属部署单元：</span><Input style="width: 160px" placeholder="请输入"></Input></div>-->
+
+
                     </Col>
                     <Col span="4">
                     <Form-item>
-                        <Button type="primary">查询</Button>
+                        <Button type="primary" @click="onCheck">查询</Button>
                     </Form-item>
 
                     <Form-item>
-                        <Button type="ghost">重置</Button>
+                        <Button type="ghost" >重置</Button>
                     </Form-item>
-                    <!--<Button type="primary">查询</Button>-->
+
                     </Col>
                 </Row>
             </Form>
@@ -125,8 +105,7 @@
                 disabledDate: (date) => {
                 return date && date.valueOf() < this.startDate.valueOf()
             }
-        },
-                columns: [
+        }, columns: [
             {
                 title: '发起人',
                 key: 'name',
@@ -147,12 +126,11 @@
                 return h('a',{on: {
                     click: () => {
                     this.gotoCheck(params.index);}
-    }
+        }
     },params.row['resource'])
     }else{
         return h('div',params.row['resource']);
     }
-
     }
     },
     {
@@ -229,17 +207,29 @@
     }else {
         this.filterDate[params.index].approval_status = "资源不足";
         return h('div',[
-            h('div',{
+            h('Button',{
                 props: {
+                    type: 'primary',
                     size: 'small'
                 },
                 style: {
                     marginRight: '5px'
-                }
-            },'创建')]);
+                }, on: {
+                    click: () => {
+                    this.gotoReAdd(params.index);
+    }}
+            },'重建')]);
     } }
     }
     ],
+
+    formItem:{
+        resource_name:"",
+                approval_status:"",
+                start_time:"",
+                start_time:"",
+                project:""
+    },
     queryData: [
         {
             name: 'sdfsd',
@@ -272,15 +262,21 @@
             reservation_status:""
         }
     ],
+   // 分页数据
+    filterDate: [],
+    pageSize: 10,
+    num: 1,
 
-        // 分页数据
-            filterDate: [],
-            pageSize: 10,
-            num: 1
     }
     },
-    beforeCreate(){
+    mounted() {
+      this.onCheck();
+    },
 
+
+    methods:{
+    // 查找
+            onCheck() {
         //取得资源申请列表数据
 //        let userid= userinfo.user_id;
         console.log(this.queryData)
@@ -292,10 +288,19 @@
         if( ifadmin ){
             url=common.apihost+'resource/';
         }else{
-            url=common.apihost+'resource/?user_id='+userid;
+            url=common.apihost+'resource/';
+            //url=common.apihost+'resource/?user_id='+userid;
         }
-        console.log(url);
-        this.$http.get(url, {emulateJSON:true}  ).then(function (response) {
+        let query = {};
+
+        this.formItem.userid && (query.userid = userid);
+        this.formItem.resource_name && (query.resource_name = this.formItem.resource_name)
+        this.formItem.start_time && (query.start_time = this.formItem.start_time)
+        this.formItem.end_time && (query.end_time = this.formItem.end_time)
+        this.formItem.project && (query.project = this.formItem.project)
+
+
+        this.$http.get(url, {params: query} ,{emulateJSON:true}  ).then(function (response) {
 
             console.log(response.body.result.msg);
             if(response.body.code===200 && response.body.result.res=="success") {
@@ -319,16 +324,15 @@
 
                 this.filterDate = this.mockTableData(this.queryData, this.pageSize, 1)
             }
-
             // 成功回调
         }, function () {
             this.$Message.error('登陆失败!');
             // 失败回调
         });
-    },
 
-    methods:{
 
+
+        },
         //新增一条资源
         gotoAdd(index){
             const url=common.apihost+'approval/reservation';
@@ -336,6 +340,21 @@
             this.$http.post(url,resourcejson, {emulateJSON:true}  ).then(function (response) {
                 if(response.body.code===200 ) {
                     // this.$Message.success('提交成功!');
+                    console.log("添加资源预留");
+                    this.$router.push({name: 'applicationDeployment',query: { id:  this.filterDate[index].id }});
+                }
+                // 成功回调
+            }, function () {
+
+            });
+        },
+        //重新创建资源
+        gotoReAdd(index){
+            const url=common.apihost+'approval/reservation';
+            let resourcejson={"resource_id": this.queryData[index].id}
+            this.$http.put(url,resourcejson ).then(function (response) {
+                if(response.body.code===200 ) {
+                     this.$Message.success('资源预留成功!');
                     console.log("添加资源预留");
                     this.$router.push({name: 'applicationDeployment',query: { id:  this.filterDate[index].id }});
                 }
