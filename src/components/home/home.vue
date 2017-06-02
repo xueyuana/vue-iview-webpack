@@ -54,7 +54,7 @@
                                 <template slot="title">
                                    持续交付
                                 </template>
-                                <Menu-item name="31">应用部署</Menu-item>
+                                <!--<Menu-item name="31">应用部署</Menu-item>-->
                                 <Menu-item name="32">部署历史</Menu-item>
                             </Submenu>
                             <Submenu name="4">
