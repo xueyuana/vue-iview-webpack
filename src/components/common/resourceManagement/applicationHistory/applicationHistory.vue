@@ -26,7 +26,8 @@
                                 <Date-picker type="datetime" placeholder="选择日期" v-model="formItem.start_time"></Date-picker>
                             </Form-item>
                             </Col>
-                            <Col span="2" style="text-align: center">至</Col>
+                            <Col span="2" style="text-align: center">至
+                            </Col>
                             <Col span="11">
                             <Form-item >
                                 <Date-picker type="datetime" placeholder="选择日期" v-model="formItem.end_time"></Date-picker>
@@ -61,7 +62,7 @@
                     </Form-item>
 
                     <Form-item>
-                        <Button type="ghost" >重置</Button>
+                        <Button type="ghost" @click="onReset" >重置</Button>
                     </Form-item>
 
                     </Col>
@@ -166,7 +167,7 @@
                     on: {
                         click: () => {
                         this.gotoAdd(params.index);
-        }}},'创建')])
+        }}},'部署')])
     }else if(this.filterDate[params.index].reservation_status == "unreserved"){
         if(this.filterDate[params.index].approval_status == "审批中"){
             return h('div',[
@@ -187,7 +188,7 @@
                     style: {
                         marginRight: '5px'
                     }
-                },'创建')]);
+                },'部署')]);
         }else{
             return h('div',[
                 h('Button',{
@@ -275,8 +276,8 @@
 
 
     methods:{
-    // 查找
-            onCheck() {
+        // 查找
+         onCheck() {
         //取得资源申请列表数据
 //        let userid= userinfo.user_id;
         console.log(this.queryData)
@@ -288,8 +289,8 @@
         if( ifadmin ){
             url=common.apihost+'resource/';
         }else{
-            url=common.apihost+'resource/';
-            //url=common.apihost+'resource/?user_id='+userid;
+            //url=common.apihost+'resource/';
+            url=common.apihost+'resource/?user_id='+userid;
         }
         let query = {};
 
@@ -333,6 +334,56 @@
 
 
         },
+        //重置
+        onReset() {
+            //取得资源申请列表数据
+//        let userid= userinfo.user_id;
+            console.log(this.queryData)
+
+            //取得资源申请列表数据
+            let userid= getStroage('userInfo').user_id;
+            let ifadmin = getStroage('userInfo').is_admin;
+            let url="";
+            if( ifadmin ){
+                url=common.apihost+'resource/';
+            }else{
+                // url=common.apihost+'resource/';
+                url=common.apihost+'resource/?user_id='+userid;
+            }
+            let query = {};
+            this.$http.get(url, {emulateJSON:true}  ).then(function (response) {
+
+                console.log(response.body.result.msg);
+                if(response.body.code===200 && response.body.result.res=="success") {
+                    this.queryData=response.body.result.msg;
+                    let msgs= response.body.result.msg;
+
+                    for (var index in msgs) {
+                        if(msgs[index].approval_status == "unsubmit"){
+                            this.queryData[index].approval_status="流程不存在";
+                        }
+                        if(msgs[index].approval_status == "processing"){
+                            this.queryData[index].approval_status="审批中";
+                        }
+                        if(msgs[index].approval_status == "success"){
+                            this.queryData[index].approval_status="审批完成";
+                        }
+                        if(msgs[index].approval_status == "failed"){
+                            this.queryData[index].approval_status="审批不通过";
+                        }
+                    }
+
+                    this.filterDate = this.mockTableData(this.queryData, this.pageSize, 1)
+                }
+                // 成功回调
+            }, function () {
+                this.$Message.error('登陆失败!');
+                // 失败回调
+            });
+
+
+
+        },
         //新增一条资源
         gotoAdd(index){
             const url=common.apihost+'approval/reservation';
@@ -352,7 +403,7 @@
         gotoReAdd(index){
             const url=common.apihost+'approval/reservation';
             let resourcejson={"resource_id": this.queryData[index].id}
-            this.$http.put(url,resourcejson ).then(function (response) {
+            this.$http.put(url,resourcejson, {emulateJSON:true}  ).then(function (response) {
                 if(response.body.code===200 ) {
                      this.$Message.success('资源预留成功!');
                     console.log("添加资源预留");
