@@ -173,11 +173,13 @@
 
 <script>
   import baseUrl from 'tools/common.js'
-  import USER from 'tools/user.js'
+  import {getStroage} from 'tools/cookieAction.js'
+//  import USER from 'tools/user.js'
 
   export default {
     data() {
       return {
+        userInfo: '',
         activeIndex: 0,
         funcBtns: ['返回', '提交'],
 
@@ -202,11 +204,12 @@
         redis_ip: '172.20.120',
         redis_tag: 'redis',
 
-        mirror: 'arp.reg.innertoon.com/qitoon.checkin/qitoon.checkin:20170517101336',
+        mirror: '',
       }
     },
 
     mounted() {
+      this.userInfo = getStroage('userInfo')
       if (this.$route.query.id) {
         this.resource_id = this.$route.query.id
         this.getRrsource()
@@ -276,7 +279,7 @@
 
         let body = {
           "action": 'deploy_to_crp',
-          "initiator": USER.username,
+          "initiator": this.userInfo.username,
 
           "deploy_name": this.deploy_name,
 

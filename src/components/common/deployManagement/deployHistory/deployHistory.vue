@@ -6,7 +6,7 @@
         <Row :gutter="16">
           <Col span="5">
             <Form-item label="发起人:">
-            <Input v-model="formItem.initiator" placeholder="请输入"></Input>
+            <Input v-model="formItem.initiator" placeholder="请输入" :disabled="!userInfo.is_admin"></Input>
           </Form-item>
           </Col>
           <Col span="10">
@@ -33,6 +33,7 @@
           <Col span="6">
             <Form-item label="所属部署单元:">
               <Select v-model="formItem.project_name" :placeholder="project_list.length ? '请选择' : '无'" @on-change="onUnitChange" style="max-width: 120px">
+                <Option value="">不填</Option>
                 <Option v-for="item in project_list" :value="item.item_name">{{item.item_name}}</Option>
               </Select>
             </Form-item>
@@ -86,7 +87,8 @@
 
 <script>
   import baseUrl from 'tools/common.js'
-  import USER from 'tools/user.js'
+  import {getStroage} from 'tools/cookieAction.js'
+//  import userInfo from 'tools/user.js'
 
   export default {
     data() {
@@ -100,8 +102,8 @@
           formStatus: '',
           project_name: '',
           resource_name: ''
-
         },
+        userInfo: '',
         project_list: [],
         resource_list: [],
         columns: [
@@ -149,6 +151,9 @@
     },
 
     mounted() {
+      this.userInfo = getStroage('userInfo')
+      console.log('this.userInfo',this.userInfo)
+      this.formItem.initiator = this.userInfo.is_admin ? '' : this.userInfo.username
       this.onInquire()
       this.getProjectList()
       this.getDeployList()
@@ -184,8 +189,8 @@
         this.formItem.created_time = value
       },
       onUnitChange(val) {
-        if (!val) return
         this.formItem.resource_name = ''
+        console.log(val)
         this.getDeployList()
         this.onInquire()
       },
@@ -223,7 +228,7 @@
       },
         // 请求部署单元列表
       getProjectList() {
-        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + USER.user_id
+        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + this.userInfo.user_id
         this.$http.get(url).then(data => {
           console.log('部署单元列表', data)
           this.project_list = data.body.result.res
@@ -235,7 +240,7 @@
       getDeployList() {
         let url = baseUrl.apihost + 'resource/'
         let query = {}
-        USER.user_id && (query.user_id = USER.user_id)
+        this.userInfo.user_id && (query.user_id = this.userInfo.user_id)
         this.formItem.project_name && (query.project = this.formItem.project_name)
 
         this.$http.get(url, {

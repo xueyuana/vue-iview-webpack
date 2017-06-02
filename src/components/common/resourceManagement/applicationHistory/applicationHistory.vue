@@ -402,7 +402,7 @@
           if (response.body.code === 200) {
             // this.$Message.success('提交成功!');
             console.log("添加资源预留");
-            this.$router.push({name: 'applicationDeployment', query: {id: this.filterDate[index].id}});
+            this.$router.push({name: 'deployment', query: {id: this.filterDate[index].id}});
           }
           // 成功回调
         }, function () {
@@ -411,18 +411,19 @@
       },
       //重新创建资源
       gotoReAdd(index){
-        const url = common.apihost + 'approval/reservation';
-        let resourcejson = {"resource_id": this.queryData[index].id}
-        this.$http.put(url, resourcejson, {emulateJSON: true}).then(function (response) {
-          if (response.body.code === 200) {
-            this.$Message.success('资源预留成功!');
-            console.log("添加资源预留");
-            this.$router.push({name: 'applicationDeployment', query: {id: this.filterDate[index].id}});
-          }
-          // 成功回调
-        }, function () {
 
-        });
+//        const url = common.apihost + 'approval/reservation';
+//        let resourcejson = {"resource_id": this.queryData[index].id}
+//        this.$http.put(url, resourcejson, {emulateJSON: true}).then(function (response) {
+//          if (response.body.code === 200) {
+//            this.$Message.success('资源预留成功!');
+//            console.log("添加资源预留");
+//            this.$router.push({name: 'applicationDeployment', query: {id: this.filterDate[index].id}});
+//          }
+//          // 成功回调
+//        }, function () {
+//
+//        });
       },
       //跳转到编辑页面
       gotoEdit(index){
@@ -461,7 +462,7 @@
         }
         return data;
       }
-      
+
     }
   }
 

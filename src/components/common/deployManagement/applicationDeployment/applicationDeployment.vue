@@ -21,14 +21,14 @@
         <Row :gutter="16">
           <Col class="apply-content-form-item" span="6">
           <Form-item label="所属部署单元:">
-            <Select v-model="project_name" :placeholder="project_list.length ? '请选择' : '无'" @on-change="onUnitChange" style="min-width: 120px">
+            <Select v-model="project_name" :placeholder="project_list.length ? '请选择' : '无'" @on-change="onUnitChange" style="min-width: 100px">
               <Option v-for="item in project_list" :value="item.item_name">{{item.item_name}}</Option>
             </Select>
           </Form-item>
           </Col>
           <Col class="apply-content-form-item" span="6">
           <Form-item label="部署实例名称:">
-            <Select v-model="resource_name" :placeholder="resource_list.length ? '请选择' : '无'" @on-change="onDeployChange" style="min-width: 120px">
+            <Select v-model="resource_name" :placeholder="resource_list.length ? '请选择' : '无'" @on-change="onDeployChange" style="min-width: 100px">
               <Option v-for="item in resource_list" :value="item.resource">{{item.resource}}</Option>
             </Select>
           </Form-item>
@@ -181,11 +181,13 @@
 
 <script>
   import baseUrl from 'tools/common.js'
-  import USER from 'tools/user.js'
+  import {getStroage} from 'tools/cookieAction.js'
+//  import USER from 'tools/user.js'
 
   export default {
     data() {
       return {
+        userInfo: '',
         activeIndex: 0,
         funcBtns: ['返回', '提交'],
 
@@ -212,12 +214,13 @@
         redis_ip: '172.20.120',
         redis_tag: 'redis',
 
-        mirror: 'arp.reg.innertoon.com/qitoon.checkin/qitoon.checkin:20170517101336',
+        mirror: '',
 
       }
     },
 
     mounted() {
+      this.userInfo = getStroage('userInfo')
       this.getProjectList()
     },
 
@@ -283,7 +286,7 @@
 
         let body = {
           "action": 'deploy_to_crp',
-          "initiator": USER.username,
+          "initiator": this.userInfo.username,
 
           "deploy_name": this.deploy_name,
 
@@ -308,7 +311,6 @@
         }
 
         console.log('POST数据', body)
-//        let url = 'http://172.31.30.43:5000/api/' + 'deployment/deployments'
         let url = baseUrl.apihost + 'deployment/deployments'
         this.$http.post(url, JSON.stringify(body)).then(res => {
           console.log('提交成功', res)
@@ -336,7 +338,7 @@
 
         // 请求部署单元列表
       getProjectList() {
-        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + USER.user_id
+        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + this.userInfo.user_id
         this.$http.get(url).then(data => {
           console.log('部署单元列表', data)
           this.project_list = data.body.result.res
@@ -348,7 +350,7 @@
       getDeployList() {
         let url = baseUrl.apihost + 'resource/'
         let query = {}
-        USER.user_id && (query.user_id = USER.user_id)
+        this.userInfo.user_id && (query.user_id = this.userInfo.user_id)
         this.project_name && (query.project = this.project_name)
 
         this.$http.get(url, {

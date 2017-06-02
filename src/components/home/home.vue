@@ -65,7 +65,7 @@
                                 <Menu-item name="42">我的资源</Menu-item>
                                 <Menu-item name="43">资源视图</Menu-item>
                             </Submenu>
-                            <Submenu name="5" v-if="userInfo">
+                            <Submenu name="5" v-if="userInfo.is_admin">
                                 <template slot="title">
                                     权限管理
                                 </template>
