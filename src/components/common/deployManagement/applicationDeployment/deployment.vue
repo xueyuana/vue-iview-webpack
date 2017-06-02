@@ -9,39 +9,33 @@
                 @click="onLink(index)">{{item}}
 
 
-
         </Button>
       </div>
     </div>
-    <!--内容区-->
     <div class="apply-content">
       <!--项目信息-->
       <div class="apply-content-title">部署单元信息：</div>
       <Form class="apply-content-form" label-position="left" :label-width="98">
         <Row :gutter="16">
           <Col class="apply-content-form-item" span="6">
-          <Form-item label="所属部署单元:">
-            <Select v-model="project_name" :placeholder="project_list.length ? '请选择' : '无'" @on-change="onUnitChange" style="min-width: 120px">
-              <Option v-for="item in project_list" :value="item.item_name">{{item.item_name}}</Option>
-            </Select>
-          </Form-item>
+            <Form-item label="所属部署单元:">
+              <Input :value="project_name" disabled></Input>
+            </Form-item>
           </Col>
           <Col class="apply-content-form-item" span="6">
-          <Form-item label="部署实例名称:">
-            <Select v-model="resource_name" :placeholder="resource_list.length ? '请选择' : '无'" @on-change="onDeployChange" style="min-width: 120px">
-              <Option v-for="item in resource_list" :value="item.resource">{{item.resource}}</Option>
-            </Select>
-          </Form-item>
+            <Form-item label="部署实例名称:">
+              <Input :value="resource_name" disabled></Input>
+            </Form-item>
           </Col>
           <Col class="apply-content-form-item" span="6">
-          <Form-item label="部署实例类型:">
-            <Input :value="environment | filterEnv" disabled></Input>
-          </Form-item>
+            <Form-item label="部署实例类型:">
+              <Input :value="environment | filterEnv" disabled></Input>
+            </Form-item>
           </Col>
           <Col class="apply-content-form-item" span="6">
-          <Form-item label="部署编号:">
-            <Input v-model="deploy_name"></Input>
-          </Form-item>
+            <Form-item label="部署编号:">
+              <Input v-model="deploy_name"></Input>
+            </Form-item>
           </Col>
         </Row>
         <Row>
@@ -113,8 +107,6 @@
         </Form-item>
         <Button type="primary" @click="onTest">检测</Button>
       </Form>
-
-
     </div>
   </div>
 
@@ -189,11 +181,9 @@
         activeIndex: 0,
         funcBtns: ['返回', '提交'],
 
-        project_list: [],
         project_id: '',
         project_name: '',
 
-        resource_list: [],
         resource_id: '',
         resource_name: '',
 
@@ -213,12 +203,16 @@
         redis_tag: 'redis',
 
         mirror: 'arp.reg.innertoon.com/qitoon.checkin/qitoon.checkin:20170517101336',
-
       }
     },
 
     mounted() {
-      this.getProjectList()
+      if (this.$route.query.id) {
+        this.resource_id = this.$route.query.id
+        this.getRrsource()
+      } else {
+        this.$Message.warning('没有获取到ID')
+      }
     },
 
     filters: {
@@ -231,7 +225,7 @@
           case 'produce':
             return '生产环境'
           default:
-            return ''
+            break
         }
       }
     },
@@ -247,27 +241,26 @@
             break
         }
       },
-//      // 获取申请资源信息
-//      getRrsource() {
-//        const url = baseUrl.apihost + 'resource/' + this.resource_id
-//        this.$http.get(url, {emulateJSON: true}).then(res => {
-//          console.log("资源信息获取成功:", res)
-//          if (res.body.code === 200 && res.body.result.res == "success") {
-//            // 初始化数据
-//            this.initInfo(res.data.result.msg)
-//          }
-//        })
-//      },
-//      initInfo(data) {
-//        this.project_name = data.project
-//        this.project_id = data.project_id
-//        this.resource_name = data.resource_name
-//        this.environment = data.env
-//      },
-      // 环境切换
+      // 获取申请资源信息
+      getRrsource() {
+        const url = baseUrl.apihost + 'resource/' + this.resource_id
+        this.$http.get(url, {emulateJSON: true}).then(res => {
+          console.log("资源信息获取成功:", res)
+          if (res.body.code === 200 && res.body.result.res == "success") {
+            // 初始化数据
+            this.initInfo(res.data.result.msg)
+          }
+        })
+      },
+      initInfo(data) {
+        this.project_name = data.project
+        this.project_id = data.project_id
+        this.resource_name = data.resource_name
+        this.environment = data.env
+      },
 
-        // 提交
-      onSubmit(index) {
+      // 提交
+      onSubmit() {
         if (!this.resource_name.trim()) {
           this.$Message.warning('部署实例名称不能为空')
           return
@@ -308,7 +301,6 @@
         }
 
         console.log('POST数据', body)
-//        let url = 'http://172.31.30.43:5000/api/' + 'deployment/deployments'
         let url = baseUrl.apihost + 'deployment/deployments'
         this.$http.post(url, JSON.stringify(body)).then(res => {
           console.log('提交成功', res)
@@ -319,48 +311,7 @@
 
       },
 
-      onUnitChange(val) {
-        if (!val) return
-        this.resource_name = ''
-        this.environment = ''
-
-        this.project_id = this.project_list.filter(item => item.item_name === val)[0].item_id
-        this.getDeployList()
-      },
-      onDeployChange(val) {
-        if (!val) return
-        this.resource_id = this.resource_list.filter(item => item.resource === val)[0].id
-        this.environment = this.resource_list.filter(item => item.resource === val)[0].env
-        console.log('this.environment',this.environment)
-      },
-
-        // 请求部署单元列表
-      getProjectList() {
-        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + USER.user_id
-        this.$http.get(url).then(data => {
-          console.log('部署单元列表', data)
-          this.project_list = data.body.result.res
-        }, err => {
-          console.log('error', err)
-        })
-      },
-        // 获取部署单元下对应部署列表
-      getDeployList() {
-        let url = baseUrl.apihost + 'resource/'
-        let query = {}
-        USER.user_id && (query.user_id = USER.user_id)
-        this.project_name && (query.project = this.project_name)
-
-        this.$http.get(url, {
-          params: query
-        }).then(data => {
-          console.log('资源列表', data)
-           this.resource_list = data.body.result.msg.filter(item => item.reservation_status === 'ok')
-        }, err => {
-          console.log('error', err)
-        })
-      },
-        // 检查镜像url
+      // 检查镜像url
       onTest() {
         let url = baseUrl.apihost + ''
         this.$http.post(url, {}).then(data => {
