@@ -364,12 +364,12 @@
         })
       },
       getDbInfoList() {
-//        let url = baseUrl.apihost + 'get_dbinfo/' + this.resource_name
-        let url = '/static/json/getdbinfo.json'
+        let url = baseUrl.apihost + 'get_dbinfo/' + this.resource_name
+//        let url = '/static/json/getdbinfo.json'
         this.$http.get(url).then(data => {
            this.mysql_ip = data.body.result.msg.mysql_ip
            this.redis_ip = data.body.result.msg.redis_ip
-           this.mongo_ip = data.body.result.msg.mongo_ip
+           this.mongodb_ip = data.body.result.msg.mongo_ip
         }, err => {
           console.log('error', err)
         })
