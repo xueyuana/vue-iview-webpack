@@ -102,6 +102,9 @@
 
 <script>
   import {setStroage} from 'tools/cookieAction.js';
+  import common from 'tools/common.js';
+  import {userinfo} from 'tools/user.js';
+  import {getStroage} from 'tools/cookieAction.js'
   import baseUrl from 'tools/common.js'
   import USER from 'tools/user.js'
 
@@ -157,7 +160,7 @@
         formItem: {},
         index: '',
         USER:{
-          userId:getStroage('userInfo').userId
+          userId: getStroage('userInfo').user_id
         }
       }
     },
