@@ -5,7 +5,8 @@ export const breadcrumbData = {
   state: {
     level: {
       level_1: '主页', // 设置默认值
-      level_2: '管理控制台'
+      level_2: '管理控制台',
+      level_3: ''
     }
   },
   // 状态值的改变方法,操作状态值

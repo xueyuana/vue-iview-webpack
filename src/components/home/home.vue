@@ -75,7 +75,12 @@
                     </i-col>
                     <i-col span="20" offset="4">
                         <div class="layout-header">
-                            <Breadcrumb separator=">">
+                            <Breadcrumb separator=">" v-if="$store.state.breadcrumbData.level.level_3">
+                                <Breadcrumb-item href="#">{{ $store.state.breadcrumbData.level.level_1 }}</Breadcrumb-item>
+                                <Breadcrumb-item href="/resource_view">{{ $store.state.breadcrumbData.level.level_2 }}</Breadcrumb-item>
+                                <Breadcrumb-item>{{ $store.state.breadcrumbData.level.level_3 }}</Breadcrumb-item>
+                            </Breadcrumb>
+                            <Breadcrumb separator=">" v-else>
                                 <Breadcrumb-item href="#">{{ $store.state.breadcrumbData.level.level_1 }}</Breadcrumb-item>
                                 <Breadcrumb-item>{{ $store.state.breadcrumbData.level.level_2 }}</Breadcrumb-item>
                             </Breadcrumb>
