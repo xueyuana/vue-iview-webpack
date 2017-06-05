@@ -225,7 +225,7 @@
       onSubmit() {
         if (this.formItem.id) {
           this.loading = true
-          let url = baseUrl.apihost + 'auth/admindetail/' + this.USER.user_id
+          let url = baseUrl.apihost + 'auth/admindetail/' + this.formItem.id
           let params = {
             'user_id': this.formItem.id,
             'admin_user': this.formItem.autho
