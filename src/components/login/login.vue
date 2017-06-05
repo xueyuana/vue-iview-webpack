@@ -175,7 +175,6 @@
                                     userinfo.username=response.body.result.msg.username;
                                     userinfo.user_id=response.body.result.msg.user_id;
                                     userinfo.is_admin=response.body.result.msg.is_admin;
-                                    userinfo.is_root=response.body.result.msg.is_root;
                                     userinfo.department=response.body.result.msg.department;
 
                                     setStroage('userInfo', userinfo)
