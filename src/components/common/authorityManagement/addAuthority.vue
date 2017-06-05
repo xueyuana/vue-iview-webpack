@@ -155,7 +155,10 @@
         searchList: [],
         selected: {},
         formItem: {},
-        index: ''
+        index: '',
+        USER:{
+          userId:getStroage('userInfo').userId
+        }
       }
     },
 
@@ -225,7 +228,7 @@
       onSubmit() {
         if (this.formItem.id) {
           this.loading = true
-          let url = baseUrl.apihost + 'auth/admindetail/' + this.formItem.id
+          let url = baseUrl.apihost + 'auth/admindetail/' + this.USER.userId
           let params = {
             'user_id': this.formItem.id,
             'admin_user': this.formItem.autho
