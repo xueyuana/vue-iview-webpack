@@ -66,44 +66,51 @@ import addAuthority from './components/common/authorityManagement/addAuthority.v
 
 //创建路由对象
 var vueRouters = new VueRouter({
-    routes:[
-        {path:'/',redirect:'login'}, //一开始就重定向到登录页面
-        {name:'login',path:'/login',component:login},
+    routes: [
+        {path: '/', redirect: 'login'}, //一开始就重定向到登录页面
+        {name: 'login', path: '/login', component: login},
 
-        {name:'home',path:'/home',component:home,
+        {
+            name: 'home', path: '/home', component: home,
             children: [
                 // 管理控制台
                 // 普通用户
-                {name:'managementConsole',path:'/management_console',component:managementConsole},
+                {name: 'managementConsole', path: '/management_console', component: managementConsole},
                 //管理员账户
-                {name:'adminConsole',path:'/admin_console',component:adminConsole},
+                {name: 'adminConsole', path: '/admin_console', component: adminConsole},
                 // 项目管理
-                {name:'projectApplication',path:'/project_application',component:projectApplication},
-                {name:'pro_applicationHistory',path:'/pro_application_history',component:pro_applicationHistory},
+                {name: 'projectApplication', path: '/project_application', component: projectApplication},
+                {name: 'pro_applicationHistory', path: '/pro_application_history', component: pro_applicationHistory},
                 // 资源管理
-                {name:'resourceApplication',path:'/resource_application',query: { id: 'ss' },component:resourceApplication},
-                {name:'res_applicationHistory',path:'/res_application_history',component:res_applicationHistory},
+                {
+                    name: 'resourceApplication',
+                    path: '/resource_application',
+                    query: {id: 'ss'},
+                    component: resourceApplication
+                },
+                {name: 'res_applicationHistory', path: '/res_application_history', component: res_applicationHistory},
                 // 资源审批
-                {name:'res_applicationCheck',path:'/res_applicationCheck',component:res_applicationCheck},
+                {name: 'res_applicationCheck', path: '/res_applicationCheck', component: res_applicationCheck},
 
                 // 部署管理
-                {name:'deployment',path:'/deployment',component:deployment},
-                {name:'applicationDeployment',path:'/application_deployment',component:applicationDeployment},
-                {name:'deployHistory',path:'/deploy_history',component:deployHistory},
+                {name: 'deployment', path: '/deployment', component: deployment},
+                {name: 'applicationDeployment', path: '/application_deployment', component: applicationDeployment},
+                {name: 'deployHistory', path: '/deploy_history', component: deployHistory},
                 // 工作台
-                {name:'processList',path:'/process_list',component:processList},
+                {name: 'processList', path: '/process_list', component: processList},
 
-                {name:'myWorkbench_ordinary',path:'/my_workbench',component:managementConsole}, // 加载普通用户管理控制台组件
-                {name:'myWorkbench_admin',path:'/my_workbench',component:adminConsole}, // 加载管理员管理控制台组件
+                {name: 'myWorkbench_ordinary', path: '/my_workbench', component: managementConsole}, // 加载普通用户管理控制台组件
+                {name: 'myWorkbench_admin', path: '/my_workbench', component: adminConsole}, // 加载管理员管理控制台组件
 
-                {name:'myResource',path:'/my_resource',component:myResource},
-                {name:'resourceView',path:'/resource_view',component:resourceView,
-                    children:[
-                        {name: 'resourceTree',path:'/resource_view/tree_map/:resource_id',component:resourceTree}
-                        ]
+                {name: 'myResource', path: '/my_resource', component: myResource},
+                {
+                    name: 'resourceView', path: '/resource_view', component: resourceView,
+                    children: [
+                        {name: 'resourceTree', path: '/resource_view/tree_map/:resource_id', component: resourceTree}
+                    ]
                 },
                 // 权限管理
-                {name:'addAuthority',path:'/add_authority',component:addAuthority}
+                {name: 'addAuthority', path: '/add_authority', component: addAuthority}
             ]
         }
     ]
@@ -112,88 +119,97 @@ var vueRouters = new VueRouter({
 // 导入状态池
 import {store} from './store/store.js';
 
+
 vueRouters.beforeEach((to, from, next) => {
-  let nav = {}
-  let bread = {}
-  bread.level_1 = '主页'
-  switch (to.name) {
-    // 管理控制台 > 普通用户
-    case 'managementConsole':
-        bread.level_2 = '管理控制台'
-        break
-    // 管理控制台 > 管理员账户
-    case 'adminConsole':
-        bread.level_2 = '管理控制台'
-      break
-    // 部署单元管理
-    case 'projectApplication':
-      nav.openNames = '1'
-      nav.activeName = '11'
-      bread.level_2 = '创建部署单元'
-      break
-    case 'pro_applicationHistory':
-      nav.openNames = '1'
-      nav.activeName = '12'
-      bread.level_2 = '部署单元查询'
-      break
-    // 资源管理
-    case 'resourceApplication':
-      nav.openNames = '2'
-      nav.activeName = '21'
-      bread.level_2 = '资源申请'
-      break
-    case 'res_applicationHistory':
-      nav.openNames = '2'
-      nav.activeName = '22'
-      bread.level_2 = '资源列表'
-      break
-    case 'res_applicationCheck':
-      bread.level_2 = '资源审批'
-      break
-    // 持续交付
-    case 'applicationDeployment':
-      nav.openNames = '3'
-      nav.activeName = '31'
-      bread.level_2 = '应用部署'
-      break
-    case 'deployHistory':
-      nav.openNames = '3'
-      nav.activeName = '32'
-      bread.level_2 = '部署历史'
-      break
-    // 工作台
-    case 'myWorkbench_ordinary':
-      nav.openNames = '4'
-      nav.activeName = '41'
-      bread.level_2 = '我的工作台'
-      break
-      case 'myWorkbench_admin':
-          nav.openNames = '4'
-          nav.activeName = '41'
-          bread.level_2 = '我的工作台'
-          break
-    case 'myResource':
-      nav.openNames = '4'
-      nav.activeName = '42'
-      bread.level_2 = '我的资源'
-      break
-    case 'resourceView':
-      nav.openNames = '4'
-      nav.activeName = '43'
-      bread.level_2 = '资源视图'
-      break
-    // 权限管理
-    case 'addAuthority':
-      nav.openNames = '5'
-      nav.activeName = '51'
-      bread.level_2 = '添加权限'
-      break
-    default:
-        break
-  }
-  store.commit('getActiveItem', nav)
-  store.commit('getLevel', bread)
-  next()
+    let nav = {}
+    let bread = {}
+    bread.level_1 = '主页'
+    switch (to.name) {
+        // 管理控制台 > 普通用户
+        case 'managementConsole':
+            bread.level_2 = '管理控制台'
+            break
+        // 管理控制台 > 管理员账户
+        case 'adminConsole':
+            bread.level_2 = '管理控制台'
+            break
+        // 部署单元管理
+        case 'projectApplication':
+            nav.openNames = '1'
+            nav.activeName = '11'
+            bread.level_2 = '创建部署单元'
+            break
+        case 'pro_applicationHistory':
+            nav.openNames = '1'
+            nav.activeName = '12'
+            bread.level_2 = '部署单元查询'
+            break
+        // 资源管理
+        case 'resourceApplication':
+            nav.openNames = '2'
+            nav.activeName = '21'
+            bread.level_2 = '资源申请'
+            break
+        case 'res_applicationHistory':
+            nav.openNames = '2'
+            nav.activeName = '22'
+            bread.level_2 = '资源列表'
+            break
+        case 'res_applicationCheck':
+            bread.level_2 = '资源审批'
+            break
+        // 持续交付
+        case 'applicationDeployment':
+            nav.openNames = '3'
+            nav.activeName = '31'
+            bread.level_2 = '应用部署'
+            break
+        case 'deployHistory':
+            nav.openNames = '3'
+            nav.activeName = '32'
+            bread.level_2 = '部署历史'
+            break
+        // 工作台
+        case 'myWorkbench_ordinary':
+            nav.openNames = '4'
+            nav.activeName = '41'
+            bread.level_2 = '我的工作台'
+            break
+        case 'myWorkbench_admin':
+            nav.openNames = '4'
+            nav.activeName = '41'
+            bread.level_2 = '我的工作台'
+            break
+        case 'myResource':
+            nav.openNames = '4'
+            nav.activeName = '42'
+            bread.level_2 = '我的资源'
+            break
+        case 'resourceView':
+            nav.openNames = '4'
+            nav.activeName = '43'
+            bread.level_2 = '资源视图'
+            break
+        // 权限管理
+        case 'addAuthority':
+            nav.openNames = '5'
+            nav.activeName = '51'
+            bread.level_2 = '添加权限'
+            break
+
+        case 'resourceTree':
+            nav.openNames = '4'
+            nav.activeName = '43'
+            bread.level_2 = '资源视图'
+            break
+
+        default:
+            break
+    }
+    store.commit('getActiveItem', nav)
+    store.commit('getLevel', bread)
+
+    next();
 })
 
 
@@ -203,7 +219,7 @@ new Vue({
     // 使用状态池
     store,
     //在Vue实例上使用路由
-    router:vueRouters,
+    router: vueRouters,
     //render:c=>c(App)//使用webpack,渲染App.vue这个根组件
     render: (function (createElement) {
         return createElement(App);

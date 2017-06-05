@@ -117,7 +117,8 @@
           {
             title: '发起日期',
             key: 'date',
-            align: 'center'
+            align: 'center',
+            "sortable": true
           },
           {
             title: '资源名称',
@@ -412,18 +413,20 @@
       //重新创建资源
       gotoReAdd(index){
 
-//        const url = common.apihost + 'approval/reservation';
-//        let resourcejson = {"resource_id": this.queryData[index].id}
-//        this.$http.put(url, resourcejson, {emulateJSON: true}).then(function (response) {
-//          if (response.body.code === 200) {
-//            this.$Message.success('资源预留成功!');
-//            console.log("添加资源预留");
-//            this.$router.push({name: 'applicationDeployment', query: {id: this.filterDate[index].id}});
-//          }
-//          // 成功回调
-//        }, function () {
-//
-//        });
+        const url = common.apihost + 'approval/reservation/'+this.queryData[index].id;
+
+        this.$http.put(url, {emulateJSON: true}).then(function (response) {
+         if (response.body.code === 200) {
+            this.$Message.success('资源预留成功!');
+           // console.log("添加资源预留");
+           // this.$router.push({name: 'applicationDeployment', query: {id: this.filterDate[index].id}});
+          }else{
+           this.$Message.success('资源失败再次预留!');
+         }失败
+          // 成功回调
+        }, function () {
+
+       });
       },
       //跳转到编辑页面
       gotoEdit(index){

@@ -13,6 +13,8 @@ import { openMenu } from './openMenu.js';
 import { resourceData } from './resourceData.js';
 // 进入审批页面的源路径
 import { path } from './originPath.js';
+// 部署实例的架构视图
+import { graph } from './graph.js';
 
 export const store = new Vuex.Store({
     modules: {
@@ -21,5 +23,6 @@ export const store = new Vuex.Store({
         openMenu:openMenu,
         resourceData:resourceData,
         path:path,
+        graph:graph
     }
 });

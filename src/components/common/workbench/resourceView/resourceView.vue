@@ -65,41 +65,68 @@
             this.getDeployUit();
         },
         methods:{
+            // 获取拥有资源的部署单元的信息
             getDeployUit() {
-                // agg_by=project&agg_expr=res_id&agg_expr=resource_name
                 let userInfo = JSON.parse(localStorage.getItem('userInfo'));
                 let url='';
-                // 查询条件
-//                let query = {
-//                    agg_by: "project",
-//                    agg_expr: "res_id",
-//                    agg_expr: "resource_name"
-//                };
+
                 if (!userInfo.is_admin) { //普通用户
                     url = common.apihost + 'resource/?user_id='+userInfo.user_id+'&agg_by=project&agg_expr=res_id&agg_expr=resource_name';
                 }else  {
                     url = common.apihost + 'resource/?agg_by=project&agg_expr=res_id&agg_expr=resource_name';
                 }
 
-                // 查询条件
                 this.$http.get(url)
                         .then(response => {
                                 console.log(response);
                                 if (response.body.code === 200) { // 请求成功
                                     let backDatas = response.body.result.msg;
                                     this.menuDatas=backDatas;
-//
                                 }
                         });
             },
+
+            //  根据id获取name
+            getNameById (id) {
+                // 设置面包屑导航的数据
+                for(let i=0;i<this.menuDatas.length;i++) {
+                    let menuData=this.menuDatas[i];
+                    for(let j=0;j<menuData.ret.length;j++) {
+                        let retObj=menuData.ret[j];
+                        if(retObj.res_id===id) {
+                            return retObj.resource_name
+                        }
+                    }
+                }
+            },
+
             // 跳转到相应的资源架构图
             goResourceTree (name) {
                 console.log(name);
+
+                // 跳转到部署实例的视图
+                this.$router.push({ name:"resourceTree",params:{ resource_id:name}});
+
+                // 修改面包屑导航的数据
+                this.$store.commit('getLevel',{
+                            level_1: this.$store.state.breadcrumbData.level.level_1,
+                            level_2: this.$store.state.breadcrumbData.level.level_2,
+                            level_3: this.getNameById(name)
+                });
+
                 // 根据id获取部署实例的架构数据
+                const url=common.apihost+"bench/source_unit_detail/"+name;
+                this.$http.get(url)
+                        .then(response => {
+                                console.log(response);
+                                if (response.body.code === 200) { // 请求成功
+//                                     let backDatas = response.body.result.msg;
 
-                // 将数据保存到状态池中
+                                    // 将数据保存到状态池中
+                                    // this.$store.commit("getGraphDatas",backDatas);
 
-                this.$router.push({ name:"resourceTree",params:{ resource_id:name}})
+                                }
+                        });
             }
         }
     }

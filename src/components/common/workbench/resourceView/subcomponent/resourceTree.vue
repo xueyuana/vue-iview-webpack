@@ -18,7 +18,7 @@
 
      var echarts = require('echarts');
     // 关系图
-    require('echarts/lib/chart/graph');
+     require('echarts/lib/chart/graph');
 
     export default{
         data (){
@@ -147,7 +147,7 @@
             }
         },
         mounted (){
-          this.getDatas();
+            this.getDatas();
         },
         methods: {
             // 获取数据
@@ -155,18 +155,12 @@
                 // 图的尺寸
                 let width=600;
                 let height=400;
+
                 // 初始坐标
-                let divObj=document.getElementById("treeContent");
-                console.log(divObj.offsetLeft);
-                console.log(divObj.offsetTop);
-
-
-                let x=width/2;
                 let y=300;
-                // y轴每次递增 200
+                // y轴每次递增
                 let stepY=100;
                 // x轴进行平分
-
 
                 // 给每一个点配置坐标 指定位置
                 for(let i=0;i<this.datas.length;i++) {
@@ -193,7 +187,7 @@
                     switch (dataObj.layerName) {
                         case "deployInstance":
                             categories.push({
-                                name:'部署单元',
+                                name:'部署实例',
                                 itemStyle:{
                                     normal: {
                                     color: '#C71919'
@@ -267,7 +261,7 @@
 
                 // 基于准备好的dom，初始化echarts实例
                 let myChart = echarts.init(document.getElementById('treeContent'));
-                //  myChart.showLoading();
+//                  myChart.showLoading();
                 let option = {
 //                    backgroundColor:'#5cff8f',
                     width:  width,
@@ -726,6 +720,7 @@
 //                            ],
                             links:[],
                             categories: categories,
+
                             lineStyle: {
                                 normal: {
                                     opacity: 0.9,
@@ -754,7 +749,7 @@
                             y: child.y,
                             category: i,
                             symbol: symbol,
-                            symbolSize:[100,100],
+                            symbolSize:[80,160],
                             itemStyle:{
                                 normal: {
 //                                    color: 'blue',
