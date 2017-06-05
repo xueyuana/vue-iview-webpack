@@ -413,9 +413,9 @@
       //重新创建资源
       gotoReAdd(index){
 
-        const url = common.apihost + 'approval/reservation';
-       let resourcejson = {"resource_id": this.queryData[index].id}
-        this.$http.put(url, resourcejson, {emulateJSON: true}).then(function (response) {
+        const url = common.apihost + 'approval/reservation/'+this.queryData[index].id;
+
+        this.$http.put(url, {emulateJSON: true}).then(function (response) {
          if (response.body.code === 200) {
             this.$Message.success('资源预留成功!');
            // console.log("添加资源预留");
