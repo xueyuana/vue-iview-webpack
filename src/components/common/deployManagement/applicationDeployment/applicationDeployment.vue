@@ -333,6 +333,7 @@
         if (!val) return
         this.resource_id = this.resource_list.filter(item => item.resource === val)[0].id
         this.environment = this.resource_list.filter(item => item.resource === val)[0].env
+        this.getDbInfoList()
         console.log('this.environment',this.environment)
       },
 
@@ -358,6 +359,17 @@
         }).then(data => {
           console.log('资源列表', data)
            this.resource_list = data.body.result.msg.filter(item => item.reservation_status === 'ok')
+        }, err => {
+          console.log('error', err)
+        })
+      },
+      getDbInfoList() {
+//        let url = baseUrl.apihost + 'get_dbinfo/' + this.resource_name
+        let url = '/json/getdbinfo.json'
+        this.$http.get(url).then(data => {
+           this.mysql_ip = data.body.result.msg.mysql_ip
+           this.redis_ip = data.body.result.msg.redis_ip
+           this.mongo_ip = data.body.result.msg.mongo_ip
         }, err => {
           console.log('error', err)
         })
