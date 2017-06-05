@@ -365,7 +365,7 @@
       },
       getDbInfoList() {
 //        let url = baseUrl.apihost + 'get_dbinfo/' + this.resource_name
-        let url = '/json/getdbinfo.json'
+        let url = '/static/json/getdbinfo.json'
         this.$http.get(url).then(data => {
            this.mysql_ip = data.body.result.msg.mysql_ip
            this.redis_ip = data.body.result.msg.redis_ip
