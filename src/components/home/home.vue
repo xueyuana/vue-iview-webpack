@@ -257,6 +257,9 @@
                     case '22': //资源申请历史
                         this.$router.push({name: 'res_applicationHistory'});
                         break;
+                    case '23': //我的申请
+                        this.$router.push({name: 'myApplication'});
+                        break;
                     case '31': //应用部署
                         this.$router.push({name: 'applicationDeployment'});
                         break;

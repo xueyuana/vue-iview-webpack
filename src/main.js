@@ -45,6 +45,7 @@ import pro_applicationHistory from './components/common/projectManagement/applic
 // 资源管理
 import resourceApplication from './components/common/resourceManagement/resourceApplication/resourceApplication.vue';
 import res_applicationHistory from './components/common/resourceManagement/applicationHistory/applicationHistory.vue';
+import myApplication from './components/common/resourceManagement/myApplication/myApplication.vue';
 //资源审批
 import res_applicationCheck from './components/common/resourceManagement/resourceApplication/resourceCheck.vue';
 // 部署管理
@@ -89,6 +90,7 @@ var vueRouters = new VueRouter({
                     component: resourceApplication
                 },
                 {name: 'res_applicationHistory', path: '/res_application_history', component: res_applicationHistory},
+                {name: 'myApplication', path: '/my_application', component: myApplication},
                 // 资源审批
                 {name: 'res_applicationCheck', path: '/res_applicationCheck', component: res_applicationCheck},
 
@@ -154,6 +156,11 @@ vueRouters.beforeEach((to, from, next) => {
             nav.openNames = '2'
             nav.activeName = '22'
             bread.level_2 = '部署实例列表'
+            break
+        case 'myApplication':
+            nav.openNames = '2'
+            nav.activeName = '23'
+            bread.level_2 = '我的申请'
             break
         case 'res_applicationCheck':
             bread.level_2 = '部署实例审批'
