@@ -45,10 +45,11 @@
                             </Submenu>
                             <Submenu name="2">
                                 <template slot="title">
-                                   资源管理
+                                    部署实例管理
                                 </template>
-                                <Menu-item name="21">资源申请</Menu-item>
-                                <Menu-item name="22">资源列表</Menu-item>
+                                <Menu-item name="21">部署实例申请</Menu-item>
+                                <Menu-item name="22">部署实例列表</Menu-item>
+                                <Menu-item name="23">我的申请</Menu-item>
                             </Submenu>
                             <Submenu name="3">
                                 <template slot="title">

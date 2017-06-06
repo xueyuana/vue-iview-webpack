@@ -148,15 +148,15 @@ vueRouters.beforeEach((to, from, next) => {
         case 'resourceApplication':
             nav.openNames = '2'
             nav.activeName = '21'
-            bread.level_2 = '资源申请'
+            bread.level_2 = '部署实例申请'
             break
         case 'res_applicationHistory':
             nav.openNames = '2'
             nav.activeName = '22'
-            bread.level_2 = '资源列表'
+            bread.level_2 = '部署实例列表'
             break
         case 'res_applicationCheck':
-            bread.level_2 = '资源审批'
+            bread.level_2 = '部署实例审批'
             break
         // 持续交付
         case 'applicationDeployment':
