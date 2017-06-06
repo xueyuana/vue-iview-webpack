@@ -21,16 +21,26 @@
         <Row :gutter="16">
           <Col class="apply-content-form-item" span="6">
           <Form-item label="所属部署单元:">
-            <Select v-model="project_name" :placeholder="project_list.length ? '请选择' : '无'" @on-change="onUnitChange" style="min-width: 100px">
-              <Option v-for="item in project_list" :value="item.item_name">{{item.item_name}}</Option>
-            </Select>
+            <template v-if="resource_id">
+              <Input :value="project_name" disabled></Input>
+            </template>
+            <template v-else>
+              <Select v-model="project_name" :placeholder="project_list.length ? '请选择' : '无'" @on-change="onUnitChange" style="min-width: 100px">
+                <Option v-for="item in project_list" :value="item.item_name">{{item.item_name}}</Option>
+              </Select>
+            </template>
           </Form-item>
           </Col>
           <Col class="apply-content-form-item" span="6">
           <Form-item label="部署实例名称:">
-            <Select v-model="resource_name" :placeholder="resource_list.length ? '请选择' : '无'" @on-change="onDeployChange" style="min-width: 100px">
-              <Option v-for="item in resource_list" :value="item.resource">{{item.resource}}</Option>
-            </Select>
+            <template v-if="resource_id">
+              <Input :value="resource_name" disabled></Input>
+            </template>
+            <template v-else>
+              <Select v-model="resource_name" :placeholder="resource_list.length ? '请选择' : '无'" @on-change="onDeployChange" style="min-width: 100px">
+                <Option v-for="item in resource_list" :value="item.resource">{{item.resource}}</Option>
+              </Select>
+            </template>
           </Form-item>
           </Col>
           <Col class="apply-content-form-item" span="6">
@@ -218,7 +228,12 @@
 
       }
     },
-
+    watch: {
+      '$route'(to, from){
+        this.resource_id = '';
+        this.getProjectList()
+      }
+    },
     mounted() {
       this.userInfo = getStroage('userInfo')
       if (this.$route.query.id) {
@@ -246,6 +261,10 @@
     },
 
     methods: {
+        getStatus (urlStr) {
+          var urlStrArr = urlStr.split('/')
+          return urlStrArr[urlStrArr.length - 1]
+        },
       onLink(index) {
         switch (index) {
           case 0:
@@ -398,8 +417,8 @@
           console.log("资源信息获取成功:", res)
           if (res.body.code === 200 && res.body.result.res == "success") {
             // 初始化数据
-            this.initInfo(res.data.result.msg)
-            this.getDbInfoList()
+            this.initInfo(res.data.result.msg);
+            this.getDbInfoList();
           }
         })
       },

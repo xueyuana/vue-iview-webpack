@@ -95,7 +95,6 @@ var vueRouters = new VueRouter({
                 {name: 'res_applicationCheck', path: '/res_applicationCheck', component: res_applicationCheck},
 
                 // 部署管理
-                {name: 'deployment', path: '/deployment', component: deployment},
                 {name: 'applicationDeployment', path: '/application_deployment', component: applicationDeployment},
                 {name: 'deployHistory', path: '/deploy_history', component: deployHistory},
                 // 工作台

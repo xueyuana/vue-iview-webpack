@@ -320,7 +320,7 @@
       },
       //新增一条资源
       gotoAdd(index){
-        this.$router.push({name: 'deployment', query: {id: this.filterDate[index].id}});
+        this.$router.push({name: 'applicationDeployment', query: {id: this.filterDate[index].id}});
         /*const url = common.apihost + 'approval/reservation';
         let resourcejson = {"resource_id": this.queryData[index].id}
         this.$http.post(url, resourcejson, {emulateJSON: true}).then(function (response) {
