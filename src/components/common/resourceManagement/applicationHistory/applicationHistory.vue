@@ -403,7 +403,7 @@
           if (response.body.code === 200) {
             // this.$Message.success('提交成功!');
             console.log("添加资源预留");
-            this.$router.push({name: 'deployment', query: {id: this.filterDate[index].id}});
+            this.$router.push({name: 'applicationDeployment', query: {id: this.filterDate[index].id}});
           }
           // 成功回调
         }, function () {

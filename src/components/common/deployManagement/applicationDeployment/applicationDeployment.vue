@@ -57,12 +57,12 @@
         <Row :gutter="16">
           <Col class="apply-content-form-item" span="8">
           <Form-item label="执行目标:" style="width: 210px">
-            <Input v-model="mysql_tag"></Input>
+            <Input v-model="mysql_tag" disabled></Input>
           </Form-item>
           </Col>
           <Col class="apply-content-form-item" span="8">
           <Form-item label="IP:" style="width: 210px">
-            <Input v-model="mysql_ip"></Input>
+            <Input v-model="mysql_ip" disabled></Input>
           </Form-item>
           </Col>
         </Row>
@@ -74,12 +74,12 @@
         <Row :gutter="16">
           <Col class="apply-content-form-item" span="8">
           <Form-item label="执行目标:" style="width: 210px">
-            <Input v-model="mongodb_tag"></Input>
+            <Input v-model="mongodb_tag" disabled></Input>
           </Form-item>
           </Col>
           <Col class="apply-content-form-item" span="8">
           <Form-item label="IP:" style="width: 210px">
-            <Input v-model="mongodb_ip"></Input>
+            <Input v-model="mongodb_ip" disabled></Input>
           </Form-item>
           </Col>
         </Row>
@@ -91,12 +91,12 @@
         <Row :gutter="16">
           <Col class="apply-content-form-item" span="8">
           <Form-item label="执行目标:" style="width: 210px">
-            <Input v-model="redis_tag"></Input>
+            <Input v-model="redis_tag" disabled></Input>
           </Form-item>
           </Col>
           <Col class="apply-content-form-item" span="8">
           <Form-item label="IP:" style="width: 210px">
-            <Input v-model="redis_ip"></Input>
+            <Input v-model="redis_ip" disabled></Input>
           </Form-item>
           </Col>
         </Row>
@@ -205,13 +205,13 @@
         release_notes: '',
 
         mongodb_context: '',
-        mongodb_ip: '172.20.110',
+        mongodb_ip: '',
         mongodb_tag: 'mongo',
         mysql_context: '',
-        mysql_ip: '172.20.119',
+        mysql_ip: '',
         mysql_tag: 'mysql',
         redis_context: '',
-        redis_ip: '172.20.120',
+        redis_ip: '',
         redis_tag: 'redis',
 
         mirror: '',
@@ -221,7 +221,13 @@
 
     mounted() {
       this.userInfo = getStroage('userInfo')
-      this.getProjectList()
+      if (this.$route.query.id) {
+        this.resource_id = this.$route.query.id
+        this.getRrsource()
+      } else {
+        this.getProjectList()
+      }
+
     },
 
     filters: {
@@ -340,6 +346,7 @@
         // 请求部署单元列表
       getProjectList() {
         let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + this.userInfo.user_id
+//        let url = '/static/json/applicationDeployment/iteminfo.json'
         this.$http.get(url).then(data => {
           console.log('部署单元列表', data)
           this.project_list = data.body.result.res
@@ -350,6 +357,7 @@
         // 获取部署单元下对应部署列表
       getDeployList() {
         let url = baseUrl.apihost + 'resource/'
+//        let url = '/static/json/applicationDeployment/resource.json'
         let query = {}
         this.userInfo.user_id && (query.user_id = this.userInfo.user_id)
         this.project_name && (query.project = this.project_name)
@@ -365,7 +373,7 @@
       },
       getDbInfoList() {
         let url = baseUrl.apihost + 'resource/get_dbinfo/' + this.resource_id
-//        let url = '/static/json/getdbinfo.json'
+//        let url = '/static/json/applicationDeployment/getdbinfo.json'
         this.$http.get(url).then(data => {
            this.mysql_ip = data.body.result.msg.mysql_ip
            this.redis_ip = data.body.result.msg.redis_ip
@@ -382,7 +390,25 @@
         }, err => {
           this.$Message.warning('此镜像可用')
         })
-      }
+      },
+      // 获取申请资源信息
+      getRrsource() {
+        const url = baseUrl.apihost + 'resource/' + this.resource_id
+        this.$http.get(url, {emulateJSON: true}).then(res => {
+          console.log("资源信息获取成功:", res)
+          if (res.body.code === 200 && res.body.result.res == "success") {
+            // 初始化数据
+            this.initInfo(res.data.result.msg)
+            this.getDbInfoList()
+          }
+        })
+      },
+      initInfo(data) {
+        this.project_name = data.project
+        this.project_id = data.project_id
+        this.resource_name = data.resource_name
+        this.environment = data.env
+      },
     }
   }
 </script>
