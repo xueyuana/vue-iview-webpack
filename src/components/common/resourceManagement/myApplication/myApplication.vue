@@ -162,7 +162,7 @@
                         let text="";
                         let status=this.filterDate[params.index].formStatus;
 
-                        if (status == "未提交") {
+                        if (status == "待提交") {
                             color="red";
                             text="未提交";
                             return h('Button', {
@@ -177,7 +177,7 @@
                                     }
                                 }
                             }, text);
-                        }else {
+                        }else if(status == "已提交") {
                             color="blue";
                             text="已提交";
                             return h('Button', {
