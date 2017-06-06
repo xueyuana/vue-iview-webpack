@@ -5,18 +5,10 @@
       <Form :label-width="100">
         <Row>
           <Col span="6">
-          <Form-item label="发起人">
+          <Form-item label="归属人">
             <Input placeholder="请输入" v-model="formItem.name"></Input>
           </Form-item>
-          <Form-item label="审批状态">
-            <Select placeholder="请选择" v-model="formItem.approval_status">
-              <Option value=""> 流程不存在</Option>
-              <Option value=""> 审批完成</Option>
-              <Option value=""> 资源不足</Option>
-              <Option value="">审批不通过</Option>
 
-            </Select>
-          </Form-item>
           </Col>
           <Col span="8">
           <Form-item label="发起日期">
@@ -36,20 +28,15 @@
               </Col>
             </Row>
           </Form-item>
-          <Form-item label="表单状态">
-            <Select placeholder="请选择" v-model="formItem.formStatus">
-              <Option value="待提交">待提交</Option>
-              <Option value="已提交">已提交</Option>
-            </Select>
-          </Form-item>
+
           </Col>
           <Col span="6">
-          <Form-item label="资源名称">
+          <Form-item label="实例名称">
             <Input placeholder="请输入" v-model="formItem.resource_name"></Input>
           </Form-item>
 
 
-          <Form-item label="所属部署单元">
+          <Form-item label="部署单元">
             <Input v-model="formItem.project" placeholder="请输入"></Input>
 
           </Form-item>
@@ -110,48 +97,30 @@
           }
         }, columns: [
           {
-            title: '发起人',
+            title: '归属人',
             key: 'name',
             align: 'center'
           },
           {
-            title: '发起日期',
+            title: '部署时间',
             key: 'date',
             align: 'center',
             "sortable": true
           },
           {
-            title: '资源名称',
-            key: 'resource',
-            align: 'center',
-            render: (h, params) => {
-              //判断是否是管理员只有管理员才能点击
-              if (getStroage('userInfo').is_admin) {
-                return h('a', {
-                  on: {
-                    click: () => {
-                      this.gotoCheck(params.index);
-                    }
-                  }
-                }, params.row['resource'])
-              } else {
-                return h('div', params.row['resource']);
-              }
-            }
-          },
-          {
-            title: '表单状态',
-            key: 'formStatus',
-            align: 'center'
-          },
-          {
-            title: '审批状态',
-            key: 'approval_status',
-            align: 'center'
-          },
-          {
-            title: '所属部署单元',
+            title: '部署单元',
             key: 'project',
+            align: 'center'
+          },
+          {
+            title: '实例名称',
+            key: 'resource',
+            align: 'center'
+
+          },
+          {
+            title: '部署状态',
+            key: 'reservation_status',
             align: 'center'
           },
           {
@@ -159,7 +128,7 @@
             key: 'operate',
             align: 'center',
             render: (h, params) => {
-              if (this.filterDate[params.index].reservation_status == "ok") {
+                    if (this.filterDate[params.index].reservation_status == "部署成功") {
                 return h('div', [
                   h('Button', {
                     props: {
@@ -171,66 +140,55 @@
                     },
                     on: {
                       click: () => {
-                        this.gotoAdd(params.index);
-                      }
-                    }
-                  }, '部署')])
-              } else if (this.filterDate[params.index].reservation_status == "unreserved") {
-                if (this.filterDate[params.index].approval_status == "审批中") {
-                  return h('div', [
-                    h('div', {
-                      props: {
-                        size: 'small'
-                      },
-                      style: {
-                        marginRight: '5px'
-                      }
-                    }, '编辑')])
-                } else if (this.filterDate[params.index].approval_status == "审批完成") {
-                  return h('div', [
-                    h('div', {
-                      props: {
-                        size: 'small'
-                      },
-                      style: {
-                        marginRight: '5px'
-                      }
-                    }, '部署')]);
-                } else {
-                  return h('div', [
-                    h('Button', {
-                      props: {
-                        type: 'primary',
-                        size: 'small'
-                      },
-                      style: {
-                        marginRight: '5px'
-                      },
-                      on: {
-                        click: () => {
-                          this.gotoEdit(params.index);
-                        }
-                      }
-                    }, '编辑')])
-                }
+                      this.gotoShow(params.index);
+                          }
+                       }
+                    }, '查看')])
+                }else if (this.filterDate[params.index].reservation_status == "等待中") {
+                        return h('div', [
+                          h('div', {
+                            props: {
+                              type: 'primary',
+                              size: 'small'
+                            },
+                            style: {
+                              marginRight: '5px'
+                            }
 
-              } else {
-                this.filterDate[params.index].approval_status = "资源不足";
-                return h('div', [
-                  h('Button', {
-                    props: {
-                      type: 'primary',
-                      size: 'small'
-                    },
-                    style: {
-                      marginRight: '5px'
-                    }, on: {
-                      click: () => {
-                        this.gotoReAdd(params.index);
-                      }
+                      }, '部署')])
+                      }else if (this.filterDate[params.index].reservation_status == "部署失败") {
+                      return h('div', [
+                        h('Button', {
+                          props: {
+                            type: 'primary',
+                            size: 'small'
+                          },
+                          style: {
+                            marginRight: '5px'
+                          },
+                          on: {
+                            click: () => {
+                            this.gotoReAdd(params.index);
                     }
-                  }, '重建')]);
-              }
+                    }
+                    }, '重建')])
+                    }else if (this.filterDate[params.index].reservation_status == "未部署") {
+                          return h('div', [
+                            h('Button', {
+                              props: {
+                                type: 'primary',
+                                size: 'small'
+                              },
+                              style: {
+                                marginRight: '5px'
+                              },
+                              on: {
+                                click: () => {
+                                this.gotoAdd(params.index);
+                        }
+                        }
+                        }, '部署')])
+                        }
             }
           }
         ],
@@ -244,36 +202,7 @@
           project: ""//所属部署单元
         },
         queryData: [
-          {
-            name: 'sdfsd',
-            date: 'sdfsf',
-            resource: 'sdfsf',
-            formStatus: 'sdfdsf',
-            approval_status: 'success',
-            project: 'sdfsf',
-            id: '123',
-            reservation_status: ""
-          },
-          {
-            name: 'sdfsd',
-            date: 'sdfsf',
-            resource: 'sdfsf',
-            formStatus: 'sdfdsf',
-            approval_status: '流程不存在',
-            project: 'sdfsf',
-            id: '123',
-            reservation_status: ""
-          },
-          {
-            name: 'sdfsd',
-            date: 'sdfsf',
-            resource: 'sdfsf',
-            formStatus: 'sdfdsf',
-            approval_status: 'processing',
-            project: 'sdfsf',
-            id: '123',
-            reservation_status: ""
-          }
+
         ],
         // 分页数据
         filterDate: [],
@@ -290,11 +219,7 @@
     methods: {
       // 查找
       onCheck() {
-        //取得资源申请列表数据
-//        let userid= userinfo.user_id;
-        console.log(this.queryData)
 
-        //取得资源申请列表数据
         let userid = getStroage('userInfo').user_id;
         let ifadmin = getStroage('userInfo').is_admin;
         let url = "";
@@ -318,24 +243,29 @@
 
           console.log(response.body.result.msg);
           if (response.body.code === 200 && response.body.result.res == "success") {
-            this.queryData = response.body.result.msg;
+
             let msgs = response.body.result.msg;
 
             for (var index in msgs) {
-              if (msgs[index].approval_status == "unsubmit") {
-                this.queryData[index].approval_status = "流程不存在";
+             //只显示申请成功的
+              if (msgs[index].approval_status === "success") {
+                if(msgs[index].reservation_status === "ok"){
+                  msgs[index].reservation_status="部署成功";
+                }
+                if(msgs[index].reservation_status === "fail"){
+                  msgs[index].reservation_status="部署失败";
+                }
+                if(msgs[index].reservation_status === "reserving"){
+                  msgs[index].reservation_status="等待中";
+                }
+                if(msgs[index].reservation_status === "unreserved"){
+                  msgs[index].reservation_status="未部署";
+                }
+                this.queryData.push(msgs[index]);
               }
-              if (msgs[index].approval_status == "processing") {
-                this.queryData[index].approval_status = "审批中";
-              }
-              if (msgs[index].approval_status == "success") {
-                this.queryData[index].approval_status = "审批完成";
-              }
-              if (msgs[index].approval_status == "failed") {
-                this.queryData[index].approval_status = "审批不通过";
-              }
-            }
 
+            }
+            console.log(this.queryData);
             this.filterDate = this.mockTableData(this.queryData, this.pageSize, 1)
           }
           // 成功回调
@@ -365,24 +295,17 @@
         let query = {};
         this.$http.get(url, {emulateJSON: true}).then(function (response) {
 
-          console.log(response.body.result.msg);
+          console.log('实例列表'+response.body.result.msg);
           if (response.body.code === 200 && response.body.result.res == "success") {
-            this.queryData = response.body.result.msg;
+           // this.queryData = response.body.result.msg;
             let msgs = response.body.result.msg;
 
             for (var index in msgs) {
-              if (msgs[index].approval_status == "unsubmit") {
-                this.queryData[index].approval_status = "流程不存在";
-              }
-              if (msgs[index].approval_status == "processing") {
-                this.queryData[index].approval_status = "审批中";
-              }
+            //只显示审批完成的
               if (msgs[index].approval_status == "success") {
-                this.queryData[index].approval_status = "审批完成";
+                this.queryData.push(msgs[index]);
               }
-              if (msgs[index].approval_status == "failed") {
-                this.queryData[index].approval_status = "审批不通过";
-              }
+
             }
 
             this.filterDate = this.mockTableData(this.queryData, this.pageSize, 1)
@@ -429,16 +352,7 @@
 
        });
       },
-      //跳转到编辑页面
-      gotoEdit(index){
-        console.log(this.queryData[index].id);
-        this.$router.push({name: 'resourceApplication', query: {id: this.filterDate[index].id}});
-      },
-      //跳转到审批页面
-      gotoCheck(index){
-        console.log(this.queryData[index].id);
-        this.$router.push({name: 'res_applicationCheck', query: {id: this.filterDate[index].id}});
-      },
+
 
       // 分页
       changePage(val) {
