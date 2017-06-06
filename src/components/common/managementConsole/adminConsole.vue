@@ -14,7 +14,7 @@
                                 <i class="fa fa-server" aria-hidden="true"></i>
                             </div>
                             <div class="top_right fr">
-                                <div class="count">2</div>
+                                <div class="count" v-model="data.project" >{{data.project}}</div>
                                 <div class="name">部署单元</div>
                             </div>
                         </div>
@@ -33,8 +33,8 @@
                                 <i class="fa fa-cubes" aria-hidden="true"></i>
                             </div>
                             <div class="top_right fr">
-                                <div class="count">2</div>
-                                <div class="name">计算实例</div>
+                                <div class="count" v-model="data.department">{{data.department}}</div>
+                                <div class="name">资源个数</div>
                             </div>
                         </div>
                         <div class="bottom clearfix">
@@ -53,7 +53,7 @@
                                 <i class="fa fa-database" aria-hidden="true"></i>
                             </div>
                             <div class="top_right fr">
-                                <div class="count">2</div>
+                                <div class="count" v-model="data.mysqlandmongo">2</div>
                                 <div class="name">数据库实例</div>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                                 <i class="fa fa-hdd-o" aria-hidden="true"></i>
                             </div>
                             <div class="top_right fr">
-                                <div class="count">2</div>
+                                <div class="count" v-model="data.redies">2</div>
                                 <div class="name">缓存实例</div>
                             </div>
                         </div>
@@ -370,12 +370,25 @@
                 // 保存未审批的数据
                 data1: [],
                 filterDate: [],
-                pageSize: 10
+                pageSize: 10,
+                //四个动态数据
+                data:{
+                    //部署单元
+                    project:0,
+                    //计算实例
+                    department:0,
+                    //数据库实例
+                    mysqlandmongo:0,
+                    //缓存实例
+                    redies:0
+                }
             }
         },
 
         mounted() {
             this.goQuery();
+           this. getProject();
+           this.getDepartment();
         },
 
         methods: {
@@ -464,7 +477,61 @@
             goCheck (id) {
                 console.log(id);
                 this.$router.push({name: 'res_applicationCheck',query: { id: id}});
+            },
+           //获取部署单元个数
+
+        getProject() {
+            let userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+            const url = common.apihost + 'iteminfo/iteminfoes/project_item';
+            // 查询条件
+            let query = {};
+
+            if (!userInfo.is_admin) { //普通用户
+                query.user_id=userInfo.user_id; // 默认按照登录用户进行查询
             }
+
+            this.$http.get(url, {params: query})
+                    .then(response => {
+                console.log(response);
+            if (response.body.code === 200) { // 请求成功
+                let backDatas = response.body.result.res;
+               this.data.project=backDatas.length;
+           }
+        });
+        },
+    //获取资源列表个数
+
+    getDepartment() {
+        let userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+        let query = {};
+        let url='';
+        console.log("测试");
+        if (userInfo.is_admin) {
+            url = common.apihost + 'resource/';
+        } else {
+            //url=common.apihost+'resource/';
+            url = common.apihost + 'resource/?user_id=' + userInfo.user_id;
         }
-    }
+
+        this.$http.get(url)
+                .then(response => {
+            console.log(response);
+        if (response.body.code === 200) { // 请求成功
+            let backDatas = response.body.result.msg;
+            //成功的资源列表个数
+            let departmentLength =0;
+            //成功的mysqlandmogon个数
+            backDatas.forEach(function(value, index, array) {
+                if(backDatas[index].approval_status == 'success'&& backDatas[index].reservation_status == 'ok'){
+                    departmentLength ++;
+                }
+            });
+           this.data.department=departmentLength;
+        }
+    });
+    },
+ }
+}
 </script>
