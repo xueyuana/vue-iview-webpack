@@ -359,7 +359,6 @@
                                     formatter: child.tooltip[0]
                                 }
                             });
-
                             // 设置links
                             if(child.target) {
                                 for(let k=0;k<child.target.length;k++) {
