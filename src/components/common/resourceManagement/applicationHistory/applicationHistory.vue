@@ -120,7 +120,7 @@
           },
           {
             title: '部署状态',
-            key: 'reservation_status',
+            key: 'deploy_result',
             align: 'center'
           },
           {
@@ -128,67 +128,123 @@
             key: 'operate',
             align: 'center',
             render: (h, params) => {
-                    if (this.filterDate[params.index].reservation_status == "部署成功") {
+            if (this.filterDate[params.index].reservation_status == "unreserved") {
+        return h('div', [
+          h('Button', {
+            props: {
+              type: 'disabled',
+              size: 'small'
+            },
+            style: {
+              marginRight: '5px'
+            }
+          }, '部署'),
+          h('Button', {
+            props: {
+              type: 'disabled',
+              size: 'small'
+            },
+            style: {
+              marginRight: '5px'
+            }
+          }, '查看')])
+      }
+            //预留状态是预留中，部署状态为未部署 ，部署查看 按钮均不能用
+                    if (this.filterDate[params.index].reservation_status == "reserving") {
                 return h('div', [
                   h('Button', {
                     props: {
-                      type: 'primary',
+                      type: 'disabled',
                       size: 'small'
                     },
                     style: {
                       marginRight: '5px'
+                    }
+                  }, '部署'),
+                  h('Button', {
+                    props: {
+                      type: 'disabled',
+                      size: 'small'
                     },
-                    on: {
-                      click: () => {
-                      this.gotoShow(params.index);
-                          }
-                       }
+                    style: {
+                      marginRight: '5px'
+                    }
                     }, '查看')])
-                }else if (this.filterDate[params.index].reservation_status == "等待中") {
-                        return h('div', [
-                          h('div', {
-                            props: {
-                              type: 'primary',
-                              size: 'small'
-                            },
-                            style: {
-                              marginRight: '5px'
+                }else if (this.filterDate[params.index].reservation_status == "fail") {
+                    return h('div', [
+                      h('Button', {
+                        props: {
+                          type: 'primary',
+                          size: 'small'
+                        },
+                        style: {
+                          marginRight: '5px'
+                        },on: {
+                          click: () => {
+                          this.gotoReAdd(params.index);
                             }
-
-                      }, '部署')])
-                      }else if (this.filterDate[params.index].reservation_status == "部署失败") {
-                      return h('div', [
-                        h('Button', {
-                          props: {
-                            type: 'primary',
-                            size: 'small'
-                          },
-                          style: {
-                            marginRight: '5px'
-                          },
-                          on: {
-                            click: () => {
-                            this.gotoReAdd(params.index);
-                    }
-                    }
-                    }, '重建')])
-                    }else if (this.filterDate[params.index].reservation_status == "未部署") {
-                          return h('div', [
-                            h('Button', {
-                              props: {
-                                type: 'primary',
-                                size: 'small'
-                              },
-                              style: {
-                                marginRight: '5px'
-                              },
-                              on: {
-                                click: () => {
-                                this.gotoAdd(params.index);
+                       }
+                      }, '重建'),
+                      h('Button', {
+                        props: {
+                          type: 'disabled',
+                          size: 'small'
+                        },
+                        style: {
+                          marginRight: '5px'
                         }
-                        }
-                        }, '部署')])
-                        }
+                      }, '查看')])
+                     //预留成功
+                      }else if (this.filterDate[params.index].reservation_status == "ok") {
+                            //未部署
+                           if(this.filterDate[params.index].deploy_result == '部署中'){
+                             return h('div', [
+                               h('Button', {
+                                 props: {
+                                   type: 'disabled',
+                                   size: 'small'
+                                 },
+                                 style: {
+                                   marginRight: '5px'
+                                 }
+                               }, '部署'),
+                               h('Button', {
+                                 props: {
+                                   type: 'primary',
+                                   size: 'small'
+                                 },
+                                 style: {
+                                   marginRight: '5px'
+                                 }
+                               }, '查看')])
+                           }//部署成功和部署失败部署中
+                           else{
+                             return h('div', [
+                               h('Button', {
+                                 props: {
+                                   type: 'primary',
+                                   size: 'small'
+                                 },
+                                 style: {
+                                   marginRight: '5px'
+                                 },
+                                 on: {
+                                   click: () => {
+                                   this.gotoAdd(params.index);
+                                 }
+                                }
+                               }, '部署'),
+                               h('Button', {
+                                 props: {
+                                   type: 'primary',
+                                   size: 'small'
+                                 },
+                                 style: {
+                                   marginRight: '5px'
+                                 }
+                               }, '查看')])
+                           }
+                       }
             }
           }
         ],
@@ -217,6 +273,113 @@
 
 
     methods: {
+      //修改部署状态
+      formatStatus(val){
+        switch (val) {
+          case 'deploying':
+            return '部署中'
+          case 'not_deployed':
+            return '未部署'
+          case 'fail':
+            return '失败'
+          case 'success':
+            return '成功'
+          default:
+            break
+        }
+      },
+      //取得对应的部署状态以及时间，如果没有部署，时间则还是资源创建时间按
+      getStatus(){
+     /*   //用户姓名
+        let userName = getStroage('userInfo').userName;
+        let url =  common.apihost + 'deployment/getDeploymentsByInitiator?initiator='+userName;
+
+        this.$http.get(url, {emulateJSON: true}).then(function (response) {
+
+         // console.log(response.body.result.msg);
+          if (response.body.code === 200 ) {
+
+            let msgs = response.body.result.msg;
+
+
+          }
+          // 成功回调
+        }, function () {
+         // this.$Message.error('登陆失败!');
+          // 失败回调
+        });*/
+
+        let msgs=[
+          {
+            "resource_id": "9e9ee9d2-4a96-11e7-968f-fa163e9474c9",
+            "resource_name": "june001",
+            "deploy_id": "b247eac0-46a8-11e7-84ee-fa163e9474c9",
+            "deploy_name": "部署编号001",
+            "deploy_result": "deploying",
+            "project_id": "263506f8-3f8c-11e7-80ef-fa163e9474c9",
+            "project_name": "测试环境11",
+            "created_time": "2017-06-01 16:57:26",
+            "initiator": "朱杰杰",
+            "environment": "develop",
+            "app_image": "arp.reg.innertoon.com/qitoon.checkin/qitoon.checkin:20170517101336"
+          },
+          {
+            "resource_id": "5a3dcec8-4679-11e7-92c1-fa163e9474c9",
+            "resource_name": "june001",
+            "deploy_id": "b247eac0-46a8-11e7-84ee-fa163e9474c9",
+            "deploy_name": "部署编号001",
+            "deploy_result": "deploying",
+            "project_id": "263506f8-3f8c-11e7-80ef-fa163e9474c9",
+            "project_name": "测试环境11",
+            "created_time": "2017-06-01 16:57:26",
+            "initiator": "朱杰杰",
+            "environment": "develop",
+            "app_image": "arp.reg.innertoon.com/qitoon.checkin/qitoon.checkin:20170517101336"
+          },
+          {
+            "resource_id": "5a3dcec8-4679-11e7-92c1-fa163e9474c9",
+            "resource_name": "june001",
+            "deploy_id": "b247eac0-46a8-11e7-84ee-fa163e9474c9",
+            "deploy_name": "部署编号001",
+            "deploy_result": "deploying",
+            "project_id": "263506f8-3f8c-11e7-80ef-fa163e9474c9",
+            "project_name": "测试环境11",
+            "created_time": "2017-06-01 16:57:26",
+            "initiator": "朱杰杰",
+            "environment": "develop",
+            "app_image": "arp.reg.innertoon.com/qitoon.checkin/qitoon.checkin:20170517101336"
+          }
+        ]
+
+
+        for (var num in this.queryData) {
+          for (var index in msgs) {
+            //只显示申请成功的
+            if (msgs[index].resource_id ===this.queryData[num].id) {
+
+              this.queryData[num].date=msgs[index].created_time;
+              msgs[index].deploy_result=this.formatStatus(msgs[index].deploy_result);
+
+              this.queryData[num].deploy_result=msgs[index].deploy_result;
+            }
+
+          }
+
+          if (this.queryData[num].reservation_status == "reserving" ||this.queryData[num].reservation_status == "unreserved") {
+            this.queryData[num].deploy_result = "未部署";
+          }
+          if (this.queryData[num].reservation_status == "fail") {
+            this.queryData[num].deploy_result = "资源不足";
+          }
+
+         }
+       console.log("整理后"+this.queryData)
+
+
+
+
+
+      },
       // 查找
       onCheck() {
 
@@ -249,23 +412,13 @@
             for (var index in msgs) {
              //只显示申请成功的
               if (msgs[index].approval_status === "success") {
-                if(msgs[index].reservation_status === "ok"){
-                  msgs[index].reservation_status="部署成功";
-                }
-                if(msgs[index].reservation_status === "fail"){
-                  msgs[index].reservation_status="部署失败";
-                }
-                if(msgs[index].reservation_status === "reserving"){
-                  msgs[index].reservation_status="等待中";
-                }
-                if(msgs[index].reservation_status === "unreserved"){
-                  msgs[index].reservation_status="未部署";
-                }
+
                 this.queryData.push(msgs[index]);
               }
 
             }
             console.log(this.queryData);
+            this.getStatus();
             this.filterDate = this.mockTableData(this.queryData, this.pageSize, 1)
           }
           // 成功回调
@@ -375,7 +528,8 @@
             approval_status: originData[i].approval_status,
             project: originData[i].project,
             id: originData[i].id,
-            reservation_status: originData[i].reservation_status
+            reservation_status: originData[i].reservation_status,
+            deploy_result: originData[i].deploy_result
           })
         }
         return data;
