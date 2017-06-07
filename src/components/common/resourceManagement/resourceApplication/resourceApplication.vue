@@ -491,8 +491,6 @@
 
 
     .title {
-
-
         width: 100%;
         height: 20px;
         padding-left: 5px;
@@ -734,7 +732,9 @@
             console.log(response);
             if(response.body.code===200 ) {
 
-                this.$router.push({name: 'res_applicationHistory'});
+//                this.$router.push({name: 'res_applicationHistory'});
+                // 跳转到我的申请
+                this.$router.push({name: 'myApplication'});
             }
             // 成功回调
         }, function () {

@@ -102,7 +102,7 @@
 
             // 跳转到相应的资源架构图
             goResourceTree (name) {
-                console.log(name);
+//                console.log(name);
 
                 // 跳转到部署实例的视图
                 this.$router.push({ name:"resourceTree",params:{ resource_id:name}});
@@ -113,20 +113,6 @@
                             level_2: this.$store.state.breadcrumbData.level.level_2,
                             level_3: this.getNameById(name)
                 });
-
-                // 根据id获取部署实例的架构数据
-                const url=common.apihost+"bench/source_unit_detail/"+name;
-                this.$http.get(url)
-                        .then(response => {
-                                console.log(response);
-                                if (response.body.code === 200) { // 请求成功
-//                                     let backDatas = response.body.result.msg;
-
-                                    // 将数据保存到状态池中
-                                    // this.$store.commit("getGraphDatas",backDatas);
-
-                                }
-                        });
             }
         }
     }

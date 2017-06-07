@@ -67,6 +67,8 @@ import addAuthority from './components/common/authorityManagement/addAuthority.v
 
 //创建路由对象
 var vueRouters = new VueRouter({
+    // 滚动行为在history模式小有效
+    mode: 'history',
     routes: [
         {path: '/', redirect: 'login'}, //一开始就重定向到登录页面
         {name: 'login', path: '/login', component: login},
@@ -114,7 +116,19 @@ var vueRouters = new VueRouter({
                 {name: 'addAuthority', path: '/add_authority', component: addAuthority}
             ]
         }
-    ]
+    ],
+
+    scrollBehavior (to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            if (to.hash) {
+                return { anchor: true }
+            }else  {
+                return { x: 0, y: 0 }
+            }
+        }
+    }
 });
 
 // 导入状态池

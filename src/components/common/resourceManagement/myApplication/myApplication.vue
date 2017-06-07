@@ -164,7 +164,7 @@
 
                         if (status == "待提交") {
                             color="red";
-                            text="未提交";
+                            text="待提交";
                             return h('Button', {
                                 props: {
                                     type: 'error',

@@ -93,6 +93,9 @@
                             </div>
                         </div>
 
+                        <!--<div class="layout-copy">-->
+                        <!--</div>-->
+
                     </i-col>
                 </Row>
             </div>
@@ -108,7 +111,7 @@
         width: 100%;
         line-height: 60px;
         padding: 0 20px;
-        /*border-bottom: 1px solid #ECECEC;*/
+        border-bottom: 1px solid #ECECEC;
         box-sizing: border-box;
         position: fixed;
         background: #f5f7f9;
@@ -144,8 +147,8 @@
     }
 
     .layout{
-        border: 1px solid #d7dde4;
-        background: #f5f7f9;
+        /*border: 1px solid #d7dde4;*/
+        /*background: #f5f7f9;*/
         position: relative;
     }
     .layout-breadcrumb{
