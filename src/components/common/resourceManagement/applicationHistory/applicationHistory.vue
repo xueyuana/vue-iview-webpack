@@ -4,13 +4,17 @@
     <div class="query">
       <Form :label-width="100">
         <Row>
-          <Col span="6">
+          <Col span="10">
           <Form-item label="归属人">
             <Input placeholder="请输入" v-model="formItem.name"></Input>
           </Form-item>
 
+          <Form-item label="实例名称">
+            <Input placeholder="请输入" v-model="formItem.resource_name"></Input>
+          </Form-item>
+
           </Col>
-          <Col span="8">
+          <Col span="10">
           <Form-item label="发起日期">
             <Row>
               <Col span="11">
@@ -29,18 +33,9 @@
             </Row>
           </Form-item>
 
-          </Col>
-          <Col span="6">
-          <Form-item label="实例名称">
-            <Input placeholder="请输入" v-model="formItem.resource_name"></Input>
-          </Form-item>
-
-
           <Form-item label="部署单元">
             <Input v-model="formItem.project" placeholder="请输入"></Input>
-
           </Form-item>
-
 
           </Col>
           <Col span="4">
@@ -96,6 +91,11 @@
             return date && date.valueOf() < this.startDate.valueOf()
           }
         }, columns: [
+          {
+            type: 'index',
+            title: '序号',
+            align: 'center'
+          },
           {
             title: '归属人',
             key: 'name',

@@ -3,7 +3,8 @@
     <div class="addres-wrap">
         <Form ref="formInline" :model="formInline" :rules="ruleInline">
             <div class="addres-top clearfix">
-                <Button id="returnButton" ><a href="" style="color: #fff">返回</a> </Button>
+                <!--<Button id="returnButton" ><a href="" style="color: #fff">返回</a> </Button>-->
+                <Button id="returnButton" @click="back">返回</Button>
                 <Button id="submit" type="primary"  @click="save('formInline')">提交</Button>
                 <Button id="save"  @click="handleSubmit()" >保存到草稿</Button>
             </div>
@@ -36,7 +37,7 @@
                         <div class="container">
                             <div class="clearfix" style="margin-bottom: 10px">
                                 <div class="container-left">
-                                    <span>实例名称:</span>
+                                    <span>实例名称：</span>
                                     <Input style="width: 180px" v-model="formInline.compute_list[0].ins_name" placeholder="请输入实例名称"></Input>
                                 </div>
                                 <div class="container-right">
@@ -85,7 +86,7 @@
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
-                                            <span>实例版本: </span>
+                                            <span>实例版本： </span>
                                             <Select style="width: 180px;" v-model="formInline.resource_list[0].version" placeholder="请选择">
                                                <Option value="MYSQL5.6">MYSQL5.6</Option>
                                                 <Option value="MYSQL5.6">MYSQL5.6</Option>
@@ -111,14 +112,14 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2" placeholder="请选择">
+                                            <Select style="width: 180px"  v-model="cpuandrem.resourcecr2" placeholder="请选择">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="2C,8G">2C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
-                                            <span>实例数量: </span>
+                                            <span>实例数量： </span>
                                             <Input style="width: 180px" min="0" max="1" v-model="formInline.resource_list[1].quantity"></Input>
                                         </div>
                                     </div>
@@ -149,7 +150,7 @@
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
-                                            <span>实例版本: </span>
+                                            <span>实例版本： </span>
                                             <Select style="width: 180px;" v-model="formInline.resource_list[2].version" placeholder="请选择">
                                                 <option value="Mongo3.2">Mongo3.2</option>
                                             </Select>
@@ -187,7 +188,7 @@
                         <div class="container">
                             <div class="clearfix" style="margin-bottom: 10px">
                                 <div class="container-left">
-                                    <span>实例名称:</span>
+                                    <span>实例名称：</span>
                                     <Input style="width: 180px" v-model="formInline.compute_list[0].ins_name" placeholder="请输入实例名称"></Input>
                                 </div>
                                 <div class="container-right">
@@ -235,7 +236,7 @@
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
-                                            <span>实例版本: </span>
+                                            <span>实例版本： </span>
                                             <Select style="width: 180px;" v-model="formInline.resource_list[0].version" placeholder="请选择">
                                                 <Option value="MYSQL5.6">MYSQL5.6</Option>
                                             </Select>
@@ -260,14 +261,14 @@
                                     <div class="container-right">
                                         <div>
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2" placeholder="请选择">
+                                            <Select style="width: 180px;"  v-model="cpuandrem.resourcecr2" placeholder="请选择">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="2C,8G">2C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
-                                            <span>实例数量: </span>
+                                            <span>实例数量： </span>
                                             <Input style="width: 180px" v-model="formInline.resource_list[1].quantity" ></Input>
                                         </div>
                                     </div>
@@ -298,7 +299,7 @@
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
-                                            <span>实例版本: </span>
+                                            <span>实例版本：</span>
                                             <Select style="width: 180px;" v-model="formInline.resource_list[2].version"  placeholder="请选择">
                                                 <option value="Mongo3.2">Mongo3.2</option>
                                             </Select>
@@ -338,7 +339,7 @@
                         <div class="container">
                             <div class="clearfix" style="margin-bottom: 10px">
                                 <div class="container-left">
-                                    <span>实例名称:</span>
+                                    <span>实例名称：</span>
                                     <Input style="width: 180px" v-model="formInline.compute_list[0].ins_name" placeholder="请输入实例名称"></Input>
                                 </div>
                                 <div class="container-right">
@@ -387,7 +388,7 @@
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
-                                            <span>实例版本: </span>
+                                            <span>实例版本： </span>
                                             <Select style="width: 180px;" v-model="formInline.resource_list[0].version" placeholder="请选择">
                                                 <Option value="MYSQL5.6">MYSQL5.6</Option>
                                             </Select>
@@ -410,16 +411,16 @@
 
                                     </div>
                                     <div class="container-right">
-                                        <div>
+                                        <div style="height: 50px">
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2"  placeholder="请选择">
+                                            <Select style="width: 180px"  v-model="cpuandrem.resourcecr2"  placeholder="请选择">
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="2C,8G">2C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
-                                            <span>实例数量: </span>
+                                            <span>实例数量：</span>
                                             <Input style="width: 180px" v-model="formInline.resource_list[1].quantity"></Input>
                                         </div>
                                     </div>
@@ -450,7 +451,7 @@
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
-                                            <span>实例版本: </span>
+                                            <span>实例版本： </span>
                                             <Select style="width: 180px;" v-model="formInline.resource_list[2].version"  placeholder="请选择">
                                                 <option value="Mongo3.2">Mongo3.2</option>
                                             </Select>
@@ -494,10 +495,11 @@
         width: 100%;
         height: 20px;
         padding-left: 5px;
-        background-color: rgba(242, 242, 242, 1);
+        background-color: #f2f2f2;
         font-size: 14px;
         line-height: 20px;
         margin-bottom: 10px;
+        color:#000;
     }
 
 
@@ -508,7 +510,12 @@
         padding-bottom: 10px;
     }
 
-
+    .container.database {
+        width: 100%;
+        margin-left: 0px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
 
     .container-left,.container-right {
         height: auto;
@@ -779,8 +786,14 @@
         this.cpuandrem.resourcecr1= this.formInline.resource_list[0].cpu+"C,"+ this.formInline.resource_list[0].mem+"G"
         this.cpuandrem.resourcecr2= this.formInline.resource_list[1].cpu+"C,"+ this.formInline.resource_list[1].mem+"G"
         this.cpuandrem.resourcecr3= this.formInline.resource_list[2].cpu+"C,"+ this.formInline.resource_list[2].mem+"G"
-    }
+    },
 
+        // 返回
+        back () {
+            if(this.$store.state.path.originPath==="/my_application") { //从我的申请页面进入
+                this.$router.push({name: 'myApplication'});
+            }
+        }
     }
     }
 

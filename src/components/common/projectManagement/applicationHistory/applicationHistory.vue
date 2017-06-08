@@ -62,7 +62,7 @@
                 <tbody>
 
                 <tr v-for="(data,trIndex) in filterDate" :key="data">
-                    <td>{{trIndex+1}}</td>
+                    <td >{{trIndex+1}}</td>
                     <!--<td><a href="#">{{data.item_name}}</a></td>-->
                     <td>{{data.item_name}}</td>
                     <td>{{data.create_date}}</td>

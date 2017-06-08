@@ -5,16 +5,15 @@
             <Form :label-width="100">
                 <Row>
                     <Col span="6">
-                    <Form-item label="发起人">
+                    <Form-item label="归属人">
                         <Input placeholder="请输入" v-model="formItem.name"></Input>
                     </Form-item>
                     <Form-item label="审批状态">
                         <Select placeholder="请选择" v-model="formItem.approval_status">
-                            <Option value=""> 流程不存在</Option>
-                            <Option value=""> 审批完成</Option>
-                            <Option value=""> 资源不足</Option>
-                            <Option value="">审批不通过</Option>
-
+                            <Option value="unsubmit"> 流程不存在</Option>
+                            <Option value="processing">审批中</Option>
+                            <Option value="success"> 审批完成</Option>
+                            <Option value="failed">审批不通过</Option>
                         </Select>
                     </Form-item>
                     </Col>
@@ -44,7 +43,7 @@
                     </Form-item>
                     </Col>
                     <Col span="6">
-                    <Form-item label="资源名称">
+                    <Form-item label="部署实例名称">
                         <Input placeholder="请输入" v-model="formItem.resource_name"></Input>
                     </Form-item>
 
@@ -111,6 +110,11 @@
                 },
 
                 columns: [
+                    {
+                        type: 'index',
+                        title: '序号',
+                        align: 'center'
+                    },
                     {
                         title: '归属人',
                         key: 'name',
@@ -191,88 +195,7 @@
 
                    }
                 }
-//
-//                {
-//                     title: '操作',
-//                     key: 'operate',
-//                     align: 'center',
-//                     render: (h, params) => {
-//                     if (this.filterDate[params.index].reservation_status == "ok") {
-//                        return h('div', [
-//                            h('Button', {
-//                                props: {
-//                                    type: 'primary',
-//                                    size: 'small'
-//                                },
-//                                style: {
-//                                    marginRight: '5px'
-//                                },
-//                                on: {
-//                                    click: () => {
-//                                    this.gotoAdd(params.index);
-//                    }
-//                    }
-//                    }, '部署')])
-//                    } else if (this.filterDate[params.index].reservation_status == "unreserved") {
-//                        if (this.filterDate[params.index].approval_status == "审批中") {
-//                            return h('div', [
-//                                h('div', {
-//                                    props: {
-//                                        size: 'small'
-//                                    },
-//                                    style: {
-//                                        marginRight: '5px'
-//                                    }
-//                                }, '编辑')])
-//                        } else if (this.filterDate[params.index].approval_status == "审批完成") {
-//                            return h('div', [
-//                                h('div', {
-//                                    props: {
-//                                        size: 'small'
-//                                    },
-//                                    style: {
-//                                        marginRight: '5px'
-//                                    }
-//                                }, '部署')]);
-//                        } else {
-//                            return h('div', [
-//                                h('Button', {
-//                                    props: {
-//                                        type: 'primary',
-//                                        size: 'small'
-//                                    },
-//                                    style: {
-//                                        marginRight: '5px'
-//                                    },
-//                                    on: {
-//                                        click: () => {
-//                                        this.gotoEdit(params.index);
-//                        }
-//                        }
-//                        }, '编辑')])
-//                        }
-//
-//                    } else {
-//                        this.filterDate[params.index].approval_status = "资源不足";
-//                        return h('div', [
-//                            h('Button', {
-//                                props: {
-//                                    type: 'primary',
-//                                    size: 'small'
-//                                },
-//                                style: {
-//                                    marginRight: '5px'
-//                                }, on: {
-//                                    click: () => {
-//                                    this.gotoReAdd(params.index);
-//                    }
-//                    }
-//                    }, '重建')]);
-//                    }
-//                }
-//                }
             ],
-
             formItem: {
                 name: "",//发起人
                         resource_name: "",//资源名称
@@ -351,10 +274,8 @@
                 this.formItem.end_time && (query.end_time = this.formItem.end_time)
                 this.formItem.project && (query.project = this.formItem.project)
 
-                console.log("query" + query);
                 this.$http.get(url, {params: query}, {emulateJSON: true}).then(function (response) {
 
-                    console.log(response.body.result.msg);
                     if (response.body.code === 200 && response.body.result.res == "success") {
                         this.queryData = response.body.result.msg;
                         let msgs = response.body.result.msg;
@@ -388,7 +309,6 @@
             onReset() {
                 //取得资源申请列表数据
 //        let userid= userinfo.user_id;
-                console.log(this.queryData)
 
                 //取得资源申请列表数据
                 let userid = getStroage('userInfo').user_id;
@@ -403,7 +323,6 @@
                 let query = {};
                 this.$http.get(url, {emulateJSON: true}).then(function (response) {
 
-                    console.log(response.body.result.msg);
                     if (response.body.code === 200 && response.body.result.res == "success") {
                         this.queryData = response.body.result.msg;
                         let msgs = response.body.result.msg;

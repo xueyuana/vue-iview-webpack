@@ -108,7 +108,7 @@
         resource_list: [],
         columns: [
           {
-            title: '编号',
+            title: '序号',
             type: 'index',
             align: 'center'
           },

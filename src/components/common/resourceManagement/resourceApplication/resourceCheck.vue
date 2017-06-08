@@ -3,6 +3,7 @@
     <div class="addres-wrap">
         <Form ref="jsonname" :model="jsonname">
             <div class="addres-top clearfix">
+                <Button id="returnButton" @click="back">返回</Button>
                 <Button id="submit" type="primary"  @click="pass()">通过</Button>
                 <Button id="save"  @click="notPass()" >不通过</Button>
             </div>
@@ -10,7 +11,12 @@
 
                <div class="allcontent">
                         <div class="title"><span>部署单元环境:</span></div>
-                        <div class="container"><span>{{jsonname.env}}</span></div>
+                        <div class="container">
+                            <!--<span>{{jsonname.env}}</span>-->
+                            <Tag type="dot" color="blue">
+                                {{jsonname.env}}
+                            </Tag>
+                        </div>
                         <div class="title"><span>部署单元信息:</span></div>
                         <div class="container clearfix">
                             <div class="container-left">
@@ -35,7 +41,7 @@
                         <div class="container">
                             <div class="clearfix" style="margin-bottom: 10px">
                                 <div class="container-left">
-                                    <span>实例名称:</span>
+                                    <span>实例名称：</span>
                                     <Input style="width: 180px" v-model="jsonname.compute_list[0].ins_name" disabled></Input>
                                  </div>
                                 <div class="container-right">
@@ -81,7 +87,7 @@
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
-                                            <span>实例版本: </span>
+                                            <span>实例版本： </span>
                                             <Select style="width: 180px" v-model="jsonname.resource_list[0].version" disabled>
                                                 <Option value="MYSQL5.5">MYSQL5.5</Option>
                                                 <Option value="MYSQL5.6">MYSQL5.6</Option>
@@ -90,7 +96,7 @@
                                     </div>
                                 </Tab-pane>
                                 <Tab-pane label="REDIS" name="redis">
-                                    <div class="container-left">
+                                    <div class="container-left" style="height: 100px">
                                         <div style="height: 50px">
                                             <span>实例名称：</span>
                                             <Input style="width: 180px" v-model="jsonname.resource_list[1].res_name" disabled></Input>
@@ -104,17 +110,17 @@
                                         </div>
 
                                     </div>
-                                    <div class="container-right">
+                                    <div class="container-right" style="height: 100px">
                                         <div style="height: 50px">
                                             <span>实例规格：</span>
-                                            <Select style="width: 180px;height:50px"  v-model="cpuandrem.resourcecr2" disabled>
+                                            <Select style="width: 180px;"  v-model="cpuandrem.resourcecr2" disabled>
                                                 <Option value="2C,4G">2C 4G</Option>
                                                 <Option value="2C,8G">2C 8G</Option>
                                                 <Option value="4C,16G">4C 16G</Option>
                                             </Select>
                                         </div>
                                         <div style="height: 50px">
-                                            <span>实例数量: </span>
+                                            <span>实例数量： </span>
                                             <Input-number v-model="jsonname.resource_list[1].quantity" disabled></Input-number>
                                         </div>
                                     </div>
@@ -133,8 +139,8 @@
                                             <span>存储空间：</span>
                                             <Input-number v-model="jsonname.resource_list[2].disk" disabled></Input-number>G                                        </div>
                                     </div>
-                                    <div class="container-right">
-                                        <div>
+                                    <div class="container-right" style="height:100px;">
+                                        <div style="height: 50px">
                                             <span>实例规格：</span>
                                             <Select style="width: 180px"  v-model="cpuandrem.resourcecr3" disabled>
                                                 <Option value="2C,4G">2C 4G</Option>
@@ -142,8 +148,8 @@
                                                 <Option value="4C,16G">4C 16G</Option>
                                             </Select>
                                         </div>
-                                        <div>
-                                            <span>实例版本: </span>
+                                        <div style="height: 50px">
+                                            <span>实例版本： </span>
                                             <Select style="width: 180px" v-model="jsonname.resource_list[2].version" disabled>
                                                 <option value="Mongo3.2">Mongo3.2</option>
                                             </Select>
@@ -154,12 +160,12 @@
 
 
                         </div>
-                        <div class="title"><span>审批意见:</span></div>
-                        <div ><textarea style="width: 100%" id="annotation" v-model="checkjson.annotation" ></textarea></div>
+                        <div class="title"><span>审批意见: (选填)</span></div>
+                        <div >
+                            <!--<textarea style="width: 100%" id="annotation" v-model="checkjson.annotation" ></textarea>-->
+                            <Input v-model="checkjson.annotation" type="textarea" :autosize="{minRows: 4, maxRows: 6}" placeholder="请输入审批意见：如同意或者不同意"></Input>
+                        </div>
                     </div>
-
-
-
 
             </div>
         </Form>
@@ -177,7 +183,7 @@
         float: right;
         background-color: #39f;
         color: white;
-        margin: 0 4px;
+        margin: 10px 4px;
     }
 
     .addres-container Button{
@@ -188,17 +194,20 @@
 
     .title {
         width: 100%;
-        height: 24px;
-        line-height: 24px;
+        height: 20px;
+        padding-left: 5px;
         background-color: #f2f2f2;
-        margin-bottom: 10px;
+        font-size: 14px;
+        line-height: 20px;
+        margin: 10px 0px;
+        color: #000;
     }
 
-    .title span {
-        color: #000;
-        font-weight: 500;
-        font-size: 18px;
-    }
+    /*.title span {*/
+        /*color: #000;*/
+        /*font-weight: 500;*/
+        /*font-size: 18px;*/
+    /*}*/
 
     .container {
         width: 100%;
@@ -206,7 +215,12 @@
         padding-top: 10px;
         padding-bottom: 10px;
     }
-
+    .container.database {
+        width: 100%;
+        margin-left: 0px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
 
 
     .container-left,.container-right {
@@ -220,10 +234,9 @@
 
     }
 
-
-
     .database {
         border: 1px solid #d7d7d7;
+        border-radius: 4px;
     }
 
 
@@ -383,7 +396,15 @@
                 }
                 // 成功回调
             });
-        }
+        },
+
+            back () {
+                if(this.$store.state.path.originPath==="/admin_console") { //从管理控制台页面进入
+                    this.$router.push({name: 'adminConsole'});
+                }
+            }
+
+
 
     }
 
