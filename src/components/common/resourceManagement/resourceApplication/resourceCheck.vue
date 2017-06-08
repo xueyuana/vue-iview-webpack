@@ -401,10 +401,10 @@
             back () {
                 if(this.$store.state.path.originPath==="/admin_console") { //从管理控制台页面进入
                     this.$router.push({name: 'adminConsole'});
+                }else if(this.$store.state.path.originPath==="/my_application") {//从我的申请页面进入
+                    this.$router.push({name: 'myApplication'});
                 }
             }
-
-
 
     }
 

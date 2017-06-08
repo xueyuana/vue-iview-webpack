@@ -110,7 +110,7 @@
 
                                     </div>
                                     <div class="container-right">
-                                        <div>
+                                        <div style="height: 50px">
                                             <span>实例规格：</span>
                                             <Select style="width: 180px"  v-model="cpuandrem.resourcecr2" placeholder="请选择">
                                                 <Option value="2C,4G">2C 4G</Option>
@@ -259,7 +259,7 @@
 
                                     </div>
                                     <div class="container-right">
-                                        <div>
+                                        <div style="height: 50px">
                                             <span>实例规格：</span>
                                             <Select style="width: 180px;"  v-model="cpuandrem.resourcecr2" placeholder="请选择">
                                                 <Option value="2C,4G">2C 4G</Option>
@@ -533,9 +533,8 @@
 
     .database {
         border: 1px solid #d7d7d7;
+        border-radius: 4px;
     }
-
-
 
 </style>
 <script>

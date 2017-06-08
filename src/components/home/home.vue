@@ -231,7 +231,8 @@
             // 退出登录
             toLogOut() {
                 console.log('logput')
-                removeStroage('userInfo')
+                removeStroage('userInfo');
+                this.$router.push({path:'/login'});
             },
 
             // 导航跳转
