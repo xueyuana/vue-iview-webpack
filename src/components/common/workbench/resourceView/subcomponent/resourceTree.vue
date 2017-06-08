@@ -9,9 +9,9 @@
 </template>
 
 <style scoped>
- #treeContent {
-     margin: 0 auto;
- }
+     #treeContent {
+         margin: 0 auto;
+     }
 </style>
 <script>
     import common from '../../../../../tools/common.js';
@@ -165,7 +165,63 @@
                     .then(response => {
                            console.log(response);
                            let backDatas = response.body;
-                           this.getDatas(backDatas);
+                           let mockData=[
+                                {
+                                    layerName:"physicalLayer",
+                                    children:[
+                                        {
+                                            name: '物理机',
+                                            imageUrl:'physical',
+                                            tooltip: ['物理机'],
+                                            target:['机架']
+                                        }
+                                    ]
+                                },
+                                //   机架层
+                                {
+                                    layerName:"frameLayer",
+                                    children:[
+                                        {
+                                            name: "机架",
+                                            imageUrl:'frame',
+                                            tooltip:['机架'],
+                                            target:['资源池']
+                                        }
+                                    ]
+                                },
+                                //   资源池层
+                                {
+                                    layerName:"resDomainLayer",
+                                    children:[
+                                        {
+                                            name: "资源池",
+                                            imageUrl:'resDomain',
+                                            tooltip: ['资源池'],
+                                            target:['DC']
+                                        }
+                                    ]
+                                },
+                                //   数据中心层
+                                {
+                                    layerName:"dcLayer",
+                                    children:[
+                                        {
+                                            name: "DC",
+                                            imageUrl:'DC',
+                                            tooltip: ['数据中心'],
+                                            target:[]
+                                        }
+                                    ]
+                                }
+                           ];
+
+                            for(let i=0;i<backDatas.length;i++) {
+                                let dataObj=backDatas[i];
+                                if(dataObj.layerName==="virtualLayer") {
+                                    dataObj.children[0].target[0]=mockData[0].children[0].name;
+                                }
+                            }
+                           this.getDatas(backDatas.concat(mockData));
                     });
         },
         methods: {
@@ -344,7 +400,7 @@
                                 y: child.y,
                                 category: i,
                                 symbol: symbol,
-                                symbolSize:[80,100],
+                                symbolSize:[80,160],
                                 itemStyle:{
                                     normal: {
 //                                    color: 'blue',
@@ -437,8 +493,63 @@
                         .then(response => {
                                 console.log(response);
                                 let backDatas = response.body;
-//                                this.datas=backDatas;
-                                this.getDatas(backDatas);
+                                let mockData=[
+                                    {
+                                        layerName:"physicalLayer",
+                                        children:[
+                                            {
+                                                name: '物理机',
+                                                imageUrl:'physical',
+                                                tooltip: ['物理机'],
+                                                target:['机架']
+                                            }
+                                        ]
+                                    },
+                                    //   机架层
+                                    {
+                                        layerName:"frameLayer",
+                                        children:[
+                                            {
+                                                name: "机架",
+                                                imageUrl:'frame',
+                                                tooltip:['机架'],
+                                                target:['资源池']
+                                            }
+                                        ]
+                                    },
+                                    //   资源池层
+                                    {
+                                        layerName:"resDomainLayer",
+                                        children:[
+                                            {
+                                                name: "资源池",
+                                                imageUrl:'resDomain',
+                                                tooltip: ['资源池'],
+                                                target:['DC']
+                                            }
+                                        ]
+                                    },
+                                    //   数据中心层
+                                    {
+                                        layerName:"dcLayer",
+                                        children:[
+                                            {
+                                                name: "DC",
+                                                imageUrl:'DC',
+                                                tooltip: ['数据中心'],
+                                                target:[]
+                                            }
+                                        ]
+                                    }
+                                ];
+
+                                for(let i=0;i<backDatas.length;i++) {
+                                    let dataObj=backDatas[i];
+                                    if(dataObj.layerName==="virtualLayer") {
+                                        dataObj.children[0].target[0]=mockData[0].children[0].name;
+                                    }
+                                }
+                                this.getDatas(backDatas.concat(mockData));
                         });
             }
         }
