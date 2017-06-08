@@ -3,7 +3,11 @@
         <Row>
             <Col span="4">
               <div class="view-left scrollbar">
-                <Menu :theme="theme" active-name="1" width="auto" @on-select="goResourceTree">
+                <Menu
+                        :theme="theme"
+                        :active-name="$store.state.subOpenMenu.subActiveItem.activeName"
+                        :open-names="[$store.state.subOpenMenu.subActiveItem.openNames]"
+                        width="auto" @on-select="goResourceTree">
                     <Submenu :name="menuData._id.project" v-for="(menuData,index) in menuDatas" :key="menuData">
                         <template slot="title">
                            {{menuData._id.project}}
@@ -82,6 +86,15 @@
                                 if (response.body.code === 200) { // 请求成功
                                     let backDatas = response.body.result.msg;
                                     this.menuDatas=backDatas;
+
+                                    this.$router.push({ name:"resourceTree",params:{ resource_id:backDatas[0].ret[0].res_id}});
+
+                                    // 修改面包屑导航的数据
+                                    this.$store.commit('getLevel',{
+                                        level_1: this.$store.state.breadcrumbData.level.level_1,
+                                        level_2: this.$store.state.breadcrumbData.level.level_2,
+                                        level_3: this.getNameById(this.$route.params.resource_id).resource_name
+                                    });
                                 }
                         });
             },
@@ -94,7 +107,10 @@
                     for(let j=0;j<menuData.ret.length;j++) {
                         let retObj=menuData.ret[j];
                         if(retObj.res_id===id) {
-                            return retObj.resource_name
+                            return {
+                                resource_name:retObj.resource_name,
+                                openName:menuData._id.project
+                            }
                         }
                     }
                 }
@@ -111,8 +127,21 @@
                 this.$store.commit('getLevel',{
                             level_1: this.$store.state.breadcrumbData.level.level_1,
                             level_2: this.$store.state.breadcrumbData.level.level_2,
-                            level_3: this.getNameById(name)
+                            level_3: this.getNameById(name).resource_name
                 });
+            }
+        },
+
+        watch: {
+            '$route' (to, from) {
+                console.log("动态路径参数" + this.$route.params.resource_id);
+                // 设置默认打开项
+                this.$store.commit("getSubActiveItem",{
+                    openNames: this.getNameById(this.$route.params.resource_id).openName,  // Submenu
+                    activeName: this.$route.params.resource_id  //Menu-item
+                });
+                console.log(this.$store.state.subOpenMenu.subActiveItem);
+
             }
         }
     }

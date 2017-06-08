@@ -486,7 +486,7 @@
 
         watch: {
             '$route' (to, from) {
-                console.log("路由变化了");
+
                 // 获取动态路径参数 根据路径参数请求数据
                 const url=common.apihost+"bench/source_unit_detail/"+this.$route.params.resource_id;
                 this.$http.get(url)

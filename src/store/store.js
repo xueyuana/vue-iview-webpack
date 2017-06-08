@@ -9,6 +9,8 @@ import { breadcrumbData } from './breadcrumbData.js';
 import { projectInfo } from './projectList.js';
 /* 导入侧边导航的激活状态*/
 import { openMenu } from './openMenu.js';
+// 资源视图
+import { subOpenMenu } from './subOpenMenu.js';
 // 我的资源数据
 import { resourceData } from './resourceData.js';
 // 进入审批页面的源路径
@@ -20,6 +22,7 @@ export const store = new Vuex.Store({
         projectInfo:projectInfo,
         openMenu:openMenu,
         resourceData:resourceData,
-        path:path
+        path:path,
+        subOpenMenu:subOpenMenu
     }
 });

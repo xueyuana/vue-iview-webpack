@@ -136,8 +136,8 @@ import {store} from './store/store.js';
 
 
 vueRouters.beforeEach((to, from, next) => {
-    let nav = {}
-    let bread = {}
+    let nav = {};
+    let bread = {};
     bread.level_1 = '主页'
     switch (to.name) {
         // 管理控制台 > 普通用户
@@ -216,7 +216,6 @@ vueRouters.beforeEach((to, from, next) => {
             nav.activeName = '51'
             bread.level_2 = '添加权限'
             break
-
         case 'resourceTree':
             nav.openNames = '4'
             nav.activeName = '43'
