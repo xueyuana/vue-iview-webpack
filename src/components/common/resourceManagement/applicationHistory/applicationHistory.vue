@@ -24,7 +24,7 @@
               </Col>
               <Col span="2" style="text-align: center">
               至
-                                          </Col>
+              </Col>
               <Col span="11">
               <Form-item>
                 <Date-picker type="datetime" placeholder="选择日期" v-model="formItem.end_time"></Date-picker>
@@ -290,26 +290,54 @@
       },
       //取得对应的部署状态以及时间，如果没有部署，时间则还是资源创建时间按
       getStatus(){
-     /*   //用户姓名
-        let userName = getStroage('userInfo').userName;
-        let url =  common.apihost + 'deployment/getDeploymentsByInitiator?initiator='+userName;
+        //用户姓名
+        let userName = getStroage('userInfo').username;
+        let ifadmin = getStroage('userInfo').is_admin;
+        let url='';
+        if (ifadmin) {
+          url = common.apihost + 'deployment/getDeploymentsByInitiator';
+        } else {
+          //url=common.apihost+'resource/';
+          url =  common.apihost + 'deployment/getDeploymentsByInitiator?initiator='+userName;
+        }
 
         this.$http.get(url, {emulateJSON: true}).then(function (response) {
 
-         // console.log(response.body.result.msg);
-          if (response.body.code === 200 ) {
+         console.log("返回测试"+response.body);
+          if (response.status === 200 ) {
 
-            let msgs = response.body.result.msg;
+            let msgs = response.body;
+            for (var num in this.queryData) {
+              for (var index in msgs) {
+                //只显示申请成功的
+                if (msgs[index].resource_id ===this.queryData[num].id) {
 
+                  this.queryData[num].date=msgs[index].created_time;
+                  msgs[index].deploy_result=this.formatStatus(msgs[index].deploy_result);
+
+                  this.queryData[num].deploy_result=msgs[index].deploy_result;
+                }
+
+              }
+
+            /*  if (this.queryData[num].reservation_status == "reserving" ||this.queryData[num].reservation_status == "unreserved") {
+                this.queryData[num].deploy_result = "未部署";
+              }
+              if (this.queryData[num].reservation_status == "fail") {
+                this.queryData[num].deploy_result = "资源不足";
+              }*/
+
+            }
 
           }
           // 成功回调
         }, function () {
          // this.$Message.error('登陆失败!');
           // 失败回调
-        });*/
 
-        let msgs=[
+        });
+
+       /* let msgs=[
           {
             "resource_id": "9e9ee9d2-4a96-11e7-968f-fa163e9474c9",
             "resource_name": "june001",
@@ -349,30 +377,10 @@
             "environment": "develop",
             "app_image": "arp.reg.innertoon.com/qitoon.checkin/qitoon.checkin:20170517101336"
           }
-        ]
+        ]*/
 
 
-        for (var num in this.queryData) {
-          for (var index in msgs) {
-            //只显示申请成功的
-            if (msgs[index].resource_id ===this.queryData[num].id) {
 
-              this.queryData[num].date=msgs[index].created_time;
-              msgs[index].deploy_result=this.formatStatus(msgs[index].deploy_result);
-
-              this.queryData[num].deploy_result=msgs[index].deploy_result;
-            }
-
-          }
-
-          if (this.queryData[num].reservation_status == "reserving" ||this.queryData[num].reservation_status == "unreserved") {
-            this.queryData[num].deploy_result = "未部署";
-          }
-          if (this.queryData[num].reservation_status == "fail") {
-            this.queryData[num].deploy_result = "资源不足";
-          }
-
-         }
        console.log("整理后"+this.queryData)
 
 
@@ -418,6 +426,15 @@
 
             }
             console.log(this.queryData);
+            for (var num in this.queryData) {
+              if (this.queryData[num].reservation_status == "reserving" ||this.queryData[num].reservation_status == "unreserved" ||this.queryData[num].reservation_status == "ok") {
+                this.queryData[num].deploy_result = "未部署";
+              }
+              if (this.queryData[num].reservation_status == "fail") {
+                this.queryData[num].deploy_result = "资源不足";
+              }
+
+            }
             this.getStatus();
             this.filterDate = this.mockTableData(this.queryData, this.pageSize, 1)
           }
@@ -505,8 +522,6 @@
 
        });
       },
-
-
       // 分页
       changePage(val) {
         this.filterDate = this.mockTableData(this.queryData, this.pageSize, val)
