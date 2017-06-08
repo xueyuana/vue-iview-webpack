@@ -1,0 +1,45 @@
+{
+    "code": 200,
+    "result": {
+        "msg": "",
+        "res": [
+            {
+                "create_date": "2017-06-07 11:05:58.712000",
+                "item_code": "0101",
+                "item_depart": "item_depart",
+                "item_description": "item_description",
+                "item_id": "38f2e348-4b2e-11e7-8ff9-fa163e9474c9",
+                "item_name": "item_name",
+                "user": "user",
+                "resource_type": "mysql",
+                "resource_name": "resource_name",
+                "resource_ip": "192.168.0.0",
+                "resource_status": "运行中",
+                "resource_config": [{"name":"CPU", "value":"1核"},{"name":"内存", "value":"2GB"}],
+                "resource_number": "10000",
+                "resource_user": "root",
+                "resource_password": "123456",
+                "user_id": "142369"
+
+            },
+            {
+                "create_date": "2017-06-07 11:01:10.705000",
+                "item_code": "002",
+                "item_depart": "item_depart2",
+                "item_description": "item_description2",
+                "item_id": "8f3722f6-4b2d-11e7-a145-fa163e9474c9",
+                "item_name": "item_name2",
+                "user": "user2",
+                "resource_type": "docker",
+                "resource_name": "resource_name2",
+                "resource_ip": "192.168.0.1",
+                "resource_status": "运行中",
+                "resource_config": [{"name":"CPU", "value":"1核"},{"name":"内存", "value":"2GB"}],
+                "resource_number": "10000",
+                "resource_user": "root",
+                "resource_password": "123456",
+                "user_id": "1423622"
+            }
+        ]
+    }
+}
