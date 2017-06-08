@@ -241,7 +241,11 @@
                                  },
                                  style: {
                                    marginRight: '5px'
-                                 }
+                                 },
+                                 on: {
+                                   click: () => {
+                                   this.gotoChart(params.index);
+                                 }}
                                }, '查看')])
                            }
                        }
@@ -320,12 +324,6 @@
 
               }
 
-            /*  if (this.queryData[num].reservation_status == "reserving" ||this.queryData[num].reservation_status == "unreserved") {
-                this.queryData[num].deploy_result = "未部署";
-              }
-              if (this.queryData[num].reservation_status == "fail") {
-                this.queryData[num].deploy_result = "资源不足";
-              }*/
 
             }
 
@@ -521,6 +519,10 @@
         }, function () {
 
        });
+      },
+      //查看跳转到图表的页面
+      gotoChart(index){
+        this.$router.push({ name:"resourceTree",params:{ resource_id: this.filterDate[index].id}});
       },
       // 分页
       changePage(val) {
