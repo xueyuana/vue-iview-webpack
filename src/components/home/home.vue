@@ -48,8 +48,9 @@
                                     部署实例管理
                                 </template>
                                 <Menu-item name="21">部署实例申请</Menu-item>
-                                <Menu-item name="22">部署实例列表</Menu-item>
-                                <Menu-item name="23">我的申请</Menu-item>
+                                <Menu-item name="22">我的申请</Menu-item>
+                                <Menu-item name="23">部署实例列表</Menu-item>
+
                             </Submenu>
                             <Submenu name="3">
                                 <template slot="title">
@@ -258,11 +259,11 @@
                     case '21': //资源申请
                         this.$router.push({name: 'resourceApplication'});
                         break;
-                    case '22': //资源申请历史
-                        this.$router.push({name: 'res_applicationHistory'});
-                        break;
-                    case '23': //我的申请
+                    case '22': //我的申请
                         this.$router.push({name: 'myApplication'});
+                        break;
+                    case '23': //资源申请历史
+                        this.$router.push({name: 'res_applicationHistory'});
                         break;
                     case '31': //应用部署
                         this.$router.push({name: 'applicationDeployment'});

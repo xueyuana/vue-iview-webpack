@@ -11,15 +11,15 @@
                 <Row type="flex" justify="center" align="middle">
                     <Col span="24">
 
-                    <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70" >
+                    <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70" inline >
 
-                        <Form-item prop="user" label="用户名">
+                        <Form-item prop="userName" label="用户名">
                             <Input type="text" v-model="formInline.userName" placeholder="请输入工号" >
 
                             </Input>
                         </Form-item>
 
-                        <Form-item prop="password" label="密码">
+                        <Form-item prop="passWord" label="密码">
                             <Input type="password" v-model="formInline.passWord" placeholder="请输入密码">
 
                             </Input>
@@ -142,9 +142,8 @@
     methods: {
         handleSubmit(name) {
             this.$refs[name].validate((valid) => {
-
                 if (valid) {
-                    let userName = this.formInline.userName;
+                  let userName = this.formInline.userName;
                     let passWord = this.formInline.passWord;
                     let rememberStatus = this.formInline.rememberPassword;
                     let accountInfo = "";
@@ -189,7 +188,7 @@
 
                                 // 成功回调
                             }, function () {
-                               /* this.$Message.error('登陆失败!');*/
+                               /!* this.$Message.error('登陆失败!');*!/
                                 // 失败回调
                             });
 
@@ -198,7 +197,7 @@
                 } else {
                     this.$Message.error('表单验证失败!');
                 }
-            })
+            });
         },
         doRememberPassword: function(event){
             let mySelf = this;
