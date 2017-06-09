@@ -295,6 +295,17 @@
       //取得对应的部署状态以及时间，如果没有部署，时间则还是资源创建时间按
       getStatus(){
         //用户姓名
+        for (var num in this.queryData) {
+          if (this.queryData[num].reservation_status == "reserving" ||this.queryData[num].reservation_status == "unreserved") {
+            this.queryData[num].deploy_result = "未部署";
+          }
+          if (this.queryData[num].reservation_status == "fail") {
+            this.queryData[num].deploy_result = "资源不足";
+          }
+          if (this.queryData[num].reservation_status == "ok") {
+            this.queryData[num].deploy_result = "未部署";
+          }
+        }
         let userName = getStroage('userInfo').username;
         let ifadmin = getStroage('userInfo').is_admin;
         let url='';
@@ -304,29 +315,29 @@
           //url=common.apihost+'resource/';
           url =  common.apihost + 'deployment/getDeploymentsByInitiator?initiator='+userName;
         }
-
+        const _this = this;
         this.$http.get(url, {emulateJSON: true}).then(function (response) {
 
-         console.log("返回测试"+response.body);
+        // console.log("返回测试"+response.body);
           if (response.status === 200 ) {
 
             let msgs = response.body;
-            for (var num in this.queryData) {
+            for (var num in _this.queryData) {
               for (var index in msgs) {
                 //只显示申请成功的
-                if (msgs[index].resource_id ===this.queryData[num].id) {
+                if (msgs[index].resource_id ===_this.queryData[num].id) {
 
-                  this.queryData[num].date=msgs[index].created_time;
-                  msgs[index].deploy_result=this.formatStatus(msgs[index].deploy_result);
+                  _this.queryData[num].date=msgs[index].created_time;
+                  msgs[index].deploy_result=_this.formatStatus(msgs[index].deploy_result);
 
-                  this.queryData[num].deploy_result=msgs[index].deploy_result;
+                  _this.queryData[num].deploy_result=msgs[index].deploy_result;
                 }
 
               }
 
 
             }
-
+            this.filterDate = this.mockTableData(_this.queryData, this.pageSize, 1)
           }
           // 成功回调
         }, function () {
@@ -335,55 +346,11 @@
 
         });
 
-       /* let msgs=[
-          {
-            "resource_id": "9e9ee9d2-4a96-11e7-968f-fa163e9474c9",
-            "resource_name": "june001",
-            "deploy_id": "b247eac0-46a8-11e7-84ee-fa163e9474c9",
-            "deploy_name": "部署编号001",
-            "deploy_result": "deploying",
-            "project_id": "263506f8-3f8c-11e7-80ef-fa163e9474c9",
-            "project_name": "测试环境11",
-            "created_time": "2017-06-01 16:57:26",
-            "initiator": "朱杰杰",
-            "environment": "develop",
-            "app_image": "arp.reg.innertoon.com/qitoon.checkin/qitoon.checkin:20170517101336"
-          },
-          {
-            "resource_id": "5a3dcec8-4679-11e7-92c1-fa163e9474c9",
-            "resource_name": "june001",
-            "deploy_id": "b247eac0-46a8-11e7-84ee-fa163e9474c9",
-            "deploy_name": "部署编号001",
-            "deploy_result": "deploying",
-            "project_id": "263506f8-3f8c-11e7-80ef-fa163e9474c9",
-            "project_name": "测试环境11",
-            "created_time": "2017-06-01 16:57:26",
-            "initiator": "朱杰杰",
-            "environment": "develop",
-            "app_image": "arp.reg.innertoon.com/qitoon.checkin/qitoon.checkin:20170517101336"
-          },
-          {
-            "resource_id": "5a3dcec8-4679-11e7-92c1-fa163e9474c9",
-            "resource_name": "june001",
-            "deploy_id": "b247eac0-46a8-11e7-84ee-fa163e9474c9",
-            "deploy_name": "部署编号001",
-            "deploy_result": "deploying",
-            "project_id": "263506f8-3f8c-11e7-80ef-fa163e9474c9",
-            "project_name": "测试环境11",
-            "created_time": "2017-06-01 16:57:26",
-            "initiator": "朱杰杰",
-            "environment": "develop",
-            "app_image": "arp.reg.innertoon.com/qitoon.checkin/qitoon.checkin:20170517101336"
-          }
-        ]*/
 
 
+        this.filterDate = this.mockTableData(_this.queryData, this.pageSize, 1)
 
-       console.log("整理后"+this.queryData)
-
-
-
-
+       console.log(_this.queryData)
 
       },
       // 查找
@@ -410,7 +377,7 @@
         console.log("query" + query);
         this.$http.get(url, {params: query}, {emulateJSON: true}).then(function (response) {
 
-          console.log(response.body.result.msg);
+  //        console.log(response.body.result.msg);
           if (response.body.code === 200 && response.body.result.res == "success") {
 
             let msgs = response.body.result.msg;
@@ -424,17 +391,9 @@
 
             }
             console.log(this.queryData);
-            for (var num in this.queryData) {
-              if (this.queryData[num].reservation_status == "reserving" ||this.queryData[num].reservation_status == "unreserved" ||this.queryData[num].reservation_status == "ok") {
-                this.queryData[num].deploy_result = "未部署";
-              }
-              if (this.queryData[num].reservation_status == "fail") {
-                this.queryData[num].deploy_result = "资源不足";
-              }
 
-            }
             this.getStatus();
-            this.filterDate = this.mockTableData(this.queryData, this.pageSize, 1)
+
           }
           // 成功回调
         }, function () {
