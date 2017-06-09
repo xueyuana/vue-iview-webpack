@@ -165,11 +165,7 @@ vueRouters.beforeEach((to, from, next) => {
             nav.activeName = '21'
             bread.level_2 = '部署实例申请'
             break
-        case 'myApplication':
-            nav.openNames = '2'
-            nav.activeName = '22'
-            bread.level_2 = '我的申请'
-            break
+
         case 'res_applicationHistory':
             nav.openNames = '2'
             nav.activeName = '23'
@@ -204,6 +200,11 @@ vueRouters.beforeEach((to, from, next) => {
             nav.openNames = '4'
             nav.activeName = '42'
             bread.level_2 = '我的资源'
+            break
+        case 'myApplication':
+            nav.openNames = '2'
+            nav.activeName = '44'
+            bread.level_2 = '我的申请'
             break
         case 'resourceView':
             nav.openNames = '4'
