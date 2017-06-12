@@ -36,10 +36,10 @@
                         <div class="title"><span>计算信息:</span></div>
                         <div class="container">
                             <div class="clearfix" style="margin-bottom: 10px">
-                                <div class="container-left">
+                               <!-- <div class="container-left">
                                     <span>实例名称：</span>
                                     <Input style="width: 180px" v-model="formInline.compute_list[0].ins_name" placeholder="请输入实例名称"></Input>
-                                </div>
+                                </div>-->
                                 <div class="container-right">
                                     <span>实例规格：</span>
                                     <Select style="width: 180px" v-model="cpuandrem.cpuandrem1" placeholder="请选择">

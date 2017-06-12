@@ -34,7 +34,7 @@
                             </div>
                             <div class="top_right fr">
                                 <div class="count" v-model="data.department">{{data.department}}</div>
-                                <div class="name">资源个数</div>
+                                <div class="name">部署实例</div>
                             </div>
                         </div>
                         <div class="bottom clearfix">
@@ -375,7 +375,7 @@
                 data:{
                     //部署单元
                     project:0,
-                    //计算实例
+                    //部署实例
                     department:0,
                     //数据库实例
                     mysqlandmongo:0,

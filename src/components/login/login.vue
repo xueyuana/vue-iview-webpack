@@ -185,10 +185,13 @@
                                       this.$router.push({path:'/management_console'})
                                     }
                                 }
+                                  if(response.body.code == 400){
+                                      this.$Message.error('验证错误!');
 
+                                  }
                                 // 成功回调
                             }, function () {
-                               /!* this.$Message.error('登陆失败!');*!/
+                              this.$Message.error('登陆失败!');
                                 // 失败回调
                             });
 
