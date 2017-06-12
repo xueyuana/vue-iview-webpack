@@ -9,10 +9,7 @@
                     <span>查询类型</span>
                 </div>
                 <div class="search-tabs">
-                    <Tabs value="deployUnit" :animated="false" @on-click="getTabName">
-                        <Tab-pane label="部署单元" name="deployUnit">
-                            <!--集成部署单元内容组件-->
-                            <div class="public-content">
+                    <div class="public-content">
                                 <!--部署单元内容-->
                                 <div class="table-search clearfix">
                                     <div class="search-select fl">
@@ -26,7 +23,7 @@
                                     <div class="search-btn fl">
                                         <Button type="primary" icon="ios-search" @click="goSearch">搜索</Button>
                                     </div>
-                                </div>
+                            </div>
                                 <div class="table-content">
                                     <table>
                                         <thead>
@@ -38,11 +35,19 @@
                                         <tr v-for="(data,index) in filterDate" :key="data">
                                             <td>{{ index+1 }}</td>
                                             <!--<td><a href="#">{{data.item_name}}</a></td>-->
+                                            <td>{{data.resource_type}}</td>
+                                            <td>{{data.resource_name}}</td>
                                             <td>{{data.item_name}}</td>
-                                            <td>{{data.create_date}}</td>
-                                            <td>{{data.user}}</td>
                                             <td>{{data.item_code}}</td>
-                                            <td>{{data.item_depart}}</td>
+                                            <td>{{data.create_date}}</td>
+                                            <td>{{data.resource_ip}}</td>
+                                            <td>{{data.resource_status}}</td>
+                                            <td>
+                                                <span v-for="configObj in data.resource_config" :key="configObj">
+                                                    {{ configObj.name}} : {{configObj.value}}
+                                                    <br>
+                                                </span>
+                                            </td>
                                             <td>
                                                 <Button type="primary">查看详情</Button>
                                             </td>
@@ -63,26 +68,8 @@
                                             ></Page>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </Tab-pane>
-                        <Tab-pane label="容器" name="container">
-                            <!--集成容器子组件-->
-                            <container></container>
-                        </Tab-pane>
-                        <Tab-pane label="MySQL" name="mysql">
-                            <!--集成mysql子组件-->
-                            <mysql></mysql>
-                        </Tab-pane>
-                        <Tab-pane label="Redis" name="redis">
-                            <!--集成redis子组件-->
-                            <redis></redis>
-                        </Tab-pane>
-                        <Tab-pane label="MongoDB" name="MongoDB">
-                            <!--集成mongodb子组件-->
-                            <mongodb></mongodb>
-                        </Tab-pane>
-                    </Tabs>
+                    </div>
+                    </div>
                 </div>
             </div>
             <div class="search-right">
@@ -156,17 +143,10 @@
 
 </style>
 <script>
-    // 导入部署单元子组件
-    import deployUnit from './subcomponents/deployUnit.vue';
-    import container from './subcomponents/container.vue';
-    import mysql from './subcomponents/mysql.vue';
-    import redis from './subcomponents/redis.vue';
-    import mongodb from './subcomponents/mongodb.vue';
     import common from '../../../../tools/common.js';
     export default {
         data () {
             return {
-                // 部署单元数据
                 // 搜索输入框内容
                 inputValue:'',
                 // 下拉列表内容 便于查询
@@ -176,21 +156,17 @@
                         label: '部署单元名称'
                     },
                     {
-                        value: 'start_time',
-                        label: '创建日期'
+                        value: 'resource_type',
+                        label: '实例类型'
                     },
                     {
-                        value: 'user_name',
-                        label: '创建人'
+                        value: 'resource_name',
+                        label: '实例名称'
                     },
                     {
                         value: 'item_code',
                         label: '部署单元编号'
                     },
-                    {
-                        value: 'item_depart',
-                        label: '归属部门'
-                    }
                 ],
                 // 下拉列表选中的值
                 selectedValue: '',
@@ -204,25 +180,38 @@
                         key: 'identifier'
                     },
                     {
-                        title: '部署单元名称',
+                        title: '实例类型',
+                        key: 'resource_type'
+                    },
+                    {
+                        title: '实例名称',
+                        key: 'resource_name'
+                    },
+                    {
+                        title: '所属部署单元名称',
                         key: 'item_name'
+                    },
+                    {
+                        title: '所属部署单元编号',
+                        key: 'item_code'
                     },
                     {
                         title: '创建日期',
                         key: 'create_date'
                     },
                     {
-                        title: '创建人',
-                        key: 'user'
+                        title: 'IP',
+                        key: 'resource_ip'
                     },
                     {
-                        title: '部署单元编号',
-                        key: 'item_code'
+                        title: '状态',
+                        key: 'resource_status'
                     },
                     {
-                        title: '归属部门',
-                        key: 'item_depart'
+                        title: '配置',
+                        key: 'resource_config'
                     },
+
                     {
                         title: '操作',
                         key: 'action'
@@ -283,7 +272,8 @@
             goSearch  () {
                 let userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-                const url = common.apihost + 'iteminfo/iteminfoes/project_item';
+//                const url = common.apihost + 'iteminfo/iteminfoes/project_item';
+                const url = '/static/json/myResource/myResource.json'
                 // 查询条件
                 let query = {};
 
@@ -302,7 +292,7 @@
                                     let backDatas = response.body.result.res;
                                     this.data1 = backDatas;
                                     this.filterDate = this.mockTableData(backDatas, this.pageSize, 1)
-                                    this.$store.commit('getOriginData', this.filterDate);
+//                                    this.$store.commit('getOriginData', this.filterDate);
                                 }
                         });
             },
@@ -311,7 +301,7 @@
             changePage (page) {
                 console.log(page);
                 this.filterDate = this.mockTableData(this.data1, this.pageSize, page);
-                this.$store.commit('getOriginData', this.filterDate);
+//                this.$store.commit('getOriginData', this.filterDate);
             },
 
             // 返回切换后的每页条数
@@ -329,47 +319,17 @@
                     data.push({
                         item_name: originData[i].item_name,
                         create_date: originData[i].create_date.substring(0, 16),
-                        user: originData[i].user,
                         item_code: originData[i].item_code,
-                        item_depart: originData[i].item_depart
+                        resource_type: originData[i].resource_type,
+                        resource_name: originData[i].resource_name,
+                        resource_ip: originData[i].resource_ip,
+                        resource_status: originData[i].resource_status,
+                        resource_config: originData[i].resource_config,
                     })
                 }
                 return data;
             },
-
-            getResourceData (url) {
-                this.$http.get(url)
-                        .then(response => {
-                             console.log(response);
-                            if (response.body.code === 200) { // 请求成功
-                                let backDatas = response.body.result.res;
-                            }
-                       });
-            },
-
-            // 获取点击tab触发的值
-            getTabName (name) {
-                console.log(name);
-                let url="";
-                // 根据不同的name，请求不同的数据
-                switch (name) {
-                    case "deployUnit":
-                        url=common.apihost+'iteminfo/iteminfoes/project_item';
-                        break;
-                    case "container":
-                        url=common.apihost+'res_callback/res';
-                        this.getResourceData(url);
-                        break;
-
-                }
-            }
         },
-        components: {
-            deployUnit,
-            container,
-            mysql,
-            redis,
-            mongodb
-        }
+
     }
 </script>

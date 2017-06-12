@@ -3,7 +3,11 @@
         <Row>
             <Col span="4">
               <div class="view-left scrollbar">
-                <Menu :theme="theme" active-name="1" width="auto" @on-select="goResourceTree">
+                <Menu
+                        :theme="theme"
+                        :active-name="$store.state.subOpenMenu.subActiveItem.activeName"
+                        :open-names="[$store.state.subOpenMenu.subActiveItem.openNames]"
+                        width="auto" @on-select="goResourceTree">
                     <Submenu :name="menuData._id.project" v-for="(menuData,index) in menuDatas" :key="menuData">
                         <template slot="title">
                            {{menuData._id.project}}
@@ -65,41 +69,79 @@
             this.getDeployUit();
         },
         methods:{
+            // 获取拥有资源的部署单元的信息
             getDeployUit() {
-                // agg_by=project&agg_expr=res_id&agg_expr=resource_name
                 let userInfo = JSON.parse(localStorage.getItem('userInfo'));
                 let url='';
-                // 查询条件
-//                let query = {
-//                    agg_by: "project",
-//                    agg_expr: "res_id",
-//                    agg_expr: "resource_name"
-//                };
+
                 if (!userInfo.is_admin) { //普通用户
                     url = common.apihost + 'resource/?user_id='+userInfo.user_id+'&agg_by=project&agg_expr=res_id&agg_expr=resource_name';
                 }else  {
                     url = common.apihost + 'resource/?agg_by=project&agg_expr=res_id&agg_expr=resource_name';
                 }
 
-                // 查询条件
                 this.$http.get(url)
                         .then(response => {
                                 console.log(response);
                                 if (response.body.code === 200) { // 请求成功
                                     let backDatas = response.body.result.msg;
                                     this.menuDatas=backDatas;
-//
+
+                                    this.$router.push({ name:"resourceTree",params:{ resource_id:backDatas[0].ret[0].res_id}});
+
+                                    // 修改面包屑导航的数据
+                                    this.$store.commit('getLevel',{
+                                        level_1: this.$store.state.breadcrumbData.level.level_1,
+                                        level_2: this.$store.state.breadcrumbData.level.level_2,
+                                        level_3: this.getNameById(this.$route.params.resource_id).resource_name
+                                    });
                                 }
                         });
             },
+
+            //  根据id获取name
+            getNameById (id) {
+                // 设置面包屑导航的数据
+                for(let i=0;i<this.menuDatas.length;i++) {
+                    let menuData=this.menuDatas[i];
+                    for(let j=0;j<menuData.ret.length;j++) {
+                        let retObj=menuData.ret[j];
+                        if(retObj.res_id===id) {
+                            return {
+                                resource_name:retObj.resource_name,
+                                openName:menuData._id.project
+                            }
+                        }
+                    }
+                }
+            },
+
             // 跳转到相应的资源架构图
             goResourceTree (name) {
-                console.log(name);
-                // 根据id获取部署实例的架构数据
+//                console.log(name);
 
-                // 将数据保存到状态池中
+                // 跳转到部署实例的视图
+                this.$router.push({ name:"resourceTree",params:{ resource_id:name}});
 
-                this.$router.push({ name:"resourceTree",params:{ resource_id:name}})
+                // 修改面包屑导航的数据
+                this.$store.commit('getLevel',{
+                            level_1: this.$store.state.breadcrumbData.level.level_1,
+                            level_2: this.$store.state.breadcrumbData.level.level_2,
+                            level_3: this.getNameById(name).resource_name
+                });
+            }
+        },
+
+        watch: {
+            '$route' (to, from) {
+                console.log("动态路径参数" + this.$route.params.resource_id);
+                // 设置默认打开项
+                this.$store.commit("getSubActiveItem",{
+                    openNames: this.getNameById(this.$route.params.resource_id).openName,  // Submenu
+                    activeName: this.$route.params.resource_id  //Menu-item
+                });
+                console.log(this.$store.state.subOpenMenu.subActiveItem);
+
             }
         }
     }

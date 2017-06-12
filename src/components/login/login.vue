@@ -11,15 +11,15 @@
                 <Row type="flex" justify="center" align="middle">
                     <Col span="24">
 
-                    <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70" >
+                    <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70" inline >
 
-                        <Form-item prop="user" label="用户名">
+                        <Form-item prop="userName" label="用户名">
                             <Input type="text" v-model="formInline.userName" placeholder="请输入工号" >
 
                             </Input>
                         </Form-item>
 
-                        <Form-item prop="password" label="密码">
+                        <Form-item prop="passWord" label="密码">
                             <Input type="password" v-model="formInline.passWord" placeholder="请输入密码">
 
                             </Input>
@@ -125,7 +125,7 @@
                 ],
                 passWord: [
                     { required: true, message: '请填写密码', trigger: 'blur' },
-                    { type: 'string', min: 6, message: '密码长度不能小于6位', trigger: 'blur' }
+                    { type: 'string', min: 4, message: '密码长度不能小于4位', trigger: 'blur' }
                 ]
             }
         }
@@ -142,9 +142,8 @@
     methods: {
         handleSubmit(name) {
             this.$refs[name].validate((valid) => {
-
                 if (valid) {
-                    let userName = this.formInline.userName;
+                  let userName = this.formInline.userName;
                     let passWord = this.formInline.passWord;
                     let rememberStatus = this.formInline.rememberPassword;
                     let accountInfo = "";
@@ -175,7 +174,6 @@
                                     userinfo.username=response.body.result.msg.username;
                                     userinfo.user_id=response.body.result.msg.user_id;
                                     userinfo.is_admin=response.body.result.msg.is_admin;
-                                    userinfo.is_root=response.body.result.msg.is_root;
                                     userinfo.department=response.body.result.msg.department;
 
                                     setStroage('userInfo', userinfo)
@@ -187,10 +185,13 @@
                                       this.$router.push({path:'/management_console'})
                                     }
                                 }
+                                  if(response.body.code == 400){
+                                      this.$Message.error('验证错误!');
 
+                                  }
                                 // 成功回调
                             }, function () {
-                               /* this.$Message.error('登陆失败!');*/
+                              this.$Message.error('登陆失败!');
                                 // 失败回调
                             });
 
@@ -199,7 +200,7 @@
                 } else {
                     this.$Message.error('表单验证失败!');
                 }
-            })
+            });
         },
         doRememberPassword: function(event){
             let mySelf = this;

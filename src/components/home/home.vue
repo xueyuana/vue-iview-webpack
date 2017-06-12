@@ -45,10 +45,12 @@
                             </Submenu>
                             <Submenu name="2">
                                 <template slot="title">
-                                   资源管理
+                                    部署实例管理
                                 </template>
-                                <Menu-item name="21">资源申请</Menu-item>
-                                <Menu-item name="22">资源列表</Menu-item>
+                                <Menu-item name="21">部署实例申请</Menu-item>
+
+                                <Menu-item name="23">部署实例列表</Menu-item>
+
                             </Submenu>
                             <Submenu name="3">
                                 <template slot="title">
@@ -62,6 +64,7 @@
                                     工作台
                                 </template>
                                 <Menu-item name="41">我的工作台</Menu-item>
+                                <Menu-item name="44">我的申请</Menu-item>
                                 <Menu-item name="42">我的资源</Menu-item>
                                 <Menu-item name="43">资源视图</Menu-item>
                             </Submenu>
@@ -75,7 +78,12 @@
                     </i-col>
                     <i-col span="20" offset="4">
                         <div class="layout-header">
-                            <Breadcrumb separator=">">
+                            <Breadcrumb separator=">" v-if="$store.state.breadcrumbData.level.level_3">
+                                <Breadcrumb-item href="#">{{ $store.state.breadcrumbData.level.level_1 }}</Breadcrumb-item>
+                                <Breadcrumb-item href="/resource_view">{{ $store.state.breadcrumbData.level.level_2 }}</Breadcrumb-item>
+                                <Breadcrumb-item>{{ $store.state.breadcrumbData.level.level_3 }}</Breadcrumb-item>
+                            </Breadcrumb>
+                            <Breadcrumb separator=">" v-else>
                                 <Breadcrumb-item href="#">{{ $store.state.breadcrumbData.level.level_1 }}</Breadcrumb-item>
                                 <Breadcrumb-item>{{ $store.state.breadcrumbData.level.level_2 }}</Breadcrumb-item>
                             </Breadcrumb>
@@ -86,6 +94,9 @@
                                 <router-view></router-view>
                             </div>
                         </div>
+
+                        <!--<div class="layout-copy">-->
+                        <!--</div>-->
 
                     </i-col>
                 </Row>
@@ -102,7 +113,7 @@
         width: 100%;
         line-height: 60px;
         padding: 0 20px;
-        /*border-bottom: 1px solid #ECECEC;*/
+        border-bottom: 1px solid #ECECEC;
         box-sizing: border-box;
         position: fixed;
         background: #f5f7f9;
@@ -138,15 +149,15 @@
     }
 
     .layout{
-        border: 1px solid #d7dde4;
-        background: #f5f7f9;
+        /*border: 1px solid #d7dde4;*/
+        /*background: #f5f7f9;*/
         position: relative;
     }
     .layout-breadcrumb{
         padding: 10px 15px 0;
     }
     .layout-content{
-        min-height: 800px;
+        min-height: 200px;
         margin: 15px;
         overflow: hidden;
         background: #fff;
@@ -222,7 +233,8 @@
             // 退出登录
             toLogOut() {
                 console.log('logput')
-                removeStroage('userInfo')
+                removeStroage('userInfo');
+                this.$router.push({path:'/login'});
             },
 
             // 导航跳转
@@ -248,7 +260,8 @@
                     case '21': //资源申请
                         this.$router.push({name: 'resourceApplication'});
                         break;
-                    case '22': //资源申请历史
+
+                    case '23': //资源申请历史
                         this.$router.push({name: 'res_applicationHistory'});
                         break;
                     case '31': //应用部署
@@ -267,6 +280,10 @@
                     case '42': //我的资源
                         this.$router.push({name: 'myResource'});
                         break;
+                    case '44': //我的申请
+                        this.$router.push({name: 'myApplication'});
+                        break;
+
                     case '43': //资源视图
                         this.$router.push({name: 'resourceView'});
                         break;

@@ -102,6 +102,9 @@
 
 <script>
   import {setStroage} from 'tools/cookieAction.js';
+  import common from 'tools/common.js';
+  import {userinfo} from 'tools/user.js';
+  import {getStroage} from 'tools/cookieAction.js'
   import baseUrl from 'tools/common.js'
   import USER from 'tools/user.js'
 
@@ -155,7 +158,10 @@
         searchList: [],
         selected: {},
         formItem: {},
-        index: ''
+        index: '',
+        USER:{
+          userId: getStroage('userInfo').user_id
+        }
       }
     },
 
@@ -225,7 +231,7 @@
       onSubmit() {
         if (this.formItem.id) {
           this.loading = true
-          let url = baseUrl.apihost + 'auth/admindetail/' + this.USER.user_id
+          let url = baseUrl.apihost + 'auth/admindetail/' + this.USER.userId
           let params = {
             'user_id': this.formItem.id,
             'admin_user': this.formItem.autho

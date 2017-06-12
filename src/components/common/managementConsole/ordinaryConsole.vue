@@ -65,7 +65,7 @@
                                 <i class="fa fa-server" aria-hidden="true"></i>
                             </div>
                             <div class="top_right fr">
-                                <div class="count">2</div>
+                                <div class="count" v-model="dataList.count">2</div>
                                 <div class="name">部署单元</div>
                             </div>
                         </div>
@@ -84,8 +84,8 @@
                                 <i class="fa fa-cubes" aria-hidden="true"></i>
                             </div>
                             <div class="top_right fr">
-                                <div class="count">2</div>
-                                <div class="name">计算实例</div>
+                                <div class="count" v-model="dataList.list">2</div>
+                                <div class="name">资源列表</div>
                             </div>
                         </div>
                         <div class="bottom clearfix">
@@ -104,7 +104,7 @@
                                 <i class="fa fa-database" aria-hidden="true"></i>
                             </div>
                             <div class="top_right fr">
-                                <div class="count">2</div>
+                                <div class="count" v-model="dataList.sqlmongo">2</div>
                                 <div class="name">数据库实例</div>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                                 <i class="fa fa-hdd-o" aria-hidden="true"></i>
                             </div>
                             <div class="top_right fr">
-                                <div class="count">2</div>
+                                <div class="count" v-model="dataList.redies">2</div>
                                 <div class="name">缓存实例</div>
                             </div>
                         </div>
@@ -333,8 +333,8 @@
     export default {
         data () {
             return {
-                unapprovedNum:0
-
+                unapprovedNum:0,
+                dataList:{}
             }
         },
 

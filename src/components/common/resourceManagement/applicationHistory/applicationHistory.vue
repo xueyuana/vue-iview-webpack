@@ -4,21 +4,17 @@
     <div class="query">
       <Form :label-width="100">
         <Row>
-          <Col span="6">
-          <Form-item label="发起人">
+          <Col span="10">
+          <Form-item label="归属人">
             <Input placeholder="请输入" v-model="formItem.name"></Input>
           </Form-item>
-          <Form-item label="审批状态">
-            <Select placeholder="请选择" v-model="formItem.approval_status">
-              <Option value=""> 流程不存在</Option>
-              <Option value=""> 审批完成</Option>
-              <Option value=""> 资源不足</Option>
-              <Option value="">审批不通过</Option>
 
-            </Select>
+          <Form-item label="实例名称">
+            <Input placeholder="请输入" v-model="formItem.resource_name"></Input>
           </Form-item>
+
           </Col>
-          <Col span="8">
+          <Col span="10">
           <Form-item label="发起日期">
             <Row>
               <Col span="11">
@@ -28,7 +24,7 @@
               </Col>
               <Col span="2" style="text-align: center">
               至
-                                          </Col>
+              </Col>
               <Col span="11">
               <Form-item>
                 <Date-picker type="datetime" placeholder="选择日期" v-model="formItem.end_time"></Date-picker>
@@ -36,24 +32,10 @@
               </Col>
             </Row>
           </Form-item>
-          <Form-item label="表单状态">
-            <Select placeholder="请选择" v-model="formItem.formStatus">
-              <Option value="待提交">待提交</Option>
-              <Option value="已提交">已提交</Option>
-            </Select>
-          </Form-item>
-          </Col>
-          <Col span="6">
-          <Form-item label="资源名称">
-            <Input placeholder="请输入" v-model="formItem.resource_name"></Input>
-          </Form-item>
 
-
-          <Form-item label="所属部署单元">
+          <Form-item label="部署单元">
             <Input v-model="formItem.project" placeholder="请输入"></Input>
-
           </Form-item>
-
 
           </Col>
           <Col span="4">
@@ -110,47 +92,35 @@
           }
         }, columns: [
           {
-            title: '发起人',
+            type: 'index',
+            title: '序号',
+            align: 'center'
+          },
+          {
+            title: '归属人',
             key: 'name',
             align: 'center'
           },
           {
-            title: '发起日期',
+            title: '部署时间',
             key: 'date',
-            align: 'center'
-          },
-          {
-            title: '资源名称',
-            key: 'resource',
             align: 'center',
-            render: (h, params) => {
-              //判断是否是管理员只有管理员才能点击
-              if (getStroage('userInfo').is_admin) {
-                return h('a', {
-                  on: {
-                    click: () => {
-                      this.gotoCheck(params.index);
-                    }
-                  }
-                }, params.row['resource'])
-              } else {
-                return h('div', params.row['resource']);
-              }
-            }
+            "sortable": true
           },
           {
-            title: '表单状态',
-            key: 'formStatus',
-            align: 'center'
-          },
-          {
-            title: '审批状态',
-            key: 'approval_status',
-            align: 'center'
-          },
-          {
-            title: '所属部署单元',
+            title: '部署单元',
             key: 'project',
+            align: 'center'
+          },
+          {
+            title: '实例名称',
+            key: 'resource',
+            align: 'center'
+
+          },
+          {
+            title: '部署状态',
+            key: 'deploy_result',
             align: 'center'
           },
           {
@@ -158,78 +128,127 @@
             key: 'operate',
             align: 'center',
             render: (h, params) => {
-              if (this.filterDate[params.index].reservation_status == "ok") {
+            if (this.filterDate[params.index].reservation_status == "unreserved") {
+        return h('div', [
+          h('Button', {
+            props: {
+              type: 'disabled',
+              size: 'small'
+            },
+            style: {
+              marginRight: '5px'
+            }
+          }, '部署'),
+          h('Button', {
+            props: {
+              type: 'disabled',
+              size: 'small'
+            },
+            style: {
+              marginRight: '5px'
+            }
+          }, '查看')])
+      }
+            //预留状态是预留中，部署状态为未部署 ，部署查看 按钮均不能用
+                    if (this.filterDate[params.index].reservation_status == "reserving") {
                 return h('div', [
                   h('Button', {
                     props: {
-                      type: 'primary',
+                      type: 'disabled',
                       size: 'small'
                     },
                     style: {
                       marginRight: '5px'
-                    },
-                    on: {
-                      click: () => {
-                        this.gotoAdd(params.index);
-                      }
                     }
-                  }, '部署')])
-              } else if (this.filterDate[params.index].reservation_status == "unreserved") {
-                if (this.filterDate[params.index].approval_status == "审批中") {
-                  return h('div', [
-                    h('div', {
-                      props: {
-                        size: 'small'
-                      },
-                      style: {
-                        marginRight: '5px'
-                      }
-                    }, '编辑')])
-                } else if (this.filterDate[params.index].approval_status == "审批完成") {
-                  return h('div', [
-                    h('div', {
-                      props: {
-                        size: 'small'
-                      },
-                      style: {
-                        marginRight: '5px'
-                      }
-                    }, '部署')]);
-                } else {
-                  return h('div', [
-                    h('Button', {
-                      props: {
-                        type: 'primary',
-                        size: 'small'
-                      },
-                      style: {
-                        marginRight: '5px'
-                      },
-                      on: {
-                        click: () => {
-                          this.gotoEdit(params.index);
+                  }, '部署'),
+                  h('Button', {
+                    props: {
+                      type: 'disabled',
+                      size: 'small'
+                    },
+                    style: {
+                      marginRight: '5px'
+                    }
+                    }, '查看')])
+                }else if (this.filterDate[params.index].reservation_status == "fail") {
+                    return h('div', [
+                      h('Button', {
+                        props: {
+                          type: 'primary',
+                          size: 'small'
+                        },
+                        style: {
+                          marginRight: '5px'
+                        },on: {
+                          click: () => {
+                          this.gotoReAdd(params.index);
+                            }
+                       }
+                      }, '重建'),
+                      h('Button', {
+                        props: {
+                          type: 'disabled',
+                          size: 'small'
+                        },
+                        style: {
+                          marginRight: '5px'
                         }
-                      }
-                    }, '编辑')])
-                }
-
-              } else {
-                this.filterDate[params.index].approval_status = "资源不足";
-                return h('div', [
-                  h('Button', {
-                    props: {
-                      type: 'primary',
-                      size: 'small'
-                    },
-                    style: {
-                      marginRight: '5px'
-                    }, on: {
-                      click: () => {
-                        this.gotoReAdd(params.index);
-                      }
-                    }
-                  }, '重建')]);
-              }
+                      }, '查看')])
+                     //预留成功
+                      }else if (this.filterDate[params.index].reservation_status == "ok") {
+                            //未部署
+                           if(this.filterDate[params.index].deploy_result == '部署中'){
+                             return h('div', [
+                               h('Button', {
+                                 props: {
+                                   type: 'disabled',
+                                   size: 'small'
+                                 },
+                                 style: {
+                                   marginRight: '5px'
+                                 }
+                               }, '部署'),
+                               h('Button', {
+                                 props: {
+                                   type: 'primary',
+                                   size: 'small'
+                                 },
+                                 style: {
+                                   marginRight: '5px'
+                                 }
+                               }, '查看')])
+                           }//部署成功和部署失败部署中
+                           else{
+                             return h('div', [
+                               h('Button', {
+                                 props: {
+                                   type: 'primary',
+                                   size: 'small'
+                                 },
+                                 style: {
+                                   marginRight: '5px'
+                                 },
+                                 on: {
+                                   click: () => {
+                                   this.gotoAdd(params.index);
+                                 }
+                                }
+                               }, '部署'),
+                               h('Button', {
+                                 props: {
+                                   type: 'primary',
+                                   size: 'small'
+                                 },
+                                 style: {
+                                   marginRight: '5px'
+                                 },
+                                 on: {
+                                   click: () => {
+                                   this.gotoChart(params.index);
+                                 }}
+                               }, '查看')])
+                           }
+                       }
             }
           }
         ],
@@ -243,36 +262,7 @@
           project: ""//所属部署单元
         },
         queryData: [
-          {
-            name: 'sdfsd',
-            date: 'sdfsf',
-            resource: 'sdfsf',
-            formStatus: 'sdfdsf',
-            approval_status: 'success',
-            project: 'sdfsf',
-            id: '123',
-            reservation_status: ""
-          },
-          {
-            name: 'sdfsd',
-            date: 'sdfsf',
-            resource: 'sdfsf',
-            formStatus: 'sdfdsf',
-            approval_status: '流程不存在',
-            project: 'sdfsf',
-            id: '123',
-            reservation_status: ""
-          },
-          {
-            name: 'sdfsd',
-            date: 'sdfsf',
-            resource: 'sdfsf',
-            formStatus: 'sdfdsf',
-            approval_status: 'processing',
-            project: 'sdfsf',
-            id: '123',
-            reservation_status: ""
-          }
+
         ],
         // 分页数据
         filterDate: [],
@@ -287,13 +277,85 @@
 
 
     methods: {
+      //修改部署状态
+      formatStatus(val){
+        switch (val) {
+          case 'deploying':
+            return '部署中'
+          case 'not_deployed':
+            return '未部署'
+          case 'fail':
+            return '失败'
+          case 'success':
+            return '成功'
+          default:
+            break
+        }
+      },
+      //取得对应的部署状态以及时间，如果没有部署，时间则还是资源创建时间按
+      getStatus(){
+        //用户姓名
+        for (var num in this.queryData) {
+          if (this.queryData[num].reservation_status == "reserving" ||this.queryData[num].reservation_status == "unreserved") {
+            this.queryData[num].deploy_result = "未部署";
+          }
+          if (this.queryData[num].reservation_status == "fail") {
+            this.queryData[num].deploy_result = "资源不足";
+          }
+          if (this.queryData[num].reservation_status == "ok") {
+            this.queryData[num].deploy_result = "未部署";
+          }
+        }
+        let userName = getStroage('userInfo').username;
+        let ifadmin = getStroage('userInfo').is_admin;
+        let url='';
+        if (ifadmin) {
+          url = common.apihost + 'deployment/getDeploymentsByInitiator';
+        } else {
+          //url=common.apihost+'resource/';
+          url =  common.apihost + 'deployment/getDeploymentsByInitiator?initiator='+userName;
+        }
+        const _this = this;
+        this.$http.get(url, {emulateJSON: true}).then(function (response) {
+
+        // console.log("返回测试"+response.body);
+          if (response.status === 200 ) {
+
+            let msgs = response.body;
+            for (var num in _this.queryData) {
+              for (var index in msgs) {
+                //只显示申请成功的
+                if (msgs[index].resource_id ===_this.queryData[num].id) {
+
+                  _this.queryData[num].date=msgs[index].created_time;
+                  msgs[index].deploy_result=_this.formatStatus(msgs[index].deploy_result);
+
+                  _this.queryData[num].deploy_result=msgs[index].deploy_result;
+                }
+
+              }
+
+
+            }
+            this.filterDate = this.mockTableData(_this.queryData, this.pageSize, 1)
+          }
+          // 成功回调
+        }, function () {
+         // this.$Message.error('登陆失败!');
+          // 失败回调
+
+        });
+
+
+
+        this.filterDate = this.mockTableData(_this.queryData, this.pageSize, 1)
+
+       console.log(_this.queryData)
+
+      },
       // 查找
       onCheck() {
-        //取得资源申请列表数据
-//        let userid= userinfo.user_id;
-        console.log(this.queryData)
 
-        //取得资源申请列表数据
         let userid = getStroage('userInfo').user_id;
         let ifadmin = getStroage('userInfo').is_admin;
         let url = "";
@@ -315,27 +377,23 @@
         console.log("query" + query);
         this.$http.get(url, {params: query}, {emulateJSON: true}).then(function (response) {
 
-          console.log(response.body.result.msg);
+  //        console.log(response.body.result.msg);
           if (response.body.code === 200 && response.body.result.res == "success") {
-            this.queryData = response.body.result.msg;
+
             let msgs = response.body.result.msg;
 
             for (var index in msgs) {
-              if (msgs[index].approval_status == "unsubmit") {
-                this.queryData[index].approval_status = "流程不存在";
-              }
-              if (msgs[index].approval_status == "processing") {
-                this.queryData[index].approval_status = "审批中";
-              }
-              if (msgs[index].approval_status == "success") {
-                this.queryData[index].approval_status = "审批完成";
-              }
-              if (msgs[index].approval_status == "failed") {
-                this.queryData[index].approval_status = "审批不通过";
-              }
-            }
+             //只显示申请成功的
+              if (msgs[index].approval_status === "success") {
 
-            this.filterDate = this.mockTableData(this.queryData, this.pageSize, 1)
+                this.queryData.push(msgs[index]);
+              }
+
+            }
+            console.log(this.queryData);
+
+            this.getStatus();
+
           }
           // 成功回调
         }, function () {
@@ -364,24 +422,17 @@
         let query = {};
         this.$http.get(url, {emulateJSON: true}).then(function (response) {
 
-          console.log(response.body.result.msg);
+          console.log('实例列表'+response.body.result.msg);
           if (response.body.code === 200 && response.body.result.res == "success") {
-            this.queryData = response.body.result.msg;
+           // this.queryData = response.body.result.msg;
             let msgs = response.body.result.msg;
 
             for (var index in msgs) {
-              if (msgs[index].approval_status == "unsubmit") {
-                this.queryData[index].approval_status = "流程不存在";
-              }
-              if (msgs[index].approval_status == "processing") {
-                this.queryData[index].approval_status = "审批中";
-              }
+            //只显示审批完成的
               if (msgs[index].approval_status == "success") {
-                this.queryData[index].approval_status = "审批完成";
+                this.queryData.push(msgs[index]);
               }
-              if (msgs[index].approval_status == "failed") {
-                this.queryData[index].approval_status = "审批不通过";
-              }
+
             }
 
             this.filterDate = this.mockTableData(this.queryData, this.pageSize, 1)
@@ -396,46 +447,42 @@
       },
       //新增一条资源
       gotoAdd(index){
-        const url = common.apihost + 'approval/reservation';
+        this.$router.push({name: 'applicationDeployment', query: {id: this.filterDate[index].id}});
+        /*const url = common.apihost + 'approval/reservation';
         let resourcejson = {"resource_id": this.queryData[index].id}
         this.$http.post(url, resourcejson, {emulateJSON: true}).then(function (response) {
           if (response.body.code === 200) {
             // this.$Message.success('提交成功!');
             console.log("添加资源预留");
-            this.$router.push({name: 'deployment', query: {id: this.filterDate[index].id}});
+
           }
           // 成功回调
         }, function () {
 
-        });
+        });*/
       },
       //重新创建资源
       gotoReAdd(index){
 
-//        const url = common.apihost + 'approval/reservation';
-//        let resourcejson = {"resource_id": this.queryData[index].id}
-//        this.$http.put(url, resourcejson, {emulateJSON: true}).then(function (response) {
-//          if (response.body.code === 200) {
-//            this.$Message.success('资源预留成功!');
-//            console.log("添加资源预留");
-//            this.$router.push({name: 'applicationDeployment', query: {id: this.filterDate[index].id}});
-//          }
-//          // 成功回调
-//        }, function () {
-//
-//        });
-      },
-      //跳转到编辑页面
-      gotoEdit(index){
-        console.log(this.queryData[index].id);
-        this.$router.push({name: 'resourceApplication', query: {id: this.filterDate[index].id}});
-      },
-      //跳转到审批页面
-      gotoCheck(index){
-        console.log(this.queryData[index].id);
-        this.$router.push({name: 'res_applicationCheck', query: {id: this.filterDate[index].id}});
-      },
+        const url = common.apihost + 'approval/reservation/'+this.queryData[index].id;
 
+        this.$http.put(url, {emulateJSON: true}).then(function (response) {
+         if (response.body.code === 200) {
+            this.$Message.success('资源预留成功!');
+           // console.log("添加资源预留");
+           // this.$router.push({name: 'applicationDeployment', query: {id: this.filterDate[index].id}});
+          }else{
+           this.$Message.success('资源失败再次预留!');
+         }失败
+          // 成功回调
+        }, function () {
+
+       });
+      },
+      //查看跳转到图表的页面
+      gotoChart(index){
+        this.$router.push({ name:"resourceTree",params:{ resource_id: this.filterDate[index].id}});
+      },
       // 分页
       changePage(val) {
         this.filterDate = this.mockTableData(this.queryData, this.pageSize, val)
@@ -457,7 +504,8 @@
             approval_status: originData[i].approval_status,
             project: originData[i].project,
             id: originData[i].id,
-            reservation_status: originData[i].reservation_status
+            reservation_status: originData[i].reservation_status,
+            deploy_result: originData[i].deploy_result
           })
         }
         return data;
