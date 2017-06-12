@@ -309,6 +309,7 @@
           console.log('提交成功', res)
           this.$router.push({name: 'myResource'})
         }, err => {
+          this.$Message.warning('错误')
           console.log('error', err)
         })
 
