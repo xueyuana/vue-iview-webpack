@@ -304,10 +304,10 @@
           this.$Message.warning('所属部署单元不能为空')
           return
         }
-        if (!this.mirror.trim()) {
+      /*  if (!this.mirror.trim()) {
           this.$Message.warning('镜像URL不能为空')
           return
-        }
+        }*/
 
         let body = {
           "action": 'deploy_to_crp',
