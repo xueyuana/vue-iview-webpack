@@ -148,54 +148,71 @@
             let rememberStatus = this.formInline.rememberPassword;
             let accountInfo = "";
             accountInfo = userName + "&" + passWord;
-            console.log(this.formInline.userName);
 
-            const url=common.apihost+'auth/userlist';
-            this.$http.post(
-              url,
-              {
-                'id':userName,
-                'password':passWord
-
-              }, {emulateJSON:true} ).then(response=>{
-              console.log('账号密码', response);
-              if (rememberStatus){
-                console.log("勾选了记住密码，现在开始写入cookie");
-                setCookie('accountInfo',accountInfo,1440*3);
+            // June 临时验证
+            if (userName) {
+              setStroage('role', {role: userName})
+              switch (userName) {
+                case 'user':
+                  this.$router.push({name: 'home'})
+                  break
+                case 'admin':
+                  this.$router.push({name: 'home'})
+                  break
+                case 'approval':
+                  this.$router.push({name: 'home'})
+                  break
+                default:
+                  this.$Message.error('权限不存在')
               }
-              else{
-                console.log("没有勾选记住密码，现在开始删除账号cookie");
-                delCookie('accountInfo');
-              }
-              if(response.body.code===200){
-                this.$Message.success('提交成功!');
-                console.log('登录成功', response)
-                let userinfo = {}
-                userinfo.username=response.body.result.msg.username;
-                userinfo.user_id=response.body.result.msg.user_id;
-                userinfo.is_admin=response.body.result.msg.is_admin;
-                userinfo.department=response.body.result.msg.department;
+            } else {
+              this.$Message.error('用户名不能为空')
+            }
 
-                setStroage('userInfo', userinfo)
-
-                // 根据身份跳转不同界面
-                if (response.body.result.msg.is_admin) {
-                  this.$router.push({path:'/admin_console'})
-                }else {
-                  this.$router.push({path:'/management_console'})
-                }
-              }
-              if(response.body.code == 400){
-                this.$Message.error('验证错误!');
-
-              }
-              // 成功回调
-            }, function () {
-              this.$Message.error('登陆失败!');
-              // 失败回调
-            });
-
-
+//            const url=common.apihost+'auth/userlist';
+//            this.$http.post(
+//              url,
+//              {
+//                'id':userName,
+//                'password':passWord
+//
+//              }, {emulateJSON:true} ).then(response=>{
+//              console.log('账号密码', response);
+//              if (rememberStatus){
+//                console.log("勾选了记住密码，现在开始写入cookie");
+//                setCookie('accountInfo',accountInfo,1440*3);
+//              }
+//              else{
+//                console.log("没有勾选记住密码，现在开始删除账号cookie");
+//                delCookie('accountInfo');
+//              }
+//              if(response.body.code===200){
+//                this.$Message.success('提交成功!');
+//                console.log('登录成功', response)
+//                let userinfo = {}
+//                userinfo.username=response.body.result.msg.username;
+//                userinfo.user_id=response.body.result.msg.user_id;
+//                userinfo.is_admin=response.body.result.msg.is_admin;
+//                userinfo.department=response.body.result.msg.department;
+//
+//                setStroage('userInfo', userinfo)
+//
+//                // 根据身份跳转不同界面
+//                if (response.body.result.msg.is_admin) {
+//                  this.$router.push({path:'/admin_console'})
+//                }else {
+//                  this.$router.push({path:'/management_console'})
+//                }
+//              }
+//              if(response.body.code == 400){
+//                this.$Message.error('验证错误!');
+//
+//              }
+//              // 成功回调
+//            }, function () {
+//              this.$Message.error('登陆失败!');
+//              // 失败回调
+//            });
 
           } else {
             this.$Message.error('表单验证失败!');

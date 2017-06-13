@@ -52,7 +52,7 @@ import admin_userManage from './views/admin/systemManage/userManage.vue'        
 import admin_operationLog from './views/common/operationLog.vue'                                // 管理员 > 操作日志
 
 import approval_approvalQuery from './views/approval/approvalManage/approvalQuery.vue'          // 行政审批 > 资源查询（审批查询）
-import approval_resourceDetails from './views/common/resourceDetails.vue'                         // 行政审批 > 行政审批页面（资源详情）
+import approval_resourceDetails from './views/common/resourceDetails.vue'                       // 行政审批 > 行政审批页面（资源详情）
 import approval_changePassword from './views/common/changePassword.vue'                         // 行政审批 > 用户管理（修改密码）
 import approval_operationLog from './views/common/operationLog.vue'                             // 行政审批 > 操作日志
 
@@ -61,13 +61,14 @@ var vueRouters = new VueRouter({
     // 滚动行为在history模式小有效
     mode: 'history',
     routes: [
-        {path: '/', redirect: '/home', component: home},
+        {name: 'page', path: '/', component: page},
         {name: 'login', path: '/login', component: login},
-
         {
             name: 'home', path: '/home', component: home,
             children: [
                 // 用户
+                {path: '', component: user_manageConsole},
+                {name: 'user_manageConsole', path: 'user_manageConsole', component: user_manageConsole},
                 {name: 'user_manageConsole', path: 'user_manageConsole', component: user_manageConsole},
                 {name: 'user_deployExample', path: 'user_deployExample', component: user_deployExample},
                 {name: 'user_resourceApplication', path: 'user_resourceApplication', component: user_resourceApplication},
@@ -75,10 +76,22 @@ var vueRouters = new VueRouter({
                 {name: 'user_myResource', path: 'user_myResource', component: user_myResource},
                 {name: 'user_changePassword', path: 'user_changePassword', component: user_changePassword},
                 {name: 'user_operationLog', path: 'user_operationLog', component: user_operationLog},
+                // 管理员
+                {name: 'admin_manageConsole', path: 'admin_manageConsole', component: admin_manageConsole},
+                {name: 'admin_poolManage', path: 'admin_poolManage', component: admin_poolManage},
+                {name: 'admin_mirrorManagement', path: 'admin_mirrorManagement', component: admin_mirrorManagement},
+                {name: 'admin_virtualManage', path: 'admin_virtualManage', component: admin_virtualManage},
+                {name: 'admin_resourceApproval', path: 'admin_resourceApproval', component: admin_resourceApproval},
+                {name: 'admin_userManage', path: 'admin_userManage', component: admin_userManage},
+                {name: 'admin_operationLog', path: 'admin_operationLog', component: admin_operationLog},
+                // 行政审批
+                {name: 'approval_approvalQuery', path: 'approval_approvalQuery', component: approval_approvalQuery},
+                {name: 'approval_resourceDetails', path: 'approval_resourceDetails', component: approval_resourceDetails},
+                {name: 'approval_changePassword', path: 'approval_changePassword', component: approval_changePassword},
+                {name: 'approval_operationLog', path: 'approval_operationLog', component: approval_operationLog}
             ]
         }
     ],
-
     scrollBehavior (to, from, savedPosition) {
         if (savedPosition) {
             return savedPosition
@@ -101,7 +114,7 @@ vueRouters.beforeEach((to, from, next) => {
     let bread = {};
     bread.level_1 = '主页'
     switch (to.name) {
-        // 管理控制台 > 普通用户
+        // 用户
         case 'managementConsole':
             bread.level_2 = '管理控制台'
             break
@@ -183,13 +196,10 @@ vueRouters.beforeEach((to, from, next) => {
             nav.activeName = '43'
             bread.level_2 = '资源视图'
             break
-
         default:
-            break
     }
     store.commit('getActiveItem', nav)
     store.commit('getLevel', bread)
-
     next();
 })
 
