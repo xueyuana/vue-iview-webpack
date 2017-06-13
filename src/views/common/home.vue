@@ -3,12 +3,12 @@
     <!--头部-->
     <div class="uop-header clearfix">
       <div class="logo fl">
-        <a href="#">
-          <img src="../../../static/image/syswinLogo.png" alt="" width="160px">
+        <a href="/">
+          <img src="../../static/logo.png" alt="">
         </a>
       </div>
       <div class="uop-title fl">
-        <p>技术运维管理平台</p>
+        <p>门头沟政务云资源管理平台</p>
       </div>
       <div class="user-info fr">
         <ul>
@@ -32,47 +32,82 @@
       <div class="layout">
         <Row type="flex">
           <i-col span="4" class="layout-menu-left">
-            <Menu :active-name="$store.state.openMenu.activeItem.activeName" :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto"  @on-select="go">
+            <Menu v-if="role === 'user'" :active-name="$store.state.openMenu.activeItem.activeName"
+                  :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go">
               <div class="layout-logo-left" @click="goConsole">
                 管理控制台
-            </div>
+              </div>
               <Submenu name="1">
                 <template slot="title">
-                  部署单元管理
-              </template>
-                <Menu-item name="11">创建部署单元</Menu-item>
-                <Menu-item name="12">部署单元查询</Menu-item>
+                  业务管理
+                </template>
+                <Menu-item name="11">部署实例</Menu-item>
               </Submenu>
               <Submenu name="2">
                 <template slot="title">
-                  部署实例管理
-              </template>
-                <Menu-item name="21">部署实例申请</Menu-item>
-
-                <Menu-item name="23">部署实例列表</Menu-item>
-
+                  资源管理
+                </template>
+                <Menu-item name="21">资源申请</Menu-item>
+                <Menu-item name="22">资源查询</Menu-item>
+                <Menu-item name="23">我的资源</Menu-item>
               </Submenu>
               <Submenu name="3">
                 <template slot="title">
-                  持续交付
-               </template>
-                <Menu-item name="31">应用部署</Menu-item>
-                <Menu-item name="32">部署历史</Menu-item>
+                  系统管理
+                </template>
+                <Menu-item name="31">用户管理</Menu-item>
+                <Menu-item name="32">操作日志</Menu-item>
+              </Submenu>
+            </Menu>
+            <Menu v-if="role === 'admin'" :active-name="$store.state.openMenu.activeItem.activeName"
+                  :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go">
+              <div class="layout-logo-left" @click="goConsole">
+                管理控制台
+              </div>
+              <Submenu name="1">
+                <template slot="title">
+                  资源池
+                </template>
+                <Menu-item name="11">资源池管理</Menu-item>
+              </Submenu>
+              <Submenu name="2">
+                <template slot="title">
+                  资源管理
+                </template>
+                <Menu-item name="21">镜像管理</Menu-item>
+                <Menu-item name="22">虚拟机管理</Menu-item>
+              </Submenu>
+              <Submenu name="3">
+                <template slot="title">
+                  资源审批
+                </template>
+                <Menu-item name="31">资源审批</Menu-item>
               </Submenu>
               <Submenu name="4">
                 <template slot="title">
-                  工作台
-              </template>
-                <Menu-item name="41">我的工作台</Menu-item>
-                <Menu-item name="44">我的申请</Menu-item>
-                <Menu-item name="42">我的资源</Menu-item>
-                <Menu-item name="43">资源视图</Menu-item>
+                  系统管理
+                </template>
+                <Menu-item name="41">用户管理</Menu-item>
+                <Menu-item name="42">操作日志</Menu-item>
               </Submenu>
-              <Submenu name="5" v-if="userInfo.is_admin">
+            </Menu>
+            <Menu v-if="role === 'approval'" :active-name="$store.state.openMenu.activeItem.activeName"
+                  :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go">
+              <div class="layout-logo-left" @click="goConsole">
+                管理控制台
+              </div>
+              <Submenu name="1">
                 <template slot="title">
-                  权限管理
-              </template>
-                <Menu-item name="51">添加权限</Menu-item>
+                  资源管理
+                </template>
+                <Menu-item name="11">资源查询</Menu-item>
+              </Submenu>
+              <Submenu name="2">
+                <template slot="title">
+                  系统管理
+                </template>
+                <Menu-item name="21">用户管理</Menu-item>
+                <Menu-item name="22">操作日志</Menu-item>
               </Submenu>
             </Menu>
           </i-col>
@@ -94,10 +129,6 @@
                 <router-view></router-view>
               </div>
             </div>
-
-            <!--<div class="layout-copy">-->
-            <!--</div>-->
-
           </i-col>
         </Row>
       </div>
@@ -112,7 +143,7 @@
     height: 60px;
     width: 100%;
     line-height: 60px;
-    padding: 0 20px;
+    padding: 0 20px 0 0;
     border-bottom: 1px solid #ECECEC;
     box-sizing: border-box;
     position: fixed;
@@ -122,7 +153,13 @@
   }
 
   .uop-header .logo {
-    margin-top: 5px;
+    width: 222px;
+    height: 60px;
+  }
+
+  .uop-header .logo img{
+    width: 100%;
+    height: 100%;
   }
 
   .uop-header .uop-title {
@@ -148,15 +185,17 @@
     margin-top: 60px;
   }
 
-  .layout{
+  .layout {
     /*border: 1px solid #d7dde4;*/
     /*background: #f5f7f9;*/
     position: relative;
   }
-  .layout-breadcrumb{
+
+  .layout-breadcrumb {
     padding: 10px 15px 0;
   }
-  .layout-content{
+
+  .layout-content {
     min-height: 200px;
     margin: 15px;
     overflow: hidden;
@@ -164,29 +203,33 @@
     border-radius: 4px;
   }
 
-  .layout-content-main{
+  .layout-content-main {
     padding: 10px;
   }
-  .layout-copy{
+
+  .layout-copy {
     text-align: center;
     padding: 10px 0 20px;
     color: #9ea7b4;
   }
-  .layout-menu-left{
+
+  .layout-menu-left {
     background: #464c5b;
     color: #fff;
     min-height: 800px;
     position: fixed;
   }
-  .layout-header{
+
+  .layout-header {
     margin-left: 15px;
     height: 40px;
     line-height: 40px;
     padding-left: 10px;
     background: #fff;
-    box-shadow: 0 1px 1px rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
   }
-  .layout-logo-left{
+
+  .layout-logo-left {
     width: 100%;
     line-height: 50px;
     text-align: center;
@@ -209,11 +252,15 @@
     data () {
       return {
         // 保存用户名
-        userInfo:{}
+        userInfo: {},
+        role: ''
       }
     },
     mounted () {
-      this.getUserInfo();
+      this.role = getStroage('role').role
+      this.goConsole()
+
+//      this.getUserInfo();
     },
     methods: {
       // 获取用户名
@@ -224,64 +271,117 @@
       // 跳转到管理控制台
       goConsole () {
         // 根据不同身份跳转不同界面
-        if (this.userInfo.is_admin) {
-          this.$router.push({path:'/admin_console'});
+        if (this.role) {
+          switch (this.role) {
+            case 'user':
+              this.$router.push({name: 'user_manageConsole'})
+              break
+            case 'admin':
+              this.$router.push({name: 'admin_manageConsole'})
+              break
+            case 'approval':
+              this.$router.push({name: 'approval_approvalQuery'})
+              break
+            default:
+          }
         } else {
-          this.$router.push({path:'/management_console'});
+          this.$Message.error('没有权限，请重新登录')
         }
+
+
+//        if (this.userInfo.is_admin) {
+//          this.$router.push({path: '/admin_console'});
+//        } else {
+//          this.$router.push({path: '/management_console'});
+//        }
       },
       // 退出登录
       toLogOut() {
-        console.log('logput')
         removeStroage('userInfo');
-        this.$router.push({path:'/login'});
+        removeStroage('role');
+        this.$router.push({name: 'login'});
       },
 
       // 导航跳转
       go (name) {
-        switch (name){
-          case '11': //项目创建
-            // 跳转
-            this.$router.push({name: 'projectApplication'});
+        if (this.role === 'user') {
+          this.goUser(name)
+        } else if (this.role === 'admin') {
+          this.goAdmin(name)
+        } else if (this.role === 'approval') {
+          this.goApproval(name)
+        } else {
+          this.$Message.warning('没有权限，请重新登录')
+        }
+      },
+      goUser(name) {
+        switch (name) {
+          case '11': //部署实例
+            this.$router.push({name: 'user_deployExample'});
             break;
-          case '12': //项目创建历史
-            this.$router.push({name: 'pro_applicationHistory'});
-            break;
+
           case '21': //资源申请
-            this.$router.push({name: 'resourceApplication'});
+            this.$router.push({name: 'user_resourceApplication'});
+            break;
+          case '22': //资源查询
+            this.$router.push({name: 'user_resourceQuery'});
+            break;
+          case '23': //我的资源
+            this.$router.push({name: 'user_myResource'});
             break;
 
-          case '23': //资源申请历史
-            this.$router.push({name: 'res_applicationHistory'});
+          case '31': //用户管理
+            this.$router.push({name: 'user_changePassword'});
             break;
-          case '31': //应用部署
-            this.$router.push({name: 'applicationDeployment'});
+          case '32': //操作日志
+            this.$router.push({name: 'user_operationLog'});
             break;
-          case '32': //部署历史
-            this.$router.push({name: 'deployHistory'});
-            break;
-          case '41': //我的工作台
-            if(this.userInfo.is_admin) {
-              this.$router.push({name: 'myWorkbench_admin'});
-            }else {
-              this.$router.push({name: 'myWorkbench_ordinary'});
-            }
-            break;
-          case '42': //我的资源
-            this.$router.push({name: 'myResource'});
-            break;
-          case '44': //我的申请
-            this.$router.push({name: 'myApplication'});
+          default:
+        }
+      },
+      goAdmin(name) {
+        switch (name) {
+          case '11': //资源池管理
+            this.$router.push({name: 'admin_poolManage'});
             break;
 
-          case '43': //资源视图
-            this.$router.push({name: 'resourceView'});
+          case '21': //镜像管理
+            this.$router.push({name: 'admin_mirrorManagement'});
             break;
-          case '51': //权限管理
-            this.$router.push({name: 'addAuthority'});
+          case '22': //虚拟机管理
+            this.$router.push({name: 'admin_virtualManage'});
             break;
+
+          case '31': //资源审批
+            this.$router.push({name: 'admin_resourceApproval'});
+            break;
+
+          case '41': //用户管理
+            this.$router.push({name: 'admin_userManage'});
+            break;
+          case '42': //操作日志
+            this.$router.push({name: 'admin_operationLog'});
+            break;
+          default:
+        }
+      },
+      goApproval(name) {
+        switch (name) {
+          case '11': //资源查询
+            this.$router.push({name: 'approval_approvalQuery'});
+            break;
+
+          case '21': //用户管理
+            this.$router.push({name: 'approval_changePassword'});
+            break;
+          case '22': //操作日志
+            this.$router.push({name: 'approval_operationLog'});
+            break;
+
+          default:
         }
       }
     }
+
   }
 </script>
