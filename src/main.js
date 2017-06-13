@@ -30,90 +30,51 @@ import '../static/css/reset.css';
 // import echarts from 'echarts2';
 // Vue.use(echarts);
 
-//导入组件
-import login from './components/login/login.vue';
-import home from './components/home/home.vue';
+// 导入视图界面
+import page from './views/page/page.vue'                    // 首页
+import login from './views/common/login.vue'                // 登录
+import home from './views/common/home.vue'                  // Home页
 
-// 导入管理控制台
-import managementConsole from './components/common/managementConsole/ordinaryConsole.vue';
-import adminConsole from './components/common/managementConsole/adminConsole.vue';
+import user_manageConsole from './views/common/manageConsole.vue'                               // 用户 > 管理控制台
+import user_deployExample from './views/user/businessManage/deployExamples.vue'                 // 用户 > 部署实例
+import user_resourceApplication from './views/user/resourceManage/resourceApplication.vue'      // 用户 > 资源申请
+import user_resourceQuery from './views/user/resourceManage/resourceQuery.vue'                  // 用户 > 资源查询
+import user_myResource from './views/common/myResource.vue'                                     // 用户 > 我的资源
+import user_changePassword from './views/common/changePassword.vue'                             // 用户 > 用户管理（修改密码）
+import user_operationLog from './views/common/operationLog.vue'                                 // 用户 > 操作日志
 
-// 导入项目管理
-import projectApplication from './components/common/projectManagement/projectApplication/createProject.vue';
-import pro_applicationHistory from './components/common/projectManagement/applicationHistory/applicationHistory.vue';
+import admin_manageConsole from './views/admin/manageConsole.vue'                               // 管理员 > 管理控制台
+import admin_poolManage from './views/admin/resourcePool/poolManage.vue'                        // 管理员 > 资源池管理
+import admin_mirrorManagement from './views/admin/resourceManage/mirrorManage.vue'              // 管理员 > 镜像管理
+import admin_virtualManage from './views/common/myResource.vue'                                 // 管理员 > 虚拟机管理
+import admin_resourceApproval from './views/admin/resourceApproval/resourceApproval.vue'        // 管理员 > 资源审批
+import admin_userManage from './views/admin/systemManage/userManage.vue'                        // 管理员 > 用户管理
+import admin_operationLog from './views/common/operationLog.vue'                                // 管理员 > 操作日志
 
-// 资源管理
-import resourceApplication from './components/common/resourceManagement/resourceApplication/resourceApplication.vue';
-import res_applicationHistory from './components/common/resourceManagement/applicationHistory/applicationHistory.vue';
-import myApplication from './components/common/resourceManagement/myApplication/myApplication.vue';
-//资源审批
-import res_applicationCheck from './components/common/resourceManagement/resourceApplication/resourceCheck.vue';
-// 部署管理
-import deployment from './components/common/deployManagement/applicationDeployment/deployment.vue';
-import applicationDeployment from './components/common/deployManagement/applicationDeployment/applicationDeployment.vue';
-import deployHistory from 'components/common/deployManagement/deployHistory/deployHistory.vue';
-
-//工作台
-import processList from './components/common/workbench/processList/processList.vue';
-import myWorkbench from './components/common/workbench/myWorkbench/myWorkbranch.vue';
-import myResource from './components/common/workbench/myResource/myResource2.vue';
-import resourceView from './components/common/workbench/resourceView/resourceView.vue';
-// 导入资源架构图子组件
-import resourceTree from './components/common/workbench/resourceView/subcomponent/resourceTree.vue';
-
-//权限管理
-import addAuthority from './components/common/authorityManagement/addAuthority.vue';
-
+import approval_approvalQuery from './views/approval/approvalManage/approvalQuery.vue'          // 行政审批 > 资源查询（审批查询）
+import approval_resourceDetails from './views/common/resourceDetails.vue'                         // 行政审批 > 行政审批页面（资源详情）
+import approval_changePassword from './views/common/changePassword.vue'                         // 行政审批 > 用户管理（修改密码）
+import approval_operationLog from './views/common/operationLog.vue'                             // 行政审批 > 操作日志
 
 //创建路由对象
 var vueRouters = new VueRouter({
     // 滚动行为在history模式小有效
     mode: 'history',
     routes: [
-        {path: '/', redirect: 'login'}, //一开始就重定向到登录页面
+        {path: '/', redirect: '/home', component: home},
         {name: 'login', path: '/login', component: login},
 
         {
             name: 'home', path: '/home', component: home,
             children: [
-                // 管理控制台
-                // 普通用户
-                {name: 'managementConsole', path: '/management_console', component: managementConsole},
-                //管理员账户
-                {name: 'adminConsole', path: '/admin_console', component: adminConsole},
-                // 项目管理
-                {name: 'projectApplication', path: '/project_application', component: projectApplication},
-                {name: 'pro_applicationHistory', path: '/pro_application_history', component: pro_applicationHistory},
-                // 资源管理
-                {
-                    name: 'resourceApplication',
-                    path: '/resource_application',
-                    query: {id: 'ss'},
-                    component: resourceApplication
-                },
-                {name: 'res_applicationHistory', path: '/res_application_history', component: res_applicationHistory},
-                {name: 'myApplication', path: '/my_application', component: myApplication},
-                // 资源审批
-                {name: 'res_applicationCheck', path: '/res_applicationCheck', component: res_applicationCheck},
-
-                // 部署管理
-                {name: 'applicationDeployment', path: '/application_deployment', component: applicationDeployment},
-                {name: 'deployHistory', path: '/deploy_history', component: deployHistory},
-                // 工作台
-                {name: 'processList', path: '/process_list', component: processList},
-
-                {name: 'myWorkbench_ordinary', path: '/my_workbench', component: managementConsole}, // 加载普通用户管理控制台组件
-                {name: 'myWorkbench_admin', path: '/my_workbench', component: adminConsole}, // 加载管理员管理控制台组件
-
-                {name: 'myResource', path: '/my_resource', component: myResource},
-                {
-                    name: 'resourceView', path: '/resource_view', component: resourceView,
-                    children: [
-                        {name: 'resourceTree', path: '/resource_view/tree_map/:resource_id', component: resourceTree}
-                    ]
-                },
-                // 权限管理
-                {name: 'addAuthority', path: '/add_authority', component: addAuthority}
+                // 用户
+                {name: 'user_manageConsole', path: 'user_manageConsole', component: user_manageConsole},
+                {name: 'user_deployExample', path: 'user_deployExample', component: user_deployExample},
+                {name: 'user_resourceApplication', path: 'user_resourceApplication', component: user_resourceApplication},
+                {name: 'user_resourceQuery', path: 'user_resourceQuery', component: user_resourceQuery},
+                {name: 'user_myResource', path: 'user_myResource', component: user_myResource},
+                {name: 'user_changePassword', path: 'user_changePassword', component: user_changePassword},
+                {name: 'user_operationLog', path: 'user_operationLog', component: user_operationLog},
             ]
         }
     ],
