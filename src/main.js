@@ -45,7 +45,7 @@ import user_operationLog from './views/common/operationLog.vue'                 
 
 import admin_manageConsole from './views/admin/manageConsole.vue'                               // 管理员 > 管理控制台
 import admin_poolManage from './views/admin/resourcePool/poolManage.vue'                        // 管理员 > 资源池管理
-import admin_resourceDetails from './views/common/resourceDetails.vue'                          // 管理员 > 资源池详情
+import admin_poolDetails from './views/admin/resourcePool/poolDetail.vue'                          // 管理员 > 资源池详情
 import admin_mirrorManagement from './views/admin/resourceManage/mirrorManage.vue'              // 管理员 > 镜像管理
 import admin_virtualManage from './views/common/myResource.vue'                                 // 管理员 > 虚拟机管理
 import admin_resourceApproval from './views/admin/resourceApproval/resourceApproval.vue'        // 管理员 > 资源审批
@@ -78,7 +78,7 @@ var vueRouters = new VueRouter({
         // 管理员
         {name: 'admin_manageConsole', path: 'admin_manageConsole', component: admin_manageConsole},
         {name: 'admin_poolManage', path: 'admin_poolManage', component: admin_poolManage},
-        {name: 'admin_resourceDetails', path: 'admin_resourceDetails', component: admin_resourceDetails},
+        {name: 'admin_poolDetails', path: 'admin_poolDetails', component: admin_poolDetails},
         {name: 'admin_mirrorManagement', path: 'admin_mirrorManagement', component: admin_mirrorManagement},
         {name: 'admin_virtualManage', path: 'admin_virtualManage', component: admin_virtualManage},
         {name: 'admin_resourceApproval', path: 'admin_resourceApproval', component: admin_resourceApproval},
@@ -158,7 +158,7 @@ vueRouters.beforeEach((to, from, next) => {
       nav.activeName = '11'
       bread.level_2 = '资源池管理'
       break
-    case 'admin_resourceDetails':
+    case 'admin_poolDetails':
       bread.level_2 = '资源池详情'
       break
     case 'admin_mirrorManagement':

@@ -96,7 +96,7 @@
                 on: {
                   click: () => {
                     console.log(22222)
-                    this.$router.push({name: 'admin_resourceDetails',query: {id: '000000'}})
+                    this.$router.push({name: 'admin_poolDetails',query: {id: '000000'}})
                   }
                 }
               }, params.row.resource_name)
