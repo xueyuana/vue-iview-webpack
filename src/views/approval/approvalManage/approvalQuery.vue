@@ -4,49 +4,47 @@
       <div class="search-form">
         <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="100">
           <Row>
-            <Col span="4">
-            <Form-item label="申请人" prop="apply_name">
-              <Input v-model="formValidate.apply_name" placeholder="请输入"></Input>
-            </Form-item>
+            <Col span="9">
+              <Form-item label="申请人" prop="apply_name">
+                <Input v-model="formValidate.apply_name" placeholder="请输入"></Input>
+              </Form-item>
+              <Form-item label="审批状态" prop="apply_status">
+                <Select v-model="formValidate.apply_status">
+                  <Option label="待审批" value="0"></Option>
+                  <Option label="审批未通过" value="1"></Option>
+                  <Option label="审批完成" value="2"></Option>
+                </Select>
+              </Form-item>
             </Col>
-            <Col span="8">
-            <Form-item label="申请日期">
-              <Row>
-                <Col span="11">
-                <Form-item prop="create_date_begin">
-                  <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.create_date_begin"></Date-picker>
-                </Form-item>
-                </Col>
-                <Col span="2" style="text-align: center">至</Col>
-                <Col span="11">
-                <Form-item prop="create_date_end">
-                  <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.create_date_end"></Date-picker>
-                </Form-item>
-                </Col>
-              </Row>
-            </Form-item>
+            <Col span="9">
+              <Form-item label="申请日期">
+                <Row>
+                  <Col span="11">
+                  <Form-item prop="create_date_begin">
+                    <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.create_date_begin"></Date-picker>
+                  </Form-item>
+                  </Col>
+                  <Col span="2" style="text-align: center">至</Col>
+                  <Col span="11">
+                  <Form-item prop="create_date_end">
+                    <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.create_date_end"></Date-picker>
+                  </Form-item>
+                  </Col>
+                </Row>
+              </Form-item>
+              <Form-item label="部署实例" prop="case">
+                <Select v-model="formValidate.case">
+                  <Option label="实例1" value="0"></Option>
+                  <Option label="实例2" value="1"></Option>
+                  <Option label="实例3" value="2"></Option>
+                </Select>
+              </Form-item>
             </Col>
-            <Col span="4">
-            <Form-item label="审批状态" prop="apply_status">
-              <Select v-model="formValidate.apply_status" style="width:150px">
-                <Option label="待审批" value="0"></Option>
-                <Option label="审批未通过" value="1"></Option>
-                <Option label="审批完成" value="2"></Option>
-              </Select>
-            </Form-item>
-            </Col>
-            <Col span="4">
-            <Form-item label="部署实例" prop="case">
-              <Select v-model="formValidate.case" style="width:200px">
-                <Option label="实例1" value="0"></Option>
-                <Option label="实例2" value="1"></Option>
-                <Option label="实例3" value="2"></Option>
-              </Select>
-            </Form-item>
-            </Col>
-            <Col span="4">
+            <Col span="6">
             <Form-item>
               <Button type="primary" @click="goQuery">查询</Button>
+            </Form-item>
+            <Form-item>
               <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
             </Form-item>
             </Col>
@@ -55,7 +53,13 @@
       </div>
     </div>
     <div class="table-list">
+      <div>申请资源列表：</div>
       <Table border :columns="columns" :data="dataDemo"></Table>
+      <div style="margin: 10px;overflow: hidden">
+        <div style="float: right;">
+          <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -136,43 +140,43 @@
                   },
                   on: {
                     click: () => {
-                      this.$router.push({name: 'user_manageConsole', query: {apply_code: params.row.apply_code}});
+                      this.$router.push({name: 'approval_resourceDetails', query: {apply_code: params.row.apply_code}});
                     }
                   }
                 }, params.row.apply_code)
               ]);
-            }
-          },
-          {
-            title: '申请人',
-            key: 'apply_name',
-            align: 'center'
-          },
-          {
-            title: '审批状态',
-            key: 'apply_status',
-            align: 'center',
-            sortable: true
-          },
-          {
-            title: '部署实例',
-            key: 'case',
-            align: 'center',
-            sortable: true
-          },
-          {
-            title: '资源池',
-            key: 'resource',
-            align: 'center',
-            sortable: true
-          },
-          {
-            title: '申请日期',
-            key: 'create_date',
-            align: 'center',
-            sortable: true
           }
-        ],
+        },
+        {
+          title: '申请人',
+                  key: 'apply_name',
+                align: 'center'
+        },
+        {
+          title: '审批状态',
+                  key: 'apply_status',
+                align: 'center',
+                sortable: true
+        },
+        {
+          title: '部署实例',
+                  key: 'case',
+                align: 'center',
+                sortable: true
+        },
+        {
+          title: '资源池',
+                  key: 'resource',
+                align: 'center',
+                sortable: true
+        },
+        {
+          title: '申请日期',
+                  key: 'create_date',
+                align: 'center',
+                sortable: true
+        }
+      ],
         dataDemo: [
           {
             index: 1,
@@ -210,7 +214,10 @@
             resource: '资源池4',
             create_date: '2016-10-04'
           }
-        ]
+        ],
+        data1: [],
+        pageSize: 10,
+        num: 1
       }
     },
     computed: {},
@@ -266,6 +273,14 @@
             create_date: '2016-10-04'
           }
         ];
+      },
+      // 分页
+      changePage(val) {
+        this.filterDate = this.mockTableData(this.data1, this.pageSize, val)
+      },
+      changePageSize(val) {
+        this.pageSize = val
+        this.changePage(1)
       }
     }
   }
