@@ -152,19 +152,19 @@
             // June 临时验证
             if (userName) {
               setStroage('role', {role: userName})
-                switch (this.role) {
-                  case 'user':
-                    this.$router.push({name: 'user_manageConsole'})
-                    break
-                  case 'admin':
-                    this.$router.push({name: 'admin_manageConsole'})
-                    break
-                  case 'approval':
-                    this.$router.push({name: 'approval_approvalQuery'})
-                    break
-                  default:
-                    this.$Message.error('权限不存在')
-                }
+              switch (userName) {
+                case 'user':
+                  this.$router.push({name: 'user_manageConsole'})
+                  break
+                case 'admin':
+                  this.$router.push({name: 'admin_manageConsole'})
+                  break
+                case 'approval':
+                  this.$router.push({name: 'approval_approvalQuery'})
+                  break
+                default:
+                  this.$Message.error('权限不存在')
+              }
             } else {
               this.$Message.error('用户名不能为空')
             }
