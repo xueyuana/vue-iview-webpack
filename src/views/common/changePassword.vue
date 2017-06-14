@@ -1,6 +1,6 @@
 <template>
   <div class="page-changePwd">
-    <div class="title">修改密码</div>
+    <div class="cp_title">修改密码</div>
     <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
       <Row>
         <Col span="10">
@@ -25,7 +25,7 @@
 </template>
 
 <style scoped>
-  .title{
+  .cp_title{
     width: 80%;
     height: 20px;
     padding-left: 5px;

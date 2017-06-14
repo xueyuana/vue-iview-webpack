@@ -3,9 +3,7 @@
     <!--头部-->
     <div class="uop-header clearfix">
       <div class="logo fl">
-        <a href="/">
-          <img src="../../static/logo.png" alt="">
-        </a>
+        <a class="logo_icon" href="/"></a>
       </div>
       <div class="uop-title fl">
         <p>门头沟政务云资源管理平台</p>
@@ -143,7 +141,7 @@
     height: 60px;
     width: 100%;
     line-height: 60px;
-    padding: 0 20px 0 0;
+    padding: 0 20px;
     border-bottom: 1px solid #ECECEC;
     box-sizing: border-box;
     position: fixed;
@@ -153,13 +151,16 @@
   }
 
   .uop-header .logo {
-    width: 222px;
+    width: 100px;
     height: 60px;
   }
 
-  .uop-header .logo img{
+  .uop-header .logo_icon {
+    display: block;
     width: 100%;
     height: 100%;
+    background: url("../../static/logo.png") no-repeat 0 0;
+    background-size: 100% 100%;
   }
 
   .uop-header .uop-title {
@@ -258,8 +259,6 @@
     },
     mounted () {
       this.role = getStroage('role').role
-      this.goConsole()
-
 //      this.getUserInfo();
     },
     methods: {
@@ -287,13 +286,6 @@
         } else {
           this.$Message.error('没有权限，请重新登录')
         }
-
-
-//        if (this.userInfo.is_admin) {
-//          this.$router.push({path: '/admin_console'});
-//        } else {
-//          this.$router.push({path: '/management_console'});
-//        }
       },
       // 退出登录
       toLogOut() {

@@ -7,7 +7,7 @@
             <Col span="3" order="4" class="c-ivu-col">帮助与支持</Col>
             <Col span="3" order="5" class="c-ivu-col">关于我们</Col>
             <Col span="7" order="6" class="c-ivu-col">&nbsp;</Col>
-            <Col span="3" order="7" class="c-ivu-col"><span @click="render">控制台11</span></Col>
+            <Col span="3" order="7" class="c-ivu-col"><span @click="render">控制台</span></Col>
         </Row>
         <Carousel autoplay v-model="value2">
             <Carousel-item>

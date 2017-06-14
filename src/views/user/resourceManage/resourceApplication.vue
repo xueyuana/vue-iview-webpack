@@ -1,19 +1,249 @@
 <template>
-  <div class="">
-    资源申请
+  <div class="container">
+    <div class="set">
+      <Button type="info" class="add" @click="addInformation">添加</Button>
+      <Button type="info" @click="sendInformation">提交</Button>
+    </div>
+    <Flow></Flow>
+    <div class="header">资源信息</div>
+    <div class="item">
+      <span class="title">申请单号</span>
+      <Input v-model="id" placeholder="请输入..." style="width: 200px"></Input>
+    </div>
+    <div class="contain" v-for="(item,index) in resourceInformation">
+      <div class="item example">
+        <span class="title">部署实例</span>
+        <Select v-model="item.deployExample" style="width:200px" :disabled="index ==0?false:true">
+          <Option v-for="item in exampleList" :value="item.value" :key="item">{{ item.value }}</Option>
+        </Select>
+        <Button type="info" class="add-example" @click="createExample">新建部署实例</Button>
+      </div>
+      <div class="item">
+        <span class="title">虚拟机名称</span>
+        <Input v-model="item.virtualMachine" placeholder="请输入..." style="width: 200px"></Input>
+      </div>
+      <div class="item">
+        <span class="title">资源池选择</span>
+        <Select v-model="item.resourcePool" style="width:200px" :disabled="index ==0?false:true">
+          <Option v-for="item in resourcePool" :value="item.value" :key="item">{{ item.value }}</Option>
+        </Select>
+      </div>
+      <div class="item">
+        <span class="title">部门</span>
+        <Input v-model="item.department" placeholder="请输入..." style="width: 200px"></Input>
+      </div>
+      <div class="item">
+        <span class="title">镜像</span>
+        <Select v-model="item.mirrorImage" style="width:200px">
+          <Option v-for="item in mirrorImage" :value="item.value" :key="item">{{ item.value }}</Option>
+        </Select>
+      </div>
+      <div class="item">
+        <span class="title">规格</span>
+        <Select v-model="item.standard" style="width:200px">
+          <Option v-for="item in standard" :value="item.value" :key="item">{{ item.value }}</Option>
+        </Select>
+      </div>
+      <div class="item">
+        <span class="title">存储空间</span>
+        <Input v-model="item.storageSpace" placeholder="请输入..." style="width: 200px"></Input>
+      </div>
+      <div class="item">
+        <span class="title">数量</span>
+        <Input-number :max="10" :min="1" v-model="item.count"></Input-number>
+      </div>
+    </div>
+    <div class="header">业务信息</div>
+    <Input class="comment" v-model="serviceInformation" type="textarea" :maxlength="500" :rows=6 placeholder="请输入..."></Input>
   </div>
 </template>
 
-<style scoped>
-
-</style>
-
 <script>
+  import Flow from './../../../components/common/flow.vue'
   export default {
-    data() {
-      return {}
+    name: 'user-application',
+    data () {
+      return {
+        resourceInformation: [{
+
+          deployExample: '',
+          virtualMachine: '',
+          resourcePool: '',
+          department: '',
+          mirrorImage: '',
+          standard: '',
+          storageSpace: '',
+          count: 1
+
+        }],
+        exampleList: [
+          {
+            value: '部署实例1'
+          },
+          {
+            value: '部署实例2'
+          }
+        ],
+        resourcePool:[
+          {
+            value: 'DMZ'
+          },
+          {
+            value: '互联网资源池'
+          }
+        ],
+        standard: [
+          {
+            value: '2C4G'
+          },
+          {
+            value: '4C8G'
+          }
+        ],
+        mirrorImage: [
+          {
+            value: 'Centos 7.2'
+          },
+          {
+            value: 'Ubuntu 15.01'
+          }
+        ],
+        serviceInformation: '',
+        id:'id'+parseInt(Math.random()*9)+parseInt(Math.random()*9)+parseInt(Math.random()*9)+parseInt(Math.random()*9),
+
+      }
     },
-    computed: {},
-    methods: {}
+    components: {
+      Flow
+
+    },
+    created () {
+      let id = this.$route.query.id
+      if(id === undefined) {
+//        console.log('没有传参数')
+        return
+      }else{
+        let informationArr = this.$store.state.userData.information
+        informationArr.forEach((item,index) => {
+          if(item.id == id){
+            this.resourceInformation = item.resourceInformation
+            this.serviceInformation = item.serviceInformation
+            this.id = id
+          }
+        })
+      }
+
+    },
+    methods: {
+      addInformation () {
+        let informationLength = this.resourceInformation.length;
+        if(informationLength >=10){
+          this.$Notice.open({
+            title: '最多添加10个虚拟机'
+          })
+          return
+        }
+        this.resourceInformation.push({
+          id:'',
+          deployExample: this.resourceInformation[0].deployExample,
+          virtualMachine: '',
+          resourcePool: this.resourceInformation[0].resourcePool,
+          department: '',
+          mirrorImage: '',
+          standard: '',
+          storageSpace: '',
+          count: 1
+        })
+      },
+      createExample () {
+        this.$router.push({name: 'user_deployExample'})
+      },
+      sendInformation () {
+        //提交信息
+        let date = new Date();
+        let Y = date.getFullYear();
+        let M = date.getMonth()+1;
+        let D = date.getDate()
+        let h = date.getHours()
+        let m = date.getMinutes()
+        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m
+
+//        let resourceQuery = {
+//          id: this.id,
+//          deployExample: this.resourceInformation[0].deployExample,
+//          resourcePool: this.resourceInformation[0].resourcePool
+//
+//        }
+        let information = {
+          resourceInformation: this.resourceInformation,
+          serviceInformation: this.serviceInformation,
+          id: this.id,
+          applyDate: applyDate,
+          status: '审批完成'
+        }
+
+        this.$store.commit('setInformation',information)
+
+        this.$router.push({name: 'user_resourceQuery'})
+      }
+    }
+
   }
 </script>
+
+
+<style scoped>
+  .container{
+    width: 100%;
+  }
+  .set{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .add {
+    margin-right: 20px;
+  }
+  .header{
+    padding-left:10px;
+    height: 30px;
+    width: 100%;
+    background-color: #f2f2f2;
+    line-height: 30px;
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  .contain {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-bottom: 15px;
+
+  }
+  .item {
+    padding-right: 160px;
+    padding-bottom: 10px;
+
+  }
+  .title{
+    width: 80px;
+    text-align: center;
+    margin-right: 20px;
+    display: inline-block;
+  }
+  .add-example {
+    position: absolute;
+    right: 38px;
+    top: 0;
+  }
+  .example {
+    position: relative;
+  }
+  .comment {
+    width: 800px;
+    padding-left: 30px;
+
+  }
+
+</style>
