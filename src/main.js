@@ -60,7 +60,7 @@ import approval_operationLog from './views/common/operationLog.vue'             
 //创建路由对象
 var vueRouters = new VueRouter({
   // 滚动行为在history模式小有效
-  mode: 'history',
+  // mode: 'history',
   routes: [
     {name: 'page', path: '/', component: page},
     {name: 'login', path: '/login', component: login},
@@ -129,12 +129,12 @@ vueRouters.beforeEach((to, from, next) => {
       nav.activeName = '21'
       bread.level_2 = '资源申请'
       break
-    case 'pro_applicationHistory':
+    case 'user_resourceQuery':
       nav.openNames = '2'
       nav.activeName = '22'
       bread.level_2 = '资源查询'
       break
-    case 'resourceApplication':
+    case 'user_myResource':
       nav.openNames = '2'
       nav.activeName = '23'
       bread.level_2 = '我的资源'
