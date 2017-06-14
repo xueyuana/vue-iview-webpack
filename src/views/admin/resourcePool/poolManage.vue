@@ -71,7 +71,6 @@
 <script>
   import baseUrl from 'tools/common.js'
   import {getStroage} from 'tools/cookieAction.js'
-  //  import userInfo from 'tools/user.js'
 
   export default {
     data() {
@@ -91,7 +90,17 @@
           {
             title: '资源池名称',
             key: 'resource_name',
-            align: 'center'
+            align: 'center',
+            render: (h, params) => {
+              return h('a', {
+                on: {
+                  click: () => {
+                    console.log(22222)
+                    this.$router.push({name: 'admin_resourceDetails',query: {id: '000000'}})
+                  }
+                }
+              }, params.row.resource_name)
+            }
           },
           {
             title: '物理机',

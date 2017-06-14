@@ -20,7 +20,7 @@
             </Form-item>
 
             <Form-item prop="passWord" label="密码">
-              <Input type="password" v-model="formInline.passWord" placeholder="请输入密码">
+              <Input type="password" v-model="formInline.passWord" @keydown.native.enter="handleSubmit('formInline')" placeholder="请输入密码">
 
               </Input>
             </Form-item>
@@ -152,19 +152,19 @@
             // June 临时验证
             if (userName) {
               setStroage('role', {role: userName})
-              switch (userName) {
-                case 'user':
-                  this.$router.push({name: 'home'})
-                  break
-                case 'admin':
-                  this.$router.push({name: 'home'})
-                  break
-                case 'approval':
-                  this.$router.push({name: 'home'})
-                  break
-                default:
-                  this.$Message.error('权限不存在')
-              }
+                switch (this.role) {
+                  case 'user':
+                    this.$router.push({name: 'user_manageConsole'})
+                    break
+                  case 'admin':
+                    this.$router.push({name: 'admin_manageConsole'})
+                    break
+                  case 'approval':
+                    this.$router.push({name: 'approval_approvalQuery'})
+                    break
+                  default:
+                    this.$Message.error('权限不存在')
+                }
             } else {
               this.$Message.error('用户名不能为空')
             }
