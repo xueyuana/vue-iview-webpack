@@ -35,7 +35,7 @@ import page from './views/page/page.vue'                    // 首页
 import login from './views/common/login.vue'                // 登录
 import home from './views/common/home.vue'                  // Home页
 
-import user_manageConsole from './views/common/manageConsole.vue'                               // 用户 > 管理控制台
+import user_manageConsole from './views/user/systemManage/manageConsole.vue'                    // 用户 > 管理控制台
 import user_deployExample from './views/user/businessManage/deployExamples.vue'                 // 用户 > 部署实例
 import user_resourceApplication from './views/user/resourceManage/resourceApplication.vue'      // 用户 > 资源申请
 import user_resourceQuery from './views/user/resourceManage/resourceQuery.vue'                  // 用户 > 资源查询

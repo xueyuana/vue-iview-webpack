@@ -77,8 +77,7 @@
 </style>
 
 <script>
-  var echarts = require('echarts');
-  console.log(echarts)
+  var echarts = require('echarts/lib/echarts');
   // 关系图
   require('echarts/lib/chart/pie');
 
