@@ -111,8 +111,8 @@
             render: (h, params) => {
               return h('a',{
                 on: {
-                  click:() => {
-                    this.$router.push({name: 'admin_resourceDetails', query: {id: params.row.order_number}})
+                  click: () => {
+                    this.$router.push({name: 'approval_resourceDetails', query: {id: params.row.order_number}})
                   }
                 }
               }, params.row.order_number)

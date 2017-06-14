@@ -144,7 +144,7 @@ vueRouters.beforeEach((to, from, next) => {
       nav.activeName = '31'
       bread.level_2 = '用户管理'
       break
-    case 'resourceApplication':
+    case 'user_operationLog':
       nav.openNames = '3'
       nav.activeName = '32'
       bread.level_2 = '操作日志'

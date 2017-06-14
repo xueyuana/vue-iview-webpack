@@ -197,7 +197,7 @@
   }
 
   .layout-content {
-    min-height: 200px;
+    min-height: 500px;
     margin: 15px;
     overflow: hidden;
     background: #fff;
