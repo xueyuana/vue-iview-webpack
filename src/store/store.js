@@ -15,6 +15,7 @@ import { subOpenMenu } from './subOpenMenu.js';
 import { resourceData } from './resourceData.js';
 // 进入审批页面的源路径
 import { path } from './originPath.js';
+import {userData} from './user.js'
 
 export const store = new Vuex.Store({
     modules: {
@@ -23,6 +24,7 @@ export const store = new Vuex.Store({
         openMenu:openMenu,
         resourceData:resourceData,
         path:path,
-        subOpenMenu:subOpenMenu
+        subOpenMenu:subOpenMenu,
+        userData
     }
 });
