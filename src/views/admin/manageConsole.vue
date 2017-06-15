@@ -3,6 +3,7 @@
     <!--资源使用概况-->
     <div class="resource-survey">
       <div class="title">
+        <Icon type="android-radio-button-on"></Icon>
         <span>资源概览</span>
       </div>
       <div class="resource-pie">
@@ -39,7 +40,8 @@
 <style scoped>
   /*概况*/
   .survey {
-    margin-top: 20px;
+    border: 1px dashed #ccc;
+    padding: 20px;
   }
 
   .survey .title {

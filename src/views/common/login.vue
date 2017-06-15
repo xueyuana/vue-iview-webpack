@@ -1,27 +1,28 @@
 <template>
   <div>
-    <div  class="login-container-div ">
-      <Row type="flex" justify="center" align="middle" style="text-align: center;font-size: 30px;color:#3399ff;margin-bottom:20px"> <Col span="24">
-        技术运维统一管理平台
+    <div class="login-container-div ">
+      <Row type="flex" justify="center" align="middle"
+           style="text-align: center;font-size: 30px;color:#3399ff;margin-bottom:20px">
+        <Col span="24">
+          门头沟政务云资源管理平台
         </Col>
       </Row>
 
       <div class="login-container">
-
         <Row type="flex" justify="center" align="middle">
           <Col span="24">
 
-          <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70" inline >
+          <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70" inline>
 
             <Form-item prop="userName" label="用户名">
-              <Input type="text" v-model="formInline.userName" placeholder="请输入工号" >
+              <Input type="text" v-model="formInline.userName" placeholder="请输入工号">
 
               </Input>
             </Form-item>
 
             <Form-item prop="passWord" label="密码">
-              <Input type="password" v-model="formInline.passWord" @keydown.native.enter="handleSubmit('formInline')" placeholder="请输入密码">
-
+              <Input type="password" v-model="formInline.passWord" @keydown.native.enter="handleSubmit('formInline')"
+                     placeholder="请输入密码">
               </Input>
             </Form-item>
 
@@ -40,7 +41,7 @@
 
 
             <Form-item>
-              <Checkbox v-model="formInline.rememberPassword"  @click.prevent.native="doRememberPassword">记住密码</Checkbox>
+              <Checkbox v-model="formInline.rememberPassword" @click.prevent.native="doRememberPassword">记住密码</Checkbox>
               <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
             </Form-item>
           </Form>
@@ -54,36 +55,43 @@
 </template>
 
 
-<style scoped >
-  .index{
+<style scoped>
+  .index {
     width: 100%;
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     text-align: center;
-  h1{
+
+  h1 {
     height: 150px;
-  img{
+
+  img {
     height: 100%;
   }
-  }
-  h2{
-    color: #666;
-    margin-bottom: 200px;
-  p{
-    margin: 0 0 50px;
-  }
-  }
-  .ivu-row-flex{
-    height: 100%;
-  }
-  }
-  .login-container-div{
-    margin: 180px auto;
-    width: 350px;
 
   }
+  h2 {
+    color: #666;
+    margin-bottom: 200px;
+
+  p {
+    margin: 0 0 50px;
+  }
+
+  }
+  .ivu-row-flex {
+    height: 100%;
+  }
+
+  }
+  .login-container-div {
+    margin: 180px auto;
+    width: 380px;
+
+  }
+
   .login-container {
     /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
     -webkit-border-radius: 5px;
@@ -95,15 +103,18 @@
     background: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
+
   .title {
     margin: 0px auto;
     text-align: center;
     color: #505458;
     font-size: 30px;
   }
+
   .remember {
     margin: 0px 0px 35px 0px;
   }
+
   }
 </style>
 
@@ -121,11 +132,11 @@
         },
         ruleInline: {
           userName: [
-            { required: true, message: '请填写用户名', trigger: 'blur' }
+            {required: true, message: '请填写用户名', trigger: 'blur'}
           ],
           passWord: [
-            { required: true, message: '请填写密码', trigger: 'blur' },
-            { type: 'string', min: 4, message: '密码长度不能小于4位', trigger: 'blur' }
+            {required: true, message: '请填写密码', trigger: 'blur'},
+            {type: 'string', min: 4, message: '密码长度不能小于4位', trigger: 'blur'}
           ]
         }
       }
@@ -135,7 +146,7 @@
       // console.log('login页面 加载完成！')
     },
     // 相当于ready 模板编译挂载之后
-    mounted: function() {
+    mounted: function () {
       //读取cookie中的账号信息，如果有accountInfo的话，则说明该用户之前勾选了记住密码的功能，则需要自动填上账号密码
 //      this.loadAccountInfo();
     },
@@ -219,7 +230,7 @@
           }
         });
       },
-      doRememberPassword: function(event){
+      doRememberPassword: function (event) {
         let mySelf = this;
         let rememberStatus = mySelf.formInline.rememberPassword;
         // event.preventDefault();
@@ -227,26 +238,26 @@
 
       },
 
-      loadAccountInfo: function(){
+      loadAccountInfo: function () {
 
         let mySelf = this;
 
         let accountInfo = getCookie('accountInfo');
 
         //如果cookie里没有账号信息
-        if(Boolean(accountInfo) == false){
+        if (Boolean(accountInfo) == false) {
           console.log('cookie中没有检测到账号信息！');
           return false;
         }
-        else{
+        else {
           //如果cookie里有账号信息
           console.log('cookie中检测到账号信息！现在开始预填写！');
           let userName = "";
           let passWord = "";
           let index = accountInfo.indexOf("&");
 
-          userName = accountInfo.substring(0,index);
-          passWord = accountInfo.substring(index+1);
+          userName = accountInfo.substring(0, index);
+          passWord = accountInfo.substring(index + 1);
 
           mySelf.formInline.userName = userName;
           mySelf.formInline.passWord = passWord;
