@@ -1,10 +1,9 @@
 <template>
-  <div class="operation-list">
-    <div class="search-title">
-      <div class="search-form">
-        <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="100">
-          <Row>
-            <Col span="9">
+  <div class="operation">
+    <div class="operation-form">
+      <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="90">
+        <Row>
+          <Col span="9">
             <Form-item label="日期">
               <Row>
                 <Col span="11">
@@ -20,38 +19,41 @@
                 </Col>
               </Row>
             </Form-item>
-            <Form-item label="资源池" prop="resource">
-              <Select v-model="formValidate.resource">
+          </Col>
+          <Col span="5">
+            <Form-item label="虚拟机名称" prop="virtual_name">
+              <Input v-model="formValidate.virtual_name" placeholder="请输入"></Input>
+            </Form-item>
+          </Col>
+          <Col span="5">
+            <Form-item label="资源池:">
+              <Select v-model="formValidate.resource" clearable style="">
                 <Option label="资源池1" value="0"></Option>
                 <Option label="资源池2" value="1"></Option>
               </Select>
             </Form-item>
-            </Col>
-            <Col span="9">
-            <Form-item label="虚拟机名称" prop="virtual_name">
-              <Input v-model="formValidate.virtual_name" placeholder="请输入"></Input>
-            </Form-item>
-            <Form-item label="部署实例" prop="case">
-              <Select v-model="formValidate.case">
-                <Option label="实例1" value="0"></Option>
-                <Option label="实例2" value="1"></Option>
-                <Option label="实例3" value="2"></Option>
+          </Col>
+          <Col span="5">
+            <Form-item label="部署实例:">
+              <Select v-model="formValidate.case" clearable style="">
+                <Option :value="1" :key="1">部署实例1</Option>
+                <Option :value="2" :key="2">部署实例2</Option>
               </Select>
             </Form-item>
-            </Col>
-            <Col span="6">
-            <Form-item>
-              <Button type="primary" @click="goQuery">查询</Button>
-            </Form-item>
-            <Form-item>
-              <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
-            </Form-item>
-            </Col>
-          </Row>
-        </Form>
-      </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="22" style="min-height: 20px"></Col>
+          <Col span="1">
+            <Button type="primary" @click="goQuery">查询</Button>
+          </Col>
+          <Col span="1">
+            <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
+          </Col>
+        </Row>
+      </Form>
     </div>
-    <div class="table-list">
+    <div class="operation-table">
       <div>日志列表：</div>
       <Table border :columns="columns" :data="dataDemo"></Table>
       <div style="margin: 10px;overflow: hidden">
@@ -63,42 +65,24 @@
   </div>
 </template>
 
-<style scoped>
-  .search-title {
-    padding-top: 15px;
-    background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);
-    border: 1px solid rgb(228, 228, 228);
-    border-radius: 10px;
-  }
-  .table-list {
-    padding: 20px 20px;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-  }
-
-  table tr {
-    border: 1px solid #D7DDE4;
-  }
-  table tbody tr{
-    height: 48px;
-    display: table-row;
-  }
-
-  table td, table th{
-    text-align: center;
-    border: 1px solid #D7DDE4;
-  }
-
-  table thead tr {
-    height: 40px;
-    background-color: #F5F7F9;
-  }
-
-  table tbody tr:hover {
-    background-color: #F3FAFF;
+<style lang="less" scoped>
+  .operation {
+    margin-top: 30px;
+    &-form {
+       padding: 15px;
+       background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);
+       border: 1px solid rgb(228, 228, 228);
+       border-radius: 10px;
+    &-project_name {
+       width: 30%;
+     }
+    &-formStatus {
+       width: 50%;
+     }
+    }
+    &-table {
+       padding: 20px 20px;
+     }
   }
 </style>
 

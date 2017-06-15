@@ -2,8 +2,8 @@
   <div class="page-changePwd">
     <div class="cp_title">修改密码</div>
     <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
-      <Row>
-        <Col span="10">
+      <Row type="flex" justify="center">
+        <Col span="8">
           <Form-item label="原密码" prop="originPasswd">
             <Input type="password" v-model="formCustom.originPasswd" placeholder="可为空"></Input>
           </Form-item>
@@ -18,7 +18,6 @@
             <Button type="ghost" @click="handleReset('formCustom')" style="margin-left: 8px">重置</Button>
           </Form-item>
         </Col>
-        <Col span="14"></Col>
       </Row>
     </Form>
   </div>
@@ -26,7 +25,7 @@
 
 <style scoped>
   .cp_title{
-    width: 80%;
+    width: 100%;
     height: 20px;
     padding-left: 5px;
     background-color: #f2f2f2;
