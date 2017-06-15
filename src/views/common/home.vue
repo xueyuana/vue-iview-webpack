@@ -19,7 +19,7 @@
             <span>{{userInfo.department}}</span>
           </li>
           <li @click="toLogOut">
-            <a href="#">退出</a>
+            <a href="javascript:void(0);">退出</a>
           </li>
         </ul>
       </div>
@@ -197,7 +197,7 @@
   }
 
   .layout-content {
-    min-height: 200px;
+    min-height: 500px;
     margin: 15px;
     /*overflow: hidden;*/
     background: #fff;
@@ -291,7 +291,8 @@
       toLogOut() {
         removeStroage('userInfo');
         removeStroage('role');
-        this.$router.push({name: 'login'});
+        console.log('我退出了')
+        this.$router.push({path: '/login'});
       },
 
       // 导航跳转

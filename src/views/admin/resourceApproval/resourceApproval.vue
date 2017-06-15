@@ -106,37 +106,55 @@
           },
           {
             title: '申请单号',
-            key: 'resource_name',
-            align: 'center'
+            key: 'order_number',
+            align: 'center',
+            render: (h, params) => {
+              return h('a',{
+                on: {
+                  click: () => {
+                    this.$router.push({name: 'approval_resourceDetails', query: {id: params.row.order_number}})
+                  }
+                }
+              }, params.row.order_number)
+            }
           },
           {
             title: '申请人',
-            key: 'physical_machine',
+            key: 'applicant',
             align: 'center'
           },
           {
             title: '部署实例',
-            key: 'virtual_machine',
+            key: 'deploy_name',
             align: 'center'
           },
           {
             title: '资源池',
-            key: 'CPU_proportion',
+            key: 'resource_pool',
             align: 'center'
           },
           {
             title: '审批状态',
-            key: 'CPU_proportion',
+            key: 'status',
             align: 'center'
           },
           {
             title: '日期',
-            key: 'CPU_proportion',
+            key: 'data',
             align: 'center'
           }
         ],
         data1: [],
-        filterDate: [],
+        filterDate: [
+          {
+            order_number: 'ID0001',
+            applicant: '王雪娇',
+            deploy_name: '实例1',
+            resource_pool: '222',
+            status: '审批不通过',
+            data: '2017.6.14 14.44'
+          }
+        ],
         pageSize: 10,
         num: 1
       }

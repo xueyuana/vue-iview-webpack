@@ -137,7 +137,7 @@
     // 相当于ready 模板编译挂载之后
     mounted: function() {
       //读取cookie中的账号信息，如果有accountInfo的话，则说明该用户之前勾选了记住密码的功能，则需要自动填上账号密码
-      this.loadAccountInfo();
+//      this.loadAccountInfo();
     },
     methods: {
       handleSubmit(name) {
