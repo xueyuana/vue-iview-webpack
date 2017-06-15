@@ -46,7 +46,7 @@
       </div>
       <div class="item">
         <span class="title">存储空间</span>
-        <Input v-model="item.storageSpace" placeholder="请输入..." style="width: 200px"></Input>
+        <Input v-model="item.storageSpace" placeholder="最小单位G，最大500G" style="width: 200px"></Input>
       </div>
       <div class="item">
         <span class="title">数量</span>
@@ -168,12 +168,6 @@
         let m = date.getMinutes()
         let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m
 
-//        let resourceQuery = {
-//          id: this.id,
-//          deployExample: this.resourceInformation[0].deployExample,
-//          resourcePool: this.resourceInformation[0].resourcePool
-//
-//        }
         let information = {
           resourceInformation: this.resourceInformation,
           serviceInformation: this.serviceInformation,

@@ -199,7 +199,7 @@
   .layout-content {
     min-height: 500px;
     margin: 15px;
-    overflow: hidden;
+    /*overflow: hidden;*/
     background: #fff;
     border-radius: 4px;
   }
