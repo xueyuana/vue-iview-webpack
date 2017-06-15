@@ -27,13 +27,13 @@
         <div class="item">
           <span class="title">部署实例</span>
           <Select v-model="model1" style="width:200px">
-            <Option v-for="item in deployExample" :value="item.value" :key="item">{{ item.value }}</Option>
+            <Option v-for="item in deployExample" :value="item.value" :key="item" >{{ item.value }} </Option>
           </Select>
         </div>
       </div>
       <div class="query">
-        <Button >查询</Button>
-        <Button class="reset">重置</Button>
+        <Button type="info" >查询</Button>
+        <Button class="reset" type="info" >重置</Button>
       </div>
     </div>
     <div class="header">资源列表：</div>
@@ -141,11 +141,9 @@
             render: (h,params) => {
               var self = this;
               return h('Select',{
-//                attrs: {
-//                  value: self.model2
-//                },
                 props: {
-                  size: 'small'
+                  size: 'small',
+                  clearable: true
                 },
                 domProps: {
                   value: self.model2
@@ -153,6 +151,17 @@
                 on: {
                   'on-change': (event) => {
                     self.model2 = event
+
+                    if(event == '关机' || event == '重启' || event == '删除'){
+                      self.$Modal.info({
+                        title: '确认',
+                        content: '<p>确认选择'+event+'吗</p>',
+                        onOk: () => {
+                          console.log('确认')
+                        }
+
+                      })
+                    }
                   }
                 }
               },this.approvalStatus.map(function (item) {
@@ -188,6 +197,9 @@
       },
       clickbutton () {
         console.log('click2')
+      },
+      optionTips () {
+        console.log(11)
       }
     }
   }
