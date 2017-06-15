@@ -33,7 +33,7 @@
     <!--</Row>-->
     <!--</div>-->
     <div class="status-list">
-      <div class="rd_status_title">xxx资源池资源使用情况</div>
+      <div class="rd_status_title">xxx资源池资源使用情况:</div>
       <Row type="flex" justify="start" class="code-row-bg">
         <Col span="7">
         <Row>
@@ -77,7 +77,7 @@
       </Row>
     </div>
     <div class="status-list">
-      <div class="rd_status_title">本次申请占用资源情况</div>
+      <div class="rd_status_title">本次申请占用资源情况:</div>
       <Row type="flex" justify="start" class="code-row-bg">
         <Col span="7">
         <Row>
@@ -143,59 +143,59 @@
       <Form ref="formValidate" :model="formValidate" :label-width="120">
         <Row>
           <Col span="24">
-          <div class="rs_title">资源信息</div>
+          <div class="rs_title">资源信息:</div>
           </Col>
           <Col span="12">
-          <Form-item label="申请单号">
+          <Form-item label="申请单号:">
             <Input v-model="formValidate.apply_code"></Input>
           </Form-item>
-          <Form-item label="虚拟机名称">
+          <Form-item label="虚拟机名称:">
             <Input v-model="formValidate.virtual_name"></Input>
           </Form-item>
-          <Form-item label="部门">
+          <Form-item label="部门:">
             <Input v-model="formValidate.department"></Input>
           </Form-item>
-          <Form-item label="规格">
+          <Form-item label="规格:">
             <Select v-model="formValidate.spec">
               <Option label="2C4G" value="0"></Option>
               <Option label="4C8G" value="1"></Option>
             </Select>
           </Form-item>
-          <Form-item label="存储空间">
+          <Form-item label="存储空间:">
             <Input v-model="formValidate.storeSpace"></Input>
           </Form-item>
           </Col>
           <Col span="12">
           <Form-item>&nbsp;</Form-item>
-          <Form-item label="部署实例" prop="case">
+          <Form-item label="部署实例:" prop="case">
             <Select v-model="formValidate.case">
               <Option label="实例1" value="0"></Option>
               <Option label="实例2" value="1"></Option>
               <Option label="实例3" value="2"></Option>
             </Select>
           </Form-item>
-          <Form-item label="资源池">
+          <Form-item label="资源池:">
             <Select v-model="formValidate.resource">
               <Option label="资源池1" value="0"></Option>
               <Option label="资源池2" value="1"></Option>
             </Select>
           </Form-item>
-          <Form-item label="镜像">
+          <Form-item label="镜像:">
             <Select v-model="formValidate.mirror">
               <Option label="Centos 7.2" value="0"></Option>
               <Option label="Ubuntu 15.01" value="1"></Option>
             </Select>
           </Form-item>
-          <Form-item label="数量">
+          <Form-item label="数量:">
             <Input-number :max="10" :min="1" v-model="formValidate.total"></Input-number>
           </Form-item>
           </Col>
           <Col span="24">
-          <div class="rs_title">业务信息</div>
+          <div class="rs_title">业务信息:</div>
           <Input v-model="formValidate.ywInfo" type="textarea" :maxlength="100" :autosize="{minRows: 2,maxRows: 5}" placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
           </Col>
           <Col span="24">
-          <div class="rs_title">行政审批意见</div>
+          <div class="rs_title">行政审批意见:</div>
           <Input v-model="formValidate.xzInfo" type="textarea" :maxlength="100" :autosize="{minRows: 2,maxRows: 5}" placeholder="默认显示同意，最多100个字符"></Input>
           </Col>
         </Row>

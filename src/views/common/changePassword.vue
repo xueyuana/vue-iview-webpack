@@ -4,13 +4,13 @@
     <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
       <Row type="flex" justify="center">
         <Col span="8">
-          <Form-item label="原密码" prop="originPasswd">
+          <Form-item label="原密码:" prop="originPasswd">
             <Input type="password" v-model="formCustom.originPasswd" placeholder="可为空"></Input>
           </Form-item>
-          <Form-item label="新密码" prop="passwd">
+          <Form-item label="新密码:" prop="passwd">
             <Input type="password" v-model="formCustom.passwd" :maxlength="16" placeholder="最多16位"></Input>
           </Form-item>
-          <Form-item label="新密码确认" prop="passwdCheck">
+          <Form-item label="新密码确认:" prop="passwdCheck">
             <Input type="password" v-model="formCustom.passwdCheck" :maxlength="16" placeholder="最多16位"></Input>
           </Form-item>
           <Form-item class="btnCss">

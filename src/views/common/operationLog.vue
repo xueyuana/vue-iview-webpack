@@ -1,10 +1,10 @@
 <template>
   <div class="operation">
     <div class="operation-form">
-      <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="90">
+      <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="85">
         <Row>
           <Col span="9">
-            <Form-item label="日期">
+            <Form-item label="日期:">
               <Row>
                 <Col span="11">
                 <Form-item prop="create_date_begin">
@@ -21,7 +21,7 @@
             </Form-item>
           </Col>
           <Col span="5">
-            <Form-item label="虚拟机名称" prop="virtual_name">
+            <Form-item label="虚拟机名称:" prop="virtual_name" class="operation-form-virtual">
               <Input v-model="formValidate.virtual_name" placeholder="请输入"></Input>
             </Form-item>
           </Col>
@@ -42,13 +42,12 @@
             </Form-item>
           </Col>
         </Row>
-        <Row>
-          <Col span="22" style="min-height: 20px"></Col>
-          <Col span="1">
-            <Button type="primary" @click="goQuery">查询</Button>
-          </Col>
-          <Col span="1">
+        <Row type="flex" justify="end">
+          <Col span="24" style="min-height: 20px">
+          <div class="operation-form-query">
+            <Button type="primary" class="operation-form-query-add" @click.native="goQuery">查询</Button>
             <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
+          </div>
           </Col>
         </Row>
       </Form>
@@ -73,12 +72,23 @@
        background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);
        border: 1px solid rgb(228, 228, 228);
        border-radius: 10px;
-    &-project_name {
-       width: 30%;
-     }
-    &-formStatus {
-       width: 50%;
-     }
+        &-project_name {
+           width: 30%;
+         }
+        &-virtual {
+           label {
+             width:80px;
+           }
+         }
+        &-query {
+           width: 100%;
+           display: flex;
+           justify-content: flex-end;
+           box-sizing: border-box;
+        &-add{
+           margin-right: 10px;
+         }
+        }
     }
     &-table {
        padding: 20px 20px;

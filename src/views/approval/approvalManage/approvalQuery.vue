@@ -4,12 +4,12 @@
       <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="70">
         <Row :gutter="16">
           <Col span="5">
-            <Form-item label="申请人" prop="apply_name">
+            <Form-item label="申请人:" prop="apply_name">
               <Input v-model="formValidate.apply_name" placeholder="请输入"></Input>
             </Form-item>
           </Col>
           <Col span="9">
-            <Form-item label="申请日期">
+            <Form-item label="申请日期:">
               <Row>
                 <Col span="11">
                 <Form-item prop="create_date_begin">
@@ -43,13 +43,12 @@
             </Form-item>
           </Col>
         </Row>
-        <Row>
-          <Col span="22" style="min-height: 20px"></Col>
-          <Col span="1">
-          <Button type="primary" @click.native="goQuery">查询</Button>
-          </Col>
-          <Col span="1">
-          <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
+        <Row type="flex" justify="end">
+          <Col span="24" style="min-height: 20px">
+          <div class="approval-form-query">
+            <Button type="primary" class="approval-form-query-add" @click.native="goQuery">查询</Button>
+            <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
+          </div>
           </Col>
         </Row>
       </Form>
@@ -80,6 +79,15 @@
       &-formStatus {
          width: 50%;
        }
+      &-query {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        box-sizing: border-box;
+        &-add{
+          margin-right: 10px;
+        }
+      }
     }
     &-table {
        padding: 20px 20px;
