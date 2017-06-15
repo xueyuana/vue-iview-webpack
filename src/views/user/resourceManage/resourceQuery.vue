@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="query">
-        <Button>查询</Button>
+        <Button type="info" >查询</Button>
 
       </div>
     </div>

@@ -12,35 +12,52 @@
         </div>
       </div>
       <div class="query">
-        <Button >查询</Button>
-        <Button class="reset">重置</Button>
+        <Button type="info" >查询</Button>
+        <Button class="reset" type="info" >重置</Button>
       </div>
     </div>
     <div class="createUser">
-      <Button @click="isCreate = true">创 建</Button>
+      <Button @click="isCreate = true" type="info" >创 建</Button>
       <Modal
           v-model="isCreate"
           title="用户信息"
           width="300"
-          @on-ok="ok"
-          @on-cancel="cancel">
+          @on-ok="createOk"
+          @on-cancel="createCancel">
         <div class="createWrap">
-          <span class="modal-title">用户名：</span><Input v-model="value" placeholder="请输入..." style="width: 200px"></Input>
-          <span class="modal-title">密码：</span><Input v-model="value" placeholder="请输入..." style="width: 200px"></Input>
-          <span class="modal-title">部门：</span><Input v-model="value" placeholder="请输入..." style="width: 200px"></Input>
-          <span class="modal-title">手机：</span><Input v-model="value" placeholder="请输入..." style="width: 200px"></Input>
-          <span class="modal-title">邮箱：</span><Input v-model="value" placeholder="请输入..." style="width: 200px"></Input>
+          <span class="modal-title">用户名：</span><Input v-model="createUser.userName" placeholder="请输入..." style="width: 200px"></Input>
+          <span class="modal-title">密码：</span><Input v-model="createUser.passWord" placeholder="请输入..." style="width: 200px"></Input>
+          <span class="modal-title">部门：</span><Input v-model="createUser.department" placeholder="请输入..." style="width: 200px"></Input>
+          <span class="modal-title">手机：</span><Input v-model="createUser.phone" placeholder="请输入..." style="width: 200px"></Input>
+          <span class="modal-title">邮箱：</span><Input v-model="createUser.email" placeholder="请输入..." style="width: 200px"></Input>
           <span class="modal-title">角色:</span>
-          <Select v-model="role" style="width:196px">
+          <Select v-model="createUser.role" style="width:196px">
             <Option v-for="item in roleList" :value="item.value" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
-
       </Modal>
 
     </div>
     <div class="header">资源列表：</div>
     <Table border :columns="columns1" :data="queryResult"></Table>
+    <Modal
+        v-model="isCompile"
+        title="用户信息"
+        width="300"
+        @on-ok="compileOk"
+        @on-cancel="compileCancel">
+      <div class="createWrap">
+        <span class="modal-title">用户名：</span><Input v-model="compileUser.userName" placeholder="请输入..." style="width: 200px"></Input>
+        <span class="modal-title">密码：</span><Input v-model="compileUser.passWord" placeholder="请输入..." style="width: 200px"></Input>
+        <span class="modal-title">部门：</span><Input v-model="compileUser.department" placeholder="请输入..." style="width: 200px"></Input>
+        <span class="modal-title">手机：</span><Input v-model="compileUser.phone" placeholder="请输入..." style="width: 200px"></Input>
+        <span class="modal-title">邮箱：</span><Input v-model="compileUser.email" placeholder="请输入..." style="width: 200px"></Input>
+        <span class="modal-title">角色:</span>
+        <Select v-model="compileUser.role" style="width:196px">
+          <Option v-for="item in roleList" :value="item.value" :key="item">{{ item.value }}</Option>
+        </Select>
+      </div>
+    </Modal>
     <div class="page">
       <Button class="pre">上一页</Button>
       <Button>下一页</Button>
@@ -54,6 +71,26 @@
   export default {
     data () {
       return {
+        isCreate: false,
+        value: '',
+        isCompile: false,
+        index: '',
+        createUser: {
+          userName: '',
+          passWord: '',
+          department: '',
+          phone: '',
+          email: '',
+          role: ''
+        },
+        compileUser: {
+          userName: '',
+          passWord: '',
+          department: '',
+          phone: '',
+          email: '',
+          role: ''
+        },
         status: [
           {
             value: '运行',
@@ -109,9 +146,6 @@
             value: '行政审批'
           }
         ],
-        isCreate: false,
-        role: '',
-        value: '',
         columns1: [
           {
             title: '序号',
@@ -155,7 +189,13 @@
                     marginRight: '5px'
                   },
                   on: {
-                    click: this.compile
+                    click: () => {
+                      this.isCompile = true
+                      for(var key in params.row) {
+                        this.compileUser[key] = params.row[key]
+                      }
+                      this.index = params.index
+                    }
                   }
                 },'编辑'),
                   h('Button',{
@@ -164,7 +204,18 @@
                       size: 'small'
                     },
                     on: {
-                      click: this.delete
+                      click: () => {
+                        this.$Modal.confirm({
+                          title: '确认',
+                          content: '<p>确认删除吗？</p>',
+                          onOk: () => {
+                            this.queryResult.splice(params.index,1)
+                          },
+                          onCancel: () => {
+                            console.log('取消')
+                          }
+                        })
+                      }
                     }
                   },'删除')
                 ])
@@ -182,24 +233,66 @@
             department: '部门1',
             createDate: '2017',
             operate: ''
+          },
+          {
+            number: 2,
+            userName: '用户2',
+            phone: '187',
+            email: '@xx.com',
+            role: '用户',
+            department: '部门2',
+            createDate: '2017',
+            operate: ''
           }
         ]
 
       }
     },
     methods: {
-      compile () {
-        console.log('compile')
-      },
-      delete () {
-        console.log('delete')
-      },
-      ok () {
-        console.log('ok')
+      compileOk () {//编辑后确定
+       for(var key in this.compileUser) {
+         this.queryResult[this.index][key] = this.compileUser[key]
+       }
+
+        console.log('result',this.queryResult)
 
       },
-      cancel () {
-        console.log('cancel')
+      compileCancel () {//取消编辑
+
+      },
+      createOk () {
+        let date = new Date();
+        let Y = date.getFullYear();
+        let M = date.getMonth()+1;
+        let D = date.getDate()
+        let h = date.getHours()
+        let m = date.getMinutes()
+        h = h<10? '0'+h:h
+        m = m<10? '0'+m:m
+        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m
+        //创建的新用户
+        let newUser = this.createUser
+        this.createUser = {
+          userName: '',
+          passWord: '',
+          department: '',
+          phone: '',
+          email: '',
+          role: ''
+        }
+        newUser.applyDate = applyDate
+
+      },
+      createCancel () {
+        //清空
+        this.createUser = {
+          userName: '',
+          passWord: '',
+          department: '',
+          phone: '',
+          email: '',
+          role: ''
+        }
 
       }
     }
