@@ -1,15 +1,19 @@
 <template>
     <div class="">
         <Row>
+            <Col span="2" class="c_font">创建日期：</Col>
             <Col span="4">
-                <Date-picker type="date" placeholder="选择日期" style="width: 200px"></Date-picker>
+                <Date-picker type="date" placeholder="选择日期"></Date-picker>
             </Col>
+            <Col span="1" class="c_font2">至</Col>
             <Col span="4">
-                <Date-picker type="date" placeholder="选择日期" style="width: 200px"></Date-picker>
+                <Date-picker type="date" placeholder="选择日期"></Date-picker>
             </Col>
-            <Col span="8">
-                <Input v-model="value" placeholder="请输入..." style="width: 300px"></Input>
+            <Col span="2" class="c_font">部署实例名称：</Col>
+            <Col span="4">
+                <Input v-model="value" placeholder="请输入..."></Input>
             </Col>
+            <Col span="5"></Col>
         </Row>
         <div class="tjbssl">
             <Button @click="modal1 = true">添加部署实例</Button>
@@ -18,7 +22,7 @@
                 title="添加部署实例"
                 @on-ok="ok"
                 @on-cancel="cancel">
-                <p>名称：<Input v-model="tjname" placeholder="最多10个字符" style="width: 300px"></Input></p>
+                <p>名称：<Input v-model="message" placeholder="最多10个字符" style="width: 300px"></Input></p>
             </Modal>
         </div>
         <div class="bssl-list">部署实例列表：</div>
@@ -29,20 +33,17 @@
 
 <style scoped>
 .ivu-row{
-    padding: 30px;
-    border: 1px solid #ccc;
-    margin-bottom: 30px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e4e4e4;
+    background-image: linear-gradient(to bottom,#fff,#e4e4e4);
     border-radius: 10px;
-    background: #f8f8f9;
-}
-.tjbssl{
-    padding-bottom: 30px;
 }
 .tjbssl Button{
     display: block;
     width: 150px;
-    height: 40px;
-    line-height: 40px;
+    height: 30px;
+    line-height: 30px;
     background: #2d8cf0;
     text-align: center;
     color: #fff;
@@ -51,20 +52,31 @@
     padding: 0;
 }
 .bssl-list{
-     height: 40px;
-     line-height: 40px;
-     font-size: 16px;
+     height: 35px;
+     line-height: 35px;
+     font-size: 14px;
 }
 .ivu-page{
-    padding-top: 30px;
+    padding-top: 20px;
+    float: right;
+}
+.c_font{
+    line-height: 32px;
+    text-align: right;
+    padding-right: 10px;
 }
 
+.c_font2{
+    line-height: 32px;
+    text-align: center;
+}
 </style>
 
 <script>
   export default {
       data () {
           return {
+              message: '',
               modal1: false ,
               value: '',
               tjname: '',
@@ -115,6 +127,20 @@
                       align: 'center',
                       render: (h, params) => {
                           return h('div', [
+                              h('Button', {
+                                  props: {
+                                      type: 'primary',
+                                      size: 'small'
+                                  },
+                                  style: {
+                                      marginRight: '5px'
+                                  },
+                                  on: {
+                                      click: () => {
+                                          this.show(params.index);
+                                      }
+                                  }
+                              }, '编辑'),
                               h('Button', {
                                   props: {
                                       type: 'error',
@@ -175,10 +201,17 @@
           },
           ok () {
               this.$Message.info('点击了确定');
+              var stamp = new Date(),
+                  year = stamp.getFullYear(),
+                  month = (stamp.getMonth() + 1) > 9 ? (stamp.getMonth() + 1) : '0' + (stamp.getMonth() + 1),
+                  day = stamp.getDate() > 9 ? stamp.getDate() : '0' + stamp.getDate(),
+                  hour = stamp.getHours() > 9 ? stamp.getHours() : '0' + stamp.getHours(),
+                  minute = stamp.getMinutes() > 9 ? stamp.getMinutes() : '0' + stamp.getMinutes(),
+                  sec = stamp.getSeconds() > 9 ? stamp.getSeconds() : '0' + stamp.getSeconds()
               this.data6.push({
-                  name: '部署实例s',
-                  number: '10',
-                  time: '2017-06-05 15:00:00'
+                  name: this.message,
+                  number: '0',
+                  time: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec
               });
           },
           cancel () {

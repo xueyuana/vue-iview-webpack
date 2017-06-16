@@ -64,6 +64,7 @@
     line-height: 100px;
     font-size: 16px;
     color: #3399FF;
+    cursor: pointer;
 }
 .ivu-col-img{
     text-align: left;

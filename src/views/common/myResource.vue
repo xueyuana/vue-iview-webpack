@@ -37,7 +37,31 @@
       </div>
     </div>
     <div class="header">资源列表：</div>
-    <Table border :columns="columns1" :data="queryResult"></Table>
+    <table>
+      <thead>
+        <tr>
+          <th v-for="item in columns" :key="item.key">{{item.title}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(queryList,index) in queryResult" >
+          <td v-for="(value,key) in queryList" >{{value}}</td>
+          <td>
+            <Dropdown>
+              <a href="javascript:void(0)">
+                下拉
+                <Icon type="arrow-down-b"></Icon>
+              </a>
+              <Dropdown-menu slot="list">
+                <Dropdown-item v-for="item in operationList[index]" @click.native="clicknative($event,index)" :selected="item.selected">{{ item.value }}</Dropdown-item>
+              </Dropdown-menu>
+            </Dropdown>
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
     <div class="page">
       <Button class="pre">上一页</Button>
       <Button>下一页</Button>
@@ -78,27 +102,11 @@
             value: '资源池2'
           }
         ],
-        approvalStatus: [
-          {
-            value: 'VNC'
-          },
-          {
-            value: '启动'
-          },
-          {
-            value: '重启'
-          },
-          {
-            value: '关机'
-          },
-          {
-            value: '删除'
-          }
-        ],
+        operationList: [],
         value: '',
         model1: '',
         model2: '',
-        columns1: [
+        columns: [
           {
             title: '序号',
             key: 'number'
@@ -186,20 +194,86 @@
             resourcePool: 'DMZ',
             standard: '2C/2G/200G',
             status: '运行'
+          },
+          {
+            number: 1,
+            virtualMachine: 'web',
+            deployExample: '实例1',
+            ip: '127.29.11.200',
+            mirrorImage: 'Centos 7.2',
+            physicalMachine: '物理机1',
+            resourcePool: 'DMZ',
+            standard: '2C/2G/200G',
+            status: '异常'
           }
         ]
 
       }
     },
+    created () {
+        this.queryResult.forEach((item,index) => {
+          switch (item.status) {
+            case '运行': this.operationList.push([
+              {
+                value: '重启',
+                selected: false
+              },
+              {
+                value: '关机',
+                selected: false
+              },
+              {
+                value: 'VNC',
+                selected: false
+              }
+            ])
+              break
+            case '异常': this.operationList.push([
+              {
+                value: '启动',
+                selected: false
+              },
+              {
+                value: '开机',
+                selected: false
+              },
+              {
+                value: 'VNC',
+                selected: false
+              }
+            ])
+              break
+            case '开机': this.operationList.push([
+              {
+                value: '关机',
+                selected: false
+              },
+              {
+                value: '重启',
+                selected: false
+              },
+              {
+                value: 'VNC',
+                selected: false
+              }
+            ])
+              break
+          }
+        })
+
+    },
     methods: {
-      clickHandler () {
-        console.log('click')
-      },
-      clickbutton () {
-        console.log('click2')
-      },
-      optionTips () {
-        console.log(11)
+      clicknative (event,index) {
+        //index指的是行数
+        this.operationList[index].forEach((item,index) => {
+          if(item.value == event.target.firstChild.data) {
+            item.selected = true
+          }else {
+            item.selected = false
+          }
+        })
+
+
       }
     }
   }
@@ -257,6 +331,25 @@
   }
   .header {
     margin: 30px 0 10px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  table td,th{
+    text-align: center;
+    border: 1px solid #dddee1;
+  }
+  table tr {
+    height: 50px;
+
+  }
+  table thead tr{
+    background-color: #f8f8f9;
+  }
+  table tbody tr:hover {
+    background-color: #F3FAFF;
   }
 
 
