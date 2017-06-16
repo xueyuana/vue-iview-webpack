@@ -1,23 +1,21 @@
 <template>
   <div>
-    <div class="login-container-div ">
+    <div class="login-container-div">
       <Row type="flex" justify="center" align="middle"
            style="text-align: center;font-size: 30px;color:#3399ff;margin-bottom:20px">
         <Col span="24">
-          门头沟政务云资源管理平台
-        </Col>
+        门头沟政务云资源管理平台
+      </Col>
       </Row>
 
       <div class="login-container">
         <Row type="flex" justify="center" align="middle">
-          <Col span="24">
 
+          <Col span="24">
           <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70" inline>
 
             <Form-item prop="userName" label="用户名">
-              <Input type="text" v-model="formInline.userName" placeholder="请输入工号">
-
-              </Input>
+              <Input type="text" v-model="formInline.userName" placeholder="请输入账号" @keydown.native.enter="handleSubmit('formInline')"></Input>
             </Form-item>
 
             <Form-item prop="passWord" label="密码">
@@ -39,14 +37,14 @@
                    </Row>
                </Form-item>-->
 
-
             <Form-item>
               <Checkbox v-model="formInline.rememberPassword" @click.prevent.native="doRememberPassword">记住密码</Checkbox>
               <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
             </Form-item>
-          </Form>
 
+          </Form>
           </Col>
+
         </Row>
 
       </div>
@@ -56,44 +54,12 @@
 
 
 <style scoped>
-  .index {
-    width: 100%;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    text-align: center;
-
-  h1 {
-    height: 150px;
-
-  img {
-    height: 100%;
-  }
-
-  }
-  h2 {
-    color: #666;
-    margin-bottom: 200px;
-
-  p {
-    margin: 0 0 50px;
-  }
-
-  }
-  .ivu-row-flex {
-    height: 100%;
-  }
-
-  }
   .login-container-div {
     margin: 180px auto;
     width: 380px;
-
   }
 
   .login-container {
-    /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
     -webkit-border-radius: 5px;
     border-radius: 5px;
     -moz-border-radius: 5px;
@@ -103,18 +69,6 @@
     background: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
-
-  .title {
-    margin: 0px auto;
-    text-align: center;
-    color: #505458;
-    font-size: 30px;
-  }
-
-  .remember {
-    margin: 0px 0px 35px 0px;
-  }
-
   }
 </style>
 
@@ -141,14 +95,10 @@
         }
       }
     },
-    // 相当于init doAjax
-    beforeCreate() {
-      // console.log('login页面 加载完成！')
-    },
-    // 相当于ready 模板编译挂载之后
+
     mounted: function () {
       //读取cookie中的账号信息，如果有accountInfo的话，则说明该用户之前勾选了记住密码的功能，则需要自动填上账号密码
-//      this.loadAccountInfo();
+      // this.loadAccountInfo();
     },
     methods: {
       handleSubmit(name) {
@@ -180,56 +130,49 @@
               this.$Message.error('用户名不能为空')
             }
 
-//            const url=common.apihost+'auth/userlist';
-//            this.$http.post(
-//              url,
-//              {
-//                'id':userName,
-//                'password':passWord
-//
-//              }, {emulateJSON:true} ).then(response=>{
-//              console.log('账号密码', response);
-//              if (rememberStatus){
-//                console.log("勾选了记住密码，现在开始写入cookie");
-//                setCookie('accountInfo',accountInfo,1440*3);
-//              }
-//              else{
-//                console.log("没有勾选记住密码，现在开始删除账号cookie");
-//                delCookie('accountInfo');
-//              }
-//              if(response.body.code===200){
-//                this.$Message.success('提交成功!');
-//                console.log('登录成功', response)
-//                let userinfo = {}
-//                userinfo.username=response.body.result.msg.username;
-//                userinfo.user_id=response.body.result.msg.user_id;
-//                userinfo.is_admin=response.body.result.msg.is_admin;
-//                userinfo.department=response.body.result.msg.department;
-//
-//                setStroage('userInfo', userinfo)
-//
-//                // 根据身份跳转不同界面
-//                if (response.body.result.msg.is_admin) {
-//                  this.$router.push({path:'/admin_console'})
-//                }else {
-//                  this.$router.push({path:'/management_console'})
+
+//            let body = {
+//              "username": userName,
+//              "password": passWord,
+//            }
+//            this.$http.post('api/user/login', body, {emulateJSON: true})
+//              .then(res => {
+//                console.log('登录', res);
+//                if (rememberStatus) {
+//                  console.log("勾选了记住密码，现在开始写入cookie");
+//                  setCookie('accountInfo', accountInfo, 1440 * 3);
+//                } else {
+//                  console.log("没有勾选记住密码，现在开始删除账号cookie");
+//                  delCookie('accountInfo');
 //                }
-//              }
-//              if(response.body.code == 400){
-//                this.$Message.error('验证错误!');
 //
-//              }
-//              // 成功回调
-//            }, function () {
-//              this.$Message.error('登陆失败!');
-//              // 失败回调
-//            });
+//                if (res.body.code === 200) {
+//                  this.$Message.success('登录成功!');
+//
+//                  let userinfo = {}
+//                  userinfo.user_id = res.body.result.user_id;
+//
+//                  setStroage('userInfo', userinfo)
+//
+//                  // 根据不同用户权限进入不同界面
+//
+//                }
+//
+//                if (res.body.code == 400) {
+//                  this.$Message.error('验证错误!');
+//                }
+//                // 成功回调
+//              }, err => {
+//                this.$Message.error('登陆失败!');
+//                // 失败回调
+//              });
 
           } else {
             this.$Message.error('表单验证失败!');
           }
         });
       },
+
       doRememberPassword: function (event) {
         let mySelf = this;
         let rememberStatus = mySelf.formInline.rememberPassword;

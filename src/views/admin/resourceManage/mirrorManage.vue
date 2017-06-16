@@ -2,43 +2,44 @@
   <div class="inquire">
     <!--查询条件-->
     <div class="inquire-form">
-      <Form ref="formItem" :model="formItem" :label-width="70">
+      <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="70" inline>
         <Row :gutter="16">
           <Col span="10">
             <Form-item label="日期:">
               <Row>
                 <Col span="11">
-                <Form-item>
-                  <Date-picker type="datetime" placeholder="起始日期" @on-change="formatCreateData"></Date-picker>
-                </Form-item>
+                  <Form-item prop="start_time">
+                    <Date-picker type="datetime" placeholder="起始日期" @on-change="formatCreateData"></Date-picker>
+                  </Form-item>
                 </Col>
                 <Col span="2" style="text-align: center">-</Col>
                 <Col span="11">
-                <Form-item>
-                  <Date-picker type="datetime" placeholder="截止日期" @on-change="formatEndData"></Date-picker>
-                </Form-item>
+                  <Form-item prop="end_time">
+                    <Date-picker type="datetime" placeholder="截止日期" @on-change="formatEndData"></Date-picker>
+                  </Form-item>
                 </Col>
               </Row>
             </Form-item>
           </Col>
           <Col span="7">
-            <Form-item label="镜像格式:">
+            <Form-item label="镜像格式:" prop="image_format">
               <Input v-model="formItem.image_format" placeholder="请输入"></Input>
             </Form-item>
           </Col>
           <Col span="7">
-            <Form-item label="镜像名称:">
+            <Form-item label="镜像名称:" prop="image_name">
               <Input v-model="formItem.image_name" placeholder="请输入"></Input>
             </Form-item>
           </Col>
         </Row>
+
         <Row>
           <Col span="20" style="min-height: 20px"></Col>
           <Col span="2">
-            <Form-item>
-              <Button type="primary" @click.native="onInquire">查询</Button>
-              <Button type="ghost" @click.native="handleReset('formItem')">重置</Button>
-            </Form-item>
+            <Button type="primary" @click.native="onInquire">查询</Button>
+          </Col>
+          <Col span="2">
+            <Button type="ghost" @click.native="handleReset('formItem')">重置</Button>
           </Col>
         </Row>
       </Form>
@@ -71,6 +72,10 @@
       &-formStatus {
         width: 50%;
       }
+
+      .btns-wrap {
+        float: right;
+      }
     }
     &-table {
       padding: 20px 20px;
@@ -90,6 +95,12 @@
           end_time: '',
           image_format: '',
           image_name: ''
+        },
+        ruleValidate: {
+          start_time: [],
+          end_time: [],
+          image_format: [],
+          image_name: [],
         },
         userInfo: '',
         columns:  [
