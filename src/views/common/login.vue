@@ -3,7 +3,7 @@
     <div class="login-container-div">
       <Row type="flex" justify="center" align="middle"
            style="text-align: center;font-size: 30px;color:#3399ff;margin-bottom:20px">
-        <Col span="24">
+        <Col span="24" @click.native="goHome" style="cursor: pointer">
         门头沟政务云资源管理平台
       </Col>
       </Row>
@@ -206,6 +206,10 @@
           mySelf.formInline.passWord = passWord;
           mySelf.formInline.rememberPassword = true;
         }
+      },
+
+      goHome() {
+        this.$router.push({path: '/'})
       }
     }
   }
