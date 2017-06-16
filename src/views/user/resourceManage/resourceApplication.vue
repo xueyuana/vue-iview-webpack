@@ -159,10 +159,10 @@
       },
       createExample () {
 
-//        this.$router.push({name: 'user_deployExample'})
-        const user = 'a'
-        console.log(this.$sha256(user).toString(crypto.enc.Hex))
-        console.log(sha256)
+        this.$router.push({name: 'user_deployExample'})
+//        const user = 'a'
+//        console.log(this.$sha256(user).toString(crypto.enc.Hex))
+//        console.log(sha256)
       },
       sendInformation () { //提交信息
         let count = 0
