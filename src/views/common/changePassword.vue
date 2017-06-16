@@ -2,7 +2,7 @@
   <div class="page-changePwd">
     <div class="cp_title">修改密码</div>
     <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
-      <Row type="flex" justify="center">
+      <Row type="flex" justify="start">
         <Col span="8">
           <Form-item label="原密码:" prop="originPasswd">
             <Input type="password" v-model="formCustom.originPasswd" placeholder="可为空"></Input>
@@ -89,6 +89,7 @@
     computed: {},
     methods: {
       handleSubmit (name) {
+        console.log('ddsss', this.formCustom);
         this.$refs[name].validate((valid) => {
           if (valid) {
             this.$Message.success('修改密码成功!');

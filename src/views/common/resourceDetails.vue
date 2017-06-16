@@ -1,37 +1,70 @@
 <template>
   <div class="rsource-approval">
     <Row>
-      <Col span="12">
+      <Col span="14" offset="2">
       <div class="approval-status">
-        <Flow></Flow>
+        <Steps :current="0">
+          <Step title="提交申请"></Step>
+          <Step title="行政审批"></Step>
+          <Step title="技术审批"></Step>
+          <Step title="审批完成"></Step>
+        </Steps>
       </div>
       </Col>
-      <Col span="12">
+      <Col span="6" offset="2">
       <div class="approval-button">
-        <div>
-          <Button class="apply-button-item"
-                  type="info"
-                  v-for="(item, index) in funcBtns"
-                  @click="onLink(index)">{{item}}
-          </Button>
-        </div>
+        <Button class="apply-button-item"
+                type="info"
+                v-for="(item, index) in funcBtns"
+                @click="onLink(index)">{{item}}
+        </Button>
       </div>
       </Col>
     </Row>
-    <!--<div class="status-list">-->
-    <!--<div class="">xxx资源池资源使用情况</div>-->
-    <!--<Row :gutter="16">-->
-    <!--<Col span="6">-->
-    <!--<div><Progress :percent="25" class="rd_progress"></Progress></div>-->
-    <!--</Col>-->
-    <!--<Col span="6">-->
-    <!--<div><Progress :percent="25" class="rd_progress"></Progress></div>-->
-    <!--</Col>-->
-    <!--<Col span="6">-->
-    <!--<div><Progress :percent="25" class="rd_progress"></Progress></div>-->
-    <!--</Col>-->
-    <!--</Row>-->
-    <!--</div>-->
+    <div class="status-list">
+      <div class="rd_status_title">xxx资源池资源使用情况</div>
+      <Row :gutter="10">
+        <Col span="8">
+        <Row>
+          <Col span="5" class="rd_right">
+          <div class="rd_pro1" style="padding-right:12px;">vCPU个</div>
+          </Col>
+          <Col span="10">
+          <Progress :percent="25" :stroke-width="20" class="rd_progress" hide-info></Progress>
+          </Col>
+          <Col span="5" class="rd_left">
+          <div class="rd_pro2">2/30</div>
+          </Col>
+        </Row>
+        </Col>
+        <Col span="8">
+        <Row>
+          <Col span="5" class="rd_right">
+          <div class="rd_pro1">内存（GB）</div>
+          </Col>
+          <Col span="10">
+          <Progress :percent="25" :stroke-width="20" class="rd_progress" hide-info></Progress>
+          </Col>
+          <Col span="5" class="rd_left">
+          <div class="rd_pro2">2/30</div>
+          </Col>
+        </Row>
+        </Col>
+        <Col span="8">
+        <Row>
+          <Col span="5" class="rd_right">
+          <div class="rd_pro1">硬盘（GB）</div>
+          </Col>
+          <Col span="10" class="rd_progress">
+          <Progress :percent="25" :stroke-width="20" class="rd_progress" hide-info></Progress>
+          </Col>
+          <Col span="5" class="rd_left">
+          <div class="rd_pro2">2/30</div>
+          </Col>
+        </Row>
+        </Col>
+      </Row>
+    </div>
     <div class="status-list">
       <div class="rd_status_title">xxx资源池资源使用情况:</div>
       <Row type="flex" justify="start" class="code-row-bg">
@@ -192,11 +225,11 @@
           </Col>
           <Col span="24">
           <div class="rs_title">业务信息:</div>
-          <Input v-model="formValidate.ywInfo" type="textarea" :maxlength="100" :autosize="{minRows: 2,maxRows: 5}" placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
+          <Input v-model="ywInfo" type="textarea" :maxlength="100" :autosize="{minRows: 2,maxRows: 5}" placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
           </Col>
           <Col span="24">
           <div class="rs_title">行政审批意见:</div>
-          <Input v-model="formValidate.xzInfo" type="textarea" :maxlength="100" :autosize="{minRows: 2,maxRows: 5}" placeholder="默认显示同意，最多100个字符"></Input>
+          <Input v-model="xzInfo" type="textarea" :maxlength="100" :autosize="{minRows: 2,maxRows: 5}" placeholder="默认显示同意，最多100个字符"></Input>
           </Col>
         </Row>
       </Form>
@@ -207,13 +240,37 @@
 <style scoped>
   .approval-status{
   }
+  .rd_right{
+    text-align: right;
+  }
+  .rd_left{
+    text-align: left;
+  }
+  .rd_pro1{
+    display: inline-block;
+    vertical-align: top;
+    padding-right:10px;
+    width:80px;
+    min-width: 80px;
+    height:23px;
+    line-height:23px;
+  }
+  .rd_pro2{
+    display: inline-block;
+    vertical-align: top;
+    padding-left:10px;
+    width:80px;
+    min-width: 80px;
+    height:23px;
+    line-height:23px;
+  }
   .approval-button{
-    margin-top:30px;
+    display: flex;
+    justify-content: flex-end;
+    box-sizing: border-box;
   }
   .approval-button Button {
-    float: right;
     /*background-color: #39f;*/
-    color: white;
     margin: 0 4px;
   }
   .status-list{
@@ -304,7 +361,7 @@
     data() {
       return {
         resourceId: '',
-        funcBtns: ['不通过', '通过', '返回'],
+        funcBtns: ['返回', '通过', '不通过'],
         formValidate: {
           apply_code: '',
           virtual_name: '',
@@ -314,10 +371,10 @@
           case: '',
           resource: '',
           mirror: '',
-          total: 1,
-          ywInfo: '',
-          xzInfo: ''
-        }
+          total: 1
+        },
+        ywInfo: '',
+        xzInfo: ''
       }
     },
     components: { Flow },
@@ -343,37 +400,33 @@
           case: '1',
           resource: '1',
           mirror: '1',
-          total: 1,
-          ywInfo: '提供互联网服务，此业务位于政务外网区域',
-          xzInfo: '同意'
+          total: 1
         }
+        this.ywInfo='提供互联网服务，此业务位于政务外网区域';
+        this.xzInfo='同意';
       },
       onLink(index) {
         switch (index) {
           case 0:
-            this.onNo();
+            this.$router.go(-1);
             break;
           case 1:
             this.onSubmit();
             break;
           default:
-            this.$router.go(-1);
+            this.onNo();
             break;
         }
       },
       onSubmit () {
+        console.log('ddsss', this.ywInfo);
+        console.log('xzInfo', this.xzInfo);
         this.$Message.success('通过!');
       },
       onNo () {
+        console.log('ddsss', this.ywInfo);
+        console.log('xzInfo', this.xzInfo)
         this.$Message.error('不通过!');
-//        this.$refs[name].resetFields();
-      },
-      getQueryStringByName: function (name) {
-        var result = document.location.search.match(new RegExp('[\?\&]' + name + '=([^\&]+)', 'i'));
-        if (result == null || result.length < 1) {
-          return '';
-        }
-        return result[1];
       }
     }
   }

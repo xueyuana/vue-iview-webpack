@@ -168,12 +168,14 @@
       getData.forEach( (item,index) => {
         let obj = {
             number: index + 1,
-            id: item.id,
+            id: 'id0001',
             status: item.status,
             deployExample: item.resourceInformation[0].deployExample,
             resourcePool: item.resourceInformation[0].resourcePool,
             applyDate: item.applyDate,
-            operate: ''
+            operate: '',
+            applyPerson: 'user'
+
         }
 
         this.queryResult.push(obj)
@@ -197,10 +199,13 @@
   }
   .query-form {
     width: 100%;
-    height: 100px;
     border: 1px solid #e4e4e4;
+    padding-bottom: 10px;
     background-image: linear-gradient(to bottom,#fff,#e4e4e4);
     border-radius: 10px;
+  }
+  .item {
+    margin-bottom: 10px;
   }
   .date-picker {
     display: flex;
