@@ -4,7 +4,14 @@
       <Button type="info" class="add" @click="addInformation">添加</Button>
       <Button type="info" @click="sendInformation">提交</Button>
     </div>
-    <Flow></Flow>
+    <div class="steps">
+      <Steps :current="0">
+        <Step title="提交申请" ></Step>
+        <Step title="行政审批" ></Step>
+        <Step title="技术审批" ></Step>
+        <Step title="审批完成" ></Step>
+      </Steps>
+    </div>
     <div class="header">资源信息</div>
     <div class="contain" v-for="(item,index) in resourceInformation">
       <div class="item">
@@ -16,7 +23,7 @@
         <Select v-model="item.deployExample" style="width:200px" :disabled="index ==0?false:true">
           <Option v-for="item in exampleList" :value="item.value" :key="item">{{ item.value }}</Option>
         </Select>
-        <Button type="info" class="add-example" @click="createExample">新建部署实例</Button>
+        <Button type="dashed" class="add-example" @click="createExample">新建部署实例</Button>
       </div>
       <div class="item">
         <span class="title">资源池选择</span>
@@ -40,9 +47,10 @@
           <Option v-for="item in standard" :value="item.value" :key="item">{{ item.value }}</Option>
         </Select>
       </div>
-      <div class="item">
+      <div class="item add-unit">
         <span class="title">存储空间</span>
         <Input v-model="item.storageSpace" placeholder="最小单位G，最大500G" style="width: 200px"></Input>
+        <span class="unit">G</span>
       </div>
       <div class="item">
         <span class="title">数量</span>
@@ -50,7 +58,7 @@
       </div>
     </div>
     <div class="header">业务信息</div>
-    <Input class="comment" v-model="serviceInformation" type="textarea" :maxlength="500" :rows=6 placeholder="请输入..."></Input>
+    <Input class="comment" v-model="serviceInfo" type="textarea" :maxlength="500" :rows=6 placeholder="请输入..."></Input>
   </div>
 </template>
 
@@ -108,7 +116,7 @@
             value: 'Ubuntu 15.01'
           }
         ],
-        serviceInformation: ''
+        serviceInfo: ''
 
       }
     },
@@ -157,7 +165,7 @@
           count: 1
         })
       },
-      createExample () {
+      createExample () {//跳转新建部署实例
 
         this.$router.push({name: 'user_deployExample'})
 //        const user = 'a'
@@ -176,6 +184,15 @@
           return
         }
 
+//        let requestBody = {
+//          user_name: '用户名',
+//          user_id: 'id',
+//          business_info: this.serviceInfo
+//        }
+//
+
+
+//测试假数据使用
         let date = new Date();
         let Y = date.getFullYear();
         let M = date.getMonth()+1;
@@ -186,8 +203,8 @@
 
         let information = {
           resourceInformation: this.resourceInformation,
-          serviceInformation: this.serviceInformation,
-          id: this.id,
+          serviceInformation: this.serviceInfo,
+          id: 'id0001',
           applyDate: applyDate,
           status: '审批中'
         }
@@ -212,6 +229,10 @@
   }
   .add {
     margin-right: 20px;
+  }
+  .steps {
+    width: 70%;
+    margin: 30px auto;
   }
   .header{
     padding-left:10px;
@@ -248,6 +269,14 @@
     top: 0;
   }
   .example {
+    position: relative;
+  }
+  .unit {
+    position: absolute;
+    right: 146px;
+    top: 8px;
+  }
+  .add-unit {
     position: relative;
   }
   .comment {

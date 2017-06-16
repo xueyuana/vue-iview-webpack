@@ -39,7 +39,7 @@
 
     </div>
     <div class="header">资源列表：</div>
-    <Table border :columns="columns1" :data="queryResult"></Table>
+    <Table border :columns="columns" :data="queryResult"></Table>
     <Modal
         v-model="isCompile"
         title="用户信息"
@@ -146,7 +146,7 @@
             value: '行政审批'
           }
         ],
-        columns1: [
+        columns: [
           {
             title: '序号',
             key: 'number'
@@ -233,16 +233,6 @@
             department: '部门1',
             createDate: '2017',
             operate: ''
-          },
-          {
-            number: 2,
-            userName: '用户2',
-            phone: '187',
-            email: '@xx.com',
-            role: '用户',
-            department: '部门2',
-            createDate: '2017',
-            operate: ''
           }
         ]
 
@@ -272,6 +262,9 @@
         let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m
         //创建的新用户
         let newUser = this.createUser
+        newUser.createDate = applyDate
+        newUser.number = 2
+        this.queryResult.push(newUser)
         this.createUser = {
           userName: '',
           passWord: '',
@@ -280,7 +273,6 @@
           email: '',
           role: ''
         }
-        newUser.applyDate = applyDate
 
       },
       createCancel () {
