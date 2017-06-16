@@ -7,14 +7,14 @@
             <Form-item label="日期:">
               <Row>
                 <Col span="11">
-                <Form-item prop="create_date_begin">
-                  <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.create_date_begin"></Date-picker>
+                <Form-item prop="created_time">
+                  <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.created_time" @on-change="formatCreateData"></Date-picker>
                 </Form-item>
                 </Col>
                 <Col span="2" style="text-align: center">至</Col>
                 <Col span="11">
-                <Form-item prop="create_date_end">
-                  <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.create_date_end"></Date-picker>
+                <Form-item prop="end_time">
+                  <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.end_time" @on-change="formatEndData"></Date-picker>
                 </Form-item>
                 </Col>
               </Row>
@@ -26,15 +26,15 @@
             </Form-item>
           </Col>
           <Col span="5">
-            <Form-item label="资源池:">
+            <Form-item label="资源池:" prop="resource">
               <Select v-model="formValidate.resource" clearable style="">
-                <Option label="资源池1" value="0"></Option>
-                <Option label="资源池2" value="1"></Option>
+                <Option :value="1" :key="1">资源池1</Option>
+                <Option :value="2" :key="2">资源池2</Option>
               </Select>
             </Form-item>
           </Col>
           <Col span="5">
-            <Form-item label="部署实例:">
+            <Form-item label="部署实例:" prop="case">
               <Select v-model="formValidate.case" clearable style="">
                 <Option :value="1" :key="1">部署实例1</Option>
                 <Option :value="2" :key="2">部署实例2</Option>
@@ -102,15 +102,15 @@
       return {
         formValidate: {
           virtual_name: '',
-          create_date_begin: '',
-          create_date_end: '',
+          created_time: '',
+          end_time: '',
           resource: '',
           case: ''
         },
         ruleValidate: {
           virtual_name: [],
-          create_date_begin: [],
-          create_date_end: [],
+          created_time: [],
+          end_time: [],
           resource: [],
           case: []
         },
@@ -171,7 +171,8 @@
     },
     computed: {},
     methods: {
-      goQuery (name) {
+      goQuery () {
+        console.log('ddsss', this.formValidate);
         this.dataDemo = [{
           index: 1,
           userName: '张三',
@@ -215,6 +216,13 @@
       changePageSize(val) {
         this.pageSize = val
         this.changePage(1)
+      },
+      // 时间选择器
+      formatCreateData(value) {
+        this.formValidate.created_time = value
+      },
+      formatEndData(value) {
+        this.formValidate.end_time = value
       }
     }
   }
