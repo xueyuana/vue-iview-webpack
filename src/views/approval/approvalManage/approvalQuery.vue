@@ -12,21 +12,21 @@
             <Form-item label="申请日期:">
               <Row>
                 <Col span="11">
-                <Form-item prop="create_date_begin">
-                  <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.create_date_begin"></Date-picker>
+                <Form-item prop="created_time">
+                  <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.created_time" @on-change="formatCreateData"></Date-picker>
                 </Form-item>
                 </Col>
                 <Col span="2" style="text-align: center">至</Col>
                 <Col span="11">
-                <Form-item prop="create_date_end">
-                  <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.create_date_end"></Date-picker>
+                <Form-item prop="end_time">
+                  <Date-picker type="datetime" placeholder="选择日期" v-model="formValidate.end_time" @on-change="formatEndData"></Date-picker>
                 </Form-item>
                 </Col>
               </Row>
             </Form-item>
           </Col>
           <Col span="5">
-            <Form-item label="审批状态:">
+            <Form-item label="审批状态:" prop="apply_status">
               <Select v-model="formValidate.apply_status" clearable style="">
                 <Option :value="1" :key="1">待审批</Option>
                 <Option :value="2" :key="2">审批未通过</Option>
@@ -35,7 +35,7 @@
             </Form-item>
           </Col>
           <Col span="5">
-            <Form-item label="部署实例:">
+            <Form-item label="部署实例:" prop="case">
               <Select v-model="formValidate.case" clearable style="">
                 <Option :value="1" :key="1">部署实例1</Option>
                 <Option :value="2" :key="2">部署实例2</Option>
@@ -101,15 +101,15 @@
       return {
         formValidate: {
           apply_name: '',
-          create_date_begin: '',
-          create_date_end: '',
+          created_time: '',
+          end_time: '',
           apply_status: '',
           case: ''
         },
         ruleValidate: {
           apply_name: [],
-          create_date_begin: [],
-          create_date_end: [],
+          created_time: [],
+          end_time: [],
           apply_status: [],
           case: []
         },
@@ -173,38 +173,11 @@
           {
             index: 1,
             apply_code: 'ID0001',
-            apply_name: '张三',
+            apply_name: 'user',
             apply_status: '待审批',
             case: '实例1',
-            resource: '资源池1',
-            create_date: '2016-10-04'
-          },
-          {
-            index: 2,
-            apply_code: 'ID0002',
-            apply_name: '李四',
-            apply_status: '审批未通过',
-            case: '实例2',
-            resource: '资源池2',
-            create_date: '2016-10-05'
-          },
-          {
-            index: 3,
-            apply_code: 'ID0003',
-            apply_name: '王五',
-            apply_status: '审批完成',
-            case: '实例3',
-            resource: '资源池3',
-            create_date: '2016-10-05'
-          },
-          {
-            index: 4,
-            apply_code: 'ID0004',
-            apply_name: '赵六',
-            apply_status: '待审批',
-            case: '实例4',
-            resource: '资源池4',
-            create_date: '2016-10-04'
+            resource: 'DMZ',
+            create_date: '2016-06-23'
           }
         ],
         data1: [],
@@ -215,6 +188,7 @@
     computed: {},
     methods: {
       goQuery (name) {
+        console.log('ddsss', this.formValidate);
         this.dataDemo = [{
           index: 1,
           apply_code: 'ID0001',
@@ -231,38 +205,11 @@
           {
             index: 1,
             apply_code: 'ID0001',
-            apply_name: '张三',
+            apply_name: 'user',
             apply_status: '待审批',
             case: '实例1',
-            resource: '资源池1',
-            create_date: '2016-10-04'
-          },
-          {
-            index: 2,
-            apply_code: 'ID0002',
-            apply_name: '李四',
-            apply_status: '审批未通过',
-            case: '实例2',
-            resource: '资源池2',
-            create_date: '2016-10-05'
-          },
-          {
-            index: 3,
-            apply_code: 'ID0003',
-            apply_name: '王五',
-            apply_status: '审批完成',
-            case: '实例3',
-            resource: '资源池3',
-            create_date: '2016-10-05'
-          },
-          {
-            index: 4,
-            apply_code: 'ID0004',
-            apply_name: '赵六',
-            apply_status: '待审批',
-            case: '实例4',
-            resource: '资源池4',
-            create_date: '2016-10-04'
+            resource: 'DMZ',
+            create_date: '2016-06-23'
           }
         ];
       },
@@ -273,6 +220,13 @@
       changePageSize(val) {
         this.pageSize = val
         this.changePage(1)
+      },
+      // 时间选择器
+      formatCreateData(value) {
+        this.formValidate.created_time = value
+      },
+      formatEndData(value) {
+        this.formValidate.end_time = value
       }
     }
   }

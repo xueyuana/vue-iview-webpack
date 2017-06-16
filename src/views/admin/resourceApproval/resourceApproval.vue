@@ -148,11 +148,11 @@
         filterDate: [
           {
             order_number: 'ID0001',
-            applicant: '王雪娇',
+            applicant: 'user',
             deploy_name: '实例1',
-            resource_pool: '222',
-            status: '审批不通过',
-            data: '2017.6.14 14.44'
+            resource_pool: 'MDZ',
+            status: '审批中',
+            data: '2017-6-23'
           }
         ],
         pageSize: 10,

@@ -1,5 +1,9 @@
 <template>
     <div class="box">
+        <div class="c_title">
+            <Icon type="android-radio-button-on"></Icon>
+            <span>资源概览</span>
+        </div>
         <div class="survey">
             <div class="survey-list">
                 <Row :gutter="24">
@@ -86,6 +90,10 @@
                </Col>
             </Row>
         </div>
+        <div class="c_title">
+            <Icon type="android-radio-button-on"></Icon>
+            <span>资源审批</span>
+        </div>
         <Row class="c_application">
             <Col span="12"><Icon type="record" size="10"></Icon><font @click="myApplication">我的申请</font><span>待审批：{{ pendingApproval }} </span><span>已审批：{{ approved }}</span></Col>
             <Col span="12"></Col>
@@ -98,6 +106,16 @@
 </script>
 
 <style scoped>
+    .c_title {
+        background-color: #0AB7E9;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        width: 100px;
+        text-align: center;
+        height: 30px;
+        line-height: 30px;
+      }
     .survey-list {
         margin-top: 10px;
     }
@@ -147,7 +165,7 @@
     }
 
     .proMain {
-        margin-top: 40px;
+        margin: 40px 0;
     }
 
     .proCard {

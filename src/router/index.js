@@ -22,7 +22,7 @@ import user_operationLog from 'views/common/operationLog.vue'                   
 
 import admin_manageConsole from 'views/admin/manageConsole.vue'                               // 管理员 > 管理控制台
 import admin_poolManage from 'views/admin/resourcePool/poolManage.vue'                        // 管理员 > 资源池管理
-import admin_poolDetails from 'views/admin/resourcePool/poolDetail.vue'                          // 管理员 > 资源池详情
+import admin_poolDetails from 'views/admin/resourcePool/poolDetail.vue'                       // 管理员 > 资源池详情
 import admin_mirrorManagement from 'views/admin/resourceManage/mirrorManage.vue'              // 管理员 > 镜像管理
 import admin_virtualManage from 'views/common/myResource.vue'                                 // 管理员 > 虚拟机管理
 import admin_resourceApproval from 'views/admin/resourceApproval/resourceApproval.vue'        // 管理员 > 资源审批

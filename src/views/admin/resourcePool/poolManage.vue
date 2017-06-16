@@ -2,17 +2,21 @@
   <div class="inquire">
     <!--查询条件-->
     <div class="inquire-form">
-      <Form :model="formItem" :label-width="90">
+      <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="80" inline>
         <Row :gutter="60">
           <Col span="14">
-            <Form-item label="创建开始日期:">
+            <Form-item label="日期:">
               <Row>
                 <Col span="11">
-                <Date-picker type="datetime" placeholder="选择起始日期" @on-change="formatCreateData"></Date-picker>
+                <Form-item prop="start_time">
+                  <Date-picker type="datetime" placeholder="起始日期" @on-change="formatCreateData"></Date-picker>
+                </Form-item>
                 </Col>
-                <Col span="2" style="text-align: center">至</Col>
+                <Col span="2" style="text-align: center">-</Col>
                 <Col span="11">
-                <Date-picker type="datetime" placeholder="选择截止日期" @on-change="formatEndData"></Date-picker>
+                <Form-item prop="end_time">
+                  <Date-picker type="datetime" placeholder="截止日期" @on-change="formatEndData"></Date-picker>
+                </Form-item>
                 </Col>
               </Row>
             </Form-item>
@@ -26,10 +30,10 @@
         <Row>
           <Col span="20" style="min-height: 20px"></Col>
           <Col span="2">
-            <Button type="primary" @click.native="onInquire">查询</Button>
+          <Button type="primary" @click.native="onInquire">查询</Button>
           </Col>
           <Col span="2">
-            <Button type="primary" @click.native="onInquire">重置</Button>
+          <Button type="ghost" @click.native="handleReset('formItem')">重置</Button>
           </Col>
         </Row>
       </Form>
@@ -76,9 +80,15 @@
     data() {
       return {
         formItem: {
-          created_time: '',
+          start_time: '',
           end_time: '',
           resource_name: ''
+        },
+        ruleValidate: {
+          start_time: [],
+          end_time: [],
+          image_format: [],
+          image_name: [],
         },
         userInfo: '',
         columns: [
@@ -152,7 +162,7 @@
         let url = baseUrl.apihost + 'deployment/deployments'
         let query = {}
         this.formItem.initiator && (query.initiator = this.formItem.initiator)
-        this.formItem.created_time && (query.start_time = this.formItem.created_time)
+        this.formItem.start_time && (query.start_time = this.formItem.start_time)
         this.formItem.end_time && (query.end_time = this.formItem.end_time)
         this.formItem.project_name && (query.project_name = this.formItem.project_name)
         this.formItem.resource_name && (query.resource_name = this.formItem.resource_name)
@@ -169,9 +179,12 @@
           console.log('error', err)
         })
       },
+      handleReset(name) {
+        this.$refs[name].resetFields()
+      },
       // 时间选择器
       formatCreateData(value) {
-        this.formItem.created_time = value
+        this.formItem.start_time = value
       },
       onUnitChange(val) {
         this.formItem.resource_name = ''
@@ -201,7 +214,7 @@
         for (let i = num; i < maxNum; i++) {
           data.push({
             initiator: originData[i].initiator,
-            created_time: originData[i].created_time.substring(0, 16),
+            start_time: originData[i].start_time.substring(0, 16),
             project_name: originData[i].project_name,
             status: this.formatStatus(originData[i].deploy_result),
             deploy_id: originData[i].deploy_id,
