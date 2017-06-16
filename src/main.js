@@ -14,6 +14,11 @@ import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 Vue.use(iView);
 
+// 引入sha256加密
+import crypto from 'crypto-js'
+import sha256 from 'crypto-js/sha256'
+Vue.prototype.$sha256 = sha256
+
 //导入路由
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
@@ -25,6 +30,7 @@ Vue.use(VueResource);
 import 'font-awesome/less/font-awesome.less';
 //导入初始化的css
 import '../static/css/reset.css';
+
 
 // 导入echarts2
 // import echarts from 'echarts2';

@@ -165,7 +165,6 @@
     },
     created () {
       let getData = this.$store.state.userData.information
-//      console.log(getData)
       getData.forEach( (item,index) => {
         let obj = {
             number: index + 1,

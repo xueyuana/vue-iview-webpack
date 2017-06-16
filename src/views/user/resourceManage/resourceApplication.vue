@@ -6,21 +6,17 @@
     </div>
     <Flow></Flow>
     <div class="header">资源信息</div>
-    <div class="item">
-      <span class="title">申请单号</span>
-      <Input v-model="id" placeholder="请输入..." style="width: 200px"></Input>
-    </div>
     <div class="contain" v-for="(item,index) in resourceInformation">
+      <div class="item">
+        <span class="title">虚拟机名称</span>
+        <Input v-model="item.virtualMachine" placeholder="请输入..." style="width: 200px"></Input>
+      </div>
       <div class="item example">
         <span class="title">部署实例</span>
         <Select v-model="item.deployExample" style="width:200px" :disabled="index ==0?false:true">
           <Option v-for="item in exampleList" :value="item.value" :key="item">{{ item.value }}</Option>
         </Select>
         <Button type="info" class="add-example" @click="createExample">新建部署实例</Button>
-      </div>
-      <div class="item">
-        <span class="title">虚拟机名称</span>
-        <Input v-model="item.virtualMachine" placeholder="请输入..." style="width: 200px"></Input>
       </div>
       <div class="item">
         <span class="title">资源池选择</span>
@@ -50,7 +46,7 @@
       </div>
       <div class="item">
         <span class="title">数量</span>
-        <Input-number :max="10" :min="1" v-model="item.count"></Input-number>
+        <Input-number :max="10" :min="0" v-model="item.count"></Input-number>
       </div>
     </div>
     <div class="header">业务信息</div>
@@ -60,6 +56,10 @@
 
 <script>
   import Flow from './../../../components/common/flow.vue'
+  //引入sha256加密
+//  import crypto from 'crypto-js'
+//  import sha256 from 'crypto-js/sha256'
+
   export default {
     name: 'user-application',
     data () {
@@ -73,7 +73,7 @@
           mirrorImage: '',
           standard: '',
           storageSpace: '',
-          count: 1
+          count: 0
 
         }],
         exampleList: [
@@ -108,8 +108,7 @@
             value: 'Ubuntu 15.01'
           }
         ],
-        serviceInformation: '',
-        id:'id'+parseInt(Math.random()*9)+parseInt(Math.random()*9)+parseInt(Math.random()*9)+parseInt(Math.random()*9),
+        serviceInformation: ''
 
       }
     },
@@ -135,9 +134,12 @@
 
     },
     methods: {
-      addInformation () {
-        let informationLength = this.resourceInformation.length;
-        if(informationLength >=10){
+      addInformation () {//添加虚机
+        let count = 0
+        this.resourceInformation.forEach((item, index) => {
+          count += item.count
+        })
+        if(count >=10){
           this.$Notice.open({
             title: '最多添加10个虚拟机'
           })
@@ -156,10 +158,24 @@
         })
       },
       createExample () {
-        this.$router.push({name: 'user_deployExample'})
+
+//        this.$router.push({name: 'user_deployExample'})
+        const user = 'a'
+        console.log(this.$sha256(user).toString(crypto.enc.Hex))
+        console.log(sha256)
       },
-      sendInformation () {
-        //提交信息
+      sendInformation () { //提交信息
+        let count = 0
+        this.resourceInformation.forEach((item, index) => {
+          count += item.count
+        })
+        if(count >10){
+          this.$Notice.open({
+            title: '最多添加10个虚拟机'
+          })
+          return
+        }
+
         let date = new Date();
         let Y = date.getFullYear();
         let M = date.getMonth()+1;
@@ -173,7 +189,7 @@
           serviceInformation: this.serviceInformation,
           id: this.id,
           applyDate: applyDate,
-          status: '审批完成'
+          status: '审批中'
         }
 
         this.$store.commit('setInformation',information)
