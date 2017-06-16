@@ -350,5 +350,9 @@
     background-color: #F3FAFF;
   }
 
+  .ivu-dropdown-menu {
+    min-width: 60px;
+  }
+
 
 </style>

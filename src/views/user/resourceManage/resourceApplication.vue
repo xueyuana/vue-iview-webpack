@@ -13,17 +13,14 @@
       </Steps>
     </div>
     <div class="header">资源信息</div>
-    <div class="contain" v-for="(item,index) in resourceInformation">
+    <div class="contain" v-for="(item,index) in resourceInformation" :class="{border: index == 0?false:true}">
       <div class="item">
         <span class="title">虚拟机名称</span>
         <Input v-model="item.virtualMachine" placeholder="请输入..." style="width: 200px"></Input>
       </div>
-      <div class="item example">
-        <span class="title">部署实例</span>
-        <Select v-model="item.deployExample" style="width:200px" :disabled="index ==0?false:true">
-          <Option v-for="item in exampleList" :value="item.value" :key="item">{{ item.value }}</Option>
-        </Select>
-        <Button type="dashed" class="add-example" :class="{hidden: index == 0?false:true}" @click="createExample">新建部署实例</Button>
+      <div class="item">
+        <span class="title">部门</span>
+        <Input v-model="item.department" placeholder="请输入..." style="width: 200px"></Input>
       </div>
       <div class="item">
         <span class="title">资源池选择</span>
@@ -31,9 +28,12 @@
           <Option v-for="item in resourcePool" :value="item.value" :key="item">{{ item.value }}</Option>
         </Select>
       </div>
-      <div class="item">
-        <span class="title">部门</span>
-        <Input v-model="item.department" placeholder="请输入..." style="width: 200px"></Input>
+      <div class="item example">
+        <span class="title">部署实例</span>
+        <Select v-model="item.deployExample" style="width:200px" :disabled="index ==0?false:true">
+          <Option v-for="item in exampleList" :value="item.value" :key="item">{{ item.value }}</Option>
+        </Select>
+        <Button type="dashed" class="add-example" :class="{hidden: index == 0?false:true}" @click="createExample">新建部署实例</Button>
       </div>
       <div class="item">
         <span class="title">镜像</span>
@@ -157,7 +157,7 @@
           mirrorImage: '',
           standard: '',
           storageSpace: '',
-          count: 1
+          count: 0
         })
       },
       createExample () {//跳转新建部署实例
@@ -244,7 +244,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    margin-bottom: 15px;
+    padding-top: 30px;
+    margin-bottom: 20px;
 
   }
   .item {
@@ -281,6 +282,9 @@
   }
   .hidden {
     display: none;
+  }
+  .border {
+    border-top: 1px solid #e4e4e4
   }
 
 </style>

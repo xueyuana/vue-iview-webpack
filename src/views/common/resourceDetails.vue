@@ -421,6 +421,7 @@
       onSubmit () {
         console.log('ddsss', this.ywInfo);
         console.log('xzInfo', this.xzInfo);
+        this.$store.commit('setStatus','审批完成');
         this.$Message.success('通过!');
       },
       onNo () {
