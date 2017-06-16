@@ -3,7 +3,6 @@
     <!--资源使用概况-->
     <div class="resource-survey">
       <div class="title">
-        <Icon type="android-radio-button-on"></Icon>
         <span>资源概览</span>
       </div>
       <div class="resource-pie">

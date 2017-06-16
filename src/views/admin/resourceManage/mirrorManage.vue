@@ -2,39 +2,43 @@
   <div class="inquire">
     <!--查询条件-->
     <div class="inquire-form">
-      <Form :model="formItem" :label-width="70">
+      <Form ref="formItem" :model="formItem" :label-width="70">
         <Row :gutter="16">
           <Col span="10">
             <Form-item label="日期:">
-            <Row>
-              <Col span="11">
-                <Date-picker type="datetime" placeholder="起始日期" @on-change="formatCreateData"></Date-picker>
-              </Col>
-              <Col span="2" style="text-align: center">至</Col>
-              <Col span="11">
-                <Date-picker type="datetime" placeholder="截止日期" @on-change="formatEndData"></Date-picker>
-              </Col>
-            </Row>
-          </Form-item>
+              <Row>
+                <Col span="11">
+                <Form-item>
+                  <Date-picker type="datetime" placeholder="起始日期" @on-change="formatCreateData"></Date-picker>
+                </Form-item>
+                </Col>
+                <Col span="2" style="text-align: center">-</Col>
+                <Col span="11">
+                <Form-item>
+                  <Date-picker type="datetime" placeholder="截止日期" @on-change="formatEndData"></Date-picker>
+                </Form-item>
+                </Col>
+              </Row>
+            </Form-item>
           </Col>
           <Col span="7">
             <Form-item label="镜像格式:">
-              <Input v-model="formItem.resource_name" placeholder="请输入"></Input>
+              <Input v-model="formItem.image_format" placeholder="请输入"></Input>
             </Form-item>
           </Col>
           <Col span="7">
             <Form-item label="镜像名称:">
-              <Input v-model="formItem.resource_name" placeholder="请输入"></Input>
+              <Input v-model="formItem.image_name" placeholder="请输入"></Input>
             </Form-item>
           </Col>
         </Row>
         <Row>
           <Col span="20" style="min-height: 20px"></Col>
           <Col span="2">
-          <Button type="primary" @click.native="onInquire">查询</Button>
-          </Col>
-          <Col span="2">
-          <Button type="primary" @click.native="onInquire">重置</Button>
+            <Form-item>
+              <Button type="primary" @click.native="onInquire">查询</Button>
+              <Button type="ghost" @click.native="handleReset('formItem')">重置</Button>
+            </Form-item>
           </Col>
         </Row>
       </Form>
@@ -46,7 +50,7 @@
       <Table border size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
-          <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
+          <Page :total="this.data.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
         </div>
       </div>
     </div>
@@ -82,9 +86,10 @@
     data() {
       return {
         formItem: {
-          created_time: '',
+          start_time: '',
           end_time: '',
-          resource_name: ''
+          image_format: '',
+          image_name: ''
         },
         userInfo: '',
         columns:  [
@@ -95,64 +100,77 @@
           },
           {
             title: '镜像名称',
-            key: 'resource_name',
+            key: 'image_name',
             align: 'center'
           },
           {
             title: '尺寸',
-            key: 'physical_machine',
+            key: 'image_size',
             align: 'center'
           },
           {
             title: '镜像格式',
-            key: 'virtual_machine',
+            key: 'image_size',
             align: 'center'
           },
           {
             title: '日期',
-            key: 'CPU_proportion',
+            key: 'created_time',
             align: 'center'
           }
         ],
-        data1: [],
-        filterDate: [],
+        data: [],
+        filterDate: [
+          {
+            image_name: 'Centos 7.2',
+            image_size : '8G',
+            image_format : 'qcow2',
+            created_time : '2017-06-23 11:05'
+          }
+        ],
         pageSize: 10,
         num: 1
       }
     },
 
-    mounted() {},
+    mounted() {
+//      this.onInquire()
+    },
 
     methods: {
-      // 查找
+        // 查找
       onInquire() {
-        let url = baseUrl.apihost + 'deployment/deployments'
-        let query = {}
-        this.formItem.initiator && (query.initiator = this.formItem.initiator)
-        this.formItem.created_time && (query.start_time = this.formItem.created_time)
-        this.formItem.end_time && (query.end_time = this.formItem.end_time)
-        this.formItem.project_name && (query.project_name = this.formItem.project_name)
-        this.formItem.resource_name && (query.resource_name = this.formItem.resource_name)
-        this.formItem.deploy_name && (query.deploy_name = this.formItem.deploy_name)
 
-        this.$http.get(url, {
+        let query = {}
+        this.formItem.start_time && (query.start_time = this.formItem.start_time)
+        this.formItem.end_time && (query.end_time = this.formItem.end_time)
+        this.formItem.image_format && (query.image_format = this.formItem.image_format)
+        this.formItem.image_name && (query.image_name = this.formItem.image_name)
+
+        this.$http.get('api/image/images', {
           params: query
-        }).then(data => {
-          console.log('部署列表', data)
-          this.data1 = data.body
-          this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
-          this.num = 1
+        }).then(res => {
+          if (res.code === 200) {
+            console.log('镜像列表', res)
+            this.data = res.body
+            this.filterDate = this.mockTableData(this.data, this.pageSize, 1)
+          } else {
+            this.$Message.error(res.result.msg)
+          }
         }, err => {
           console.log('error', err)
+          this.$Message.error(err.result.msg)
         })
       },
-      // 时间选择器
+      handleReset(name) {
+        this.$refs[name].resetFields()
+      },
+        // 时间选择器
       formatCreateData(value) {
-        this.formItem.created_time = value
+        this.formItem.start_time = value
       },
       onUnitChange(val) {
-        this.formItem.resource_name = ''
-        console.log(val)
+        this.formItem.image_name = ''
         this.getDeployList()
         this.onInquire()
       },
@@ -163,9 +181,9 @@
       formatEndData(value) {
         this.formItem.end_time = value
       },
-      // 分页
+        // 分页
       changePage(val) {
-        this.filterDate = this.mockTableData(this.data1, this.pageSize, val)
+        this.filterDate = this.mockTableData(this.data, this.pageSize, val)
       },
       changePageSize(val) {
         this.pageSize = val
@@ -174,59 +192,17 @@
       mockTableData (originData, pageSize, index) {
         let data = [];
         let num = (index - 1) * pageSize
-        let maxNum = (num + pageSize) > this.data1.length ? this.data1.length : (num + pageSize)
+        let maxNum = (num + pageSize) > this.data.length ? this.data.length : (num + pageSize)
         for (let i = num; i < maxNum; i++) {
           data.push({
-            initiator: originData[i].initiator,
+            id: originData[i].id,
             created_time: originData[i].created_time.substring(0, 16),
-            project_name: originData[i].project_name,
-            status: this.formatStatus(originData[i].deploy_result),
-            deploy_id: originData[i].deploy_id,
-            deploy_name: originData[i].deploy_name,
-            resource_name: originData[i].resource_name
+            image_name: originData[i].image_name,
+            image_size: originData[i].image_size,
+            image_format: originData[i].image_format
           })
         }
         return data;
-      },
-      // 请求部署单元列表
-      getProjectList() {
-        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + this.userInfo.user_id
-        this.$http.get(url).then(data => {
-          console.log('部署单元列表', data)
-          this.project_list = data.body.result.res
-        }, err => {
-          console.log('error', err)
-        })
-      },
-      // 获取部署单元下对应部署列表
-      getDeployList() {
-        let url = baseUrl.apihost + 'resource/'
-        let query = {}
-        this.userInfo.user_id && (query.user_id = this.userInfo.user_id)
-        this.formItem.project_name && (query.project = this.formItem.project_name)
-
-        this.$http.get(url, {
-          params: query
-        }).then(data => {
-          console.log('资源列表', data)
-          this.resource_list = data.body.result.msg.filter(item => item.reservation_status === 'ok')
-        }, err => {
-          console.log('error', err)
-        })
-      },
-      formatStatus(val){
-        switch (val) {
-          case 'deploying':
-            return '部署中'
-          case 'not_deployed':
-            return '未部署'
-          case 'fail':
-            return '失败'
-          case 'success':
-            return '成功'
-          default:
-            break
-        }
       }
     }
   }

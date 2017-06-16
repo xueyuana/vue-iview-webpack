@@ -1,18 +1,11 @@
 /**
  * @Author   : Schoilar
- * @Data     : 2017-06-15  10:16
+ * @Data     : 2017-06-15  15:04
  * @Describe :
  */
 
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
-
-import page from 'views/page/page.vue'                    // 首页
-import login from 'views/common/login.vue'                // 登录
 import home from 'views/common/home.vue'                  // Home页
-
-import user_manageConsole from 'views/user/manageConsole.vue'                                   // 用户 > 管理控制台
+import user_manageConsole from 'views/user/manageConsole.vue'                    // 用户 > 管理控制台
 import user_deployExample from 'views/user/businessManage/deployExamples.vue'                 // 用户 > 部署实例
 import user_resourceApplication from 'views/user/resourceManage/resourceApplication.vue'      // 用户 > 资源申请
 import user_resourceQuery from 'views/user/resourceManage/resourceQuery.vue'                  // 用户 > 资源查询
@@ -34,23 +27,26 @@ import approval_resourceDetails from 'views/common/resourceDetails.vue'         
 import approval_changePassword from 'views/common/changePassword.vue'                         // 行政审批 > 用户管理（修改密码）
 import approval_operationLog from 'views/common/operationLog.vue'                             // 行政审批 > 操作日志
 
-
-// 创建路由对象
-var routes = [
-  {name: 'page', path: '/', component: page},
-  {name: 'login', path: '/login', component: login},
+var userRoutes = [
   {
     name: 'home', path: '/home', component: home,
     children: [
-      // 用户
-      {name: 'user_manageConsole', path: 'user_manageConsole', component: user_manageConsole},
+      {path: '', component: user_manageConsole},
+      {path: 'user_manageConsole', component: user_manageConsole},
       {name: 'user_deployExample', path: 'user_deployExample', component: user_deployExample},
       {name: 'user_resourceApplication', path: 'user_resourceApplication', component: user_resourceApplication},
       {name: 'user_resourceQuery', path: 'user_resourceQuery', component: user_resourceQuery},
       {name: 'user_myResource', path: 'user_myResource', component: user_myResource},
       {name: 'user_changePassword', path: 'user_changePassword', component: user_changePassword},
-      {name: 'user_operationLog', path: 'user_operationLog', component: user_operationLog},
-      // 管理员
+      {name: 'user_operationLog', path: 'user_operationLog', component: user_operationLog}
+    ]
+  }
+]
+
+var adminRoutes = [
+  {
+    name: 'home', path: '/home', component: home,
+    children: [
       {name: 'admin_manageConsole', path: 'admin_manageConsole', component: admin_manageConsole},
       {name: 'admin_poolManage', path: 'admin_poolManage', component: admin_poolManage},
       {name: 'admin_poolDetails', path: 'admin_poolDetails', component: admin_poolDetails},
@@ -58,8 +54,15 @@ var routes = [
       {name: 'admin_virtualManage', path: 'admin_virtualManage', component: admin_virtualManage},
       {name: 'admin_resourceApproval', path: 'admin_resourceApproval', component: admin_resourceApproval},
       {name: 'admin_userManage', path: 'admin_userManage', component: admin_userManage},
-      {name: 'admin_operationLog', path: 'admin_operationLog', component: admin_operationLog},
-      // 行政审批
+      {name: 'admin_operationLog', path: 'admin_operationLog', component: admin_operationLog}
+    ]
+  }
+]
+
+var approvalRoutes = [
+  {
+    name: 'home', path: '/home', component: home,
+    children: [
       {name: 'approval_approvalQuery', path: 'approval_approvalQuery', component: approval_approvalQuery},
       {name: 'approval_resourceDetails', path: 'approval_resourceDetails', component: approval_resourceDetails},
       {name: 'approval_changePassword', path: 'approval_changePassword', component: approval_changePassword},
@@ -68,7 +71,4 @@ var routes = [
   }
 ]
 
-
-export default new VueRouter({
-  routes: routes
-})
+export {userRoutes, adminRoutes, approvalRoutes}
