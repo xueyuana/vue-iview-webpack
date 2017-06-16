@@ -32,8 +32,8 @@
         </div>
       </div>
       <div class="query">
-        <Button type="info" >查询</Button>
-        <Button class="reset" type="info" >重置</Button>
+        <Button type="primary" >查询</Button>
+        <Button class="reset" type="ghost" >重置</Button>
       </div>
     </div>
     <div class="header">资源列表：</div>

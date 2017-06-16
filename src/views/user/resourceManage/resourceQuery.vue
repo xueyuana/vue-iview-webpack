@@ -24,12 +24,13 @@
         </div>
       </div>
       <div class="query">
-        <Button type="info" >查询</Button>
+        <Button type="primary" >查询</Button>
+        <Button type="ghost" class="ghost">重置</Button>
 
       </div>
     </div>
     <div class="header">申请资源列表：</div>
-    <Table border :columns="columns1" :data="queryResult"></Table>
+    <Table border :columns="columns" :data="queryResult"></Table>
     <div class="page">
       <Button class="pre">上一页</Button>
       <Button>下一页</Button>
@@ -65,7 +66,7 @@
         value: '',
         model1: '',
         buttonStatus: true,
-        columns1: [
+        columns: [
           {
             title: '序号',
             key: 'number'
@@ -168,7 +169,7 @@
       getData.forEach( (item,index) => {
         let obj = {
             number: index + 1,
-            id: 'id0001',
+            id: 'ID0001',
             status: item.status,
             deployExample: item.resourceInformation[0].deployExample,
             resourcePool: item.resourceInformation[0].resourcePool,
@@ -201,6 +202,7 @@
     width: 100%;
     border: 1px solid #e4e4e4;
     padding-bottom: 10px;
+    padding-right: 15px;
     background-image: linear-gradient(to bottom,#fff,#e4e4e4);
     border-radius: 10px;
   }
@@ -236,6 +238,9 @@
   }
   .header {
     margin: 30px 0 10px;
+  }
+  .ghost {
+    margin-left: 20px;
   }
 
 

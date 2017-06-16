@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="set">
-      <Button type="info" class="add" @click="addInformation">添加</Button>
-      <Button type="info" @click="sendInformation">提交</Button>
+      <Button type="primary" class="add" @click="addInformation">添加</Button>
+      <Button type="primary" @click="sendInformation">提交</Button>
     </div>
     <div class="steps">
       <Steps :current="0">
@@ -23,7 +23,7 @@
         <Select v-model="item.deployExample" style="width:200px" :disabled="index ==0?false:true">
           <Option v-for="item in exampleList" :value="item.value" :key="item">{{ item.value }}</Option>
         </Select>
-        <Button type="dashed" class="add-example" @click="createExample">新建部署实例</Button>
+        <Button type="dashed" class="add-example" :class="{hidden: index == 0?false:true}" @click="createExample">新建部署实例</Button>
       </div>
       <div class="item">
         <span class="title">资源池选择</span>
@@ -120,10 +120,6 @@
 
       }
     },
-    components: {
-      Flow
-
-    },
     created () {
       let id = this.$route.query.id
       if(id === undefined) {
@@ -154,7 +150,6 @@
           return
         }
         this.resourceInformation.push({
-          id:'',
           deployExample: this.resourceInformation[0].deployExample,
           virtualMachine: '',
           resourcePool: this.resourceInformation[0].resourcePool,
@@ -283,6 +278,9 @@
     width: 800px;
     padding-left: 30px;
 
+  }
+  .hidden {
+    display: none;
   }
 
 </style>
