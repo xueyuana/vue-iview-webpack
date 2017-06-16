@@ -44,12 +44,20 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(queryList,index) in queryResult" >
-          <td v-for="(value,key) in queryList" >{{value}}</td>
+        <tr v-for="(item,index) in queryResult" >
+          <td>{{index + 1}}</td>
+          <td>{{item.virtualMachine}}</td>
+          <td>{{item.deployExample}}</td>
+          <td>{{item.ip}}</td>
+          <td>{{item.mirrorImage}}</td>
+          <td>{{item.physicalMachine}}</td>
+          <td>{{item.resourcePool}}</td>
+          <td>{{item.standard}}</td>
+          <td> {{item.status}} </td>
           <td>
             <Dropdown>
               <a href="javascript:void(0)">
-                下拉
+                更多
                 <Icon type="arrow-down-b"></Icon>
               </a>
               <Dropdown-menu slot="list">
@@ -186,26 +194,16 @@
         queryResult: [
           {
             number: 1,
-            virtualMachine: 'web',
-            deployExample: '实例1',
+            virtualMachine: '虚拟机1',
+            deployExample: '部署实例1',
             ip: '127.29.11.200',
             mirrorImage: 'Centos 7.2',
             physicalMachine: '物理机1',
             resourcePool: 'DMZ',
             standard: '2C/2G/200G',
             status: '运行'
-          },
-          {
-            number: 1,
-            virtualMachine: 'web',
-            deployExample: '实例1',
-            ip: '127.29.11.200',
-            mirrorImage: 'Centos 7.2',
-            physicalMachine: '物理机1',
-            resourcePool: 'DMZ',
-            standard: '2C/2G/200G',
-            status: '异常'
           }
+
         ]
 
       }
@@ -292,10 +290,10 @@
   }
   .query-form {
     width: 100%;
-    height: 150px;
     border: 1px solid #e4e4e4;
     background-image: linear-gradient(to bottom,#fff,#e4e4e4);
     border-radius: 10px;
+    padding-bottom: 10px;
   }
   .date-picker {
     display: flex;
