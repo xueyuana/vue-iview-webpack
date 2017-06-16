@@ -20,9 +20,16 @@
             <Modal
                 v-model="modal1"
                 title="添加部署实例"
-                @on-ok="ok"
+                @on-ok="addmessage"
                 @on-cancel="cancel">
-                <p>名称：<Input v-model="message" placeholder="最多10个字符" style="width: 300px"></Input></p>
+                <p>名称：<Input v-model="createUser.name" placeholder="最多10个字符" style="width: 300px"></Input></p>
+            </Modal>
+            <Modal
+                v-model="modal2"
+                title="编辑部署实例"
+                @on-ok="compileOk"
+                @on-cancel="cancel">
+                <p>名称：<Input v-model="compileUser.name" placeholder="最多10个字符" style="width: 300px"></Input></p>
             </Modal>
         </div>
         <div class="bssl-list">部署实例列表：</div>
@@ -31,53 +38,22 @@
     </div>
 </template>
 
-<style scoped>
-.ivu-row{
-    padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid #e4e4e4;
-    background-image: linear-gradient(to bottom,#fff,#e4e4e4);
-    border-radius: 10px;
-}
-.tjbssl Button{
-    display: block;
-    width: 150px;
-    height: 30px;
-    line-height: 30px;
-    background: #2d8cf0;
-    text-align: center;
-    color: #fff;
-    font-size: 14px;
-    border-radius: 6px;
-    padding: 0;
-}
-.bssl-list{
-     height: 35px;
-     line-height: 35px;
-     font-size: 14px;
-}
-.ivu-page{
-    padding-top: 20px;
-    float: right;
-}
-.c_font{
-    line-height: 32px;
-    text-align: right;
-    padding-right: 10px;
-}
-
-.c_font2{
-    line-height: 32px;
-    text-align: center;
-}
-</style>
-
 <script>
   export default {
       data () {
           return {
-              message: '',
+              createUser: {
+                name: '',
+                number: '',
+                time: ''
+              },
+              compileUser: {
+                  name: '',
+                  number: '',
+                  time: ''
+              },
               modal1: false ,
+              modal2: false ,
               value: '',
               tjname: '',
               columns7: [
@@ -137,7 +113,12 @@
                                   },
                                   on: {
                                       click: () => {
-                                          this.show(params.index);
+                                        this.modal2 = true
+                                        for(var key in params.row) {
+                                          this.compileUser[key] = params.row[key]
+                                        }
+                                        console.log('5555',this.compileUser);
+                                        this.index = params.index
                                       }
                                   }
                               }, '编辑'),
@@ -167,40 +148,18 @@
               ],
               data6: [
                   {
-                      name: '部署实例1',
-                      number: '11',
-                      time: '2017-06-05 15:00:00'
-                  },
-                  {
-                      name: '部署实例2',
-                      number: '22',
-                      time: '2017-06-05 15:00:00'
-                  },
-                  {
-                      name: '部署实例3',
-                      number: '33',
-                      time: '2017-06-05 15:00:00'
-                  },
-                  {
-                    name: '部署实例4',
-                    number: '44',
-                    time: '2017-06-05 15:00:00'
+                      name: '实例1',
+                      number: '10',
+                      time: '2017-06-23 15:00:00'
                   }
               ]
           }
       },
       methods: {
-          show (index) {
-              this.$Modal.info({
-                  title: '用户信息',
-                  content: `年龄：${this.data6[index].name}<br>资源数量：${this.data6[index].number}<br>创建时间：${this.data6[index].time}`
-              })
-          },
           remove (index) {
               this.data6.splice(index, 1);
           },
-          ok () {
-              this.$Message.info('点击了确定');
+          addmessage () {
               var stamp = new Date(),
                   year = stamp.getFullYear(),
                   month = (stamp.getMonth() + 1) > 9 ? (stamp.getMonth() + 1) : '0' + (stamp.getMonth() + 1),
@@ -209,15 +168,66 @@
                   minute = stamp.getMinutes() > 9 ? stamp.getMinutes() : '0' + stamp.getMinutes(),
                   sec = stamp.getSeconds() > 9 ? stamp.getSeconds() : '0' + stamp.getSeconds()
               this.data6.push({
-                  name: this.message,
+                  name: this.createUser.name,
                   number: '0',
                   time: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec
               });
+              console.log('333333');
+              this.$Message.info('添加成功');
           },
           cancel () {
               this.$Message.info('点击了取消');
+          },
+          compileOk () {//编辑后确定
+             for(var key in this.compileUser) {
+               this.data6[this.index][key] = this.compileUser[key]
+             }
+
+              console.log('result',this.data6)
+
           }
       },
-    computed: {}
+      computed: {}
   }
 </script>
+
+<style scoped>
+.ivu-row{
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e4e4e4;
+    background-image: linear-gradient(to bottom,#fff,#e4e4e4);
+    border-radius: 10px;
+}
+.tjbssl Button{
+    display: block;
+    width: 150px;
+    height: 30px;
+    line-height: 30px;
+    background: #2d8cf0;
+    text-align: center;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 6px;
+    padding: 0;
+}
+.bssl-list{
+     height: 35px;
+     line-height: 35px;
+     font-size: 14px;
+}
+.ivu-page{
+    padding-top: 20px;
+    float: right;
+}
+.c_font{
+    line-height: 32px;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.c_font2{
+    line-height: 32px;
+    text-align: center;
+}
+</style>
