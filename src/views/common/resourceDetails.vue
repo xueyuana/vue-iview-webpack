@@ -147,47 +147,47 @@
           </Col>
           <Col span="12">
           <Form-item label="申请单号:">
-            <Input v-model="formValidate.apply_code"></Input>
+            <Input v-model="formValidate.apply_code" disabled></Input>
           </Form-item>
           <Form-item label="虚拟机名称:">
-            <Input v-model="formValidate.virtual_name"></Input>
+            <Input v-model="formValidate.virtual_name" disabled></Input>
           </Form-item>
           <Form-item label="部门:">
-            <Input v-model="formValidate.department"></Input>
+            <Input v-model="formValidate.department" disabled></Input>
           </Form-item>
           <Form-item label="规格:">
-            <Select v-model="formValidate.spec">
+            <Select v-model="formValidate.spec" disabled>
               <Option label="2C4G" value="0"></Option>
               <Option label="4C8G" value="1"></Option>
             </Select>
           </Form-item>
           <Form-item label="存储空间:">
-            <Input v-model="formValidate.storeSpace"></Input>
+            <Input v-model="formValidate.storeSpace" disabled></Input>
           </Form-item>
           </Col>
           <Col span="12">
           <Form-item>&nbsp;</Form-item>
           <Form-item label="部署实例:" prop="case">
-            <Select v-model="formValidate.case">
+            <Select v-model="formValidate.case" disabled>
               <Option label="实例1" value="0"></Option>
               <Option label="实例2" value="1"></Option>
               <Option label="实例3" value="2"></Option>
             </Select>
           </Form-item>
           <Form-item label="资源池:">
-            <Select v-model="formValidate.resource">
+            <Select v-model="formValidate.resource" disabled>
               <Option label="资源池1" value="0"></Option>
               <Option label="资源池2" value="1"></Option>
             </Select>
           </Form-item>
           <Form-item label="镜像:">
-            <Select v-model="formValidate.mirror">
+            <Select v-model="formValidate.mirror" disabled>
               <Option label="Centos 7.2" value="0"></Option>
               <Option label="Ubuntu 15.01" value="1"></Option>
             </Select>
           </Form-item>
           <Form-item label="数量:">
-            <Input-number :max="10" :min="1" v-model="formValidate.total"></Input-number>
+            <Input-number :max="10" :min="1" v-model="formValidate.total" disabled></Input-number>
           </Form-item>
           </Col>
           <Col span="24">
