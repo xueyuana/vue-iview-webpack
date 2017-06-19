@@ -4,36 +4,36 @@
       <div class="queryInformation">
         <div class="item date-picker">
           <span class="title">申请日期</span>
-          <Date-picker type="daterange"  placeholder="选择日期" style="width: 200px"></Date-picker>
+          <Date-picker type="daterange" v-model="query_info.applyDate"  placeholder="选择日期" style="width: 200px"></Date-picker>
         </div>
         <div class="item">
           <span class="title">虚拟机名称</span>
-          <Input v-model="value" placeholder="请输入..." style="width: 200px"></Input>
+          <Input v-model="query_info.vm_name" placeholder="请输入..." style="width: 200px"></Input>
         </div>
 
         <div class="item">
           <span class="title">资源池</span>
-          <Select v-model="model1" style="width:200px">
-            <Option v-for="item in resourcePool" :value="item.value" :key="item">{{ item.value }}</Option>
+          <Select v-model="query_info.az" style="width:200px">
+            <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
           </Select>
         </div>
 
         <div class="item">
           <span class="title">状态</span>
-          <Select v-model="model1" style="width:200px">
+          <Select v-model="query_info.status" style="width:200px">
             <Option v-for="item in status" :value="item.value" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
         <div class="item">
           <span class="title">部署实例</span>
-          <Select v-model="model1" style="width:200px">
+          <Select v-model="query_info.instance_name" style="width:200px">
             <Option v-for="item in deployExample" :value="item.value" :key="item" >{{ item.value }} </Option>
           </Select>
         </div>
       </div>
       <div class="query">
-        <Button type="primary" >查询</Button>
-        <Button class="reset" type="ghost" >重置</Button>
+        <Button type="primary" @click="query">查询</Button>
+        <Button class="reset" type="ghost" @click="reset">重置</Button>
       </div>
     </div>
     <div class="header">资源列表：</div>
@@ -71,8 +71,7 @@
 
     </table>
     <div class="page">
-      <Button class="pre">上一页</Button>
-      <Button>下一页</Button>
+      <Page :total="100" @on-change="changePage"></Page>
     </div>
 
   </div>
@@ -102,17 +101,24 @@
             value: '实例2'
           }
         ],
-        resourcePool: [
+        az: [
           {
-            value: '资源池1',
+            az_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
+            az_name: "资源池1",
           },
           {
-            value: '资源池2'
+            az_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
+            az_name: "资源池2",
           }
         ],
+        query_info: {
+          applyDate: [],
+          vm_name: '',
+          az: '',
+          status: '',
+          instance_name: ''
+        },
         operationList: [],
-        value: '',
-        model1: '',
         model2: '',
         columns: [
           {
@@ -154,41 +160,6 @@
           {
             title: '操作',
             key: 'operate',
-            render: (h,params) => {
-              var self = this;
-              return h('Select',{
-                props: {
-                  size: 'small',
-                  clearable: true
-                },
-                domProps: {
-                  value: self.model2
-                },
-                on: {
-                  'on-change': (event) => {
-                    self.model2 = event
-
-                    if(event == '关机' || event == '重启' || event == '删除'){
-                      self.$Modal.info({
-                        title: '确认',
-                        content: '<p>确认选择'+event+'吗</p>',
-                        onOk: () => {
-                          console.log('确认')
-                        }
-
-                      })
-                    }
-                  }
-                }
-              },this.approvalStatus.map(function (item) {
-                return h('Option',{
-                  attrs: {
-                    value: item.value,
-                    key: item
-                  }
-                },item.value)
-              }))
-            }
           }
         ],
         queryResult: [
@@ -271,7 +242,21 @@
           }
         })
 
+      },
+      changePage () {
 
+      },
+      query () {
+
+      },
+      reset () {
+        this.query_info = {
+          applyDate: [],
+          vm_name: '',
+          az: '',
+          status: '',
+          instance_name: ''
+        }
       }
     }
   }
@@ -322,10 +307,7 @@
   .page {
     display: flex;
     justify-content: flex-end;
-    margin-top: 10px;
-  }
-  .pre {
-    margin-right: 20px;
+    margin-top: 20px;
   }
   .header {
     margin: 30px 0 10px;
@@ -353,6 +335,7 @@
   .ivu-dropdown-menu {
     min-width: 60px;
   }
+
 
 
 </style>

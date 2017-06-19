@@ -4,16 +4,16 @@
       <div class="queryInformation">
         <div class="item">
           <span class="title">用户名</span>
-          <Input v-model="value" placeholder="请输入..." style="width: 300px"></Input>
+          <Input v-model="query_info.user_name" placeholder="请输入..." style="width: 300px"></Input>
         </div>
         <div class="item date-picker">
           <span class="title">申请日期</span>
-          <Date-picker type="daterange"  placeholder="选择日期" style="width: 300px"></Date-picker>
+          <Date-picker type="daterange" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
         </div>
       </div>
       <div class="query">
-        <Button type="primary" >查询</Button>
-        <Button class="reset" type="ghost" >重置</Button>
+        <Button type="primary" @click="query">查询</Button>
+        <Button class="reset" type="ghost" @click="reset">重置</Button>
       </div>
     </div>
     <div class="createUser">
@@ -25,14 +25,14 @@
           @on-ok="createOk"
           @on-cancel="createCancel">
         <div class="createWrap">
-          <span class="modal-title">用户名：</span><Input v-model="createUser.userName" placeholder="请输入..." style="width: 200px"></Input>
-          <span class="modal-title">密码：</span><Input v-model="createUser.passWord" placeholder="请输入..." style="width: 200px"></Input>
+          <span class="modal-title">用户名：</span><Input v-model="createUser.username" placeholder="请输入..." style="width: 200px"></Input>
+          <span class="modal-title">密码：</span><Input v-model="createUser.password" placeholder="请输入..." style="width: 200px"></Input>
           <span class="modal-title">部门：</span><Input v-model="createUser.department" placeholder="请输入..." style="width: 200px"></Input>
           <span class="modal-title">手机：</span><Input v-model="createUser.phone" placeholder="请输入..." style="width: 200px"></Input>
           <span class="modal-title">邮箱：</span><Input v-model="createUser.email" placeholder="请输入..." style="width: 200px"></Input>
           <span class="modal-title">角色:</span>
           <Select v-model="createUser.role" style="width:196px">
-            <Option v-for="item in roleList" :value="item.value" :key="item">{{ item.value }}</Option>
+            <Option v-for="item in roleList" :value="item.key" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
       </Modal>
@@ -47,20 +47,19 @@
         @on-ok="compileOk"
         @on-cancel="compileCancel">
       <div class="createWrap">
-        <span class="modal-title">用户名：</span><Input v-model="compileUser.userName" placeholder="请输入..." style="width: 200px"></Input>
-        <span class="modal-title">密码：</span><Input v-model="compileUser.passWord" placeholder="请输入..." style="width: 200px"></Input>
+        <span class="modal-title">用户名：</span><Input v-model="compileUser.username" placeholder="请输入..." style="width: 200px"></Input>
+        <span class="modal-title">密码：</span><Input v-model="compileUser.password" placeholder="请输入..." style="width: 200px"></Input>
         <span class="modal-title">部门：</span><Input v-model="compileUser.department" placeholder="请输入..." style="width: 200px"></Input>
         <span class="modal-title">手机：</span><Input v-model="compileUser.phone" placeholder="请输入..." style="width: 200px"></Input>
         <span class="modal-title">邮箱：</span><Input v-model="compileUser.email" placeholder="请输入..." style="width: 200px"></Input>
         <span class="modal-title">角色:</span>
         <Select v-model="compileUser.role" style="width:196px">
-          <Option v-for="item in roleList" :value="item.value" :key="item">{{ item.value }}</Option>
+          <Option v-for="item in roleList" :value="item.key" :key="item">{{ item.value }}</Option>
         </Select>
       </div>
     </Modal>
     <div class="page">
-      <Button class="pre">上一页</Button>
-      <Button>下一页</Button>
+      <Page :total="100" @on-change="changePage"></Page>
     </div>
 
   </div>
@@ -71,79 +70,42 @@
   export default {
     data () {
       return {
+        url: 'http://mpc-test.syswin.com',
+        query_info: {
+          user_name: '',
+          applyDate: []
+        },
         isCreate: false,
-        value: '',
         isCompile: false,
         index: '',
         createUser: {
-          userName: '',
-          passWord: '',
+          username: '',
+          password: '',
           department: '',
           phone: '',
           email: '',
           role: ''
         },
         compileUser: {
-          userName: '',
-          passWord: '',
+          username: '',
+          password: '',
           department: '',
           phone: '',
           email: '',
           role: ''
         },
-        status: [
-          {
-            value: '运行',
-          },
-          {
-            value: '关机'
-          },
-          {
-            value: '异常'
-          }
-        ],
-        deployExample: [
-          {
-            value: '实例1'
-          },
-          {
-            value: '实例2'
-          }
-        ],
-        resourcePool: [
-          {
-            value: '资源池1',
-          },
-          {
-            value: '资源池2'
-          }
-        ],
-        approvalStatus: [
-          {
-            value: 'VNC'
-          },
-          {
-            value: '启动'
-          },
-          {
-            value: '重启'
-          },
-          {
-            value: '关机'
-          },
-          {
-            value: '删除'
-          }
-        ],
         roleList: [
           {
-            value: '普通用户'
+            value: '普通用户',
+            key: 'user'
           },
           {
-            value: '管理员'
+            value: '管理员',
+            key: 'admin'
           },
           {
-            value: '行政审批'
+            value: '行政审批',
+            key: 'leader'
           }
         ],
         columns: [
@@ -153,7 +115,7 @@
           },
           {
             title: '用户名',
-            key: 'userName'
+            key: 'username'
           },
           {
             title: '手机',
@@ -173,7 +135,7 @@
           },
           {
             title: '创建日期',
-            key: 'createDate'
+            key: 'created_time'
           },
           {
             title: '操作',
@@ -209,7 +171,15 @@
                           title: '确认',
                           content: '<p>确认删除吗？</p>',
                           onOk: () => {
-                            this.queryResult.splice(params.index,1)
+
+//                            this.queryResult.splice(params.index,1)
+                            const url = this.url + '/api/user/users/' + params.row.id
+                            this.$http.delete(url).then( (res) => {
+                              console.log('删除用户',res.body)
+                            },(err) => {
+                              console.log('err',err)
+                            })
+
                           },
                           onCancel: () => {
                             console.log('取消')
@@ -224,16 +194,15 @@
           }
         ],
         queryResult: [
-          {
-            number: 1,
-            userName: '用户1',
-            phone: '188',
-            email: '@xx.com',
-            role: '用户',
-            department: '部门1',
-            createDate: '2017',
-            operate: ''
-          }
+//          {
+//            number: 1,
+//            username: '用户1',
+//            phone: '188',
+//            email: '@xx.com',
+//            role: '用户',
+//            department: '部门1',
+//            created_time: '2017'
+//          }
         ]
 
       }
@@ -250,21 +219,31 @@
       compileCancel () {//取消编辑
 
       },
-      createOk () {
-        let date = new Date();
-        let Y = date.getFullYear();
-        let M = date.getMonth()+1;
-        let D = date.getDate()
-        let h = date.getHours()
-        let m = date.getMinutes()
-        h = h<10? '0'+h:h
-        m = m<10? '0'+m:m
-        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m
-        //创建的新用户
-        let newUser = this.createUser
-        newUser.createDate = applyDate
-        newUser.number = 2
-        this.queryResult.push(newUser)
+      createOk () {//确定创建用户
+
+        const url = 'http://mpc-test.syswin.com/api/user/users'
+        let requestBody = this.createUser
+        this.$http.post(url,requestBody).then((res) => {
+          console.log(res.body.result)
+        },(err) => {
+          console.log(err)
+        })
+        //配合假数据
+//        let date = new Date();
+//        let Y = date.getFullYear();
+//        let M = date.getMonth()+1;
+//        let D = date.getDate()
+//        let h = date.getHours()
+//        let m = date.getMinutes()
+//        h = h<10? '0'+h:h
+//        m = m<10? '0'+m:m
+//        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m
+//        //创建的新用户
+//        let newUser = this.createUser
+//        newUser.createDate = applyDate
+//        newUser.number = 2
+//        this.queryResult.push(newUser)
+        //清空创建内容
         this.createUser = {
           userName: '',
           passWord: '',
@@ -275,7 +254,7 @@
         }
 
       },
-      createCancel () {
+      createCancel () {//创建用户取消
         //清空
         this.createUser = {
           userName: '',
@@ -286,7 +265,36 @@
           role: ''
         }
 
+      },
+      query () {
+
+      },
+      reset () {
+        this.query_info = {
+          user_name: '',
+          applyDate: []
+        }
+      },
+      changePage () {
+
       }
+    },
+    created () {
+      //获取用户
+      const url = this.url + '/api/user/users'
+      this.$http.get(url).then((res) => {
+//        console.log('用户信息',res.body)
+        res.body.result.res.forEach((item,index) => {
+          item.number = index + 1
+          this.queryResult.push(item)
+        })
+
+      },(err) => {
+//        console.log('err',err)
+      })
+
+
+
     }
   }
 
@@ -337,7 +345,7 @@
   .page {
     display: flex;
     justify-content: flex-end;
-    margin-top: 10px;
+    margin-top: 20px;
   }
   .pre {
     margin-right: 20px;

@@ -4,36 +4,35 @@
       <div class="queryInformation">
         <div class="item">
           <span class="title">申请人</span>
-          <Input v-model="value" placeholder="请输入..." style="width: 200px"></Input>
+          <Input v-model="query_info.user_name" placeholder="请输入..." style="width: 200px"></Input>
         </div>
         <div class="item date-picker">
           <span class="title">申请日期</span>
-          <Date-picker type="daterange"  placeholder="选择日期" style="width: 200px"></Date-picker>
+          <Date-picker type="daterange" v-model="query_info.applyDate" placeholder="选择日期" style="width: 200px"></Date-picker>
         </div>
         <div class="item">
           <span class="title">审批状态</span>
-          <Select v-model="model1" style="width:200px">
+          <Select v-model="query_info.status" style="width:200px">
             <Option v-for="item in approvalStatusVal" :value="item.value" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
         <div class="item">
           <span class="title">部署实例</span>
-          <Select v-model="model1" style="width:200px">
-            <Option v-for="item in deployExample" :value="item.value" :key="item">{{ item.value }}</Option>
+          <Select v-model="query_info.instance_id" style="width:200px">
+            <Option v-for="item in instance_name" :value="item.value" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
       </div>
       <div class="query">
-        <Button type="primary" >查询</Button>
-        <Button type="ghost" class="ghost">重置</Button>
+        <Button type="primary" @click="query">查询</Button>
+        <Button type="ghost" class="ghost" @click="reset">重置</Button>
 
       </div>
     </div>
     <div class="header">申请资源列表：</div>
     <Table border :columns="columns" :data="queryResult"></Table>
     <div class="page">
-      <Button class="pre">上一页</Button>
-      <Button>下一页</Button>
+      <Page :total="100" @on-change="changePage"></Page>
     </div>
 
   </div>
@@ -55,7 +54,7 @@
             value: '审批完成'
           }
         ],
-        deployExample: [
+        instance_name: [
           {
             value: '实例1'
           },
@@ -63,9 +62,13 @@
             value: '实例2'
           }
         ],
-        value: '',
-        model1: '',
-        buttonStatus: true,
+        query_info: {
+          user_name: '',
+          applyDate: [],
+          status: '',
+          instance_id: ''
+
+        },
         columns: [
           {
             title: '序号',
@@ -73,15 +76,15 @@
           },
           {
             title: '申请单号',
-            key: 'id',
+            key: 'resource_id',
             render: (h,params) => {
               return h('a',
                 {
                   domProps: {
-                    innerHTML: params.row.id
+                    innerHTML: params.row.resource_id
                   },
                   on: {
-                    click: this.reeturnResource
+                    click: this.returnResourceApplication
                   }
 
                 }
@@ -98,11 +101,11 @@
           },
           {
             title: '部署实例',
-            key: 'deployExample'
+            key: 'instance_name'
           },
           {
             title: '资源池',
-            key: 'resourcePool'
+            key: 'az'
           },
           {
             title: '申请日期',
@@ -112,7 +115,7 @@
             title: '操作',
             key: 'operate',
             render: (h,params) => {
-              console.log(params.row)
+//              console.log(params.row)
               return h('Button',{
                 props: {
                   type: 'primary',
@@ -129,10 +132,10 @@
         queryResult: [
 //          {
 //            number: 1,
-//            id: 'id001',
+//            resource_id: 'id001',
 //            status: '审批中',
-//            deployExample: '实例1',
-//            resourcePool: 'DMZ',
+//            instance_name: '实例1',
+//            az: 'DMZ',
 //            applyDate: '12',
 //            operate: ''
 //          }
@@ -141,47 +144,57 @@
       }
     },
     methods: {
-      reeturnResource (event) {
+      returnResourceApplication (event) {
 
         let id = event.target.firstChild.data
         this.$router.push({name: 'user_resourceApplication',query: {id: id}})
       },
       goMyResource () {
-//        console.log('clickbutton')
         this.$router.push({name: 'user_myResource'})
       },
-      changeStatus (id) {
-        this.$store.state.userData.approvalStatus.forEach( (item, index) => {
-          if(item.id == id){
-            console.log(item)
-            if(item.status == '审批完成'){
-              return false
-            }
-            return 11
+      changePage (page) {
+        console.log(page)
+      },
+      query () {
 
-          }
-          return 12
-        })
-      }
-    },
-    created () {
-      let getData = this.$store.state.userData.information
-      getData.forEach( (item,index) => {
-        let obj = {
-            number: index + 1,
-            id: 'ID0001',
-            status: item.status,
-            deployExample: item.resourceInformation[0].deployExample,
-            resourcePool: item.resourceInformation[0].resourcePool,
-            applyDate: item.applyDate,
-            operate: '',
-            applyPerson: 'user'
+      },
+      reset () {
+        this.query_info = {
+          user_name: '',
+          applyDate: [],
+          status: '',
+          instance_id: ''
 
         }
 
-        this.queryResult.push(obj)
+      }
+    },
+    created () {
+      //测试假数据
+      let getData = this.$store.state.userData.information
 
-      })
+      let requestBody = {
+        number: 1,
+        resource_id: 'ID0001',
+        status: getData[0].status,
+        instance_name: getData[0].resourceInformation[0].instance_name,
+        az: '资源池1',
+        applyDate: getData[0].applyDate,
+        operate: '',
+        applyPerson: 'user'
+
+      }
+      //根据用户id查找资源
+//      const url = '/api/resource/resources?user_id=id'
+//      this.$http.get(url).then((res) => {
+//        console.log(res)
+//      },(err) => {
+//        console.log(err)
+//      })
+
+
+        this.queryResult.push(requestBody)
+
     }
 
   }
@@ -231,7 +244,7 @@
   .page {
     display: flex;
     justify-content: flex-end;
-    margin-top: 10px;
+    margin-top: 20px;
   }
   .pre {
     margin-right: 20px;
