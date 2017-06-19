@@ -109,7 +109,7 @@
     },
 
     mounted() {
-//      this.onInquire()
+      this.onInquire()
     },
 
     methods: {
@@ -121,21 +121,21 @@
         this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
         this.formItem.image_format && (query.image_format = this.formItem.image_format)
         this.formItem.image_name && (query.image_name = this.formItem.image_name)
-        console.log(this.formItem.date)
+        console.log(query)
 
         this.$http.get('api/image/images', {
           params: query
         }).then(res => {
-          if (res.code === 200) {
-            console.log('镜像列表', res)
-            this.data = res.body
+          console.log('镜像列表', res)
+          if (res.body.code === 200) {
+            this.data = res.body.result.res
             this.filterDate = this.mockTableData(this.data, this.pageSize, 1)
           } else {
-            this.$Message.error(res.result.msg)
+            this.$Message.error(res.body.result.msg)
           }
         }, err => {
           console.log('error', err)
-          this.$Message.error(err.result.msg)
+          this.$Message.error(err.body.result.msg)
         })
       },
       handleReset(name) {

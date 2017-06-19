@@ -35,7 +35,6 @@ import vueRouters from './router/index.js'
 import {setCookie, getCookie, delCookie, setStroage} from 'tools/cookieAction.js'
 vueRouters.beforeEach((to, from, next) => {
 
-
   let nav = {}
   let bread = {}
   let name = to.name
