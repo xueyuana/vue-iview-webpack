@@ -5,20 +5,9 @@
       <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="70" inline>
         <Row :gutter="16">
           <Col span="10">
-            <Form-item label="日期:">
-              <Row>
-                <Col span="11">
-                  <Form-item prop="start_time">
-                    <Date-picker type="datetime" placeholder="起始日期" @on-change="formatCreateData"></Date-picker>
-                  </Form-item>
-                </Col>
-                <Col span="2" style="text-align: center">-</Col>
-                <Col span="11">
-                  <Form-item prop="end_time">
-                    <Date-picker type="datetime" placeholder="截止日期" @on-change="formatEndData"></Date-picker>
-                  </Form-item>
-                </Col>
-              </Row>
+            <Form-item label="日期:" prop="date">
+              <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm"
+                           placeholder="选择日期和时间" style="min-width: 250px"></Date-picker>
             </Form-item>
           </Col>
           <Col span="7">
@@ -33,15 +22,13 @@
           </Col>
         </Row>
 
-        <Row>
-          <Col span="20" style="min-height: 20px"></Col>
-          <Col span="2">
-            <Button type="primary" @click.native="onInquire">查询</Button>
-          </Col>
-          <Col span="2">
+        <div class="form-btn-wrap clearfix">
+          <div class="btns">
+            <Button type="primary" @click.native="onInquire" style="margin-right: 10px">查询</Button>
             <Button type="ghost" @click.native="handleReset('formItem')">重置</Button>
-          </Col>
-        </Row>
+          </div>
+        </div>
+
       </Form>
     </div>
 
@@ -59,48 +46,25 @@
 </template>
 
 <style lang="less" scoped>
-  .inquire {
-    margin-top: 30px;
-    &-form {
-      padding: 15px;
-      background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);
-      border: 1px solid rgb(228, 228, 228);
-      border-radius: 10px;
-      &-project_name {
-        width: 30%;
-      }
-      &-formStatus {
-        width: 50%;
-      }
 
-      .btns-wrap {
-        float: right;
-      }
-    }
-    &-table {
-      padding: 20px 20px;
-    }
-  }
 </style>
 
 <script>
-  import baseUrl from 'tools/common.js'
   import {getStroage} from 'tools/cookieAction.js'
+  import {formatDate} from 'tools/formatDate.js'
 
   export default {
     data() {
       return {
         formItem: {
-          start_time: '',
-          end_time: '',
+          date: [],
           image_format: '',
           image_name: ''
         },
         ruleValidate: {
-          start_time: [],
-          end_time: [],
-          image_format: [],
-          image_name: [],
+          date: [],
+          image_format: '',
+          image_name: ''
         },
         userInfo: '',
         columns:  [
@@ -153,10 +117,11 @@
       onInquire() {
 
         let query = {}
-        this.formItem.start_time && (query.start_time = this.formItem.start_time)
-        this.formItem.end_time && (query.end_time = this.formItem.end_time)
+        this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
+        this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
         this.formItem.image_format && (query.image_format = this.formItem.image_format)
         this.formItem.image_name && (query.image_name = this.formItem.image_name)
+        console.log(this.formItem.date)
 
         this.$http.get('api/image/images', {
           params: query

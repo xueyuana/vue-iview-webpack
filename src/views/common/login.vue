@@ -112,7 +112,7 @@
 
             // June 临时验证
             if (userName) {
-              setStroage('role', {role: userName})
+              setCookie('role', userName)
               switch (userName) {
                 case 'user':
                   this.$router.push({name: 'user_manageConsole'})
@@ -129,7 +129,6 @@
             } else {
               this.$Message.error('用户名不能为空')
             }
-
 
 //            let body = {
 //              "username": userName,
