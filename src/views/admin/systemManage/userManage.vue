@@ -179,7 +179,7 @@
                           onOk: () => {
 
 //                            this.queryResult.splice(params.index,1)
-                            const url = this.url + '/api/user/users/' + params.row.id
+                            const url = 'api/user/users/' + params.row.id
                             this.$http.delete(url).then( (res) => {
                               console.log('删除用户',res.body)
                               //重新获取用户
@@ -242,6 +242,15 @@
 
         const url = 'api/user/users/'+this.user_id
         let requestBody
+        switch (this.compileUser.role) {
+          case '管理员': this.compileUser.role = 'admin'
+            break
+          case '行政审批': this.compileUser.role = 'leader'
+            break
+          case '普通用户': this.compileUser.role = 'user'
+            break
+        }
+
         //判断密码是否修改
         if(this.compileUser.password){
           requestBody = this.compileUser
@@ -254,7 +263,7 @@
             role: this.compileUser.role
           }
         }
-
+        console.log(requestBody)
         this.$http.put(url,requestBody).then((res) => {
          console.log(res.body)
 //        修改成功之后改变列表数据
