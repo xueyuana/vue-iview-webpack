@@ -109,7 +109,7 @@
         this.$refs[name].validate((valid) => {
           if (valid) {
             let userName = this.formInline.userName;
-            let passWord = this.formInline.passWord;
+            let passWord = sha256(this.formInline.passWord + 'abc').toString(crypto.enc.Hex);
             let rememberStatus = this.formInline.rememberPassword;
             let accountInfo = "";
             accountInfo = userName + "&" + passWord;
@@ -140,7 +140,7 @@
             }
             this.$http.post('api/user/login', body, {emulateJSON: true})
               .then(res => {
-                console.log('登录', res);
+                console.log('登录', res)
                 if (rememberStatus) {
                   console.log("勾选了记住密码，现在开始写入cookie");
                   setCookie('accountInfo', accountInfo, 1440 * 3);
