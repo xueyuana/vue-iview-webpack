@@ -1,28 +1,22 @@
 <template>
   <div class="rsource-approval">
-    <Row>
-      <Col span="14" offset="2">
-      <div class="approval-status">
-        <Steps :current="0">
-          <Step title="提交申请"></Step>
-          <Step title="行政审批"></Step>
-          <Step title="技术审批"></Step>
-          <Step title="审批完成"></Step>
-        </Steps>
-      </div>
-      </Col>
-      <Col span="6" offset="2">
-      <div class="approval-button">
-        <Button class="apply-button-item"
-                type="info"
-                v-for="(item, index) in funcBtns"
-                @click="onLink(index)">{{item}}
-        </Button>
-      </div>
-      </Col>
-    </Row>
+    <div class="approval-button">
+      <Button class="apply-button-item"
+              type="info"
+              v-for="(item, index) in funcBtns"
+              @click="onLink(index)">{{item}}
+      </Button>
+    </div>
+    <div class="approval-status">
+      <Steps :current="0">
+        <Step title="提交申请"></Step>
+        <Step title="行政审批"></Step>
+        <Step title="技术审批"></Step>
+        <Step title="审批完成"></Step>
+      </Steps>
+    </div>
     <div class="status-list">
-      <div class="rd_status_title">xxx资源池资源使用情况</div>
+      <div class="rd_status_title">DMZ资源池资源使用情况</div>
       <Row :gutter="10">
         <Col span="8">
         <Row>
@@ -66,111 +60,136 @@
       </Row>
     </div>
     <div class="status-list">
-      <div class="rd_status_title">xxx资源池资源使用情况:</div>
-      <Row type="flex" justify="start" class="code-row-bg">
-        <Col span="7">
+      <div class="rd_status_title">本次申请占用资源情况</div>
+      <Row :gutter="10">
+        <Col span="8">
         <Row>
-          <Col span="5" class="rd_center">
-          <div class="rd_graph">vCPU个</div>
+          <Col span="5" class="rd_right">
+          <div class="rd_pro1" style="padding-right:12px;">vCPU个</div>
           </Col>
           <Col span="10">
-          <div class="graph"><strong class="bar" style="width:20%;"></strong></div>
+          <Progress :percent="100" :stroke-width="20" class="rd_progress" hide-info></Progress>
           </Col>
-          <Col span="5" class="rd_center">
-          <div class="rd_graph">2/30</div>
+          <Col span="5" class="rd_left">
+          <div class="rd_pro2">2/30</div>
           </Col>
         </Row>
         </Col>
-        <Col span="7">
+        <Col span="8">
         <Row>
-          <Col span="5" class="rd_center">
-          <div class="rd_graph">内存（GB）</div>
+          <Col span="5" class="rd_right">
+          <div class="rd_pro1">内存（GB）</div>
           </Col>
           <Col span="10">
-          <div class="graph"><strong class="bar" style="width:20%;"></strong></div>
+          <Progress :percent="100" :stroke-width="20" class="rd_progress" hide-info></Progress>
           </Col>
-          <Col span="5" class="rd_center">
-          <div class="rd_graph">2/30</div>
+          <Col span="5" class="rd_left">
+          <div class="rd_pro2">2/30</div>
           </Col>
         </Row>
         </Col>
-        <Col span="7">
+        <Col span="8">
         <Row>
-          <Col span="5" class="rd_center">
-          <div class="rd_graph">硬盘（GB）</div>
+          <Col span="5" class="rd_right">
+          <div class="rd_pro1">硬盘（GB）</div>
           </Col>
-          <Col span="10">
-          <div class="graph"><strong class="bar" style="width:20%;"></strong></div>
+          <Col span="10" class="rd_progress">
+          <Progress :percent="100" :stroke-width="20" class="rd_progress" hide-info></Progress>
           </Col>
-          <Col span="5" class="rd_center">
-          <div class="rd_graph">2/30</div>
-          </Col>
-        </Row>
-        </Col>
-      </Row>
-    </div>
-    <div class="status-list">
-      <div class="rd_status_title">本次申请占用资源情况:</div>
-      <Row type="flex" justify="start" class="code-row-bg">
-        <Col span="7">
-        <Row>
-          <Col span="5" class="rd_center">
-          <div class="rd_graph">vCPU个</div>
-          </Col>
-          <Col span="10">
-          <div class="graph"><strong class="bar" style="width:100%;"></strong></div>
-          </Col>
-          <Col span="5" class="rd_center">
-          <div class="rd_graph">4</div>
-          </Col>
-        </Row>
-        </Col>
-        <Col span="7">
-        <Row>
-          <Col span="5" class="rd_center">
-          <div class="rd_graph">内存（GB）</div>
-          </Col>
-          <Col span="10">
-          <div class="graph"><strong class="bar" style="width:100%;"></strong></div>
-          </Col>
-          <Col span="5" class="rd_center">
-          <div class="rd_graph">4</div>
-          </Col>
-        </Row>
-        </Col>
-        <Col span="7">
-        <Row>
-          <Col span="5" class="rd_center">
-          <div class="rd_graph">硬盘（GB）</div>
-          </Col>
-          <Col span="10">
-          <div class="graph"><strong class="bar" style="width:100%;"></strong></div>
-          </Col>
-          <Col span="5" class="rd_center">
-          <div class="rd_graph">200</div>
+          <Col span="5" class="rd_left">
+          <div class="rd_pro2">2/30</div>
           </Col>
         </Row>
         </Col>
       </Row>
     </div>
-    <!--<div class="status-list1">-->
-    <!--<Row :gutter="16">-->
-    <!--<Col span="8">-->
-    <!--<span class="rd_graph">硬盘（GB）</span>-->
-    <!--<div class="graph"><strong class="bar" style="width:100%;"></strong></div>-->
-    <!--<span class="rd_graph">200</span>-->
-    <!--</Col>-->
-    <!--<Col span="8">-->
-    <!--<span class="rd_graph">硬盘（GB）</span>-->
-    <!--<div class="graph"><strong class="bar" style="width:100%;"></strong></div>-->
-    <!--<span class="rd_graph">200</span>-->
-    <!--</Col>-->
-    <!--<Col span="8">-->
-    <!--<span class="rd_graph">硬盘（GB）</span>-->
-    <!--<div class="graph"><strong class="bar" style="width:100%;"></strong></div>-->
-    <!--<span class="rd_graph">200</span>-->
-    <!--</Col>-->
-    <!--</Row>-->
+    <!--<div class="status-list">-->
+      <!--<div class="rd_status_title">xxx资源池资源使用情况:</div>-->
+      <!--<Row type="flex" justify="start" class="code-row-bg">-->
+        <!--<Col span="7">-->
+        <!--<Row>-->
+          <!--<Col span="5" class="rd_center">-->
+          <!--<div class="rd_graph">vCPU个</div>-->
+          <!--</Col>-->
+          <!--<Col span="10">-->
+          <!--<div class="graph"><strong class="bar" style="width:20%;"></strong></div>-->
+          <!--</Col>-->
+          <!--<Col span="5" class="rd_center">-->
+          <!--<div class="rd_graph">2/30</div>-->
+          <!--</Col>-->
+        <!--</Row>-->
+        <!--</Col>-->
+        <!--<Col span="7">-->
+        <!--<Row>-->
+          <!--<Col span="5" class="rd_center">-->
+          <!--<div class="rd_graph">内存（GB）</div>-->
+          <!--</Col>-->
+          <!--<Col span="10">-->
+          <!--<div class="graph"><strong class="bar" style="width:20%;"></strong></div>-->
+          <!--</Col>-->
+          <!--<Col span="5" class="rd_center">-->
+          <!--<div class="rd_graph">2/30</div>-->
+          <!--</Col>-->
+        <!--</Row>-->
+        <!--</Col>-->
+        <!--<Col span="7">-->
+        <!--<Row>-->
+          <!--<Col span="5" class="rd_center">-->
+          <!--<div class="rd_graph">硬盘（GB）</div>-->
+          <!--</Col>-->
+          <!--<Col span="10">-->
+          <!--<div class="graph"><strong class="bar" style="width:20%;"></strong></div>-->
+          <!--</Col>-->
+          <!--<Col span="5" class="rd_center">-->
+          <!--<div class="rd_graph">2/30</div>-->
+          <!--</Col>-->
+        <!--</Row>-->
+        <!--</Col>-->
+      <!--</Row>-->
+    <!--</div>-->
+    <!--<div class="status-list">-->
+      <!--<div class="rd_status_title">本次申请占用资源情况:</div>-->
+      <!--<Row type="flex" justify="start" class="code-row-bg">-->
+        <!--<Col span="7">-->
+        <!--<Row>-->
+          <!--<Col span="5" class="rd_center">-->
+          <!--<div class="rd_graph">vCPU个</div>-->
+          <!--</Col>-->
+          <!--<Col span="10">-->
+          <!--<div class="graph"><strong class="bar" style="width:100%;"></strong></div>-->
+          <!--</Col>-->
+          <!--<Col span="5" class="rd_center">-->
+          <!--<div class="rd_graph">4</div>-->
+          <!--</Col>-->
+        <!--</Row>-->
+        <!--</Col>-->
+        <!--<Col span="7">-->
+        <!--<Row>-->
+          <!--<Col span="5" class="rd_center">-->
+          <!--<div class="rd_graph">内存（GB）</div>-->
+          <!--</Col>-->
+          <!--<Col span="10">-->
+          <!--<div class="graph"><strong class="bar" style="width:100%;"></strong></div>-->
+          <!--</Col>-->
+          <!--<Col span="5" class="rd_center">-->
+          <!--<div class="rd_graph">4</div>-->
+          <!--</Col>-->
+        <!--</Row>-->
+        <!--</Col>-->
+        <!--<Col span="7">-->
+        <!--<Row>-->
+          <!--<Col span="5" class="rd_center">-->
+          <!--<div class="rd_graph">硬盘（GB）</div>-->
+          <!--</Col>-->
+          <!--<Col span="10">-->
+          <!--<div class="graph"><strong class="bar" style="width:100%;"></strong></div>-->
+          <!--</Col>-->
+          <!--<Col span="5" class="rd_center">-->
+          <!--<div class="rd_graph">200</div>-->
+          <!--</Col>-->
+        <!--</Row>-->
+        <!--</Col>-->
+      <!--</Row>-->
     <!--</div>-->
     <div class="form-info">
       <Form ref="formValidate" :model="formValidate" :label-width="120">
@@ -239,6 +258,8 @@
 
 <style scoped>
   .approval-status{
+    width: 70%;
+    margin: 30px auto;
   }
   .rd_right{
     text-align: right;
@@ -421,6 +442,7 @@
       onSubmit () {
         console.log('ddsss', this.ywInfo);
         console.log('xzInfo', this.xzInfo);
+        this.$store.commit('setStatus','审批完成');
         this.$Message.success('通过!');
       },
       onNo () {

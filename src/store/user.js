@@ -2,21 +2,15 @@
 export const userData= {
   // 存储状态值
   state: {
-    datas: [], // 原始数据
-    information: [],
-    approvalStatus:[]  // 审批状态
+    information: []
   },
   // 状态值的改变方法,操作状态值
   mutations: {
-    setOriginData(state, newDatas) {
-      state.datas.push(newDatas);
-      // console.log(state.datas)
-    },
     setInformation(state,information) {
       state.information.push(information)
     },
-    setApprovalStatus(state, newData){
-      state.approvalStatus.push(newData)
+    setStatus(state, newStatus){
+      state.information[0].status = newStatus
     }
   },
   getters: {},
