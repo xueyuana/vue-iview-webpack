@@ -244,7 +244,7 @@
 
 </style>
 <script>
-  import {setStroage, getStroage, removeStroage} from 'tools/cookieAction.js';
+  import {getCookie, delCookie, setStroage, getStroage, removeStroage} from 'tools/cookieAction.js';
   import common from '../../tools/common.js';
   import {userinfo} from '../../tools/user.js';
 
@@ -258,8 +258,8 @@
       }
     },
     mounted () {
-      this.role = getStroage('role').role
-//      this.getUserInfo();
+      this.role = getCookie('role')
+      console.log('home用户权限', this.role)
     },
     methods: {
       // 获取用户名
@@ -289,8 +289,8 @@
       },
       // 退出登录
       toLogOut() {
-        removeStroage('userInfo');
-        removeStroage('role');
+
+        delCookie('role')
         console.log('我退出了')
         this.$router.push({path: '/login'});
       },

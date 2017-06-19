@@ -5,37 +5,23 @@
       <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="80" inline>
         <Row :gutter="60">
           <Col span="14">
-            <Form-item label="日期:">
-              <Row>
-                <Col span="11">
-                <Form-item prop="start_time">
-                  <Date-picker type="datetime" placeholder="起始日期" @on-change="formatCreateData"></Date-picker>
-                </Form-item>
-                </Col>
-                <Col span="2" style="text-align: center">-</Col>
-                <Col span="11">
-                <Form-item prop="end_time">
-                  <Date-picker type="datetime" placeholder="截止日期" @on-change="formatEndData"></Date-picker>
-                </Form-item>
-                </Col>
-              </Row>
+            <Form-item label="日期:" prop="date">
+              <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm"
+                           placeholder="选择日期和时间" style="width: 250px"></Date-picker>
             </Form-item>
           </Col>
           <Col span="10">
-            <Form-item label="资源池名称:">
-              <Input v-model="formItem.resource_name" placeholder="请输入"></Input>
+            <Form-item label="资源池名称:" prop="image_name">
+              <Input v-model="formItem.image_name" placeholder="请输入"></Input>
             </Form-item>
           </Col>
         </Row>
-        <Row>
-          <Col span="20" style="min-height: 20px"></Col>
-          <Col span="2">
-          <Button type="primary" @click.native="onInquire">查询</Button>
-          </Col>
-          <Col span="2">
-          <Button type="ghost" @click.native="handleReset('formItem')">重置</Button>
-          </Col>
-        </Row>
+        <div class="form-btn-wrap clearfix">
+          <div class="btns">
+            <Button type="primary" @click.native="onInquire" style="margin-right: 10px">查询</Button>
+            <Button type="ghost" @click.native="handleReset('formItem')">重置</Button>
+          </div>
+        </div>
       </Form>
     </div>
 
@@ -44,7 +30,8 @@
       <Table border size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
-          <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
+          <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage"
+                @on-page-size-change="changePageSize"></Page>
         </div>
       </div>
     </div>
@@ -52,43 +39,23 @@
 </template>
 
 <style lang="less" scoped>
-  .inquire {
-    margin-top: 30px;
-    &-form {
-      padding: 15px;
-      background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);
-      border: 1px solid rgb(228, 228, 228);
-      border-radius: 10px;
-      &-project_name {
-        width: 30%;
-      }
-      &-formStatus {
-        width: 50%;
-      }
-    }
-    &-table {
-      padding: 20px 20px;
-    }
-  }
+
 </style>
 
 <script>
-  import baseUrl from 'tools/common.js'
   import {getStroage} from 'tools/cookieAction.js'
+  import {formatDate} from 'tools/formatDate.js'
 
   export default {
     data() {
       return {
         formItem: {
-          start_time: '',
-          end_time: '',
-          resource_name: ''
+          date: [],
+          image_name: ''
         },
         ruleValidate: {
-          start_time: [],
-          end_time: [],
-          image_format: [],
-          image_name: [],
+          date: [],
+          image_name: []
         },
         userInfo: '',
         columns: [
@@ -99,17 +66,17 @@
           },
           {
             title: '资源池名称',
-            key: 'resource_name',
+            key: 'image_name',
             align: 'center',
             render: (h, params) => {
               return h('a', {
                 on: {
                   click: () => {
                     console.log(22222)
-                    this.$router.push({name: 'admin_poolDetails',query: {id: '000000'}})
+                    this.$router.push({name: 'admin_poolDetails', query: {id: '000000'}})
                   }
                 }
-              }, params.row.resource_name)
+              }, params.row.image_name)
             }
           },
           {
@@ -141,7 +108,7 @@
         data1: [],
         filterDate: [
           {
-            resource_name: '资源池一',
+            image_name: '资源池一',
             physical_machine: 20,
             virtual_machine: 200,
             CPU_proportion: '30%',
@@ -154,25 +121,24 @@
       }
     },
 
-    mounted() {},
+    mounted() {
+    },
 
     methods: {
       // 查找
       onInquire() {
-        let url = baseUrl.apihost + 'deployment/deployments'
+        let url = 'deployment/deployments'
         let query = {}
-        this.formItem.initiator && (query.initiator = this.formItem.initiator)
-        this.formItem.start_time && (query.start_time = this.formItem.start_time)
-        this.formItem.end_time && (query.end_time = this.formItem.end_time)
-        this.formItem.project_name && (query.project_name = this.formItem.project_name)
-        this.formItem.resource_name && (query.resource_name = this.formItem.resource_name)
-        this.formItem.deploy_name && (query.deploy_name = this.formItem.deploy_name)
+        this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
+        this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
+        this.formItem.image_name && (query.image_name = this.formItem.image_name)
+        console.log(query)
 
         this.$http.get(url, {
           params: query
-        }).then(data => {
-          console.log('部署列表', data)
-          this.data1 = data.body
+        }).then(res => {
+          console.log('部署列表', res)
+          this.data1 = res.body
           this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
           this.num = 1
         }, err => {
@@ -184,10 +150,11 @@
       },
       // 时间选择器
       formatCreateData(value) {
+        console.log('ssssss', value)
         this.formItem.start_time = value
       },
       onUnitChange(val) {
-        this.formItem.resource_name = ''
+        this.formItem.image_name = ''
         console.log(val)
         this.getDeployList()
         this.onInquire()
@@ -219,7 +186,7 @@
             status: this.formatStatus(originData[i].deploy_result),
             deploy_id: originData[i].deploy_id,
             deploy_name: originData[i].deploy_name,
-            resource_name: originData[i].resource_name
+            image_name: originData[i].image_name
           })
         }
         return data;

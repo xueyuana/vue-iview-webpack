@@ -2,29 +2,22 @@
   <div class="inquire">
     <!--查询条件-->
     <div class="inquire-form">
-      <Form :model="formItem" :label-width="70">
+      <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="70">
         <Row :gutter="16">
           <Col span="5">
-            <Form-item label="申请人:">
+            <Form-item label="申请人:" prop="applicant">
               <Input v-model="formItem.resource_name" placeholder="请输入"></Input>
             </Form-item>
           </Col>
           <Col span="9">
-            <Form-item label="申请日期:">
-              <Row>
-                <Col span="11">
-                <Date-picker type="datetime" placeholder="起始日期" @on-change="formatCreateData"></Date-picker>
-                </Col>
-                <Col span="2" style="text-align: center">至</Col>
-                <Col span="11">
-                <Date-picker type="datetime" placeholder="截止日期" @on-change="formatEndData"></Date-picker>
-                </Col>
-              </Row>
+            <Form-item label="申请日期:" prop="date">
+              <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm"
+                           placeholder="选择日期和时间" style="width: 250px"></Date-picker>
             </Form-item>
           </Col>
           <Col span="5">
-            <Form-item label="审批状态:">
-              <Select v-model="formItem.approval_status" clearable style="">
+            <Form-item label="审批状态:" prop="status">
+              <Select v-model="formItem.status" clearable style="">
                 <Option :value="1" :key="1">待审批</Option>
                 <Option :value="2" :key="2">审批未通过</Option>
                 <Option :value="3" :key="3">审批完成</Option>
@@ -32,20 +25,20 @@
             </Form-item>
           </Col>
           <Col span="5">
-            <Form-item label="部署实例:">
-              <Select v-model="formItem.deploy_name" clearable style="">
+            <Form-item label="部署实例:" prop="deploy_name">
+              <Select v-model="formItem.deploy_name" clearable>
                 <Option :value="1" :key="1">部署实例1</Option>
                 <Option :value="2" :key="2">部署实例2</Option>
               </Select>
             </Form-item>
           </Col>
         </Row>
-        <Row>
-          <Col span="22" style="min-height: 20px"></Col>
-          <Col span="2">
-          <Button type="primary" @click.native="onInquire">查询</Button>
-          </Col>
-        </Row>
+        <div class="form-btn-wrap clearfix">
+          <div class="btns">
+            <Button type="primary" @click.native="onInquire" style="margin-right: 10px">查询</Button>
+            <Button type="ghost" @click.native="handleReset('formItem')">重置</Button>
+          </div>
+        </div>
       </Form>
     </div>
 
@@ -84,18 +77,23 @@
 </style>
 
 <script>
-  import baseUrl from 'tools/common.js'
   import {getStroage} from 'tools/cookieAction.js'
+  import {formatDate} from 'tools/formatDate.js'
 
   export default {
     data() {
       return {
         formItem: {
-          created_time: '',
-          end_time: '',
-          resource_name: '',
-          approval_status: '',
+          applicant: '',
+          date: '',
+          status: '',
           deploy_name: ''
+        },
+        ruleValidate: {
+          applicant: [],
+          date: [],
+          status: [],
+          deploy_name: []
         },
         userInfo: '',
         columns:  [
@@ -165,13 +163,12 @@
     methods: {
       // 查找
       onInquire() {
-        let url = baseUrl.apihost + 'deployment/deployments'
+        let url = 'deployment/deployments'
         let query = {}
-        this.formItem.initiator && (query.initiator = this.formItem.initiator)
-        this.formItem.created_time && (query.start_time = this.formItem.created_time)
-        this.formItem.end_time && (query.end_time = this.formItem.end_time)
-        this.formItem.project_name && (query.project_name = this.formItem.project_name)
-        this.formItem.resource_name && (query.resource_name = this.formItem.resource_name)
+        this.formItem.applicant && (query.applicant = this.formItem.applicant)
+        this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
+        this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
+        this.formItem.status && (query.status = this.formItem.status)
         this.formItem.deploy_name && (query.deploy_name = this.formItem.deploy_name)
 
         this.$http.get(url, {
@@ -185,9 +182,12 @@
           console.log('error', err)
         })
       },
+      handleReset(name) {
+        this.$refs[name].resetFields()
+      },
       // 时间选择器
       formatCreateData(value) {
-        this.formItem.created_time = value
+        this.formItem.start_time = value
       },
       onUnitChange(val) {
         this.formItem.resource_name = ''
@@ -217,7 +217,7 @@
         for (let i = num; i < maxNum; i++) {
           data.push({
             initiator: originData[i].initiator,
-            created_time: originData[i].created_time.substring(0, 16),
+            start_time: originData[i].start_time.substring(0, 16),
             project_name: originData[i].project_name,
             status: this.formatStatus(originData[i].deploy_result),
             deploy_id: originData[i].deploy_id,
@@ -264,7 +264,6 @@
           case 'success':
             return '成功'
           default:
-            break
         }
       }
     }

@@ -1,245 +1,313 @@
 <template>
-  <div class="inquire">
-    <!--查询条件-->
-    <div class="inquire-form">
-      <Form :model="formItem" :label-width="70">
-        <Row :gutter="16">
-          <Col span="10">
-            <Form-item label="起始日期:">
-              <Row>
-                <Col span="11">
-                <Date-picker type="datetime" placeholder="起始日期" @on-change="formatCreateData"></Date-picker>
-                </Col>
-                <Col span="2" style="text-align: center">至</Col>
-                <Col span="11">
-                <Date-picker type="datetime" placeholder="截止日期" @on-change="formatEndData"></Date-picker>
-                </Col>
-              </Row>
-            </Form-item>
-          </Col>
-          <Col span="7">
-          <Form-item label="虚拟机名称:">
-            <Input v-model="formItem.resource_name" placeholder="请输入"></Input>
-          </Form-item>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col span="10">
-            <Form-item label="所属资源池:">
+  <div class="my-resource">
+    <div class="query-form">
+      <div class="queryInformation">
+        <div class="item date-picker">
+          <span class="title">申请日期</span>
+          <Date-picker v-model="date" type="daterange"  placeholder="选择日期" style="width: 200px"></Date-picker>
+        </div>
+        <div class="item">
+          <span class="title">虚拟机名称</span>
+          <Input v-model="value" placeholder="请输入..." style="width: 200px"></Input>
+        </div>
 
-            </Form-item>
-          </Col>
-          <Col span="7">
-            <Form-item label="状态:">
-              <Input v-model="formItem.resource_name" placeholder="请输入"></Input>
-            </Form-item>
-          </Col>
-          <Col span="7">
-          <Form-item label="部署实例:">
-            <Input v-model="formItem.resource_name" placeholder="请输入"></Input>
-          </Form-item>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="20" style="min-height: 20px"></Col>
-          <Col span="2">
-          <Button type="primary" @click.native="onInquire">查询</Button>
-          </Col>
-          <Col span="2">
-          <Button type="primary" @click.native="onInquire">重置</Button>
-          </Col>
-        </Row>
-      </Form>
-    </div>
+        <div class="item">
+          <span class="title">资源池</span>
+          <Select v-model="model1" style="width:200px">
+            <Option v-for="item in resourcePool" :value="item.value" :key="item">{{ item.value }}</Option>
+          </Select>
+        </div>
 
-    <!--查询结果-->
-    <div class="inquire-table">
-      <div>镜像列表：</div>
-      <Table border size="small" :columns="columns" :data="filterDate"></Table>
-      <div style="margin: 10px;overflow: hidden">
-        <div style="float: right;">
-          <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
+        <div class="item">
+          <span class="title">状态</span>
+          <Select v-model="model1" style="width:200px">
+            <Option v-for="item in status" :value="item.value" :key="item">{{ item.value }}</Option>
+          </Select>
+        </div>
+        <div class="item">
+          <span class="title">部署实例</span>
+          <Select v-model="model1" style="width:200px">
+            <Option v-for="item in deployExample" :value="item.value" :key="item" >{{ item.value }} </Option>
+          </Select>
         </div>
       </div>
+      <div class="query">
+        <Button type="info" >查询</Button>
+        <Button class="reset" type="info" @click="handleResert">重置</Button>
+      </div>
     </div>
+    <div class="header">资源列表：</div>
+    <table>
+      <thead>
+      <tr>
+        <th v-for="item in columns" :key="item.key">{{item.title}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(item,index) in queryResult" >
+        <td>{{index + 1}}</td>
+        <td>{{item.virtualMachine}}</td>
+        <td>{{item.deployExample}}</td>
+        <td>{{item.ip}}</td>
+        <td>{{item.mirrorImage}}</td>
+        <td>{{item.physicalMachine}}</td>
+        <td>{{item.resourcePool}}</td>
+        <td>{{item.standard}}</td>
+        <td> {{item.status}} </td>
+        <td>
+          <Dropdown>
+            <a href="javascript:void(0)">
+              更多
+              <Icon type="arrow-down-b"></Icon>
+            </a>
+            <Dropdown-menu slot="list">
+              <Dropdown-item v-for="item in operationList[index]" @click.native="clicknative($event,index)" :selected="item.selected">{{ item.value }}</Dropdown-item>
+            </Dropdown-menu>
+          </Dropdown>
+        </td>
+      </tr>
+
+      </tbody>
+
+    </table>
+    <div class="page">
+      <Button class="pre">上一页</Button>
+      <Button>下一页</Button>
+    </div>
+
   </div>
+
+
 </template>
-
-<style lang="less" scoped>
-  .inquire {
-    margin-top: 30px;
-    &-form {
-      padding: 15px;
-      background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);
-      border: 1px solid rgb(228, 228, 228);
-      border-radius: 10px;
-      &-project_name {
-        width: 30%;
-      }
-      &-formStatus {
-        width: 50%;
-      }
-    }
-    &-table {
-      padding: 20px 20px;
-    }
-  }
-</style>
-
 <script>
-  import baseUrl from 'tools/common.js'
-  import {getStroage} from 'tools/cookieAction.js'
-
   export default {
-    data() {
+    data () {
       return {
-        formItem: {
-          created_time: '',
-          end_time: '',
-          resource_name: ''
-        },
-        userInfo: '',
-        columns:  [
+        date: '',
+        status: [
+          {
+            value: '运行',
+          },
+          {
+            value: '关机'
+          },
+          {
+            value: '异常'
+          }
+        ],
+        deployExample: [
+          {
+            value: '实例1'
+          },
+          {
+            value: '实例2'
+          }
+        ],
+        resourcePool: [
+          {
+            value: '资源池1',
+          },
+          {
+            value: '资源池2'
+          }
+        ],
+        operationList: [],
+        value: '',
+        model1: '',
+        model2: '',
+        columns: [
           {
             title: '序号',
-            type: 'index',
-            align: 'center'
+            key: 'number'
+          },
+          {
+            title: '虚拟机名称',
+            key: 'virtualMachine'
+          },
+          {
+            title: '部署实例',
+            key: 'deployExample'
+          },
+          {
+            title: 'IP',
+            key: 'ip'
           },
           {
             title: '镜像名称',
-            key: 'resource_name',
-            align: 'center'
+            key: 'mirrorImage'
           },
           {
-            title: '尺寸',
-            key: 'physical_machine',
-            align: 'center'
+            title: '所在物理机',
+            key: 'physicalMachine'
           },
           {
-            title: '镜像格式',
-            key: 'virtual_machine',
-            align: 'center'
+            title: '所属资源池',
+            key: 'resourcePool'
           },
           {
-            title: '日期',
-            key: 'CPU_proportion',
-            align: 'center'
+            title: '规格',
+            key: 'standard'
+          },
+          {
+            title: '状态',
+            key: 'status'
+          },
+          {
+            title: '操作',
+            key: 'operate'
           }
         ],
-        data1: [],
-        filterDate: [],
-        pageSize: 10,
-        num: 1
+        queryResult: [
+          {
+            number: 1,
+            virtualMachine: '虚拟机1',
+            deployExample: '部署实例1',
+            ip: '127.29.11.200',
+            mirrorImage: 'Centos 7.2',
+            physicalMachine: '物理机1',
+            resourcePool: 'DMZ',
+            standard: '2C/2G/200G',
+            status: '运行'
+          }
+
+        ]
+
       }
     },
-
-    mounted() {},
-
-    methods: {
-      // 查找
-      onInquire() {
-        let url = baseUrl.apihost + 'deployment/deployments'
-        let query = {}
-        this.formItem.initiator && (query.initiator = this.formItem.initiator)
-        this.formItem.created_time && (query.start_time = this.formItem.created_time)
-        this.formItem.end_time && (query.end_time = this.formItem.end_time)
-        this.formItem.project_name && (query.project_name = this.formItem.project_name)
-        this.formItem.resource_name && (query.resource_name = this.formItem.resource_name)
-        this.formItem.deploy_name && (query.deploy_name = this.formItem.deploy_name)
-
-        this.$http.get(url, {
-          params: query
-        }).then(data => {
-          console.log('部署列表', data)
-          this.data1 = data.body
-          this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
-          this.num = 1
-        }, err => {
-          console.log('error', err)
-        })
-      },
-      // 时间选择器
-      formatCreateData(value) {
-        this.formItem.created_time = value
-      },
-      onUnitChange(val) {
-        this.formItem.resource_name = ''
-        console.log(val)
-        this.getDeployList()
-        this.onInquire()
-      },
-      onDeployChange(val) {
-        if (!val) return
-        this.onInquire()
-      },
-      formatEndData(value) {
-        this.formItem.end_time = value
-      },
-      // 分页
-      changePage(val) {
-        this.filterDate = this.mockTableData(this.data1, this.pageSize, val)
-      },
-      changePageSize(val) {
-        this.pageSize = val
-        this.changePage(1)
-      },
-      mockTableData (originData, pageSize, index) {
-        let data = [];
-        let num = (index - 1) * pageSize
-        let maxNum = (num + pageSize) > this.data1.length ? this.data1.length : (num + pageSize)
-        for (let i = num; i < maxNum; i++) {
-          data.push({
-            initiator: originData[i].initiator,
-            created_time: originData[i].created_time.substring(0, 16),
-            project_name: originData[i].project_name,
-            status: this.formatStatus(originData[i].deploy_result),
-            deploy_id: originData[i].deploy_id,
-            deploy_name: originData[i].deploy_name,
-            resource_name: originData[i].resource_name
-          })
-        }
-        return data;
-      },
-      // 请求部署单元列表
-      getProjectList() {
-        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + this.userInfo.user_id
-        this.$http.get(url).then(data => {
-          console.log('部署单元列表', data)
-          this.project_list = data.body.result.res
-        }, err => {
-          console.log('error', err)
-        })
-      },
-      // 获取部署单元下对应部署列表
-      getDeployList() {
-        let url = baseUrl.apihost + 'resource/'
-        let query = {}
-        this.userInfo.user_id && (query.user_id = this.userInfo.user_id)
-        this.formItem.project_name && (query.project = this.formItem.project_name)
-
-        this.$http.get(url, {
-          params: query
-        }).then(data => {
-          console.log('资源列表', data)
-          this.resource_list = data.body.result.msg.filter(item => item.reservation_status === 'ok')
-        }, err => {
-          console.log('error', err)
-        })
-      },
-      formatStatus(val){
-        switch (val) {
-          case 'deploying':
-            return '部署中'
-          case 'not_deployed':
-            return '未部署'
-          case 'fail':
-            return '失败'
-          case 'success':
-            return '成功'
-          default:
+    created () {
+      this.queryResult.forEach((item,index) => {
+        switch (item.status) {
+          case '运行': this.operationList.push([
+            {
+              value: '重启',
+              selected: false
+            },
+            {
+              value: '关机',
+              selected: false
+            }
+          ])
             break
+          case '异常': this.operationList.push([
+            {
+              value: '启动',
+              selected: false
+            },
+            {
+              value: '开机',
+              selected: false
+            }
+          ])
+            break
+          case '开机': this.operationList.push([
+            {
+              value: '关机',
+              selected: false
+            },
+            {
+              value: '重启',
+              selected: false
+            }
+          ])
+            break
+          default:
         }
+      })
+
+    },
+    methods: {
+      clicknative (event,index) {
+        //index指的是行数
+        this.operationList[index].forEach((item,index) => {
+          if(item.value == event.target.firstChild.data) {
+            item.selected = true
+          }else {
+            item.selected = false
+          }
+        })
+      },
+      handleResert() {
+        this.date = ''
+        this.model1 = ''
+        this.model2 = ''
       }
+
     }
   }
+
 </script>
+<style scoped>
+  .my-resource {
+    width: 100%;
+  }
+  .queryInformation{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+  }
+  .query-form {
+    width: 100%;
+    border: 1px solid #e4e4e4;
+    background-image: linear-gradient(to bottom,#fff,#e4e4e4);
+    border-radius: 10px;
+    padding-bottom: 10px;
+  }
+  .date-picker {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .item {
+    margin: 10px 5px;
+  }
+  .title {
+    display: inline-block;
+    width: 80px;
+    margin-right: 10px;
+    text-align: center;
+  }
+  .query {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 26px;
+    box-sizing: border-box;
+  }
+  .reset {
+    margin-left: 20px;
+  }
+  .page {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  .pre {
+    margin-right: 20px;
+  }
+  .header {
+    margin: 30px 0 10px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  table td,th{
+    text-align: center;
+    border: 1px solid #dddee1;
+  }
+  table tr {
+    height: 50px;
+
+  }
+  table thead tr{
+    background-color: #f8f8f9;
+  }
+  table tbody tr:hover {
+    background-color: #F3FAFF;
+  }
+
+
+</style>

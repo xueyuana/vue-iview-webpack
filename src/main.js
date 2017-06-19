@@ -15,6 +15,7 @@ import {store} from './store/store.js'
 import iView from 'iview'
 Vue.use(iView)
 import 'iview/dist/styles/iview.css'
+import './static/mytheme/index.less'
 
 // 引入ajax
 import VueResource from 'vue-resource'
@@ -26,11 +27,13 @@ Vue.http.options.root = 'http://mpc-test.syswin.com'
 import 'font-awesome/less/font-awesome.less'
 
 // 导入初始化的css
-import '../static/css/reset.css'
+import './static/css/reset.css'
+import './static/css/common.less'
 
 // 引入路由系统
 import vueRouters from './router/index.js'
 
+import {setCookie, getCookie, delCookie, setStroage} from 'tools/cookieAction.js'
 vueRouters.beforeEach((to, from, next) => {
 
   let nav = {}
