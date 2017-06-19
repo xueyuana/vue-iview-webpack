@@ -260,7 +260,6 @@
     mounted () {
       this.role = getCookie('role')
       console.log('home用户权限', this.role)
-//      this.getUserInfo();
     },
     methods: {
       // 获取用户名
