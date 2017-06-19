@@ -115,61 +115,61 @@
             accountInfo = userName + "&" + passWord;
 
             // June 临时验证
-//            if (userName) {
-//              setCookie('role', userName)
-//              switch (userName) {
-//                case 'user':
-//                  this.$router.push({name: 'user_manageConsole'})
-//                  break
-//                case 'admin':
-//                  this.$router.push({name: 'admin_manageConsole'})
-//                  break
-//                case 'approval':
-//                  this.$router.push({name: 'approval_approvalQuery'})
-//                  break
-//                default:
-//                  this.$Message.error('权限不存在')
-//              }
-//            } else {
-//              this.$Message.error('用户名不能为空')
-//            }
-
-            let body = {
-              "username": userName,
-              "password": passWord,
+            if (userName) {
+              setCookie('role', userName)
+              switch (userName) {
+                case 'user':
+                  this.$router.push({name: 'user_manageConsole'})
+                  break
+                case 'admin':
+                  this.$router.push({name: 'admin_manageConsole'})
+                  break
+                case 'approval':
+                  this.$router.push({name: 'approval_approvalQuery'})
+                  break
+                default:
+                  this.$Message.error('权限不存在')
+              }
+            } else {
+              this.$Message.error('用户名不能为空')
             }
-            this.$http.post('api/user/login', body, {emulateJSON: true})
-              .then(res => {
-                console.log('登录', res);
-                if (rememberStatus) {
-                  console.log("勾选了记住密码，现在开始写入cookie");
-                  setCookie('accountInfo', accountInfo, 1440 * 3);
-                } else {
-                  console.log("没有勾选记住密码，现在开始删除账号cookie");
-                  delCookie('accountInfo');
-                }
 
-                if (res.body.code === 200) {
-                  this.$Message.success('登录成功!');
-
-                  let userinfo = {}
-                  userinfo.user_id = res.body.result.user_id;
-
-                  setStroage('userInfo', userinfo)
-
-                  // 根据不同用户权限进入不同界面
-
-                }
-
-                if (res.body.code == 400) {
-                  this.$Message.error('验证错误!');
-                }
-                // 成功回调
-              }, err => {
-                this.$Message.error('登陆失败!');
-                // 失败回调
-              });
-
+//            let body = {
+//              "username": userName,
+//              "password": passWord,
+//            }
+//            this.$http.post('api/user/login', body, {emulateJSON: true})
+//              .then(res => {
+//                console.log('登录', res);
+//                if (rememberStatus) {
+//                  console.log("勾选了记住密码，现在开始写入cookie");
+//                  setCookie('accountInfo', accountInfo, 1440 * 3);
+//                } else {
+//                  console.log("没有勾选记住密码，现在开始删除账号cookie");
+//                  delCookie('accountInfo');
+//                }
+//
+//                if (res.body.code === 200) {
+//                  this.$Message.success('登录成功!');
+//
+//                  let userinfo = {}
+//                  userinfo.user_id = res.body.result.user_id;
+//
+//                  setStroage('userInfo', userinfo)
+//
+//                  // 根据不同用户权限进入不同界面
+//
+//                }
+//
+//                if (res.body.code == 400) {
+//                  this.$Message.error('验证错误!');
+//                }
+//                // 成功回调
+//              }, err => {
+//                this.$Message.error('登陆失败!');
+//                // 失败回调
+//              });
+//
           } else {
             this.$Message.error('表单验证失败!');
           }

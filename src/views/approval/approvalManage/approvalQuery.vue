@@ -116,6 +116,9 @@
                   style: {
                     marginRight: '0px'
                   },
+                  domProps: {
+                    innerHTML: params.row.id
+                  },
                   on: {
                     click: () => {
                       this.$router.push({name: 'approval_resourceDetails', query: {apply_code: params.row.apply_code}});

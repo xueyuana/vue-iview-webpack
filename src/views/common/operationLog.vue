@@ -5,7 +5,7 @@
         <Row>
           <Col span="5">
             <Form-item label="日期:" prop="start_time">
-              <Date-picker type="daterange" placement="bottom-end" format="yyyy-MM-dd" placeholder="选择日期" v-model="formValidate.start_time" @on-change="formatCreateData"></Date-picker>
+              <Date-picker type="daterange" format="yyyy-MM-dd" placeholder="选择日期" v-model="formValidate.start_time" @on-change="formatCreateData"></Date-picker>
             </Form-item>
           </Col>
           <Col span="5">

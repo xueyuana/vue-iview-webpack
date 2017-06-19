@@ -213,8 +213,8 @@
               <Option label="4C8G" value="1"></Option>
             </Select>
           </Form-item>
-          <Form-item label="存储空间:">
-            <Input v-model="formValidate.storeSpace" disabled></Input>
+          <Form-item label="存储空间:" class="store_space">
+            <Input v-model="formValidate.storeSpace" disabled></Input><span class="unit">G</span>
           </Form-item>
           </Col>
           <Col span="12">
