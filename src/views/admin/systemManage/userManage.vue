@@ -67,6 +67,10 @@
 
 </template>
 <script>
+
+  //引入sha256加密
+    import crypto from 'crypto-js'
+    import sha256 from 'crypto-js/sha256'
   export default {
     data () {
       return {
@@ -78,6 +82,7 @@
         isCreate: false,
         isCompile: false,
         index: '',
+        user_id: '',
         createUser: {
           username: '',
           password: '',
@@ -157,6 +162,7 @@
                         this.compileUser[key] = params.row[key]
                       }
                       this.index = params.index
+                      this.user_id = params.row.id
                     }
                   }
                 },'编辑'),
@@ -176,6 +182,8 @@
                             const url = this.url + '/api/user/users/' + params.row.id
                             this.$http.delete(url).then( (res) => {
                               console.log('删除用户',res.body)
+                              //重新获取用户
+                              this.getUser()
                             },(err) => {
                               console.log('err',err)
                             })
@@ -208,12 +216,56 @@
       }
     },
     methods: {
-      compileOk () {//编辑后确定
-       for(var key in this.compileUser) {
-         this.queryResult[this.index][key] = this.compileUser[key]
-       }
+      getUser () {//获取用户
+        this.queryResult = []
+        const url = 'api/user/users'
+        this.$http.get(url).then((res) => {
 
-        console.log('result',this.queryResult)
+          res.body.result.res.forEach((item,index) => {
+            item.number = index + 1
+            switch (item.role) {
+              case 'admin': item.role = '管理员'
+                break
+              case 'leader': item.role = '行政审批'
+                break
+              case 'user': item.role = '普通用户'
+                break
+            }
+            this.queryResult.push(item)
+          })
+
+        },(err) => {
+//        console.log('err',err)
+        })
+      },
+      compileOk () {//编辑后确定
+
+        const url = 'api/user/users/'+this.user_id
+        let requestBody
+        //判断密码是否修改
+        if(this.compileUser.password){
+          requestBody = this.compileUser
+        }else{
+          requestBody = {
+            username: this.compileUser.username,
+            department: this.compileUser.department,
+            phone: this.compileUser.phone,
+            email: this.compileUser.email,
+            role: this.compileUser.role
+          }
+        }
+
+        this.$http.put(url,requestBody).then((res) => {
+         console.log(res.body)
+//        修改成功之后改变列表数据
+          for(var key in this.compileUser) {
+            this.queryResult[this.index][key] = this.compileUser[key]
+          }
+
+        },(err) => {
+         console.log('err',err)
+        })
+
 
       },
       compileCancel () {//取消编辑
@@ -221,13 +273,20 @@
       },
       createOk () {//确定创建用户
 
-        const url = 'http://mpc-test.syswin.com/api/user/users'
+        const url = 'api/user/users'
         let requestBody = this.createUser
+
+        requestBody.password = sha256(this.createUser.password + '!@#$%^').toString(crypto.enc.Hex)
+
         this.$http.post(url,requestBody).then((res) => {
           console.log(res.body.result)
+          //重新获取用户
+          this.getUser()
+
         },(err) => {
           console.log(err)
         })
+
         //配合假数据
 //        let date = new Date();
 //        let Y = date.getFullYear();
@@ -267,6 +326,13 @@
 
       },
       query () {
+        let user_name = this.query_info.user_name
+        let url = 'api/user/users'
+        this.$http.get(url,{params: {username: user_name}}).then((res) => {
+          console.log(res.body)
+        },(err) => {
+          console.log(err)
+        })
 
       },
       reset () {
@@ -281,18 +347,7 @@
     },
     created () {
       //获取用户
-      const url = this.url + '/api/user/users'
-      this.$http.get(url).then((res) => {
-//        console.log('用户信息',res.body)
-        res.body.result.res.forEach((item,index) => {
-          item.number = index + 1
-          this.queryResult.push(item)
-        })
-
-      },(err) => {
-//        console.log('err',err)
-      })
-
+      this.getUser()
 
 
     }
