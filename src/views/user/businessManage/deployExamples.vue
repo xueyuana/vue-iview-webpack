@@ -13,15 +13,11 @@
                         <Input v-model="formValidate.case_name" placeholder="请输入"></Input>
                     </Form-item>
                     </Col>
-                </Row>
-                <Row type="flex" justify="end">
-                    <Col span="24">
-                    <Form-item>
+                    <Col span="5">
                         <div class="inquire-form-query">
                             <Button type="primary" class="inquire-form-query-add" @click.native="goQuery">查询</Button>
                             <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
                         </div>
-                    </Form-item>
                     </Col>
                 </Row>
             </Form>
