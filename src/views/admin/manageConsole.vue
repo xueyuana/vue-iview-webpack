@@ -44,7 +44,8 @@
   }
 
   .survey .title {
-    background-color: #0AB7E9;
+    /*#0AB7E9;*/
+    background-color: #3F94FC;
     color: #fff;
     font-size: 14px;
     font-weight: 700;
@@ -127,7 +128,7 @@
                   },
                   itemStyle: {
                     normal: {
-                      color: '#D53A35'
+                      color: '#92BF65'
                     }
                   }
                 },
@@ -142,7 +143,7 @@
                   },
                   itemStyle: {
                     normal: {
-                      color: '#00AA00'
+                      color: '#5AD6F4'
                     }
                   }
                 }
@@ -195,7 +196,7 @@
                   },
                   itemStyle: {
                     normal: {
-                      color: '#D53A35'
+                      color: '#92BF65'
                     }
                   }
                 },
@@ -209,7 +210,7 @@
                   },
                   itemStyle: {
                     normal: {
-                      color: '#00AA00'
+                      color: '#5AD6F4'
                     }
                   }
                 }
@@ -261,7 +262,7 @@
                   },
                   itemStyle: {
                     normal: {
-                      color: '#D53A35'
+                      color: '#92BF65'
                     }
                   }
                 },
@@ -275,7 +276,7 @@
                   },
                   itemStyle: {
                     normal: {
-                      color: '#00AA00'
+                      color: '#5AD6F4'
                     }
                   }
                 }

@@ -185,11 +185,11 @@
   }
   .query-form {
     width: 100%;
-    border: 1px solid #e4e4e4;
+    border-bottom: 2px solid #EAEDF1;
     padding-bottom: 10px;
     padding-right: 15px;
-    background-image: linear-gradient(to bottom,#fff,#e4e4e4);
-    border-radius: 10px;
+    /*background-image: linear-gradient(to bottom,#fff,#e4e4e4);*/
+    /*border-radius: 10px;*/
   }
   .item {
     margin-bottom: 10px;
