@@ -8,7 +8,7 @@
         </div>
         <div class="item date-picker">
           <span class="title">申请日期</span>
-          <Date-picker type="daterange" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
+          <Date-picker type="datetimerange" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
         </div>
       </div>
       <div class="query">
@@ -59,7 +59,7 @@
       </div>
     </Modal>
     <div class="page">
-      <Page :total="100" @on-change="changePage"></Page>
+      <Page :total="data_length" @on-change="changePage"></Page>
     </div>
 
   </div>
@@ -74,7 +74,8 @@
   export default {
     data () {
       return {
-        url: 'http://mpc-test.syswin.com',
+        data_length: 0,
+        getResult: [],
         query_info: {
           user_name: '',
           applyDate: []
@@ -158,8 +159,21 @@
                   on: {
                     click: () => {
                       this.isCompile = true
+                      let rowDate = {}
                       for(var key in params.row) {
-                        this.compileUser[key] = params.row[key]
+                        rowDate[key] = params.row[key]
+                      }
+                      switch (rowDate.role) {
+                        case '管理员': rowDate.role = 'admin'
+                          break
+                        case '行政审批': rowDate.role = 'leader'
+                          break
+                        case '普通用户': rowDate.role = 'user'
+                          break
+                      }
+
+                      for(var key in rowDate) {
+                        this.compileUser[key] = rowDate[key]
                       }
                       this.index = params.index
                       this.user_id = params.row.id
@@ -178,7 +192,6 @@
                           content: '<p>确认删除吗？</p>',
                           onOk: () => {
 
-//                            this.queryResult.splice(params.index,1)
                             const url = 'api/user/users/' + params.row.id
                             this.$http.delete(url).then( (res) => {
                               console.log('删除用户',res.body)
@@ -217,12 +230,15 @@
     },
     methods: {
       getUser () {//获取用户
-        this.queryResult = []
+
+
         const url = 'api/user/users'
         this.$http.get(url).then((res) => {
+          this.data_length = res.body.result.res.length
 
           res.body.result.res.forEach((item,index) => {
             item.number = index + 1
+
             switch (item.role) {
               case 'admin': item.role = '管理员'
                 break
@@ -231,25 +247,22 @@
               case 'user': item.role = '普通用户'
                 break
             }
-            this.queryResult.push(item)
+
           })
+          this.getResult = res.body.result.res
+
+//          将返回的数据进行分页
+          this.queryResult = this.mockTableData(this.getResult,10,1)
 
         },(err) => {
-//        console.log('err',err)
+
         })
       },
-      compileOk () {//编辑后确定
+      compileOk () {//确定编辑
 
         const url = 'api/user/users/'+this.user_id
+
         let requestBody
-        switch (this.compileUser.role) {
-          case '管理员': this.compileUser.role = 'admin'
-            break
-          case '行政审批': this.compileUser.role = 'leader'
-            break
-          case '普通用户': this.compileUser.role = 'user'
-            break
-        }
 
         //判断密码是否修改
         if(this.compileUser.password){
@@ -263,7 +276,7 @@
             role: this.compileUser.role
           }
         }
-        console.log(requestBody)
+
         this.$http.put(url,requestBody).then((res) => {
          console.log(res.body)
 //        修改成功之后改变列表数据
@@ -278,6 +291,7 @@
 
       },
       compileCancel () {//取消编辑
+
 
       },
       createOk () {//确定创建用户
@@ -296,23 +310,8 @@
           console.log(err)
         })
 
-        //配合假数据
-//        let date = new Date();
-//        let Y = date.getFullYear();
-//        let M = date.getMonth()+1;
-//        let D = date.getDate()
-//        let h = date.getHours()
-//        let m = date.getMinutes()
-//        h = h<10? '0'+h:h
-//        m = m<10? '0'+m:m
-//        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m
-//        //创建的新用户
-//        let newUser = this.createUser
-//        newUser.createDate = applyDate
-//        newUser.number = 2
-//        this.queryResult.push(newUser)
-        //清空创建内容
         this.createUser = {
+
           userName: '',
           passWord: '',
           department: '',
@@ -334,30 +333,101 @@
         }
 
       },
-      query () {
+      query () {//查询
+
+        this.data_length = 0
+
         let user_name = this.query_info.user_name
+
+        let start_time = this.query_info.applyDate[0]
+
+        let end_time = this.query_info.applyDate[1]
+
+        console.log('start',start_time)
+        console.log('end',end_time)
+
+        let params = {}
+
+        user_name && (params.username = user_name)
+        start_time && (params.start_time = this.timeFormat(start_time))
+        end_time && (params.end_time = this.timeFormat(end_time))
+
         let url = 'api/user/users'
-        this.$http.get(url,{params: {username: user_name}}).then((res) => {
-          console.log(res.body)
+        this.$http.get(url,{params: params}).then((res) => {
+
+          this.data_length = res.body.result.res.length
+
+          res.body.result.res.forEach((item,index) => {
+            item.number = index +1
+
+            switch (item.role) {
+              case 'admin': item.role = '管理员'
+                break
+              case 'leader': item.role = '行政审批'
+                break
+              case 'user': item.role = '普通用户'
+                break
+            }
+
+          })
+          this.getResult = res.body.result.res
+          //进行分页
+          this.queryResult = this.mockTableData(this.getResult,10,1)
         },(err) => {
           console.log(err)
         })
 
+
+
       },
-      reset () {
+      reset () {//重置
+
         this.query_info = {
           user_name: '',
           applyDate: []
         }
       },
-      changePage () {
+      changePage (page) {//分页
 
+        this.queryResult = this.mockTableData(this.getResult, 10, page)
+
+      },
+      mockTableData (originData, pageSize, index) {
+
+        let data = [];
+
+        let num = (index - 1) * pageSize
+        let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize)
+
+        data = originData.slice(num,maxNum)
+
+        data.forEach((item,index) => {
+          item.created_time = item.created_time.slice(0,19)
+        })
+
+        return data;
+      },
+      timeFormat (date) {//时间格式化
+
+        let Y = date.getFullYear();
+        let M = date.getMonth()+1;
+        let D = date.getDate()
+        let h = date.getHours()
+        let m = date.getMinutes()
+        let s = date.getSeconds()
+        M = M<10?'0' + M:M
+        D = D<10?'0' + D:D
+        h = h<10?'0' + h:h
+        m = m<10? '0' + m:m
+        s = s<10? '0' + s:s
+
+        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m + ':' + s
+        return applyDate
       }
     },
     created () {
       //获取用户
       this.getUser()
-
 
     }
   }
@@ -376,7 +446,7 @@
   }
   .query-form {
     width: 100%;
-    height: 100px;
+    padding-bottom: 15px;
     border: 1px solid #e4e4e4;
     background-image: linear-gradient(to bottom,#fff,#e4e4e4);
     border-radius: 10px;

@@ -64,9 +64,6 @@
 
 <script>
   import Flow from './../../../components/common/flow.vue'
-  //引入sha256加密
-//  import crypto from 'crypto-js'
-//  import sha256 from 'crypto-js/sha256'
 
   export default {
     name: 'user-application',
@@ -139,17 +136,24 @@
     created () {
       let id = this.$route.query.id
       if(id === undefined) {
-//        console.log('没有传参数')
         return
       }else{
-        let informationArr = this.$store.state.userData.information
-        informationArr.forEach((item,index) => {
-          if(item.id == id){
-            this.resourceInformation = item.resourceInformation
-            this.serviceInformation = item.serviceInformation
-            this.id = id
+
+        this.resourceInformation = [
+          {
+
+            instance_name: '实例1',
+            vm_name: '虚拟机1',
+            az: '资源池1',
+            department: '测试部',
+            image_id: '',
+            flaver_id: '',
+            storage: '',
+            vm_num: 1
+
           }
-        })
+        ]
+
       }
 
     },
@@ -181,7 +185,6 @@
 
         this.$router.push({name: 'user_deployExample'})
 
-//        console.log(sha256)
       },
       sendInformation () { //提交信息
         let count = 0
@@ -208,27 +211,6 @@
 //        },(err) => {
 //          console.log(err)
 //        })
-
-
-
-//测试假数据使用
-        let date = new Date();
-        let Y = date.getFullYear();
-        let M = date.getMonth()+1;
-        let D = date.getDate()
-        let h = date.getHours()
-        let m = date.getMinutes()
-        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m
-
-        let information = {
-          resourceInformation: this.resourceInformation,
-          serviceInformation: this.business_info,
-          id: 'id0001',
-          applyDate: applyDate,
-          status: '审批中'
-        }
-
-        this.$store.commit('setInformation',information)
 
         this.$router.push({name: 'user_resourceQuery'})
       }
