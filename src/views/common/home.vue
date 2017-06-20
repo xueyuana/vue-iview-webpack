@@ -19,8 +19,7 @@
             <span>{{userInfo.department}}</span>
           </li>
           <li @click="toLogOut">
-            <span>退出</span>
-            <!--<a href="javascript:void(0);">退出</a>-->
+            <a href="javascript:void(0);">退出</a>
           </li>
         </ul>
       </div>
@@ -110,7 +109,7 @@
               </Submenu>
             </Menu>
           </i-col>
-          <i-col span="20" offset="4" class="right-col">
+          <i-col span="20" offset="4">
             <div class="layout-header">
               <Breadcrumb separator=">" v-if="$store.state.breadcrumbData.level.level_3">
                 <Breadcrumb-item href="#">{{ $store.state.breadcrumbData.level.level_1 }}</Breadcrumb-item>
@@ -173,8 +172,6 @@
   .uop-header .user-info li {
     height: 100%;
     float: left;
-    font-size:16px;
-    color:#777E8C;
     margin: 0 10px;
   }
 
@@ -218,13 +215,10 @@
   }
 
   .layout-menu-left {
-    background: #3F94FC;
+    background: #464c5b;
     color: #fff;
     min-height: 800px;
     position: fixed;
-  }
-  .right-col{
-    background:#F0F5FA;
   }
 
   .layout-header {
@@ -250,7 +244,7 @@
 
 </style>
 <script>
-  import {setStroage, getStroage, removeStroage} from 'tools/cookieAction.js';
+  import {getCookie, delCookie, setStroage, getStroage, removeStroage} from 'tools/cookieAction.js';
   import common from '../../tools/common.js';
   import {userinfo} from '../../tools/user.js';
 
@@ -264,8 +258,8 @@
       }
     },
     mounted () {
-      this.role = getStroage('role').role
-//      this.getUserInfo();
+      this.role = getCookie('role')
+      console.log('home用户权限', this.role)
     },
     methods: {
       // 获取用户名
@@ -295,8 +289,8 @@
       },
       // 退出登录
       toLogOut() {
-        removeStroage('userInfo');
-        removeStroage('role');
+
+        delCookie('role')
         console.log('我退出了')
         this.$router.push({path: '/login'});
       },
