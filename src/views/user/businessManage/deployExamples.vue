@@ -3,11 +3,7 @@
         <Row>
             <Col span="2" class="c_font">创建日期：</Col>
             <Col span="4">
-                <Date-picker type="date" placeholder="选择日期"></Date-picker>
-            </Col>
-            <Col span="1" class="c_font2">至</Col>
-            <Col span="4">
-                <Date-picker type="date" placeholder="选择日期"></Date-picker>
+                <Date-picker type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 200px"></Date-picker>
             </Col>
             <Col span="2" class="c_font">部署实例名称：</Col>
             <Col span="4">
@@ -17,13 +13,17 @@
         </Row>
         <div class="tjbssl">
             <Button @click="modal1 = true">添加部署实例</Button>
-            <Modal
-                v-model="modal1"
-                title="添加部署实例"
-                @on-ok="addmessage"
-                @on-cancel="cancel">
-                <p>名称：<Input v-model="createUser.name" placeholder="最多10个字符" style="width: 300px"></Input></p>
-            </Modal>
+            <Form ref="createUser" :model="createUser" :rules="ruleInline" inline>
+                <Modal
+                    v-model="modal1"
+                    title="添加部署实例"
+                    @on-ok="addmessage('createUser')"
+                    @on-cancel="cancel">
+                        <Form-item prop="name">
+                            <p>名称：<Input v-model="createUser.name" placeholder="最多10个字符" style="width: 300px"></Input></p>
+                        </Form-item>
+                </Modal>
+            </Form>
             <Modal
                 v-model="modal2"
                 title="编辑部署实例"
@@ -46,6 +46,11 @@
                 name: '',
                 number: '',
                 time: ''
+              },
+              ruleInline: {
+                  name: [
+                      { required: true, message: '请填写部署实例名称', trigger: 'blur' }
+                  ]
               },
               compileUser: {
                   name: '',
@@ -159,21 +164,29 @@
           remove (index) {
               this.data6.splice(index, 1);
           },
-          addmessage () {
-              var stamp = new Date(),
-                  year = stamp.getFullYear(),
-                  month = (stamp.getMonth() + 1) > 9 ? (stamp.getMonth() + 1) : '0' + (stamp.getMonth() + 1),
-                  day = stamp.getDate() > 9 ? stamp.getDate() : '0' + stamp.getDate(),
-                  hour = stamp.getHours() > 9 ? stamp.getHours() : '0' + stamp.getHours(),
-                  minute = stamp.getMinutes() > 9 ? stamp.getMinutes() : '0' + stamp.getMinutes(),
-                  sec = stamp.getSeconds() > 9 ? stamp.getSeconds() : '0' + stamp.getSeconds()
-              this.data6.push({
-                  name: this.createUser.name,
-                  number: '0',
-                  time: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec
-              });
-              console.log('333333');
-              this.$Message.info('添加成功');
+          addmessage (create_name) {
+              this.$refs[create_name].validate((valid) => {
+                  if (valid) {
+                        var stamp = new Date(),
+                            year = stamp.getFullYear(),
+                            month = (stamp.getMonth() + 1) > 9 ? (stamp.getMonth() + 1) : '0' + (stamp.getMonth() + 1),
+                            day = stamp.getDate() > 9 ? stamp.getDate() : '0' + stamp.getDate(),
+                            hour = stamp.getHours() > 9 ? stamp.getHours() : '0' + stamp.getHours(),
+                            minute = stamp.getMinutes() > 9 ? stamp.getMinutes() : '0' + stamp.getMinutes(),
+                            sec = stamp.getSeconds() > 9 ? stamp.getSeconds() : '0' + stamp.getSeconds()
+                        this.data6.push({
+                            name: this.createUser.name,
+                            number: '0',
+                            time: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec
+                        });
+                        this.createUser.name='';
+                        console.log('333333');
+                        this.$Message.info('添加成功');
+                  } else {
+                        this.modal1 = false;
+                        this.$Message.error('表单验证失败!');
+                  }
+              })
           },
           cancel () {
               this.$Message.info('点击了取消');
@@ -182,9 +195,7 @@
              for(var key in this.compileUser) {
                this.data6[this.index][key] = this.compileUser[key]
              }
-
               console.log('result',this.data6)
-
           }
       },
       computed: {}
