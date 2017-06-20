@@ -16,7 +16,7 @@
     <div class="contain" v-for="(item,index) in resourceInformation" :class="{border: index == 0?false:true}">
       <div class="item">
         <span class="title">虚拟机名称</span>
-        <Input v-model="item.virtualMachine" placeholder="请输入..." style="width: 200px"></Input>
+        <Input v-model="item.vm_name" placeholder="请输入..." style="width: 200px"></Input>
       </div>
       <div class="item">
         <span class="title">部门</span>
@@ -24,41 +24,41 @@
       </div>
       <div class="item">
         <span class="title">资源池选择</span>
-        <Select v-model="item.resourcePool" style="width:200px" :disabled="index ==0?false:true">
-          <Option v-for="item in resourcePool" :value="item.value" :key="item">{{ item.value }}</Option>
+        <Select v-model="item.az" style="width:200px" :disabled="index ==0?false:true">
+          <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
         </Select>
       </div>
       <div class="item example">
         <span class="title">部署实例</span>
-        <Select v-model="item.deployExample" style="width:200px" :disabled="index ==0?false:true">
-          <Option v-for="item in exampleList" :value="item.value" :key="item">{{ item.value }}</Option>
+        <Select v-model="item.instance_name" style="width:200px" :disabled="index ==0?false:true">
+          <Option v-for="item in instance_name" :value="item.value" :key="item">{{ item.value }}</Option>
         </Select>
         <Button type="dashed" class="add-example" :class="{hidden: index == 0?false:true}" @click="createExample">新建部署实例</Button>
       </div>
       <div class="item">
         <span class="title">镜像</span>
-        <Select v-model="item.mirrorImage" style="width:200px">
-          <Option v-for="item in mirrorImage" :value="item.value" :key="item">{{ item.value }}</Option>
+        <Select v-model="item.image_id" style="width:200px">
+          <Option v-for="item in mirrorImage" :value="item.id" :key="item">{{ item.image_name }}</Option>
         </Select>
       </div>
       <div class="item">
         <span class="title">规格</span>
-        <Select v-model="item.standard" style="width:200px">
-          <Option v-for="item in standard" :value="item.value" :key="item">{{ item.value }}</Option>
+        <Select v-model="item.flaver_id" style="width:200px">
+          <Option v-for="item in flaver" :value="item.flaver_id" :key="item">{{ item.cpu + '' + item.memory }}</Option>
         </Select>
       </div>
       <div class="item add-unit">
         <span class="title">存储空间</span>
-        <Input v-model="item.storageSpace" placeholder="最小单位G，最大500G" style="width: 200px"></Input>
+        <Input v-model="item.storage" placeholder="最小单位G，最大500G" style="width: 200px"></Input>
         <span class="unit">G</span>
       </div>
       <div class="item">
         <span class="title">数量</span>
-        <Input-number :max="10" :min="0" v-model="item.count"></Input-number>
+        <Input-number :max="10" :min="0" v-model="item.vm_num"></Input-number>
       </div>
     </div>
     <div class="header">业务信息</div>
-    <Input class="comment" v-model="serviceInfo" type="textarea" :maxlength="500" :rows=6 placeholder="请输入..."></Input>
+    <Input class="comment" v-model="business_info" type="textarea" :maxlength="500" :rows=6 placeholder="请输入..."></Input>
   </div>
 </template>
 
@@ -74,17 +74,17 @@
       return {
         resourceInformation: [{
 
-          deployExample: '',
-          virtualMachine: '',
-          resourcePool: '',
+          instance_name: '',
+          vm_name: '',
+          az: '',
           department: '',
-          mirrorImage: '',
-          standard: '',
-          storageSpace: '',
-          count: 0
+          image_id: '',
+          flaver_id: '',
+          storage: '',
+          vm_num: 0
 
         }],
-        exampleList: [
+        instance_name: [
           {
             value: '部署实例1'
           },
@@ -92,31 +92,47 @@
             value: '部署实例2'
           }
         ],
-        resourcePool:[
+        az:[//资源池
           {
-            value: 'DMZ'
+            az_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
+            az_name: "资源池1",
           },
           {
-            value: '互联网资源池'
+            az_id : "03b8acba-3c6c-11e7-826c-fa163e9474c1",
+            az_name: "资源池2",
           }
         ],
-        standard: [
+        flaver: [//虚机规格
           {
-            value: '2C4G'
+            flaver_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
+            flaver_name: "flaver1",
+            cpu : "3c",
+            memory: "4g"
           },
           {
-            value: '4C8G'
+            flaver_id : "03b8acba-3c6c-11e7-826c-fa163e9474c2",
+            flaver_name: "flaver2",
+            cpu : "2c",
+            memory: "4g"
           }
         ],
-        mirrorImage: [
+        mirrorImage: [//镜像
           {
-            value: 'Centos 7.2'
+            id: "xxxx-xxxx-xxxx-xxxx",
+            image_name: "镜像名称1",
+            image_size : 1024000,
+            image_format : "qcow2",
+            created_time : "2017-06-07 11:05:10"
           },
           {
-            value: 'Ubuntu 15.01'
+            id: "xxxx-xxxx-xxxx-xxxx",
+            image_name: "镜像名称2",
+            image_size : 1024000,
+            image_format : "qcow2",
+            created_time : "2017-06-07 11:05:10"
           }
         ],
-        serviceInfo: ''
+        business_info: ''
 
       }
     },
@@ -141,7 +157,7 @@
       addInformation () {//添加虚机
         let count = 0
         this.resourceInformation.forEach((item, index) => {
-          count += item.count
+          count += item.vm_num
         })
         if(count >=10){
           this.$Notice.open({
@@ -149,28 +165,28 @@
           })
           return
         }
+
         this.resourceInformation.push({
-          deployExample: this.resourceInformation[0].deployExample,
-          virtualMachine: '',
-          resourcePool: this.resourceInformation[0].resourcePool,
+          instance_name: this.resourceInformation[0].instance_name,
+          vm_name: '',
+          az: this.resourceInformation[0].az,
           department: '',
-          mirrorImage: '',
-          standard: '',
-          storageSpace: '',
-          count: 0
+          image_id: '',
+          flaver_id: '',
+          storage: '',
+          vm_num: 0
         })
       },
       createExample () {//跳转新建部署实例
 
         this.$router.push({name: 'user_deployExample'})
-//        const user = 'a'
-//        console.log(this.$sha256(user).toString(crypto.enc.Hex))
+
 //        console.log(sha256)
       },
       sendInformation () { //提交信息
         let count = 0
         this.resourceInformation.forEach((item, index) => {
-          count += item.count
+          count += item.vm_num
         })
         if(count >10){
           this.$Notice.open({
@@ -182,9 +198,17 @@
 //        let requestBody = {
 //          user_name: '用户名',
 //          user_id: 'id',
-//          business_info: this.serviceInfo
+//          business_info: this.business_info,
+//          vmlist: this.resourceInformation
 //        }
+//        const url = '/uop/api/resource/resources'
 //
+//        this.$http.post(url,requestBody).then((res) => {
+//          console.log(res)
+//        },(err) => {
+//          console.log(err)
+//        })
+
 
 
 //测试假数据使用
@@ -198,7 +222,7 @@
 
         let information = {
           resourceInformation: this.resourceInformation,
-          serviceInformation: this.serviceInfo,
+          serviceInformation: this.business_info,
           id: 'id0001',
           applyDate: applyDate,
           status: '审批中'

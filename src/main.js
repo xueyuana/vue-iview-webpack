@@ -22,6 +22,7 @@ import VueResource from 'vue-resource'
 Vue.use(VueResource)
 Vue.http.options.root = 'http://mpc-test.syswin.com'
 
+
 // 导入字体图标库
 import 'font-awesome/less/font-awesome.less'
 

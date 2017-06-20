@@ -4,16 +4,16 @@
       <div class="queryInformation">
         <div class="item">
           <span class="title">用户名</span>
-          <Input v-model="value" placeholder="请输入..." style="width: 300px"></Input>
+          <Input v-model="query_info.user_name" placeholder="请输入..." style="width: 300px"></Input>
         </div>
         <div class="item date-picker">
           <span class="title">申请日期</span>
-          <Date-picker type="daterange"  placeholder="选择日期" style="width: 300px"></Date-picker>
+          <Date-picker type="daterange" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
         </div>
       </div>
       <div class="query">
-        <Button type="primary" >查询</Button>
-        <Button class="reset" type="ghost" >重置</Button>
+        <Button type="primary" @click="query">查询</Button>
+        <Button class="reset" type="ghost" @click="reset">重置</Button>
       </div>
     </div>
     <div class="createUser">
@@ -25,14 +25,14 @@
           @on-ok="createOk"
           @on-cancel="createCancel">
         <div class="createWrap">
-          <span class="modal-title">用户名：</span><Input v-model="createUser.userName" placeholder="请输入..." style="width: 200px"></Input>
-          <span class="modal-title">密码：</span><Input v-model="createUser.passWord" placeholder="请输入..." style="width: 200px"></Input>
+          <span class="modal-title">用户名：</span><Input v-model="createUser.username" placeholder="请输入..." style="width: 200px"></Input>
+          <span class="modal-title">密码：</span><Input v-model="createUser.password" placeholder="请输入..." style="width: 200px"></Input>
           <span class="modal-title">部门：</span><Input v-model="createUser.department" placeholder="请输入..." style="width: 200px"></Input>
           <span class="modal-title">手机：</span><Input v-model="createUser.phone" placeholder="请输入..." style="width: 200px"></Input>
           <span class="modal-title">邮箱：</span><Input v-model="createUser.email" placeholder="请输入..." style="width: 200px"></Input>
           <span class="modal-title">角色:</span>
           <Select v-model="createUser.role" style="width:196px">
-            <Option v-for="item in roleList" :value="item.value" :key="item">{{ item.value }}</Option>
+            <Option v-for="item in roleList" :value="item.key" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
       </Modal>
@@ -47,20 +47,19 @@
         @on-ok="compileOk"
         @on-cancel="compileCancel">
       <div class="createWrap">
-        <span class="modal-title">用户名：</span><Input v-model="compileUser.userName" placeholder="请输入..." style="width: 200px"></Input>
-        <span class="modal-title">密码：</span><Input v-model="compileUser.passWord" placeholder="请输入..." style="width: 200px"></Input>
+        <span class="modal-title">用户名：</span><Input v-model="compileUser.username" placeholder="请输入..." style="width: 200px"></Input>
+        <span class="modal-title">密码：</span><Input v-model="compileUser.password" placeholder="请输入..." style="width: 200px"></Input>
         <span class="modal-title">部门：</span><Input v-model="compileUser.department" placeholder="请输入..." style="width: 200px"></Input>
         <span class="modal-title">手机：</span><Input v-model="compileUser.phone" placeholder="请输入..." style="width: 200px"></Input>
         <span class="modal-title">邮箱：</span><Input v-model="compileUser.email" placeholder="请输入..." style="width: 200px"></Input>
         <span class="modal-title">角色:</span>
         <Select v-model="compileUser.role" style="width:196px">
-          <Option v-for="item in roleList" :value="item.value" :key="item">{{ item.value }}</Option>
+          <Option v-for="item in roleList" :value="item.key" :key="item">{{ item.value }}</Option>
         </Select>
       </div>
     </Modal>
     <div class="page">
-      <Button class="pre">上一页</Button>
-      <Button>下一页</Button>
+      <Page :total="100" @on-change="changePage"></Page>
     </div>
 
   </div>
@@ -68,82 +67,50 @@
 
 </template>
 <script>
+
+  //引入sha256加密
+    import crypto from 'crypto-js'
+    import sha256 from 'crypto-js/sha256'
   export default {
     data () {
       return {
+        url: 'http://mpc-test.syswin.com',
+        query_info: {
+          user_name: '',
+          applyDate: []
+        },
         isCreate: false,
-        value: '',
         isCompile: false,
         index: '',
+        user_id: '',
         createUser: {
-          userName: '',
-          passWord: '',
+          username: '',
+          password: '',
           department: '',
           phone: '',
           email: '',
           role: ''
         },
         compileUser: {
-          userName: '',
-          passWord: '',
+          username: '',
+          password: '',
           department: '',
           phone: '',
           email: '',
           role: ''
         },
-        status: [
-          {
-            value: '运行',
-          },
-          {
-            value: '关机'
-          },
-          {
-            value: '异常'
-          }
-        ],
-        deployExample: [
-          {
-            value: '实例1'
-          },
-          {
-            value: '实例2'
-          }
-        ],
-        resourcePool: [
-          {
-            value: '资源池1',
-          },
-          {
-            value: '资源池2'
-          }
-        ],
-        approvalStatus: [
-          {
-            value: 'VNC'
-          },
-          {
-            value: '启动'
-          },
-          {
-            value: '重启'
-          },
-          {
-            value: '关机'
-          },
-          {
-            value: '删除'
-          }
-        ],
         roleList: [
           {
-            value: '普通用户'
+            value: '普通用户',
+            key: 'user'
           },
           {
-            value: '管理员'
+            value: '管理员',
+            key: 'admin'
           },
           {
-            value: '行政审批'
+            value: '行政审批',
+            key: 'leader'
           }
         ],
         columns: [
@@ -153,7 +120,7 @@
           },
           {
             title: '用户名',
-            key: 'userName'
+            key: 'username'
           },
           {
             title: '手机',
@@ -173,7 +140,7 @@
           },
           {
             title: '创建日期',
-            key: 'createDate'
+            key: 'created_time'
           },
           {
             title: '操作',
@@ -195,6 +162,7 @@
                         this.compileUser[key] = params.row[key]
                       }
                       this.index = params.index
+                      this.user_id = params.row.id
                     }
                   }
                 },'编辑'),
@@ -209,7 +177,17 @@
                           title: '确认',
                           content: '<p>确认删除吗？</p>',
                           onOk: () => {
-                            this.queryResult.splice(params.index,1)
+
+//                            this.queryResult.splice(params.index,1)
+                            const url = 'api/user/users/' + params.row.id
+                            this.$http.delete(url).then( (res) => {
+                              console.log('删除用户',res.body)
+                              //重新获取用户
+                              this.getUser()
+                            },(err) => {
+                              console.log('err',err)
+                            })
+
                           },
                           onCancel: () => {
                             console.log('取消')
@@ -224,47 +202,116 @@
           }
         ],
         queryResult: [
-          {
-            number: 1,
-            userName: '用户1',
-            phone: '188',
-            email: '@xx.com',
-            role: '用户',
-            department: '部门1',
-            createDate: '2017',
-            operate: ''
-          }
+//          {
+//            number: 1,
+//            username: '用户1',
+//            phone: '188',
+//            email: '@xx.com',
+//            role: '用户',
+//            department: '部门1',
+//            created_time: '2017'
+//          }
         ]
 
       }
     },
     methods: {
-      compileOk () {//编辑后确定
-       for(var key in this.compileUser) {
-         this.queryResult[this.index][key] = this.compileUser[key]
-       }
+      getUser () {//获取用户
+        this.queryResult = []
+        const url = 'api/user/users'
+        this.$http.get(url).then((res) => {
 
-        console.log('result',this.queryResult)
+          res.body.result.res.forEach((item,index) => {
+            item.number = index + 1
+            switch (item.role) {
+              case 'admin': item.role = '管理员'
+                break
+              case 'leader': item.role = '行政审批'
+                break
+              case 'user': item.role = '普通用户'
+                break
+            }
+            this.queryResult.push(item)
+          })
+
+        },(err) => {
+//        console.log('err',err)
+        })
+      },
+      compileOk () {//编辑后确定
+
+        const url = 'api/user/users/'+this.user_id
+        let requestBody
+        switch (this.compileUser.role) {
+          case '管理员': this.compileUser.role = 'admin'
+            break
+          case '行政审批': this.compileUser.role = 'leader'
+            break
+          case '普通用户': this.compileUser.role = 'user'
+            break
+        }
+
+        //判断密码是否修改
+        if(this.compileUser.password){
+          requestBody = this.compileUser
+        }else{
+          requestBody = {
+            username: this.compileUser.username,
+            department: this.compileUser.department,
+            phone: this.compileUser.phone,
+            email: this.compileUser.email,
+            role: this.compileUser.role
+          }
+        }
+        console.log(requestBody)
+        this.$http.put(url,requestBody).then((res) => {
+         console.log(res.body)
+//        修改成功之后改变列表数据
+          for(var key in this.compileUser) {
+            this.queryResult[this.index][key] = this.compileUser[key]
+          }
+
+        },(err) => {
+         console.log('err',err)
+        })
+
 
       },
       compileCancel () {//取消编辑
 
       },
-      createOk () {
-        let date = new Date();
-        let Y = date.getFullYear();
-        let M = date.getMonth()+1;
-        let D = date.getDate()
-        let h = date.getHours()
-        let m = date.getMinutes()
-        h = h<10? '0'+h:h
-        m = m<10? '0'+m:m
-        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m
-        //创建的新用户
-        let newUser = this.createUser
-        newUser.createDate = applyDate
-        newUser.number = 2
-        this.queryResult.push(newUser)
+      createOk () {//确定创建用户
+
+        const url = 'api/user/users'
+        let requestBody = this.createUser
+
+        requestBody.password = sha256(this.createUser.password + '!@#$%^').toString(crypto.enc.Hex)
+
+        this.$http.post(url,requestBody).then((res) => {
+          console.log(res.body.result)
+          //重新获取用户
+          this.getUser()
+
+        },(err) => {
+          console.log(err)
+        })
+
+        //配合假数据
+//        let date = new Date();
+//        let Y = date.getFullYear();
+//        let M = date.getMonth()+1;
+//        let D = date.getDate()
+//        let h = date.getHours()
+//        let m = date.getMinutes()
+//        h = h<10? '0'+h:h
+//        m = m<10? '0'+m:m
+//        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m
+//        //创建的新用户
+//        let newUser = this.createUser
+//        newUser.createDate = applyDate
+//        newUser.number = 2
+//        this.queryResult.push(newUser)
+        //清空创建内容
         this.createUser = {
           userName: '',
           passWord: '',
@@ -275,7 +322,7 @@
         }
 
       },
-      createCancel () {
+      createCancel () {//创建用户取消
         //清空
         this.createUser = {
           userName: '',
@@ -286,7 +333,32 @@
           role: ''
         }
 
+      },
+      query () {
+        let user_name = this.query_info.user_name
+        let url = 'api/user/users'
+        this.$http.get(url,{params: {username: user_name}}).then((res) => {
+          console.log(res.body)
+        },(err) => {
+          console.log(err)
+        })
+
+      },
+      reset () {
+        this.query_info = {
+          user_name: '',
+          applyDate: []
+        }
+      },
+      changePage () {
+
       }
+    },
+    created () {
+      //获取用户
+      this.getUser()
+
+
     }
   }
 
@@ -337,7 +409,7 @@
   .page {
     display: flex;
     justify-content: flex-end;
-    margin-top: 10px;
+    margin-top: 20px;
   }
   .pre {
     margin-right: 20px;
