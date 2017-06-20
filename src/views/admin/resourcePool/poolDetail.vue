@@ -65,7 +65,7 @@
                 <Button type="primary" @click.native="onInquire">查询</Button>
               </Col>
               <Col span="2">
-                <Button type="primary" @click.native="onInquire">重置</Button>
+                <Button type="ghost" @click.native="onInquire">重置</Button>
               </Col>
             </Row>
           </Form>
@@ -94,7 +94,8 @@
   }
 
   .survey .title {
-    background-color: #0AB7E9;
+    /*#0AB7E9;*/
+    background-color: #3F94FC;
     color: #fff;
     font-size: 14px;
     font-weight: 700;
@@ -274,7 +275,7 @@
                   },
                   itemStyle: {
                     normal: {
-                      color: '#D53A35'
+                      color: '#92BF65'
                     }
                   }
                 },
@@ -289,7 +290,7 @@
                   },
                   itemStyle: {
                     normal: {
-                      color: '#00AA00'
+                      color: '#5AD6F4'
                     }
                   }
                 }
@@ -342,7 +343,7 @@
                   },
                   itemStyle: {
                     normal: {
-                      color: '#D53A35'
+                      color: '#92BF65'
                     }
                   }
                 },
@@ -356,7 +357,7 @@
                   },
                   itemStyle: {
                     normal: {
-                      color: '#00AA00'
+                      color: '#5AD6F4'
                     }
                   }
                 }
@@ -408,7 +409,7 @@
                   },
                   itemStyle: {
                     normal: {
-                      color: '#D53A35'
+                      color: '#92BF65'
                     }
                   }
                 },
@@ -422,7 +423,7 @@
                   },
                   itemStyle: {
                     normal: {
-                      color: '#00AA00'
+                      color: '#5AD6F4'
                     }
                   }
                 }
