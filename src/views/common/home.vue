@@ -294,7 +294,7 @@
     text-align: center;
     height: 50px;
     /*#5cadff #C61E00 #0966CD @menu-dark-active-bg*/
-    background: #5cadff;
+    background: #0966CD;
     margin-bottom: 15px;
     color: #fff;
     cursor: pointer;
