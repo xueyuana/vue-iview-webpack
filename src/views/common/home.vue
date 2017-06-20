@@ -136,7 +136,7 @@
 
 </template>
 
-<style scoped>
+<style lang="less" scoped>
   /*@import "../../static/mytheme/mytheme.less";*/
   .uop-header {
     height: 80px;
@@ -244,8 +244,8 @@
   }
   .layout-menu-left .ivu-icon{
     vertical-align: bottom;
-    width:22px;
-    height:22px;
+    width:20px;
+    height:20px;
   }
   .layout-menu-left .icon-system{
     background:url("../../static/icon-system.png") no-repeat;
