@@ -31,7 +31,7 @@
       </Form>
     </div>
     <div class="inquire-table">
-      <div class="inquire-table-title">日志列表：</div>
+      <div class="inquire-table-title">日志列表</div>
       <Table :columns="columns" :data="dataDemo" stripe class="inquire-table-tb"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">

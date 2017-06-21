@@ -2,7 +2,7 @@
   <div class="rsource-approval">
     <div class="approval-button">
       <Button class="apply-button-item"
-              type="info"
+              type="primary"
               v-for="(item, index) in funcBtns"
               @click="onLink(index)">{{item}}
       </Button>

@@ -1,6 +1,6 @@
 <template>
   <div class="page-changePwd">
-    <div class="cp_title">修改密码</div>
+    <div class="sub-title cp_title">修改密码</div>
     <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
       <Row type="flex" justify="start">
         <Col span="8">
@@ -25,14 +25,7 @@
 
 <style scoped>
   .cp_title{
-    width: 100%;
-    height: 20px;
-    padding-left: 5px;
-    background-color: #f2f2f2;
-    font-size: 14px;
-    line-height: 20px;
     margin-bottom: 40px;
-    color:#000;
   }
   .btnCss{
     text-align: right;
