@@ -12,7 +12,7 @@
         <Step title="审批完成" ></Step>
       </Steps>
     </div>
-    <div class="header">资源信息</div>
+    <div class="inquire-table-title">资源信息</div>
     <div class="contain" v-for="(item,index) in resourceInformation" :class="{border: index == 0?false:true}">
       <div class="item">
         <span class="title">虚拟机名称</span>
@@ -57,7 +57,7 @@
         <Input-number :max="10" :min="0" v-model="item.vm_num"></Input-number>
       </div>
     </div>
-    <div class="header">业务信息</div>
+    <div class="inquire-table-title">业务信息</div>
     <Input class="comment" v-model="business_info" type="textarea" :maxlength="500" :rows=6 placeholder="请输入..."></Input>
   </div>
 </template>
@@ -235,23 +235,13 @@
     width: 70%;
     margin: 30px auto;
   }
-  .header{
-    padding-left:10px;
-    height: 30px;
-    width: 100%;
-    background-color: #f2f2f2;
-    line-height: 30px;
-    font-weight: 700;
-    font-size: 18px;
-    margin-bottom: 15px;
-  }
   .contain {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    padding-top: 30px;
-    margin-bottom: 20px;
+    /*padding-top: 30px;*/
+    /*margin-bottom: 20px;*/
 
   }
   .item {

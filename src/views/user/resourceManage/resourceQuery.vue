@@ -25,10 +25,10 @@
 
       </div>
     </div>
-    <div class="header">申请资源列表：</div>
-    <Table border :columns="columns" :data="queryResult"></Table>
+    <div class="inquire-table-title">申请资源列表：</div>
+    <Table border stripe :columns="columns" :data="queryResult"></Table>
     <div class="page">
-      <Page :total="100" @on-change="changePage"></Page>
+      <Page :total="100" show-sizer @on-change="changePage"></Page>
     </div>
 
   </div>
@@ -186,10 +186,8 @@
   .query-form {
     width: 100%;
     border-bottom: 2px solid #EAEDF1;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     padding-right: 15px;
-    /*background-image: linear-gradient(to bottom,#fff,#e4e4e4);*/
-    /*border-radius: 10px;*/
   }
   .item {
     margin-bottom: 10px;
@@ -220,9 +218,6 @@
   }
   .pre {
     margin-right: 20px;
-  }
-  .header {
-    margin: 30px 0 10px;
   }
   .ghost {
     margin-left: 20px;

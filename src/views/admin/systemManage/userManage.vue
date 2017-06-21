@@ -1,6 +1,6 @@
 <template>
   <div class="my-resource">
-    <div class="query-form">
+    <div class="query-form inquire-form">
       <div class="queryInformation">
         <div class="item">
           <span class="title">用户名</span>
@@ -16,6 +16,7 @@
         <Button class="reset" type="ghost" @click="reset">重置</Button>
       </div>
     </div>
+    <div class="inquire-table-title">用户列表：</div>
     <div class="createUser">
       <Button @click="isCreate = true" type="primary" >创 建</Button>
       <Modal
@@ -36,10 +37,8 @@
           </Select>
         </div>
       </Modal>
-
     </div>
-    <div class="header">用户列表：</div>
-    <Table border :columns="columns" :data="queryResult"></Table>
+    <Table border stripe :columns="columns" :data="queryResult"></Table>
     <Modal
         v-model="isCompile"
         title="用户信息"
@@ -59,7 +58,7 @@
       </div>
     </Modal>
     <div class="page">
-      <Page :total="data_length" @on-change="changePage" :current="current_page"></Page>
+      <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
     </div>
 
   </div>
@@ -76,7 +75,8 @@
       return {
         data_length: 0,
         current_page: 1,
-        getResult: [],
+        page_size: 10,
+        getResult: [],//获取的全部数据
         query_info: {
           user_name: '',
           applyDate: []
@@ -232,13 +232,12 @@
     methods: {
       getUser () {//获取用户
 
-
         const url = 'api/user/users'
         this.$http.get(url).then((res) => {
 
           this.data_length = res.body.result.res.length
 
-//          this.current_page = 1
+          this.current_page = 1
 
           res.body.result.res.forEach((item,index) => {
             item.number = index + 1
@@ -256,7 +255,7 @@
           this.getResult = res.body.result.res
 
 //          将返回的数据进行分页
-          this.queryResult = this.mockTableData(this.getResult,10,1)
+          this.queryResult = this.mockTableData(this.getResult,this.page_size,1)
 
         },(err) => {
 
@@ -386,7 +385,7 @@
           })
           this.getResult = res.body.result.res
           //进行分页
-          this.queryResult = this.mockTableData(this.getResult,10,1)
+          this.queryResult = this.mockTableData(this.getResult,this.page_size,1)
         },(err) => {
 
           console.log(err)
@@ -410,11 +409,11 @@
       },
       changePage (page) {//分页
 
-        this.queryResult = this.mockTableData(this.getResult, 10, page)
+        this.queryResult = this.mockTableData(this.getResult, this.page_size, page)
         this.current_page = page
 
       },
-      mockTableData (originData, pageSize, index) {
+      mockTableData (originData, pageSize, index) {//进行分页
 
         let data = [];
 
@@ -445,6 +444,13 @@
 
         let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m + ':' + s
         return applyDate
+      },
+      page_size_change (page_size) {
+
+        this.page_size = page_size
+
+        this.queryResult = this.mockTableData(this.getResult,this.page_size,1)
+
       }
     },
     created () {
@@ -468,10 +474,7 @@
   }
   .query-form {
     width: 100%;
-    padding-bottom: 15px;
-    border: 1px solid #e4e4e4;
-    background-image: linear-gradient(to bottom,#fff,#e4e4e4);
-    border-radius: 10px;
+    padding-bottom: 20px;
   }
   .date-picker {
     display: flex;
@@ -516,7 +519,7 @@
 
   }
   .createUser {
-    margin-top: 30px;
+    margin-bottom: 20px;
   }
   .createWrap {
     height: 240px;
