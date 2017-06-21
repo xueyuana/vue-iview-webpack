@@ -1,32 +1,38 @@
 <template>
-  <div class="operation">
-    <div class="operation-form">
+  <div class="inquire">
+    <div class="inquire-form">
       <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="70">
         <Row>
           <Col span="5">
             <Form-item label="日期:" prop="start_time">
-              <Date-picker type="daterange" placement="bottom-end" format="yyyy-MM-dd" placeholder="选择日期" v-model="formValidate.start_time" @on-change="formatCreateData"></Date-picker>
+              <Date-picker type="daterange" format="yyyy-MM-dd" placeholder="选择日期" v-model="formValidate.start_time" @on-change="formatCreateData"></Date-picker>
             </Form-item>
           </Col>
-          <Col span="5">
+          <Col span="7">
             <Form-item label="关键字:" prop="key_name">
               <Input v-model="formValidate.key_name" placeholder="请输入"></Input>
             </Form-item>
           </Col>
-        </Row>
-        <Row type="flex" justify="end">
-          <Col span="24" style="min-height: 20px">
-          <div class="operation-form-query">
-            <Button type="primary" class="operation-form-query-add" @click.native="goQuery">查询</Button>
-            <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
-          </div>
+          <Col span="5">
+            <div class="inquire-form-query">
+              <Button type="primary" class="inquire-form-query-add" @click.native="goQuery">查询</Button>
+              <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
+            </div>
           </Col>
         </Row>
+        <!--<Row type="flex" justify="end">-->
+          <!--<Col span="24" style="min-height: 20px">-->
+          <!--<div class="operation-form-query">-->
+            <!--<Button type="primary" class="operation-form-query-add" @click.native="goQuery">查询</Button>-->
+            <!--<Button type="ghost" @click="handleReset('formValidate')">重置</Button>-->
+          <!--</div>-->
+          <!--</Col>-->
+        <!--</Row>-->
       </Form>
     </div>
-    <div class="operation-table">
-      <div>日志列表：</div>
-      <Table border :columns="columns" :data="dataDemo"></Table>
+    <div class="inquire-table">
+      <div class="inquire-table-title">日志列表</div>
+      <Table :columns="columns" :data="dataDemo" stripe class="inquire-table-tb"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
           <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
@@ -36,36 +42,8 @@
   </div>
 </template>
 
-<style lang="less" scoped>
-  .operation {
-    margin-top: 30px;
-    &-form {
-       padding: 15px;
-       background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);
-       border: 1px solid rgb(228, 228, 228);
-       border-radius: 10px;
-        &-project_name {
-           width: 30%;
-         }
-        &-virtual {
-           label {
-             width:80px;
-           }
-         }
-        &-query {
-           width: 100%;
-           display: flex;
-           justify-content: flex-end;
-           box-sizing: border-box;
-        &-add{
-           margin-right: 10px;
-         }
-        }
-    }
-    &-table {
-       padding: 20px 20px;
-     }
-  }
+<style lang="less">
+  /*@import "../../static/css/common.less";*/
 </style>
 
 <script>

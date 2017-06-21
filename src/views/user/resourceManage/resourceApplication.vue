@@ -12,7 +12,7 @@
         <Step title="审批完成" ></Step>
       </Steps>
     </div>
-    <div class="header">资源信息</div>
+    <div class="inquire-table-title">资源信息</div>
     <div class="contain" v-for="(item,index) in resourceInformation" :class="{border: index == 0?false:true}">
       <div class="item">
         <span class="title">虚拟机名称</span>
@@ -57,16 +57,13 @@
         <Input-number :max="10" :min="0" v-model="item.vm_num"></Input-number>
       </div>
     </div>
-    <div class="header">业务信息</div>
+    <div class="inquire-table-title">业务信息</div>
     <Input class="comment" v-model="business_info" type="textarea" :maxlength="500" :rows=6 placeholder="请输入..."></Input>
   </div>
 </template>
 
 <script>
   import Flow from './../../../components/common/flow.vue'
-  //引入sha256加密
-//  import crypto from 'crypto-js'
-//  import sha256 from 'crypto-js/sha256'
 
   export default {
     name: 'user-application',
@@ -139,17 +136,24 @@
     created () {
       let id = this.$route.query.id
       if(id === undefined) {
-//        console.log('没有传参数')
         return
       }else{
-        let informationArr = this.$store.state.userData.information
-        informationArr.forEach((item,index) => {
-          if(item.id == id){
-            this.resourceInformation = item.resourceInformation
-            this.serviceInformation = item.serviceInformation
-            this.id = id
+
+        this.resourceInformation = [
+          {
+
+            instance_name: '实例1',
+            vm_name: '虚拟机1',
+            az: '资源池1',
+            department: '测试部',
+            image_id: '',
+            flaver_id: '',
+            storage: '',
+            vm_num: 1
+
           }
-        })
+        ]
+
       }
 
     },
@@ -180,9 +184,7 @@
       createExample () {//跳转新建部署实例
 
         this.$router.push({name: 'user_deployExample'})
-//        const user = 'a'
-//        console.log(this.$sha256(user).toString(crypto.enc.Hex))
-//        console.log(sha256)
+
       },
       sendInformation () { //提交信息
         let count = 0
@@ -210,27 +212,6 @@
 //          console.log(err)
 //        })
 
-
-
-//测试假数据使用
-        let date = new Date();
-        let Y = date.getFullYear();
-        let M = date.getMonth()+1;
-        let D = date.getDate()
-        let h = date.getHours()
-        let m = date.getMinutes()
-        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m
-
-        let information = {
-          resourceInformation: this.resourceInformation,
-          serviceInformation: this.business_info,
-          id: 'id0001',
-          applyDate: applyDate,
-          status: '审批中'
-        }
-
-        this.$store.commit('setInformation',information)
-
         this.$router.push({name: 'user_resourceQuery'})
       }
     }
@@ -254,23 +235,13 @@
     width: 70%;
     margin: 30px auto;
   }
-  .header{
-    padding-left:10px;
-    height: 30px;
-    width: 100%;
-    background-color: #f2f2f2;
-    line-height: 30px;
-    font-weight: 700;
-    font-size: 18px;
-    margin-bottom: 15px;
-  }
   .contain {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    padding-top: 30px;
-    margin-bottom: 20px;
+    /*padding-top: 30px;*/
+    /*margin-bottom: 20px;*/
 
   }
   .item {

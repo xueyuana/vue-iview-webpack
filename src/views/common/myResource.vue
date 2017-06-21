@@ -1,31 +1,31 @@
 <template>
   <div class="my-resource">
-    <div class="query-form">
+    <div class="query-form inquire-form">
       <div class="queryInformation">
         <div class="item date-picker">
-          <span class="title">申请日期</span>
+          <span class="title">申请日期:</span>
           <Date-picker type="daterange" v-model="query_info.applyDate"  placeholder="选择日期" style="width: 200px"></Date-picker>
         </div>
         <div class="item">
-          <span class="title">虚拟机名称</span>
+          <span class="title">虚拟机名称:</span>
           <Input v-model="query_info.vm_name" placeholder="请输入..." style="width: 200px"></Input>
         </div>
 
         <div class="item">
-          <span class="title">资源池</span>
+          <span class="title">资源池:</span>
           <Select v-model="query_info.az" style="width:200px">
             <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
           </Select>
         </div>
 
         <div class="item">
-          <span class="title">状态</span>
+          <span class="title">状态:</span>
           <Select v-model="query_info.status" style="width:200px">
             <Option v-for="item in status" :value="item.value" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
         <div class="item">
-          <span class="title">部署实例</span>
+          <span class="title">部署实例:</span>
           <Select v-model="query_info.instance_name" style="width:200px">
             <Option v-for="item in deployExample" :value="item.value" :key="item" >{{ item.value }} </Option>
           </Select>
@@ -36,7 +36,7 @@
         <Button class="reset" type="ghost" @click="reset">重置</Button>
       </div>
     </div>
-    <div class="header">资源列表：</div>
+    <div class="inquire-table-title">资源列表</div>
     <table>
       <thead>
         <tr>
@@ -44,7 +44,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item,index) in queryResult" >
+        <tr v-for="(item,index) in queryResult" :class="{bac: index%2 != 0}">
           <td>{{index + 1}}</td>
           <td>{{item.virtualMachine}}</td>
           <td>{{item.deployExample}}</td>
@@ -71,7 +71,7 @@
 
     </table>
     <div class="page">
-      <Page :total="100" @on-change="changePage"></Page>
+      <Page :total="100" show-sizer @on-change="changePage"></Page>
     </div>
 
   </div>
@@ -275,10 +275,7 @@
   }
   .query-form {
     width: 100%;
-    border: 1px solid #e4e4e4;
-    background-image: linear-gradient(to bottom,#fff,#e4e4e4);
-    border-radius: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
   }
   .date-picker {
     display: flex;
@@ -316,6 +313,7 @@
   table {
     width: 100%;
     border-collapse: collapse;
+    color: #657180;
   }
   table td,th{
     text-align: center;
@@ -326,7 +324,7 @@
 
   }
   table thead tr{
-    background-color: #f8f8f9;
+    background-color: #ebf4fe;
   }
   table tbody tr:hover {
     background-color: #F3FAFF;
@@ -334,6 +332,10 @@
 
   .ivu-dropdown-menu {
     min-width: 60px;
+  }
+
+  .bac {
+    background-color: #fcfcfc;
   }
 
 

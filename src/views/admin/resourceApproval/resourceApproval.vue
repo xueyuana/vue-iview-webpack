@@ -9,7 +9,7 @@
               <Input v-model="formItem.resource_name" placeholder="请输入"></Input>
             </Form-item>
           </Col>
-          <Col span="9">
+          <Col span="8">
             <Form-item label="申请日期:" prop="date">
               <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm"
                            placeholder="选择日期和时间" style="width: 250px"></Date-picker>
@@ -33,19 +33,29 @@
             </Form-item>
           </Col>
         </Row>
-        <div class="form-btn-wrap clearfix">
-          <div class="btns">
-            <Button type="primary" @click.native="onInquire" style="margin-right: 10px">查询</Button>
-            <Button type="ghost" @click.native="handleReset('formItem')">重置</Button>
-          </div>
-        </div>
+        <Row type="flex" justify="end">
+          <Col span="24">
+          <Form-item>
+            <div class="inquire-form-query">
+              <Button type="primary" class="inquire-form-query-add" @click.native="onInquire">查询</Button>
+              <Button type="ghost" @click="handleReset('formItem')">重置</Button>
+            </div>
+          </Form-item>
+          </Col>
+        </Row>
+        <!--<div class="form-btn-wrap clearfix">-->
+          <!--<div class="btns">-->
+            <!--<Button type="primary" @click.native="onInquire" style="margin-right: 10px">查询</Button>-->
+            <!--<Button type="ghost" @click.native="handleReset('formItem')">重置</Button>-->
+          <!--</div>-->
+        <!--</div>-->
       </Form>
     </div>
 
     <!--查询结果-->
     <div class="inquire-table">
-      <div>资源审批列表：</div>
-      <Table border size="small" :columns="columns" :data="filterDate"></Table>
+      <div class="inquire-table-title">资源审批列表</div>
+      <Table stripe size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
           <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
@@ -56,24 +66,6 @@
 </template>
 
 <style lang="less" scoped>
-  .inquire {
-    margin-top: 30px;
-    &-form {
-      padding: 15px;
-      background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);
-      border: 1px solid rgb(228, 228, 228);
-      border-radius: 10px;
-      &-project_name {
-        width: 30%;
-      }
-      &-formStatus {
-        width: 50%;
-      }
-    }
-    &-table {
-      padding: 20px 20px;
-    }
-  }
 </style>
 
 <script>

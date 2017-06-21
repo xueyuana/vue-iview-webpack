@@ -1,3 +1,5 @@
+@import "../../static/mytheme/index.less";
+
 html, body {
   width: 100%;
   height: 100%;
@@ -5,15 +7,25 @@ html, body {
 
 /* 搜索按钮栏 */
 .inquire {
-  margin-top: 20px;
   &-form {
-    padding: 15px;
-    background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);
-    border: 1px solid rgb(228, 228, 228);
-    border-radius: 10px;
+    border-bottom: 2px solid #EAEDF1;
+    &-query {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      box-sizing: border-box;
+      &-add{
+        margin-right: 10px;
+      }
+    }
   }
   &-table {
-    padding: 20px 20px;
+    &-title{
+      height:71px;
+      line-height: 71px;
+      font-size: 18px;
+      color: #666666;
+    }
   }
 }
 
@@ -21,5 +33,41 @@ html, body {
 .form-btn-wrap {
   .btns {
     float: right;
+  }
+}
+
+.sub-title{
+  font-size: 18px;
+}
+
+.sub-title-bg{
+  background-color: @title-color;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  width: 100px;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+}
+
+.c_application{
+  line-height: 40px;
+  font-size: 14px;
+  color: #AEAEAE;
+  div{
+    cursor: pointer;
+    i{
+      padding-right: 5px;
+    }
+    span{
+      &.title{
+        padding-left: 15px;
+      }
+      &.num{
+        padding-right: 15px;
+        color:red;
+      }
+    }
   }
 }

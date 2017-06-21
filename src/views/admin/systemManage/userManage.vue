@@ -1,14 +1,14 @@
 <template>
   <div class="my-resource">
-    <div class="query-form">
+    <div class="query-form inquire-form">
       <div class="queryInformation">
         <div class="item">
-          <span class="title">用户名</span>
+          <span class="title">用户名:</span>
           <Input v-model="query_info.user_name" placeholder="请输入..." style="width: 300px"></Input>
         </div>
         <div class="item date-picker">
-          <span class="title">申请日期</span>
-          <Date-picker type="daterange" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
+          <span class="title">申请日期:</span>
+          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
         </div>
       </div>
       <div class="query">
@@ -16,6 +16,7 @@
         <Button class="reset" type="ghost" @click="reset">重置</Button>
       </div>
     </div>
+    <div class="inquire-table-title">用户列表</div>
     <div class="createUser">
       <Button @click="isCreate = true" type="primary" >创 建</Button>
       <Modal
@@ -26,7 +27,7 @@
           @on-cancel="createCancel">
         <div class="createWrap">
           <span class="modal-title">用户名：</span><Input v-model="createUser.username" placeholder="请输入..." style="width: 200px"></Input>
-          <span class="modal-title">密码：</span><Input v-model="createUser.password" placeholder="请输入..." style="width: 200px"></Input>
+          <span class="modal-title">密码：</span><Input v-model="createUser.password" placeholder="请输入..." type="password" style="width: 200px"></Input>
           <span class="modal-title">部门：</span><Input v-model="createUser.department" placeholder="请输入..." style="width: 200px"></Input>
           <span class="modal-title">手机：</span><Input v-model="createUser.phone" placeholder="请输入..." style="width: 200px"></Input>
           <span class="modal-title">邮箱：</span><Input v-model="createUser.email" placeholder="请输入..." style="width: 200px"></Input>
@@ -36,10 +37,8 @@
           </Select>
         </div>
       </Modal>
-
     </div>
-    <div class="header">资源列表：</div>
-    <Table border :columns="columns" :data="queryResult"></Table>
+    <Table border stripe :columns="columns" :data="queryResult"></Table>
     <Modal
         v-model="isCompile"
         title="用户信息"
@@ -48,7 +47,7 @@
         @on-cancel="compileCancel">
       <div class="createWrap">
         <span class="modal-title">用户名：</span><Input v-model="compileUser.username" placeholder="请输入..." style="width: 200px"></Input>
-        <span class="modal-title">密码：</span><Input v-model="compileUser.password" placeholder="请输入..." style="width: 200px"></Input>
+        <span class="modal-title">密码：</span><Input v-model="compileUser.password" placeholder="修改后的密码..." type="password" style="width: 200px"></Input>
         <span class="modal-title">部门：</span><Input v-model="compileUser.department" placeholder="请输入..." style="width: 200px"></Input>
         <span class="modal-title">手机：</span><Input v-model="compileUser.phone" placeholder="请输入..." style="width: 200px"></Input>
         <span class="modal-title">邮箱：</span><Input v-model="compileUser.email" placeholder="请输入..." style="width: 200px"></Input>
@@ -59,7 +58,7 @@
       </div>
     </Modal>
     <div class="page">
-      <Page :total="100" @on-change="changePage"></Page>
+      <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
     </div>
 
   </div>
@@ -67,10 +66,17 @@
 
 </template>
 <script>
+
+  //引入sha256加密
+    import crypto from 'crypto-js'
+    import sha256 from 'crypto-js/sha256'
   export default {
     data () {
       return {
-        url: 'http://mpc-test.syswin.com',
+        data_length: 0,
+        current_page: 1,
+        page_size: 10,
+        getResult: [],//获取的全部数据
         query_info: {
           user_name: '',
           applyDate: []
@@ -78,6 +84,7 @@
         isCreate: false,
         isCompile: false,
         index: '',
+        user_id: '',
         createUser: {
           username: '',
           password: '',
@@ -153,10 +160,24 @@
                   on: {
                     click: () => {
                       this.isCompile = true
+                      let rowDate = {}
                       for(var key in params.row) {
-                        this.compileUser[key] = params.row[key]
+                        rowDate[key] = params.row[key]
+                      }
+                      switch (rowDate.role) {
+                        case '管理员': rowDate.role = 'admin'
+                          break
+                        case '行政审批': rowDate.role = 'leader'
+                          break
+                        case '普通用户': rowDate.role = 'user'
+                          break
+                      }
+
+                      for(var key in rowDate) {
+                        this.compileUser[key] = rowDate[key]
                       }
                       this.index = params.index
+                      this.user_id = params.row.id
                     }
                   }
                 },'编辑'),
@@ -172,10 +193,11 @@
                           content: '<p>确认删除吗？</p>',
                           onOk: () => {
 
-//                            this.queryResult.splice(params.index,1)
-                            const url = this.url + '/api/user/users/' + params.row.id
+                            const url = 'api/user/users/' + params.row.id
                             this.$http.delete(url).then( (res) => {
                               console.log('删除用户',res.body)
+                              //重新获取用户
+                              this.getUser()
                             },(err) => {
                               console.log('err',err)
                             })
@@ -208,45 +230,117 @@
       }
     },
     methods: {
-      compileOk () {//编辑后确定
-       for(var key in this.compileUser) {
-         this.queryResult[this.index][key] = this.compileUser[key]
-       }
+      getUser () {//获取用户
 
-        console.log('result',this.queryResult)
+        const url = 'api/user/users'
+        this.$http.get(url).then((res) => {
+
+          this.data_length = res.body.result.res.length
+
+          this.current_page = 1
+
+          res.body.result.res.forEach((item,index) => {
+            item.number = index + 1
+
+            switch (item.role) {
+              case 'admin': item.role = '管理员'
+                break
+              case 'leader': item.role = '行政审批'
+                break
+              case 'user': item.role = '普通用户'
+                break
+            }
+
+          })
+          this.getResult = res.body.result.res
+
+//          将返回的数据进行分页
+          this.queryResult = this.mockTableData(this.getResult,this.page_size,1)
+
+        },(err) => {
+
+        })
+      },
+      compileOk () {//确定编辑
+
+        const url = 'api/user/users/'+this.user_id
+
+        let requestBody
+
+        //判断密码是否修改
+        if(this.compileUser.password){
+          requestBody = this.compileUser
+        }else{
+          requestBody = {
+            username: this.compileUser.username,
+            department: this.compileUser.department,
+            phone: this.compileUser.phone,
+            email: this.compileUser.email,
+            role: this.compileUser.role
+          }
+        }
+
+        this.$http.put(url,requestBody).then((res) => {
+         console.log(res.body)
+
+          this.current_page = 1
+//        修改成功之后改变列表数据
+          for(var key in this.compileUser) {
+            this.queryResult[this.index][key] = this.compileUser[key]
+
+          }
+
+          switch (this.queryResult.role) {
+          case 'admin': item.role = '管理员'
+            break
+          case 'leader': item.role = '行政审批'
+            break
+          case 'user': item.role = '普通用户'
+            break
+          }
+
+        },(err) => {
+         console.log('err',err)
+        })
+
 
       },
       compileCancel () {//取消编辑
 
+
       },
       createOk () {//确定创建用户
 
-        const url = 'http://mpc-test.syswin.com/api/user/users'
-        let requestBody = this.createUser
-        this.$http.post(url,requestBody).then((res) => {
-          console.log(res.body.result)
-        },(err) => {
-          console.log(err)
-        })
-        //配合假数据
-//        let date = new Date();
-//        let Y = date.getFullYear();
-//        let M = date.getMonth()+1;
-//        let D = date.getDate()
-//        let h = date.getHours()
-//        let m = date.getMinutes()
-//        h = h<10? '0'+h:h
-//        m = m<10? '0'+m:m
-//        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m
-//        //创建的新用户
-//        let newUser = this.createUser
-//        newUser.createDate = applyDate
-//        newUser.number = 2
-//        this.queryResult.push(newUser)
-        //清空创建内容
+        //判断创建用户是否填写完整
+        if(this.createUser.username && this.createUser.password) {
+
+          const url = 'api/user/users'
+          let requestBody = this.createUser
+
+          requestBody.password = sha256(this.createUser.password + '!@#$%^').toString(crypto.enc.Hex)
+
+          this.$http.post(url,requestBody).then((res) => {
+            console.log(res.body.result)
+            //重新获取用户
+            this.getUser()
+
+          },(err) => {
+            console.log(err)
+
+          })
+
+        } else {
+
+          this.$Notice.open({
+            title: '请填写用户名或密码',
+          });
+
+        }
+
         this.createUser = {
-          userName: '',
-          passWord: '',
+
+          username: '',
+          password: '',
           department: '',
           phone: '',
           email: '',
@@ -255,10 +349,11 @@
 
       },
       createCancel () {//创建用户取消
+        console.log(this.createUser)
         //清空
         this.createUser = {
-          userName: '',
-          passWord: '',
+          username: '',
+          password: '',
           department: '',
           phone: '',
           email: '',
@@ -266,34 +361,114 @@
         }
 
       },
-      query () {
+      query () {//查询
+
+        let user_name = this.query_info.user_name
+
+        let start_time = this.query_info.applyDate[0]
+
+        let end_time = this.query_info.applyDate[1]
+
+        this.current_page = 1
+
+        let params = {}
+
+        user_name && (params.username = user_name)
+        start_time && (params.start_time = this.timeFormat(start_time))
+        end_time && (params.end_time = this.timeFormat(end_time))
+
+        let url = 'api/user/users'
+
+        this.$http.get(url,{params: params}).then((res) => {
+
+          this.data_length = res.body.result.res.length
+
+          res.body.result.res.forEach((item,index) => {
+            item.number = index +1
+
+            switch (item.role) {
+              case 'admin': item.role = '管理员'
+                break
+              case 'leader': item.role = '行政审批'
+                break
+              case 'user': item.role = '普通用户'
+                break
+            }
+
+          })
+          this.getResult = res.body.result.res
+          //进行分页
+          this.queryResult = this.mockTableData(this.getResult,this.page_size,1)
+        },(err) => {
+
+          console.log(err)
+
+          this.$Notice.open({
+            title: '查询失败'
+          });
+
+          this.queryResult = []
+        })
+
+
 
       },
-      reset () {
+      reset () {//重置
+
         this.query_info = {
           user_name: '',
           applyDate: []
         }
       },
-      changePage () {
+      changePage (page) {//分页
+
+        this.queryResult = this.mockTableData(this.getResult, this.page_size, page)
+        this.current_page = page
+
+      },
+      mockTableData (originData, pageSize, index) {//进行分页
+
+        let data = [];
+
+        let num = (index - 1) * pageSize
+        let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize)
+
+        data = originData.slice(num,maxNum)
+
+        data.forEach((item,index) => {
+          item.created_time = item.created_time.slice(0,19)
+        })
+
+        return data;
+      },
+      timeFormat (date) {//时间格式化
+
+        let Y = date.getFullYear();
+        let M = date.getMonth()+1;
+        let D = date.getDate()
+        let h = date.getHours()
+        let m = date.getMinutes()
+        let s = date.getSeconds()
+        M = M<10?'0' + M:M
+        D = D<10?'0' + D:D
+        h = h<10?'0' + h:h
+        m = m<10? '0' + m:m
+        s = s<10? '0' + s:s
+
+        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m + ':' + s
+        return applyDate
+      },
+      page_size_change (page_size) {
+
+        this.page_size = page_size
+
+        this.queryResult = this.mockTableData(this.getResult,this.page_size,1)
 
       }
     },
     created () {
       //获取用户
-      const url = this.url + '/api/user/users'
-      this.$http.get(url).then((res) => {
-//        console.log('用户信息',res.body)
-        res.body.result.res.forEach((item,index) => {
-          item.number = index + 1
-          this.queryResult.push(item)
-        })
-
-      },(err) => {
-//        console.log('err',err)
-      })
-
-
+      this.getUser()
 
     }
   }
@@ -312,10 +487,7 @@
   }
   .query-form {
     width: 100%;
-    height: 100px;
-    border: 1px solid #e4e4e4;
-    background-image: linear-gradient(to bottom,#fff,#e4e4e4);
-    border-radius: 10px;
+    padding-bottom: 20px;
   }
   .date-picker {
     display: flex;
@@ -360,7 +532,7 @@
 
   }
   .createUser {
-    margin-top: 30px;
+    margin-bottom: 20px;
   }
   .createWrap {
     height: 240px;

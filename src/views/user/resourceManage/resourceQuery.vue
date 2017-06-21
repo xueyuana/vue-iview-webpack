@@ -2,22 +2,18 @@
   <div class="resouce-query">
     <div class="query-form">
       <div class="queryInformation">
-        <div class="item">
-          <span class="title">申请人</span>
-          <Input v-model="query_info.user_name" placeholder="请输入..." style="width: 200px"></Input>
-        </div>
         <div class="item date-picker">
-          <span class="title">申请日期</span>
+          <span class="title">申请日期:</span>
           <Date-picker type="daterange" v-model="query_info.applyDate" placeholder="选择日期" style="width: 200px"></Date-picker>
         </div>
         <div class="item">
-          <span class="title">审批状态</span>
+          <span class="title">审批状态:</span>
           <Select v-model="query_info.status" style="width:200px">
             <Option v-for="item in approvalStatusVal" :value="item.value" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
         <div class="item">
-          <span class="title">部署实例</span>
+          <span class="title">部署实例:</span>
           <Select v-model="query_info.instance_id" style="width:200px">
             <Option v-for="item in instance_name" :value="item.value" :key="item">{{ item.value }}</Option>
           </Select>
@@ -29,10 +25,10 @@
 
       </div>
     </div>
-    <div class="header">申请资源列表：</div>
-    <Table border :columns="columns" :data="queryResult"></Table>
+    <div class="inquire-table-title">申请资源列表</div>
+    <Table border stripe :columns="columns" :data="queryResult"></Table>
     <div class="page">
-      <Page :total="100" @on-change="changePage"></Page>
+      <Page :total="100" show-sizer @on-change="changePage"></Page>
     </div>
 
   </div>
@@ -84,7 +80,10 @@
                     innerHTML: params.row.resource_id
                   },
                   on: {
-                    click: this.returnResourceApplication
+                    click: () => {
+                      let id = params.row.resource_id
+                      this.$router.push({name: 'user_resourceApplication',query: {id: id}})
+                    }
                   }
 
                 }
@@ -130,25 +129,22 @@
           }
         ],
         queryResult: [
-//          {
-//            number: 1,
-//            resource_id: 'id001',
-//            status: '审批中',
-//            instance_name: '实例1',
-//            az: 'DMZ',
-//            applyDate: '12',
-//            operate: ''
-//          }
+          {
+            number: 1,
+            resource_id: 'id001',
+            status: '审批完成',
+            instance_name: '实例1',
+            az: 'DMZ',
+            applyDate: '12',
+            operate: '',
+            applyPerson: 'admin'
+          }
         ]
 
       }
     },
     methods: {
-      returnResourceApplication (event) {
 
-        let id = event.target.firstChild.data
-        this.$router.push({name: 'user_resourceApplication',query: {id: id}})
-      },
       goMyResource () {
         this.$router.push({name: 'user_myResource'})
       },
@@ -170,30 +166,6 @@
       }
     },
     created () {
-      //测试假数据
-      let getData = this.$store.state.userData.information
-
-      let requestBody = {
-        number: 1,
-        resource_id: 'ID0001',
-        status: getData[0].status,
-        instance_name: getData[0].resourceInformation[0].instance_name,
-        az: '资源池1',
-        applyDate: getData[0].applyDate,
-        operate: '',
-        applyPerson: 'user'
-
-      }
-      //根据用户id查找资源
-//      const url = '/api/resource/resources?user_id=id'
-//      this.$http.get(url).then((res) => {
-//        console.log(res)
-//      },(err) => {
-//        console.log(err)
-//      })
-
-
-        this.queryResult.push(requestBody)
 
     }
 
@@ -213,11 +185,9 @@
   }
   .query-form {
     width: 100%;
-    border: 1px solid #e4e4e4;
-    padding-bottom: 10px;
+    border-bottom: 2px solid #EAEDF1;
+    padding-bottom: 20px;
     padding-right: 15px;
-    background-image: linear-gradient(to bottom,#fff,#e4e4e4);
-    border-radius: 10px;
   }
   .item {
     margin-bottom: 10px;
@@ -248,9 +218,6 @@
   }
   .pre {
     margin-right: 20px;
-  }
-  .header {
-    margin: 30px 0 10px;
   }
   .ghost {
     margin-left: 20px;

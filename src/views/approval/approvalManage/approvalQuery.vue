@@ -1,6 +1,6 @@
 <template>
-  <div class="approval">
-    <div class="approval-form">
+  <div class="inquire">
+    <div class="inquire-form">
       <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="70">
         <Row :gutter="16">
           <Col span="5">
@@ -8,7 +8,7 @@
               <Input v-model="formValidate.apply_name" placeholder="请输入"></Input>
             </Form-item>
           </Col>
-          <Col span="5">
+          <Col span="9">
             <Form-item label="申请日期:" prop="start_time">
               <Date-picker type="daterange" placement="bottom-end" format="yyyy-MM-dd" placeholder="选择日期" v-model="formValidate.start_time" @on-change="formatCreateData"></Date-picker>
             </Form-item>
@@ -30,20 +30,30 @@
               </Select>
             </Form-item>
           </Col>
+          <!--<Col span="4">-->
+          <!--<Form-item>-->
+            <!--<div class="inquire-form-query">-->
+              <!--<Button type="primary" class="inquire-form-query-add" @click.native="goQuery">查询</Button>-->
+              <!--<Button type="ghost" @click="handleReset('formValidate')">重置</Button>-->
+            <!--</div>-->
+          <!--</Form-item>-->
+          <!--</Col>-->
         </Row>
         <Row type="flex" justify="end">
-          <Col span="24" style="min-height: 20px">
-          <div class="approval-form-query">
-            <Button type="primary" class="approval-form-query-add" @click.native="goQuery">查询</Button>
-            <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
-          </div>
+          <Col span="24">
+            <Form-item>
+              <div class="inquire-form-query">
+                <Button type="primary" class="inquire-form-query-add" @click.native="goQuery">查询</Button>
+                <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
+              </div>
+            </Form-item>
           </Col>
         </Row>
       </Form>
     </div>
-    <div class="approval-table">
-      <div>申请资源列表：</div>
-      <Table border :columns="columns" :data="dataDemo"></Table>
+    <div class="inquire-table">
+      <div class="inquire-table-title">申请资源列表</div>
+      <Table stripe :columns="columns" :data="dataDemo"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
           <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
@@ -54,33 +64,6 @@
 </template>
 
 <style lang="less" scoped>
-  .approval {
-    margin-top: 30px;
-    &-form {
-       padding: 15px;
-       background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);
-       border: 1px solid rgb(228, 228, 228);
-       border-radius: 10px;
-      &-project_name {
-         width: 30%;
-       }
-      &-formStatus {
-         width: 50%;
-       }
-      &-query {
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-        box-sizing: border-box;
-        &-add{
-          margin-right: 10px;
-        }
-      }
-    }
-    &-table {
-       padding: 20px 20px;
-     }
-  }
 </style>
 
 <script>
@@ -115,6 +98,9 @@
                 h('a', {
                   style: {
                     marginRight: '0px'
+                  },
+                  domProps: {
+                    innerHTML: params.row.id
                   },
                   on: {
                     click: () => {

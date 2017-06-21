@@ -1,7 +1,6 @@
 <template>
     <div class="box">
-        <div class="c_title">
-            <Icon type="android-radio-button-on"></Icon>
+        <div class="sub-title-bg">
             <span>资源概览</span>
         </div>
         <div class="survey">
@@ -11,7 +10,7 @@
                         <div class="computer public">
                             <div class="top clearfix">
                                 <div class="top_left fl">
-                                    <Icon type="ios-monitor" size="50" color=""></Icon>
+                                    <Icon type="ios-monitor" size="62" color="#8BC34A"></Icon>
                                 </div>
                                 <div class="top_right fr">
                                     <div class="count" v-model="dataList.list">{{ resourceNum }}</div>
@@ -25,7 +24,7 @@
                         <div class="deployment public">
                             <div class="top clearfix">
                                 <div class="top_left fl">
-                                    <Icon type="ios-cloud" size="50"></Icon>
+                                    <Icon type="ios-cloud" size="62" color="#ff8a65"></Icon>
                                 </div>
                                 <div class="top_right fr">
                                     <div class="count" v-model="dataList.count">{{ projectNum }}</div>
@@ -38,11 +37,11 @@
                         <div class="database public">
                             <div class="top clearfix">
                                 <div class="top_left fl">
-                                    <Icon type="easel" size="50"></Icon>
+                                    <Icon type="easel" size="62" color="#8BC34A"></Icon>
                                 </div>
                                 <div class="top_right fr">
                                     <div class="count" v-model="dataList.sqlmongo">{{ vcpuNum }}</div>
-                                    <div class="name">vCPU</div>
+                                    <div class="name">VCPU</div>
                                 </div>
                             </div>
                         </div>
@@ -56,7 +55,7 @@
                     <div class="cache public">
                         <div class="top clearfix">
                             <div class="top_left fl">
-                                <Icon type="android-options" size="50"></Icon>
+                                <Icon type="android-options" size="62" color="#3BCCE1"></Icon>
                             </div>
                             <div class="top_right fr">
                                 <div class="count" v-model="dataList.redies">{{ databaseNum }}</div>
@@ -69,7 +68,7 @@
                     <div class="cache public">
                         <div class="top clearfix">
                             <div class="top_left fl">
-                                <Icon type="social-instagram" size="50"></Icon>
+                                <Icon type="social-instagram" size="62" color="#BA68C8"></Icon>
                             </div>
                             <div class="top_right fr">
                                 <div class="count" v-model="dataList.redies">{{ memeryNum }}</div>
@@ -80,42 +79,59 @@
                 </Col>
                <Col span="8">
                    <div class="proButtons">
-                   <div @click="goResourceApp">
-                       <div class="content">资源申请</div>
-                       <div class="title">
-                           <Icon type="plus" size="40"></Icon>
+                       <div @click="goResourceApp">
+                           <div class="title"><Icon type="plus" size="20"></Icon> 资源申请</div>
                        </div>
                    </div>
-               </div>
                </Col>
             </Row>
         </div>
-        <div class="c_title">
-            <Icon type="android-radio-button-on"></Icon>
+        <div class="sub-title-bg">
             <span>资源审批</span>
         </div>
         <Row class="c_application">
-            <Col span="12"><Icon type="record" size="10"></Icon><font @click="myApplication">我的申请</font><span>待审批：{{ pendingApproval }} </span><span>已审批：{{ approved }}</span></Col>
+            <Col span="12">
+                <div @click="myApplication">
+                    <Icon type="record" size="10"></Icon>我的申请
+                    <span class="title">待审批：</span><span class="num">{{ pendingApproval }}</span>
+                    <span class="title">已审批：</span><span class="num">{{ approved }}</span>
+                </div>
+            </Col>
             <Col span="12"></Col>
         </Row>
     </div>
 </template>
-
 <script>
+    export default {
+        data () {
+            return {
+                dataList: {},
+                // 统计个数
+                projectNum: 1,
+                resourceNum: 1,
+                vcpuNum: 1,
+                databaseNum: 1,
+                memeryNum: 1,
+                pendingApproval: 1,
+                approved:1
+            }
+        },
 
+        mounted() {
+
+        },
+        methods: {
+            goResourceApp () {
+                this.$router.push({name: 'user_resourceApplication'});
+            },
+            myApplication () {
+                this.$router.push({name: 'user_resourceQuery'});
+            }
+        }
+    }
 </script>
 
 <style scoped>
-    .c_title {
-        background-color: #0AB7E9;
-        color: #fff;
-        font-size: 14px;
-        font-weight: 700;
-        width: 100px;
-        text-align: center;
-        height: 30px;
-        line-height: 30px;
-      }
     .survey-list {
         margin-top: 10px;
     }
@@ -128,11 +144,12 @@
     }
 
     .public .top {
-        height: 120px;
-        background-color: #00CCFF;
-        padding: 0 10px;
-        color: #333333;
-        border-radius: 4px;
+        height: 144px;
+        background: #FFFFFF;
+        border: 1px solid #EAEDF1;
+        padding: 0 20px;
+        color: #AEAEAE;
+        border-radius: 2px;
     }
     .public .bottom {
         height: 40px;
@@ -163,24 +180,18 @@
     .bottom .arrow {
         font-size: 18px;
     }
-
     .proMain {
         margin: 40px 0;
     }
-
     .proCard {
-        /*width: 250px;*/
-        /*float: left;*/
         border: 1px solid #39f;
         -webkit-border-radius: 5px;
         border-radius: 5px;
         -moz-border-radius: 5px;
         background-clip: padding-box;
         height: 120px;
-        /*margin-right: 30px;*/
 
     }
-
     .proCardTitle {
         height: 30px;
         background-color: #39f;
@@ -190,7 +201,6 @@
         padding-left: 10px;
         padding-top: 5px;
     }
-
     .proCardContent {
         padding: 20px;
         color: #0066cc;
@@ -207,7 +217,6 @@
     .proCardContent .name:hover {
         text-decoration: underline;
     }
-
     .proCardContent .number {
         -webkit-border-radius: 13px;
         border-radius: 13px;
@@ -231,92 +240,36 @@
         box-align: center;
 
     }
-
     .proButtons {
         height: 120px;
-
     }
     .proButtons>div {
         cursor: pointer;
+        font-size: 20px;
+        color: #AEAEAE;
+        line-height: 20px;
     }
     .proButtons .title {
         text-align: center;
-        height: 80px;
-        font-size: 30px;
-        padding-top: 20px;
-        border: 1px solid #aaa;
+        height: 144px;
+        line-height: 144px;
+        font-size: 20px;
+        border: 1px solid #EAEDF1;
         -webkit-border-radius: 2px;
         border-radius: 2px;
         -moz-border-radius: 2px;
         border-top-left-radius: 0px;
         border-top-right-radius: 0px;
     }
-
-    .proButtons .content {
-        color: #fff;
-        text-align: center;
-        background-color: #00CCFF;
-        height: 40px;
-        padding-top: 10px;
-        -webkit-border-radius: 2px;
-        border-radius: 2px;
-        -moz-border-radius: 2px;
-        border-bottom-left-radius: 0px;
-        border-bottom-right-radius: 0px;
-    }
-
     .proContent h3 {
         color: #39f;
         margin: 5px
     }
-
     .proContent .precontents ul li {
         margin: 5px
     }
-
     .box{
-        border:1px dashed #CCC;
-        padding: 20px;
-    }
-    .c_application{
-        line-height: 40px;
-        font-size: 14px;
-    }
-    .c_application font{
-        padding-right: 30px;
-        padding-left: 10px;
-        cursor: pointer;
-    }
-    .c_application span{
-        padding-right: 30px;
+        /*border:1px dashed #CCC;
+        padding: 30px 100px;*/
     }
 </style>
-<script>
-    export default {
-        data () {
-            return {
-                dataList: {},
-                // 统计个数
-                projectNum: 1,
-                resourceNum: 1,
-                vcpuNum: 1,
-                databaseNum: 1,
-                memeryNum: 1,
-                pendingApproval: 1,
-                approved:1
-            }
-        },
-
-        mounted() {
-
-        },
-        methods: {
-            goResourceApp () {
-                this.$router.push({name: 'user_resourceApplication'});
-            },
-            myApplication () {
-                this.$router.push({name: 'user_resourceQuery'});
-            }
-        }
-    }
-</script>

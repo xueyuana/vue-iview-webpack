@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="home">
     <!--头部-->
     <div class="uop-header clearfix">
       <div class="logo fl">
         <a class="logo_icon" href="/"></a>
       </div>
-      <div class="uop-title fl">
-        <p>门头沟政务云资源管理平台</p>
-      </div>
+      <!--<div class="uop-title fl">-->
+        <!--<p>门头沟政务云资源管理平台</p>-->
+      <!--</div>-->
       <div class="user-info fr">
         <ul>
           <li class="username">
@@ -19,7 +19,7 @@
             <span>{{$store.state.userData.userInfo.department}}</span>
           </li>
           <li @click="toLogOut">
-            <a href="javascript:void(0);">退出</a>
+            <a href="javascript:void(0);" class="user-logout"><i class="ivu-icon icon-logout"></i>退出</a>
           </li>
         </ul>
       </div>
@@ -37,13 +37,13 @@
               </div>
               <Submenu name="1">
                 <template slot="title">
-                  业务管理
+                  <i class="ivu-icon icon-business"></i>业务管理
                 </template>
                 <Menu-item name="11">部署实例</Menu-item>
               </Submenu>
               <Submenu name="2">
                 <template slot="title">
-                  资源管理
+                  <i class="ivu-icon icon-resource"></i>资源管理
                 </template>
                 <Menu-item name="21">资源申请</Menu-item>
                 <Menu-item name="22">资源查询</Menu-item>
@@ -51,7 +51,7 @@
               </Submenu>
               <Submenu name="3">
                 <template slot="title">
-                  系统管理
+                  <i class="ivu-icon icon-system"></i>系统管理
                 </template>
                 <Menu-item name="31">用户管理</Menu-item>
                 <Menu-item name="32">操作日志</Menu-item>
@@ -64,26 +64,26 @@
               </div>
               <Submenu name="1">
                 <template slot="title">
-                  资源池
+                  <i class="ivu-icon icon-resource-chi"></i>资源池
                 </template>
                 <Menu-item name="11">资源池管理</Menu-item>
               </Submenu>
               <Submenu name="2">
                 <template slot="title">
-                  资源管理
+                  <i class="ivu-icon icon-resource"></i>资源管理
                 </template>
                 <Menu-item name="21">镜像管理</Menu-item>
                 <Menu-item name="22">虚拟机管理</Menu-item>
               </Submenu>
               <Submenu name="3">
                 <template slot="title">
-                  资源审批
+                  <i class="ivu-icon icon-approval"></i>资源审批
                 </template>
                 <Menu-item name="31">资源审批</Menu-item>
               </Submenu>
               <Submenu name="4">
                 <template slot="title">
-                  系统管理
+                  <i class="ivu-icon icon-system"></i>系统管理
                 </template>
                 <Menu-item name="41">用户管理</Menu-item>
                 <Menu-item name="42">操作日志</Menu-item>
@@ -96,20 +96,20 @@
               </div>
               <Submenu name="1">
                 <template slot="title">
-                  资源管理
+                  <i class="ivu-icon icon-resource"></i>资源管理
                 </template>
                 <Menu-item name="11">资源查询</Menu-item>
               </Submenu>
               <Submenu name="2">
                 <template slot="title">
-                  系统管理
+                  <i class="ivu-icon icon-system"></i>系统管理
                 </template>
                 <Menu-item name="21">用户管理</Menu-item>
                 <Menu-item name="22">操作日志</Menu-item>
               </Submenu>
             </Menu>
           </i-col>
-          <i-col span="20" offset="4">
+          <i-col span="20" offset="4" class="right-col">
             <div class="layout-header">
               <Breadcrumb separator=">" v-if="$store.state.breadcrumbData.level.level_3">
                 <Breadcrumb-item href="#">{{ $store.state.breadcrumbData.level.level_1 }}</Breadcrumb-item>
@@ -136,23 +136,31 @@
 
 </template>
 
-<style scoped>
-  .uop-header {
-    height: 60px;
+<style lang="less" scoped>
+  @import "../../static/mytheme/index.less";
+
+  .home {
     width: 100%;
-    line-height: 60px;
-    padding: 0 20px;
+    height: 100%;
+  }
+
+  .uop-header {
+    height: 80px;
+    width: 100%;
+    line-height: 80px;
+    padding: 0 30px;
     border-bottom: 1px solid #ECECEC;
     box-sizing: border-box;
     position: fixed;
-    background: #f5f7f9;
+    background: #fff;
     z-index: 999;
     top: 0px;
   }
 
   .uop-header .logo {
-    width: 100px;
-    height: 60px;
+    width: 356px;
+    height: 28px;
+    margin-top: 26px;
   }
 
   .uop-header .logo_icon {
@@ -164,26 +172,41 @@
   }
 
   .uop-header .uop-title {
-    margin-left: 60px;
-    color: #3399FF;
-    font-size: 18px;
+    margin-left: 8px;
+    font-size: 25px;
+    color: #2B3642;
+    /*font-size: 20px;*/
+    /*color: #2B3642;*/
   }
 
   .uop-header .user-info li {
     height: 100%;
     float: left;
+    font-size:16px;
+    color:#777E8C;
     margin: 0 10px;
   }
 
   .uop-header .user-info li a {
     display: block;
     height: 100%;
+    color:#777E8C;
+  }
+  .uop-header .user-info li .ivu-icon{
+    vertical-align: middle;
+    width:26px;
+    height:26px;
+  }
+  .uop-header .user-info li .icon-logout{
+    /*margin-right:6px;*/
+    background:url("../../static/icon-logout.png") no-repeat;
+    background-size:cover;
   }
 
   /*主题内容布局*/
   .uop-main {
     width: 100%;
-    margin-top: 60px;
+    margin-top: 80px;
   }
 
   .layout {
@@ -198,14 +221,14 @@
 
   .layout-content {
     min-height: 500px;
-    margin: 15px;
+    margin: 0 30px 30px 30px;
     /*overflow: hidden;*/
     background: #fff;
-    border-radius: 4px;
+    /*border-radius: 4px;*/
   }
 
   .layout-content-main {
-    padding: 10px;
+    padding: 30px;
   }
 
   .layout-copy {
@@ -215,27 +238,69 @@
   }
 
   .layout-menu-left {
-    background: #464c5b;
+    /*#1E7BE2  #D3371B 100%@menu-dark-active-bg*/
+    background: @menu-dark-active-bg;
     color: #fff;
+    font-size: 16px;
     min-height: 800px;
     position: fixed;
   }
+  .layout-menu-left .ivu-menu-submenu-title{
 
-  .layout-header {
-    margin-left: 15px;
-    height: 40px;
-    line-height: 40px;
-    padding-left: 10px;
-    background: #fff;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+  }
+  .layout-menu-left .ivu-icon{
+    vertical-align: bottom;
+    width:20px;
+    height:20px;
+  }
+  .layout-menu-left .icon-system{
+    background:url("../../static/icon-system.png") no-repeat;
+    background-size:cover;
+  }
+  .layout-menu-left .icon-business{
+    background:url("../../static/icon-business.png") no-repeat;
+    background-size:cover;
+  }
+  .layout-menu-left .icon-resource{
+    background:url("../../static/icon-resource.png") no-repeat;
+    background-size:cover;
+  }
+  .layout-menu-left .icon-resource{
+    background:url("../../static/icon-resource.png") no-repeat;
+    background-size:cover;
+  }
+  .layout-menu-left .icon-approval{
+    background:url("../../static/icon-approval.png") no-repeat;
+    background-size:cover;
+  }
+  .layout-menu-left .icon-resource-chi{
+    background:url("../../static/icon-resource-chi.png") no-repeat;
+    background-size:cover;
+  }
+  .right-col{
+    background:#F0F5FA;
   }
 
+  .layout-header {
+    margin-left: 30px;
+    height: 76px;
+    line-height: 76px;
+    font-size: 16px;
+    color: #777E8C;
+    /*padding-left: 10px;
+    background: #fff;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);*/
+  }
+  .layout-header .ivu-breadcrumb > span:last-child{
+    font-weight: normal;
+  }
   .layout-logo-left {
     width: 100%;
     line-height: 50px;
     text-align: center;
     height: 50px;
-    background: #5cadff;
+    /*#5cadff #C61E00 #0966CD @menu-dark-active-bg*/
+    background: @primary-color;
     margin-bottom: 15px;
     color: #fff;
     cursor: pointer;
@@ -244,7 +309,7 @@
 
 </style>
 <script>
-  import {getCookie, delCookie, setStroage, getStroage, removeStroage} from 'tools/cookieAction.js';
+  import {getCookie, setStroage, delCookie} from 'tools/cookieAction.js';
   import common from '../../tools/common.js';
 
   export default {
@@ -294,10 +359,10 @@
       },
       // 退出登录
       toLogOut() {
-
         delCookie('userInfo')
         this.$store.commit('getUserInfo', {})
         console.log('我退出了，清空cookie 和 vuex')
+
         this.$router.push({path: '/login'});
       },
 

@@ -10,14 +10,10 @@ import {store} from './store/store.js'
 // 导入iview 以及 iview的css
 import iView from 'iview'
 Vue.use(iView)
-// import 'iview/dist/styles/iview.css'
 import './static/mytheme/index.less'
 
 // 引入vue-resource
 import VueResource from 'tools/ajax.js'
-
-// 导入字体图标库
-// import 'font-awesome/less/font-awesome.less'
 
 // 导入初始化的css
 import './static/css/reset.css'
