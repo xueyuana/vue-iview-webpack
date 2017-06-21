@@ -163,7 +163,7 @@
                     case 'admin':
                       this.$router.push({name: 'admin_manageConsole'})
                       break
-                    case 'approval':
+                    case 'leader':
                       this.$router.push({name: 'approval_approvalQuery'})
                       break
                     default:

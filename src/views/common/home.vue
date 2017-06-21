@@ -89,7 +89,7 @@
                 <Menu-item name="42">操作日志</Menu-item>
               </Submenu>
             </Menu>
-            <Menu v-if="role === 'approval'" :active-name="$store.state.openMenu.activeItem.activeName"
+            <Menu v-if="role === 'leader'" :active-name="$store.state.openMenu.activeItem.activeName"
                   :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go">
               <div class="layout-logo-left" @click="goConsole">
                 管理控制台
