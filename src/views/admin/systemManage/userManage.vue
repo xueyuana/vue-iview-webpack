@@ -27,7 +27,7 @@
           @on-cancel="createCancel">
         <div class="createWrap">
           <span class="modal-title">用户名：</span><Input v-model="createUser.username" placeholder="请输入..." style="width: 200px"></Input>
-          <span class="modal-title">密码：</span><Input v-model="createUser.password" placeholder="请输入..." style="width: 200px"></Input>
+          <span class="modal-title">密码：</span><Input v-model="createUser.password" placeholder="请输入..." type="password" style="width: 200px"></Input>
           <span class="modal-title">部门：</span><Input v-model="createUser.department" placeholder="请输入..." style="width: 200px"></Input>
           <span class="modal-title">手机：</span><Input v-model="createUser.phone" placeholder="请输入..." style="width: 200px"></Input>
           <span class="modal-title">邮箱：</span><Input v-model="createUser.email" placeholder="请输入..." style="width: 200px"></Input>
@@ -47,7 +47,7 @@
         @on-cancel="compileCancel">
       <div class="createWrap">
         <span class="modal-title">用户名：</span><Input v-model="compileUser.username" placeholder="请输入..." style="width: 200px"></Input>
-        <span class="modal-title">密码：</span><Input v-model="compileUser.password" placeholder="请输入..." style="width: 200px"></Input>
+        <span class="modal-title">密码：</span><Input v-model="compileUser.password" placeholder="修改后的密码..." type="password" style="width: 200px"></Input>
         <span class="modal-title">部门：</span><Input v-model="compileUser.department" placeholder="请输入..." style="width: 200px"></Input>
         <span class="modal-title">手机：</span><Input v-model="compileUser.phone" placeholder="请输入..." style="width: 200px"></Input>
         <span class="modal-title">邮箱：</span><Input v-model="compileUser.email" placeholder="请输入..." style="width: 200px"></Input>
@@ -311,24 +311,36 @@
       },
       createOk () {//确定创建用户
 
-        const url = 'api/user/users'
-        let requestBody = this.createUser
+        //判断创建用户是否填写完整
+        if(this.createUser.username && this.createUser.password) {
 
-        requestBody.password = sha256(this.createUser.password + '!@#$%^').toString(crypto.enc.Hex)
+          const url = 'api/user/users'
+          let requestBody = this.createUser
 
-        this.$http.post(url,requestBody).then((res) => {
-          console.log(res.body.result)
-          //重新获取用户
-          this.getUser()
+          requestBody.password = sha256(this.createUser.password + '!@#$%^').toString(crypto.enc.Hex)
 
-        },(err) => {
-          console.log(err)
-        })
+          this.$http.post(url,requestBody).then((res) => {
+            console.log(res.body.result)
+            //重新获取用户
+            this.getUser()
+
+          },(err) => {
+            console.log(err)
+
+          })
+
+        } else {
+
+          this.$Notice.open({
+            title: '请填写用户名或密码',
+          });
+
+        }
 
         this.createUser = {
 
-          userName: '',
-          passWord: '',
+          username: '',
+          password: '',
           department: '',
           phone: '',
           email: '',
@@ -337,10 +349,11 @@
 
       },
       createCancel () {//创建用户取消
+        console.log(this.createUser)
         //清空
         this.createUser = {
-          userName: '',
-          passWord: '',
+          username: '',
+          password: '',
           department: '',
           phone: '',
           email: '',
