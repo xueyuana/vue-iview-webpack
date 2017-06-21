@@ -101,20 +101,18 @@
     mounted: function () {
       //读取cookie中的账号信息，如果有accountInfo的话，则说明该用户之前勾选了记住密码的功能，则需要自动填上账号密码
       // this.loadAccountInfo();
-
-      console.log(sha256('123456').toString(crypto.enc.Hex))
     },
     methods: {
       handleSubmit(name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
             let userName = this.formInline.userName;
-            let passWord = sha256(this.formInline.passWord + 'abc').toString(crypto.enc.Hex);
+            let passWord = sha256(this.formInline.passWord + '!@#$%^').toString(crypto.enc.Hex);
             let rememberStatus = this.formInline.rememberPassword;
             let accountInfo = "";
             accountInfo = userName + "&" + passWord;
 
-            // June 临时验证
+//             June 临时验证
 //            if (userName) {
 //              setCookie('role', userName)
 //              switch (userName) {
@@ -136,9 +134,9 @@
 
             let body = {
               "username": userName,
-              "password": passWord,
+              "password": passWord
             }
-            this.$http.post('api/user/login', body, {emulateJSON: true})
+            this.$http.post('api/user/login', body)
               .then(res => {
                 console.log('登录', res)
                 if (rememberStatus) {
@@ -153,21 +151,33 @@
                   this.$Message.success('登录成功!');
 
                   let userinfo = {}
-                  userinfo.user_id = res.body.result.user_id;
+                  userinfo.id = res.body.result.id
+                  userinfo.role = res.body.result.role
 
-                  setStroage('userInfo', userinfo)
+                  setCookie('userInfo', JSON.stringify(userinfo))
 
-                  // 根据不同用户权限进入不同界面
+                  switch (userinfo.role) {
+                    case 'user':
+                      this.$router.push({name: 'user_manageConsole'})
+                      break
+                    case 'admin':
+                      this.$router.push({name: 'admin_manageConsole'})
+                      break
+                    case 'approval':
+                      this.$router.push({name: 'approval_approvalQuery'})
+                      break
+                    default:
+                      this.$Message.error('权限不存在')
+                  }
 
                 }
 
                 if (res.body.code == 400) {
-                  this.$Message.error('验证错误!');
+                  this.$Message.error(res.body.result.msg)
                 }
                 // 成功回调
               }, err => {
-                this.$Message.error('登陆失败!');
-                // 失败回调
+                this.$Message.error(err.body.result.msg)
               });
 
           } else {

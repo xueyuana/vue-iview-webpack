@@ -8,7 +8,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
-import page from 'views/page/page.vue'                    // 首页
+import page from 'views/page/index.vue'                    // 首页
 import login from 'views/common/login.vue'                // 登录
 import home from 'views/common/home.vue'                  // Home页
 

@@ -12,11 +12,11 @@
         <ul>
           <li class="username">
             用户：
-            <span>{{userInfo.username}}</span>
+            <span>{{$store.state.userData.userInfo.username }}</span>
           </li>
           <li class="department">
             所属部门：
-            <span>{{userInfo.department}}</span>
+            <span>{{$store.state.userData.userInfo.department}}</span>
           </li>
           <li @click="toLogOut">
             <a href="javascript:void(0);">退出</a>
@@ -246,7 +246,6 @@
 <script>
   import {getCookie, delCookie, setStroage, getStroage, removeStroage} from 'tools/cookieAction.js';
   import common from '../../tools/common.js';
-  import {userinfo} from '../../tools/user.js';
 
   export default {
 
@@ -257,10 +256,16 @@
         role: ''
       }
     },
-    mounted () {
-      this.role = getCookie('role')
-      console.log('home用户权限', this.role)
+    created() {
+      console.log('从state中获取用户信息', this.$store.state.userData.userInfo)
+      this.userInfo = this.$store.state.userData.userInfo
+      this.role = this.userInfo.role
     },
+//    mounted () {
+//      console.log('从state中获取用户信息', this.$store.state.userData.userInfo)
+//      this.userInfo = this.$store.state.userData.userInfo
+//      this.role = this.userInfo.role
+//    },
     methods: {
       // 获取用户名
       getUserInfo () {
@@ -290,8 +295,9 @@
       // 退出登录
       toLogOut() {
 
-        delCookie('role')
-        console.log('我退出了')
+        delCookie('userInfo')
+        this.$store.commit('getUserInfo', {})
+        console.log('我退出了，清空cookie 和 vuex')
         this.$router.push({path: '/login'});
       },
 

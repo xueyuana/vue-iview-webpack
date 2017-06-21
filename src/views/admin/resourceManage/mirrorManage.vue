@@ -42,10 +42,11 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="less">
 
 </style>
 
@@ -85,7 +86,7 @@
           },
           {
             title: '镜像格式',
-            key: 'image_size',
+            key: 'image_format',
             align: 'center'
           },
           {
@@ -168,7 +169,7 @@
       mockTableData (originData, pageSize, index) {
         let data = [];
         let num = (index - 1) * pageSize
-        let maxNum = (num + pageSize) > this.data.length ? this.data.length : (num + pageSize)
+        let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize)
         for (let i = num; i < maxNum; i++) {
           data.push({
             id: originData[i].id,
