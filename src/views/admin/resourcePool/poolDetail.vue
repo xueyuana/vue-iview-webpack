@@ -172,21 +172,21 @@
             key: 'name',
             align: 'center'
           },
-          {
-            title: '型号',
-            key: 'model',
-            align: 'center'
-          },
-          {
-            title: '规格',
-            key: 'standard',
-            align: 'center'
-          },
-          {
-            title: 'IP',
-            key: 'ip',
-            align: 'center'
-          },
+//          {
+//            title: '型号',
+//            key: 'model',
+//            align: 'center'
+//          },
+//          {
+//            title: '规格',
+//            key: 'standard',
+//            align: 'center'
+//          },
+//          {
+//            title: 'IP',
+//            key: 'ip',
+//            align: 'center'
+//          },
           {
             title: '虚拟机数量',
             key: 'virtual_machine',
@@ -221,9 +221,9 @@
         filterDate: [
           {
             name: '资源池一',
-            model: 20,
-            standard: '',
-            ip: '',
+//            model: 20,
+//            standard: '',
+//            ip: '',
             virtual_machine: 200,
             CPU_proportion: '30%',
             RAM_proportion: '10%',

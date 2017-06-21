@@ -94,32 +94,32 @@
             title: '虚拟机总数',
             key: 'virtual_machine',
             align: 'center'
-          },
-          {
-            title: 'CPU占比',
-            key: 'CPU_proportion',
-            align: 'center'
-          },
-          {
-            title: '内存占比',
-            key: 'RAM_proportion',
-            align: 'center'
-          },
-          {
-            title: '磁盘占比',
-            key: 'disk_proportion',
-            align: 'center'
           }
+//          {
+//            title: 'CPU占比',
+//            key: 'CPU_proportion',
+//            align: 'center'
+//          },
+//          {
+//            title: '内存占比',
+//            key: 'RAM_proportion',
+//            align: 'center'
+//          },
+//          {
+//            title: '磁盘占比',
+//            key: 'disk_proportion',
+//            align: 'center'
+//          }
         ],
         data1: [],
         filterDate: [
           {
             image_name: '资源池一',
             physical_machine: 20,
-            virtual_machine: 200,
-            CPU_proportion: '30%',
-            RAM_proportion: '10%',
-            disk_proportion: '20%'
+            virtual_machine: 200
+//            CPU_proportion: '30%',
+//            RAM_proportion: '10%',
+//            disk_proportion: '20%'
           }
         ],
         pageSize: 10,
