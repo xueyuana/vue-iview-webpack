@@ -3,17 +3,17 @@
     <div class="query-form">
       <div class="queryInformation">
         <div class="item date-picker">
-          <span class="title">申请日期</span>
+          <span class="title">申请日期:</span>
           <Date-picker type="daterange" v-model="query_info.applyDate" placeholder="选择日期" style="width: 200px"></Date-picker>
         </div>
         <div class="item">
-          <span class="title">审批状态</span>
+          <span class="title">审批状态:</span>
           <Select v-model="query_info.status" style="width:200px">
             <Option v-for="item in approvalStatusVal" :value="item.value" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
         <div class="item">
-          <span class="title">部署实例</span>
+          <span class="title">部署实例:</span>
           <Select v-model="query_info.instance_id" style="width:200px">
             <Option v-for="item in instance_name" :value="item.value" :key="item">{{ item.value }}</Option>
           </Select>
@@ -25,7 +25,7 @@
 
       </div>
     </div>
-    <div class="inquire-table-title">申请资源列表：</div>
+    <div class="inquire-table-title">申请资源列表</div>
     <Table border stripe :columns="columns" :data="queryResult"></Table>
     <div class="page">
       <Page :total="100" show-sizer @on-change="changePage"></Page>

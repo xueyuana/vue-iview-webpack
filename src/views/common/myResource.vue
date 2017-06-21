@@ -3,29 +3,29 @@
     <div class="query-form inquire-form">
       <div class="queryInformation">
         <div class="item date-picker">
-          <span class="title">申请日期</span>
+          <span class="title">申请日期:</span>
           <Date-picker type="daterange" v-model="query_info.applyDate"  placeholder="选择日期" style="width: 200px"></Date-picker>
         </div>
         <div class="item">
-          <span class="title">虚拟机名称</span>
+          <span class="title">虚拟机名称:</span>
           <Input v-model="query_info.vm_name" placeholder="请输入..." style="width: 200px"></Input>
         </div>
 
         <div class="item">
-          <span class="title">资源池</span>
+          <span class="title">资源池:</span>
           <Select v-model="query_info.az" style="width:200px">
             <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
           </Select>
         </div>
 
         <div class="item">
-          <span class="title">状态</span>
+          <span class="title">状态:</span>
           <Select v-model="query_info.status" style="width:200px">
             <Option v-for="item in status" :value="item.value" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
         <div class="item">
-          <span class="title">部署实例</span>
+          <span class="title">部署实例:</span>
           <Select v-model="query_info.instance_name" style="width:200px">
             <Option v-for="item in deployExample" :value="item.value" :key="item" >{{ item.value }} </Option>
           </Select>
@@ -36,7 +36,7 @@
         <Button class="reset" type="ghost" @click="reset">重置</Button>
       </div>
     </div>
-    <div class="inquire-table-title">资源列表：</div>
+    <div class="inquire-table-title">资源列表</div>
     <table>
       <thead>
         <tr>

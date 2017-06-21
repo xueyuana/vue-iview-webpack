@@ -1,42 +1,42 @@
 <template>
   <div class="my-resource">
-    <div class="query-form">
+    <div class="query-form inquire-form">
       <div class="queryInformation">
         <div class="item date-picker">
-          <span class="title">申请日期</span>
-          <Date-picker v-model="date" type="daterange"  placeholder="选择日期" style="width: 200px"></Date-picker>
+          <span class="title">申请日期:</span>
+          <Date-picker type="daterange" v-model="query_info.applyDate"  placeholder="选择日期" style="width: 200px"></Date-picker>
         </div>
         <div class="item">
-          <span class="title">虚拟机名称</span>
-          <Input v-model="value" placeholder="请输入..." style="width: 200px"></Input>
+          <span class="title">虚拟机名称:</span>
+          <Input v-model="query_info.vm_name" placeholder="请输入..." style="width: 200px"></Input>
         </div>
 
         <div class="item">
-          <span class="title">资源池</span>
-          <Select v-model="model1" style="width:200px">
-            <Option v-for="item in resourcePool" :value="item.value" :key="item">{{ item.value }}</Option>
+          <span class="title">资源池:</span>
+          <Select v-model="query_info.az" style="width:200px">
+            <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
           </Select>
         </div>
 
         <div class="item">
-          <span class="title">状态</span>
-          <Select v-model="model1" style="width:200px">
+          <span class="title">状态:</span>
+          <Select v-model="query_info.status" style="width:200px">
             <Option v-for="item in status" :value="item.value" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
         <div class="item">
-          <span class="title">部署实例</span>
-          <Select v-model="model1" style="width:200px">
+          <span class="title">部署实例:</span>
+          <Select v-model="query_info.instance_name" style="width:200px">
             <Option v-for="item in deployExample" :value="item.value" :key="item" >{{ item.value }} </Option>
           </Select>
         </div>
       </div>
       <div class="query">
-        <Button type="info" >查询</Button>
-        <Button class="reset" type="info" @click="handleResert">重置</Button>
+        <Button type="primary" @click="query">查询</Button>
+        <Button class="reset" type="ghost" @click="reset">重置</Button>
       </div>
     </div>
-    <div class="header">资源列表：</div>
+    <div class="inquire-table-title">资源列表</div>
     <table>
       <thead>
       <tr>
@@ -44,7 +44,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(item,index) in queryResult" >
+      <tr v-for="(item,index) in queryResult" :class="{bac: index%2 != 0}">
         <td>{{index + 1}}</td>
         <td>{{item.virtualMachine}}</td>
         <td>{{item.deployExample}}</td>
@@ -71,8 +71,7 @@
 
     </table>
     <div class="page">
-      <Button class="pre">上一页</Button>
-      <Button>下一页</Button>
+      <Page :total="100" show-sizer @on-change="changePage"></Page>
     </div>
 
   </div>
@@ -83,7 +82,6 @@
   export default {
     data () {
       return {
-        date: '',
         status: [
           {
             value: '运行',
@@ -103,17 +101,24 @@
             value: '实例2'
           }
         ],
-        resourcePool: [
+        az: [
           {
-            value: '资源池1',
+            az_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
+            az_name: "资源池1",
           },
           {
-            value: '资源池2'
+            az_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
+            az_name: "资源池2",
           }
         ],
+        query_info: {
+          applyDate: [],
+          vm_name: '',
+          az: '',
+          status: '',
+          instance_name: ''
+        },
         operationList: [],
-        value: '',
-        model1: '',
         model2: '',
         columns: [
           {
@@ -154,7 +159,7 @@
           },
           {
             title: '操作',
-            key: 'operate'
+            key: 'operate',
           }
         ],
         queryResult: [
@@ -177,42 +182,53 @@
     created () {
       this.queryResult.forEach((item,index) => {
         switch (item.status) {
-          case '运行': this.operationList.push([
-            {
-              value: '重启',
-              selected: false
-            },
-            {
-              value: '关机',
-              selected: false
-            }
-          ])
-            break
-          case '异常': this.operationList.push([
-            {
-              value: '启动',
-              selected: false
-            },
-            {
-              value: '开机',
-              selected: false
-            }
-          ])
-            break
-          case '开机': this.operationList.push([
-            {
-              value: '关机',
-              selected: false
-            },
-            {
-              value: '重启',
-              selected: false
-            }
-          ])
-            break
-          default:
-        }
-      })
+      case '运行': this.operationList.push([
+          {
+            value: '重启',
+            selected: false
+          },
+          {
+            value: '关机',
+            selected: false
+          },
+          {
+            value: 'VNC',
+            selected: false
+          }
+        ])
+        break
+      case '异常': this.operationList.push([
+          {
+            value: '启动',
+            selected: false
+          },
+          {
+            value: '开机',
+            selected: false
+          },
+          {
+            value: 'VNC',
+            selected: false
+          }
+        ])
+        break
+      case '开机': this.operationList.push([
+          {
+            value: '关机',
+            selected: false
+          },
+          {
+            value: '重启',
+            selected: false
+          },
+          {
+            value: 'VNC',
+            selected: false
+          }
+        ])
+        break
+      }
+    })
 
     },
     methods: {
@@ -220,18 +236,28 @@
         //index指的是行数
         this.operationList[index].forEach((item,index) => {
           if(item.value == event.target.firstChild.data) {
-            item.selected = true
-          }else {
-            item.selected = false
-          }
-        })
-      },
-      handleResert() {
-        this.date = ''
-        this.model1 = ''
-        this.model2 = ''
-      }
+          item.selected = true
+        }else {
+          item.selected = false
+        }
+      })
 
+      },
+      changePage () {
+
+      },
+      query () {
+
+      },
+      reset () {
+        this.query_info = {
+          applyDate: [],
+          vm_name: '',
+          az: '',
+          status: '',
+          instance_name: ''
+        }
+      }
     }
   }
 
@@ -249,10 +275,7 @@
   }
   .query-form {
     width: 100%;
-    border: 1px solid #e4e4e4;
-    background-image: linear-gradient(to bottom,#fff,#e4e4e4);
-    border-radius: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
   }
   .date-picker {
     display: flex;
@@ -281,10 +304,7 @@
   .page {
     display: flex;
     justify-content: flex-end;
-    margin-top: 10px;
-  }
-  .pre {
-    margin-right: 20px;
+    margin-top: 20px;
   }
   .header {
     margin: 30px 0 10px;
@@ -293,6 +313,7 @@
   table {
     width: 100%;
     border-collapse: collapse;
+    color: #657180;
   }
   table td,th{
     text-align: center;
@@ -303,11 +324,20 @@
 
   }
   table thead tr{
-    background-color: #f8f8f9;
+    background-color: #ebf4fe;
   }
   table tbody tr:hover {
     background-color: #F3FAFF;
   }
+
+  .ivu-dropdown-menu {
+    min-width: 60px;
+  }
+
+  .bac {
+    background-color: #fcfcfc;
+  }
+
 
 
 </style>

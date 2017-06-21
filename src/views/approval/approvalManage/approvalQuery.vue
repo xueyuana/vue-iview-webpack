@@ -8,12 +8,12 @@
               <Input v-model="formValidate.apply_name" placeholder="请输入"></Input>
             </Form-item>
           </Col>
-          <Col span="6">
+          <Col span="9">
             <Form-item label="申请日期:" prop="start_time">
               <Date-picker type="daterange" placement="bottom-end" format="yyyy-MM-dd" placeholder="选择日期" v-model="formValidate.start_time" @on-change="formatCreateData"></Date-picker>
             </Form-item>
           </Col>
-          <Col span="4">
+          <Col span="5">
             <Form-item label="审批状态:" prop="apply_status">
               <Select v-model="formValidate.apply_status" clearable style="">
                 <Option :value="1" :key="1">待审批</Option>
@@ -22,7 +22,7 @@
               </Select>
             </Form-item>
           </Col>
-          <Col span="4">
+          <Col span="5">
             <Form-item label="部署实例:" prop="case">
               <Select v-model="formValidate.case" clearable style="">
                 <Option :value="1" :key="1">部署实例1</Option>
@@ -53,7 +53,7 @@
     </div>
     <div class="inquire-table">
       <div class="inquire-table-title">申请资源列表</div>
-      <Table border :columns="columns" :data="dataDemo"></Table>
+      <Table stripe :columns="columns" :data="dataDemo"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
           <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
