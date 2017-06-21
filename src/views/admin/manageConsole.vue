@@ -2,11 +2,11 @@
   <div class="survey">
     <!--资源使用概况-->
     <div class="resource-survey">
-      <div class="title">
+      <div class="sub-title-bg">
         <span>资源概览</span>
       </div>
       <div class="resource-pie">
-        <Row :gutter="32">
+        <Row type="flex" justify="start">
           <Col span="8">
             <div id="my-resource1"
                  style="width: 100%;height: 300px;-webkit-tap-highlight-color: transparent;use-select: none;cursor: default;">
@@ -26,56 +26,28 @@
       </div>
     </div>
     <!--待审批-->
-    <div class="pending">
-      <div class="title">
-        <span>待审批</span>
-      </div>
-      <a class="content" @click="toApproval">资源审批：<span>6</span></a>
+    <div class="sub-title-bg">
+      <span>待审批</span>
     </div>
-
+    <Row class="c_application">
+      <Col span="12">
+        <div @click="toApproval">
+          <Icon type="record" size="10"></Icon>资源审批
+          <span class="title">待审批：</span><span class="num">6</span>
+        </div>
+      </Col>
+      <Col span="12"></Col>
+    </Row>
   </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
+  @import "../../static/css/common.less";
   /*概况*/
-  .survey {
-    border: 1px dashed #ccc;
-    padding: 20px;
-  }
-
-  .survey .title {
-    /*#0AB7E9;*/
-    background-color: #3F94FC;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 700;
-    width: 100px;
-    text-align: center;
-    height: 30px;
-    line-height: 30px;
-  }
-
   .resource-pie {
     margin-top: 10px;
+    margin-bottom: 40px;
   }
-
-  .pending {
-    margin-top: 20px;
-  }
-
-  .pending .content {
-    margin-left: 40px;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 50px;
-    color: #000;
-  }
-
-  .pending .content span {
-    color: red;
-    text-decoration: underline;
-  }
-
 </style>
 
 <script>

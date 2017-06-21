@@ -1,7 +1,6 @@
 <template>
     <div class="box">
-        <div class="c_title">
-            <Icon type="android-radio-button-on"></Icon>
+        <div class="sub-title-bg">
             <span>资源概览</span>
         </div>
         <div class="survey">
@@ -87,12 +86,17 @@
                </Col>
             </Row>
         </div>
-        <div class="c_title">
-            <Icon type="android-radio-button-on"></Icon>
+        <div class="sub-title-bg">
             <span>资源审批</span>
         </div>
         <Row class="c_application">
-            <Col span="12"><Icon type="record" size="10"></Icon><font @click="myApplication">我的申请</font><span>待审批：{{ pendingApproval }} </span><span>已审批：{{ approved }}</span></Col>
+            <Col span="12">
+                <div @click="myApplication">
+                    <Icon type="record" size="10"></Icon>我的申请
+                    <span class="title">待审批：</span><span class="num">{{ pendingApproval }}</span>
+                    <span class="title">已审批：</span><span class="num">{{ approved }}</span>
+                </div>
+            </Col>
             <Col span="12"></Col>
         </Row>
     </div>
@@ -128,16 +132,6 @@
 </script>
 
 <style scoped>
-    .c_title {
-        background-color: #3F94FC;
-        color: #fff;
-        font-size: 14px;
-        font-weight: 700;
-        width: 100px;
-        text-align: center;
-        height: 30px;
-        line-height: 30px;
-    }
     .survey-list {
         margin-top: 10px;
     }
@@ -275,20 +269,7 @@
         margin: 5px
     }
     .box{
-        border:1px dashed #CCC;
-        padding: 30px 100px;
-    }
-    .c_application{
-        line-height: 40px;
-        font-size: 14px;
-        color: #AEAEAE;
-    }
-    .c_application font{
-        padding-right: 30px;
-        padding-left: 10px;
-        cursor: pointer;
-    }
-    .c_application span{
-        padding-right: 30px;
+        /*border:1px dashed #CCC;
+        padding: 30px 100px;*/
     }
 </style>
