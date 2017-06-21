@@ -234,6 +234,7 @@
 
         const url = 'api/user/users'
         this.$http.get(url).then((res) => {
+
           this.data_length = res.body.result.res.length
 
           res.body.result.res.forEach((item,index) => {
@@ -282,6 +283,16 @@
 //        修改成功之后改变列表数据
           for(var key in this.compileUser) {
             this.queryResult[this.index][key] = this.compileUser[key]
+
+          }
+
+          switch (this.queryResult.role) {
+          case 'admin': item.role = '管理员'
+            break
+          case 'leader': item.role = '行政审批'
+            break
+          case 'user': item.role = '普通用户'
+            break
           }
 
         },(err) => {
@@ -343,8 +354,6 @@
 
         let end_time = this.query_info.applyDate[1]
 
-        console.log('start',start_time)
-        console.log('end',end_time)
 
         let params = {}
 
