@@ -183,14 +183,14 @@ export default {
 }
 .demo-carousel{
     height:600px;
-    background: url("../../static/bj1.jpg")center center no-repeat;
+    /*background: url("../../static/bj1.jpg")center center no-repeat;*/
     overflow: hidden;
 }
 .demo-carousel2{
-    background: url("../../static/bj2.jpg")center center no-repeat;
+    /*background: url("../../static/bj2.jpg")center center no-repeat;*/
 }
 .demo-carousel3{
-    background: url("../../static/bj3.jpg")center center no-repeat;
+    /*background: url("../../static/bj3.jpg")center center no-repeat;*/
 }
 .demo-carousel img{
     width: 100%;

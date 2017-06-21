@@ -8,7 +8,7 @@
         </div>
         <div class="item date-picker">
           <span class="title">申请日期</span>
-          <Date-picker type="datetimerange" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
+          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
         </div>
       </div>
       <div class="query">
@@ -38,7 +38,7 @@
       </Modal>
 
     </div>
-    <div class="header">资源列表：</div>
+    <div class="header">用户列表：</div>
     <Table border :columns="columns" :data="queryResult"></Table>
     <Modal
         v-model="isCompile"
@@ -59,7 +59,7 @@
       </div>
     </Modal>
     <div class="page">
-      <Page :total="data_length" @on-change="changePage"></Page>
+      <Page :total="data_length" @on-change="changePage" :current="current_page"></Page>
     </div>
 
   </div>
@@ -75,6 +75,7 @@
     data () {
       return {
         data_length: 0,
+        current_page: 1,
         getResult: [],
         query_info: {
           user_name: '',
@@ -237,6 +238,8 @@
 
           this.data_length = res.body.result.res.length
 
+//          this.current_page = 1
+
           res.body.result.res.forEach((item,index) => {
             item.number = index + 1
 
@@ -280,6 +283,8 @@
 
         this.$http.put(url,requestBody).then((res) => {
          console.log(res.body)
+
+          this.current_page = 1
 //        修改成功之后改变列表数据
           for(var key in this.compileUser) {
             this.queryResult[this.index][key] = this.compileUser[key]
@@ -346,14 +351,13 @@
       },
       query () {//查询
 
-        this.data_length = 0
-
         let user_name = this.query_info.user_name
 
         let start_time = this.query_info.applyDate[0]
 
         let end_time = this.query_info.applyDate[1]
 
+        this.current_page = 1
 
         let params = {}
 
@@ -362,6 +366,7 @@
         end_time && (params.end_time = this.timeFormat(end_time))
 
         let url = 'api/user/users'
+
         this.$http.get(url,{params: params}).then((res) => {
 
           this.data_length = res.body.result.res.length
@@ -383,7 +388,14 @@
           //进行分页
           this.queryResult = this.mockTableData(this.getResult,10,1)
         },(err) => {
+
           console.log(err)
+
+          this.$Notice.open({
+            title: '查询失败'
+          });
+
+          this.queryResult = []
         })
 
 
@@ -399,6 +411,7 @@
       changePage (page) {//分页
 
         this.queryResult = this.mockTableData(this.getResult, 10, page)
+        this.current_page = page
 
       },
       mockTableData (originData, pageSize, index) {
