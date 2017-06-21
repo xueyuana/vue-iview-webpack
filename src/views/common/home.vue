@@ -5,9 +5,9 @@
       <div class="logo fl">
         <a class="logo_icon" href="/"></a>
       </div>
-      <div class="uop-title fl">
-        <p>门头沟政务云资源管理平台</p>
-      </div>
+      <!--<div class="uop-title fl">-->
+        <!--<p>门头沟政务云资源管理平台</p>-->
+      <!--</div>-->
       <div class="user-info fr">
         <ul>
           <li class="username">
@@ -142,7 +142,7 @@
     height: 80px;
     width: 100%;
     line-height: 80px;
-    padding: 0 20px;
+    padding: 0 30px;
     border-bottom: 1px solid #ECECEC;
     box-sizing: border-box;
     position: fixed;
@@ -152,9 +152,9 @@
   }
 
   .uop-header .logo {
-    width: 100px;
-    height: 60px;
-    margin-top: 9px;
+    width: 356px;
+    height: 28px;
+    margin-top: 26px;
   }
 
   .uop-header .logo_icon {
