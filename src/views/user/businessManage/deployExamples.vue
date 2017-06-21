@@ -34,7 +34,7 @@
             <!--<Col span="5"></Col>-->
         <!--</Row>-->
         <div class="inquire-table">
-            <div class="inquire-table-title">部署实例列表：</div>
+            <div class="inquire-table-title">部署实例列表</div>
             <div class="tjbssl">
                 <Button type="primary" @click.native="addCase">添加部署实例</Button>
                 <!--<Button @click="modal1 = true">添加部署实例</Button>-->
