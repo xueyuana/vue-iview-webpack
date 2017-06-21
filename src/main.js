@@ -10,6 +10,7 @@ import {store} from './store/store.js'
 // 导入iview 以及 iview的css
 import iView from 'iview'
 Vue.use(iView)
+// import './static/mytheme/redtheme.less'
 import './static/mytheme/index.less'
 
 // 引入vue-resource
@@ -39,10 +40,8 @@ vueRouters.beforeEach((to, from, next) => {
     if (to.path === '/login') {
       next()
     } else {
-      console.log('我马上就要请求数据了', store.state.userData.userInfo)
 
       if (Object.keys(store.state.userData.userInfo).length) {
-
         let nav = {}
         let bread = {}
         let name = to.name

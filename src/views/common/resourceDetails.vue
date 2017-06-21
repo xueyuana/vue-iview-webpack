@@ -22,7 +22,7 @@
         <!--</p>-->
       <!--</Panel>-->
     <!--</Collapse>-->
-    <div class="status-list">
+    <div class="status-list" v-if="$store.state.userData.userInfo.role == 'admin'">
       <div class="sub-title">DMZ资源池资源使用情况</div>
       <Row>
         <Col span="8">
@@ -66,7 +66,7 @@
         </Col>
       </Row>
     </div>
-    <div class="status-list">
+    <div class="status-list" v-if="$store.state.userData.userInfo.role == 'admin'">
       <div class="sub-title">本次申请占用资源情况</div>
       <Row>
         <Col span="8">

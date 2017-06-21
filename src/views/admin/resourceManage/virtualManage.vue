@@ -71,7 +71,7 @@
 
     </table>
     <div class="page">
-      <Page :total="100" show-sizer @on-change="changePage"></Page>
+      <Page :total="5" show-sizer @on-change="changePage"></Page>
     </div>
 
   </div>
@@ -192,7 +192,7 @@
             selected: false
           },
           {
-            value: 'VNC',
+            value: '删除',
             selected: false
           }
         ])
@@ -207,7 +207,7 @@
             selected: false
           },
           {
-            value: 'VNC',
+            value: '删除',
             selected: false
           }
         ])
@@ -222,7 +222,7 @@
             selected: false
           },
           {
-            value: 'VNC',
+            value: '删除',
             selected: false
           }
         ])

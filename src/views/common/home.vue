@@ -137,6 +137,7 @@
 </template>
 
 <style lang="less" scoped>
+  /*@import "../../static/mytheme/redtheme.less";*/
   @import "../../static/mytheme/index.less";
 
   .home {
@@ -326,11 +327,6 @@
       this.userInfo = this.$store.state.userData.userInfo
       this.role = this.userInfo.role
     },
-//    mounted () {
-//      console.log('从state中获取用户信息', this.$store.state.userData.userInfo)
-//      this.userInfo = this.$store.state.userData.userInfo
-//      this.role = this.userInfo.role
-//    },
     methods: {
       // 获取用户名
       getUserInfo () {
@@ -348,7 +344,7 @@
             case 'admin':
               this.$router.push({name: 'admin_manageConsole'})
               break
-            case 'approval':
+            case 'leader':
               this.$router.push({name: 'approval_approvalQuery'})
               break
             default:
@@ -372,7 +368,7 @@
           this.goUser(name)
         } else if (this.role === 'admin') {
           this.goAdmin(name)
-        } else if (this.role === 'approval') {
+        } else if (this.role === 'leader') {
           this.goApproval(name)
         } else {
           this.$Message.warning('没有权限，请重新登录')

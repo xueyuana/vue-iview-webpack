@@ -192,7 +192,7 @@
                 selected: false
               },
               {
-                value: 'VNC',
+                value: '删除',
                 selected: false
               }
             ])
@@ -207,7 +207,7 @@
                 selected: false
               },
               {
-                value: 'VNC',
+                value: '删除',
                 selected: false
               }
             ])
@@ -222,7 +222,7 @@
                 selected: false
               },
               {
-                value: 'VNC',
+                value: '删除',
                 selected: false
               }
             ])
