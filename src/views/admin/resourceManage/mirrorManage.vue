@@ -73,8 +73,8 @@
         },
         ruleValidate: {
           date: [],
-          image_format: '',
-          image_name: ''
+          image_format: [],
+          image_name: []
         },
         userInfo: '',
         columns:  [
@@ -89,9 +89,12 @@
             align: 'center'
           },
           {
-            title: '尺寸',
+            title: '尺寸 (M)',
             key: 'image_size',
-            align: 'center'
+            align: 'center',
+            render: (h, params) => {
+              return h('p', parseInt(params.row.image_size/1024/1024))
+            }
           },
           {
             title: '镜像格式',
@@ -101,18 +104,14 @@
           {
             title: '日期',
             key: 'created_time',
-            align: 'center'
+            align: 'center',
+            render: (h, params) => {
+              return h('p', params.row.created_time.replace(/[T]/g, ' ').substring(0, 10))
+            }
           }
         ],
         data: [],
-        filterDate: [
-          {
-            image_name: 'Centos 7.2',
-            image_size : '8G',
-            image_format : 'qcow2',
-            created_time : '2017-06-23 11:05'
-          }
-        ],
+        filterDate: [],
         pageSize: 10,
         num: 1
       }
@@ -179,16 +178,8 @@
         let data = [];
         let num = (index - 1) * pageSize
         let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize)
-        for (let i = num; i < maxNum; i++) {
-          data.push({
-            id: originData[i].id,
-            created_time: originData[i].created_time.substring(0, 16),
-            image_name: originData[i].image_name,
-            image_size: originData[i].image_size,
-            image_format: originData[i].image_format
-          })
-        }
-        return data;
+
+        return originData.slice(num, maxNum)
       }
     }
   }

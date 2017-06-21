@@ -21,12 +21,6 @@
             </div>
           </Col>
         </Row>
-        <!--<div class="form-btn-wrap clearfix">-->
-          <!--<div class="btns">-->
-            <!--<Button type="primary" @click.native="onInquire" style="margin-right: 10px">查询</Button>-->
-            <!--<Button type="ghost" @click.native="handleReset('formItem')">重置</Button>-->
-          <!--</div>-->
-        <!--</div>-->
       </Form>
     </div>
 
@@ -95,21 +89,6 @@
             key: 'virtual_machine',
             align: 'center'
           }
-//          {
-//            title: 'CPU占比',
-//            key: 'CPU_proportion',
-//            align: 'center'
-//          },
-//          {
-//            title: '内存占比',
-//            key: 'RAM_proportion',
-//            align: 'center'
-//          },
-//          {
-//            title: '磁盘占比',
-//            key: 'disk_proportion',
-//            align: 'center'
-//          }
         ],
         data1: [],
         filterDate: [
@@ -117,9 +96,6 @@
             image_name: '资源池一',
             physical_machine: 20,
             virtual_machine: 200
-//            CPU_proportion: '30%',
-//            RAM_proportion: '10%',
-//            disk_proportion: '20%'
           }
         ],
         pageSize: 10,
@@ -184,18 +160,8 @@
         let data = [];
         let num = (index - 1) * pageSize
         let maxNum = (num + pageSize) > this.data1.length ? this.data1.length : (num + pageSize)
-        for (let i = num; i < maxNum; i++) {
-          data.push({
-            initiator: originData[i].initiator,
-            start_time: originData[i].start_time.substring(0, 16),
-            project_name: originData[i].project_name,
-            status: this.formatStatus(originData[i].deploy_result),
-            deploy_id: originData[i].deploy_id,
-            deploy_name: originData[i].deploy_name,
-            image_name: originData[i].image_name
-          })
-        }
-        return data;
+
+        return originData.slice(num, maxNum)
       },
       // 请求部署单元列表
       getProjectList() {

@@ -281,7 +281,25 @@
 
               </div>
               <div slot="item2">
-                <Table border :columns="columns" :data="download"></Table>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>序号</th>
+                      <th>标题</th>
+                      <th>发起人</th>
+                      <th>时间</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item,index) in list" :class="{bac: index%2 != 0}">
+                      <td>{{index + 1}}</td>
+                      <td>{{item.title}}</td>
+                      <td>{{item.announcer}}</td>
+                      <td>{{item.time}}</td>
+                    </tr>
+                  </tbody>
+
+                </table>
               </div>
             </m-Tabs>
           </div>
@@ -311,7 +329,7 @@
     <footer class="item foot">
       <div class="copyright"><p>© 2017 MEHIEFKSHNK - All Right Reserved</p></div>
       <i class="arrow"></i>
-      <i class="top"></i>
+      <i class="top" @click="toTop"></i>
     </footer>
   </div>
 
@@ -604,6 +622,29 @@
     }
   }
 
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    color: #657180;
+  }
+  table td,th{
+    text-align: center;
+    border: 1px solid #dddee1;
+  }
+  table tr {
+    height: 40px;
+  }
+  table thead tr{
+    background-color: #ebf4fe;
+  }
+  table tbody tr:hover {
+    background-color: #F3FAFF;
+  }
+  .bac {
+    background-color: #fcfcfc;
+  }
+
   @keyframes arrow {
     0% {
       transform: translateY(0);
@@ -623,25 +664,7 @@
       return {
         currentIndex: 1,
         tabsData: ['最新公告', '云资源', '帮助与支持', '关于我们'],
-        columns: [
-          {
-            title: '序号',
-            type: 'index'
-          },
-          {
-            title: '标题',
-            key: 'title'
-          },
-          {
-            title: '发布者',
-            key: 'announcer'
-          },
-          {
-            title: '发布时间',
-            key: 'time'
-          }
-        ],
-        download: [
+        list: [
           {
             title: '内核‘Dirty Cow’提权漏洞安全预警公告',
             announcer: '管理员',
@@ -672,6 +695,9 @@
       },
       toConsole() {
         this.$router.push({path: '/login'})
+      },
+      toTop() {
+        this.$fullpage.moveTo(1)
       }
     },
     components: {
