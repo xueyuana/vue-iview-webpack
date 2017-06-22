@@ -25,6 +25,8 @@ import admin_poolManage from 'views/admin/resourcePool/poolManage.vue'          
 import admin_poolDetails from 'views/admin/resourcePool/poolDetail.vue'                       // 管理员 > 资源池详情
 import admin_mirrorManagement from 'views/admin/resourceManage/mirrorManage.vue'              // 管理员 > 镜像管理
 import admin_virtualManage from 'views/admin/resourceManage/virtualManage.vue'                // 管理员 > 虚拟机管理
+import admin_deployManage from 'views/admin/resourceManage/deployManage.vue'                  // 管理员 > 部署实例管理
+import admin_publicNetIp from 'views/admin/resourceManage/publicNetIp.vue'                    // 管理员 > 公网IP管理
 import admin_resourceApproval from 'views/admin/resourceApproval/resourceApproval.vue'        // 管理员 > 资源审批
 import admin_userManage from 'views/admin/systemManage/userManage.vue'                        // 管理员 > 用户管理
 import admin_operationLog from 'views/common/operationLog.vue'                                // 管理员 > 操作日志
@@ -56,6 +58,8 @@ var routes = [
       {name: 'admin_poolDetails', path: 'admin_poolDetails', component: admin_poolDetails},
       {name: 'admin_mirrorManagement', path: 'admin_mirrorManagement', component: admin_mirrorManagement},
       {name: 'admin_virtualManage', path: 'admin_virtualManage', component: admin_virtualManage},
+      {name: 'admin_deployManage', path: 'admin_deployManage', component: admin_deployManage},
+      {name: 'admin_publicNetIp', path: 'admin_publicNetIp', component: admin_publicNetIp},
       {name: 'admin_resourceApproval', path: 'admin_resourceApproval', component: admin_resourceApproval},
       {name: 'admin_userManage', path: 'admin_userManage', component: admin_userManage},
       {name: 'admin_operationLog', path: 'admin_operationLog', component: admin_operationLog},
