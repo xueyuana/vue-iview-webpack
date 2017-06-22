@@ -66,23 +66,25 @@
           },
           {
             title: '资源池名称',
-            key: 'image_name',
+            key: 'pool_name',
             align: 'center',
             render: (h, params) => {
               return h('a', {
                 on: {
                   click: () => {
-                    console.log(22222)
-                    this.$router.push({name: 'admin_poolDetails', query: {id: '000000'}})
+                    this.$router.push({name: 'admin_poolDetails', query: {hosts: JSON.stringify(params.row.hosts)}})
                   }
                 }
-              }, params.row.image_name)
+              }, params.row.pool_name)
             }
           },
           {
             title: '物理机',
             key: 'physical_machine',
-            align: 'center'
+            align: 'center',
+            render: (h, params) => {
+              return h('p', params.row.hosts.length)
+            }
           },
           {
             title: '虚拟机总数',
@@ -91,63 +93,45 @@
           }
         ],
         data1: [],
-        filterDate: [
-          {
-            image_name: '资源池一',
-            physical_machine: 20,
-            virtual_machine: 200
-          }
-        ],
+        filterDate: [],
         pageSize: 10,
         num: 1
       }
     },
 
-    mounted() {
+    created() {
+      this.onInquire()
     },
 
     methods: {
       // 查找
       onInquire() {
-        let url = 'deployment/deployments'
+        let url = 'api/pool/pools'
         let query = {}
-        this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
-        this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
-        this.formItem.image_name && (query.image_name = this.formItem.image_name)
-        console.log(query)
+//        this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
+//        this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
+//        this.formItem.image_name && (query.image_name = this.formItem.image_name)
+//        console.log(query)
 
         this.$http.get(url, {
           params: query
         }).then(res => {
-          console.log('部署列表', res)
-          this.data1 = res.body
-          this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
-          this.num = 1
+          if (res.body.code === 200) {
+            console.log('资源池列表', res)
+            this.data1 = res.body.result.res
+            this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
+          } else {
+            this.$Message.error(res.body.result.msg)
+          }
         }, err => {
+          this.$Message.error(res.body.result.msg)
           console.log('error', err)
         })
       },
       handleReset(name) {
         this.$refs[name].resetFields()
       },
-      // 时间选择器
-      formatCreateData(value) {
-        console.log('ssssss', value)
-        this.formItem.start_time = value
-      },
-      onUnitChange(val) {
-        this.formItem.image_name = ''
-        console.log(val)
-        this.getDeployList()
-        this.onInquire()
-      },
-      onDeployChange(val) {
-        if (!val) return
-        this.onInquire()
-      },
-      formatEndData(value) {
-        this.formItem.end_time = value
-      },
+
       // 分页
       changePage(val) {
         this.filterDate = this.mockTableData(this.data1, this.pageSize, val)
@@ -162,46 +146,6 @@
         let maxNum = (num + pageSize) > this.data1.length ? this.data1.length : (num + pageSize)
 
         return originData.slice(num, maxNum)
-      },
-      // 请求部署单元列表
-      getProjectList() {
-        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + this.userInfo.user_id
-        this.$http.get(url).then(data => {
-          console.log('部署单元列表', data)
-          this.project_list = data.body.result.res
-        }, err => {
-          console.log('error', err)
-        })
-      },
-      // 获取部署单元下对应部署列表
-      getDeployList() {
-        let url = baseUrl.apihost + 'resource/'
-        let query = {}
-        this.userInfo.user_id && (query.user_id = this.userInfo.user_id)
-        this.formItem.project_name && (query.project = this.formItem.project_name)
-
-        this.$http.get(url, {
-          params: query
-        }).then(data => {
-          console.log('资源列表', data)
-          this.resource_list = data.body.result.msg.filter(item => item.reservation_status === 'ok')
-        }, err => {
-          console.log('error', err)
-        })
-      },
-      formatStatus(val){
-        switch (val) {
-          case 'deploying':
-            return '部署中'
-          case 'not_deployed':
-            return '未部署'
-          case 'fail':
-            return '失败'
-          case 'success':
-            return '成功'
-          default:
-            break
-        }
       }
     }
   }
