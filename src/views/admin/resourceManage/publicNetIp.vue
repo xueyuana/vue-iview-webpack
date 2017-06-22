@@ -45,13 +45,13 @@
                             @on-ok="addmessage('createUser')"
                             @on-cancel="cancel">
                         <Form-item prop="number">
-                            <p>IP类型：<Input v-model="createUser.number" placeholder="测试地址池" style="width: 300px"></Input></p>
+                            <p><span class="mubername">名称：</span><Input v-model="createUser.number" placeholder="请输入" style="width: 300px"></Input></p>
                         </Form-item>
                         <Form-item prop="name">
-                            <p>IP范围：<Input v-model="createUser.name" placeholder="192.168.2.1" style="width: 300px"></Input></p>
+                            <p><span class="mubername">IP范围：</span><Input v-model="createUser.name" placeholder="192.168.2.1" style="width: 145px"></Input> - <Input v-model="createUser.name2" placeholder="192.168.2.6" style="width: 145px"></Input></p>
                         </Form-item>
                         <Form-item>
-                            <p>子网掩码：<Input placeholder="255.255.255.0" style="width: 300px"></Input></p>
+                            <p><span class="mubername">子网掩码：</span><Input v-model="createUser.subnetmask" placeholder="255.255.255.0" style="width: 300px"></Input></p>
                         </Form-item>
                     </Modal>
                 </Form>
@@ -80,7 +80,9 @@
               },
               createUser: {
                 name: '',
+                name2: '',
                 number: '',
+                subnetmask:'',
                 state: '',
                 time: ''
               },
@@ -110,6 +112,11 @@
                   {
                       title: 'IP地址池',
                       key: 'number',
+                      align: 'center',
+                  },
+                  {
+                      title: '子网掩码',
+                      key: 'subnetmask',
                       align: 'center',
                   },
                   {
@@ -157,6 +164,7 @@
                   {
                       name: '192.168.2.1',
                       number: '测试地址池',
+                      subnetmask:'255.255.255.0',
                       state: '已分配',
                       time: '2017-06-23 15:00:00'
                   }
@@ -192,6 +200,7 @@
                         this.data6.push({
                             name: this.createUser.name,
                             number: this.createUser.number,
+                            subnetmask: this.createUser.subnetmask,
                             time: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec
                         });
                         this.createUser.name='';
@@ -257,5 +266,10 @@
 .c_font2{
     line-height: 32px;
     text-align: center;
+}
+.mubername{
+    width: 100px;
+    display: inline-block;
+    text-align: right;
 }
 </style>
