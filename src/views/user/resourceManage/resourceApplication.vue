@@ -24,14 +24,14 @@
       </div>
       <div class="item">
         <span class="title">资源池选择</span>
-        <Select v-model="item.az" style="width:200px" :disabled="index ==0?false:true">
+        <Select v-model="az_id" style="width:200px" :disabled="index ==0?false:true">
           <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
         </Select>
       </div>
       <div class="item example">
         <span class="title">部署实例</span>
-        <Select v-model="item.instance_name" style="width:200px" :disabled="index ==0?false:true">
-          <Option v-for="item in instance_name" :value="item.value" :key="item">{{ item.value }}</Option>
+        <Select v-model="instance_id" style="width:200px" :disabled="index ==0?false:true">
+          <Option v-for="item in instance" :value="item.id" :key="item">{{ item.value }}</Option>
         </Select>
         <Button type="dashed" class="add-example" :class="{hidden: index == 0?false:true}" @click="createExample">新建部署实例</Button>
       </div>
@@ -43,8 +43,8 @@
       </div>
       <div class="item">
         <span class="title">规格</span>
-        <Select v-model="item.flaver_id" style="width:200px">
-          <Option v-for="item in flaver" :value="item.flaver_id" :key="item">{{ item.cpu + '' + item.memory }}</Option>
+        <Select v-model="item.flavor_id" style="width:200px">
+          <Option v-for="item in flavor" :value="item.flavor_id" :key="item">{{ item.cpu + '' + item.memory }}</Option>
         </Select>
       </div>
       <div class="item add-unit">
@@ -69,95 +69,127 @@
     name: 'user-application',
     data () {
       return {
+        instance_id: '',
+        az_id: '',
+        business_info: '',
         resourceInformation: [{
-
-          instance_name: '',
           vm_name: '',
-          az: '',
+          vm_num: 0,
           department: '',
+          flavor_id: '',
           image_id: '',
-          flaver_id: '',
-          storage: '',
-          vm_num: 0
-
+          storage: ''
         }],
-        instance_name: [
+        instance: [
           {
-            value: '部署实例1'
+            value: '部署实例1',
+            id: '001'
           },
           {
-            value: '部署实例2'
+            value: '部署实例2',
+            id: '002'
           }
         ],
         az:[//资源池
           {
-            az_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
+            az_id : "01",
             az_name: "资源池1",
           },
           {
-            az_id : "03b8acba-3c6c-11e7-826c-fa163e9474c1",
+            az_id : "02",
             az_name: "资源池2",
           }
         ],
-        flaver: [//虚机规格
+        flavor: [//虚机规格
           {
-            flaver_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
-            flaver_name: "flaver1",
+            flavor_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
+            flavor_name: "flaver1",
             cpu : "3c",
             memory: "4g"
           },
           {
-            flaver_id : "03b8acba-3c6c-11e7-826c-fa163e9474c2",
-            flaver_name: "flaver2",
+            flavor_id : "03b8acba-3c6c-11e7-826c-fa163e9474c2",
+            flavor_name: "flaver2",
             cpu : "2c",
             memory: "4g"
           }
         ],
         mirrorImage: [//镜像
           {
-            id: "xxxx-xxxx-xxxx-xxxx",
+            id: "011",
             image_name: "镜像名称1",
             image_size : 1024000,
             image_format : "qcow2",
             created_time : "2017-06-07 11:05:10"
           },
           {
-            id: "xxxx-xxxx-xxxx-xxxx",
+            id: "022",
             image_name: "镜像名称2",
             image_size : 1024000,
             image_format : "qcow2",
             created_time : "2017-06-07 11:05:10"
           }
-        ],
-        business_info: ''
+        ]
+
 
       }
     },
     created () {
-      let id = this.$route.query.id
-      if(id === undefined) {
-        return
-      }else{
 
-        this.resourceInformation = [
-          {
 
-            instance_name: '实例1',
-            vm_name: '虚拟机1',
-            az: '资源池1',
-            department: '测试部',
-            image_id: '',
-            flaver_id: '',
-            storage: '',
-            vm_num: 1
 
-          }
-        ]
-
-      }
+//      let id = this.$route.query.id
+//      if(id === undefined) {
+//        return
+//      }else{
+//
+//        this.resourceInformation = [
+//          {
+//
+//            instance_name: '实例1',
+//            vm_name: '虚拟机1',
+//            az: '资源池1',
+//            department: '测试部',
+//            image_id: '',
+//            flaver_id: '',
+//            storage: '',
+//            vm_num: 1
+//
+//          }
+//        ]
+//
+//      }
 
     },
     methods: {
+      getFlavor () {//获取虚拟规格
+        const url = 'api/flavor/flavors'
+
+        this.$http.get(url).then((res) => {
+          console.log(res.body)
+        },(err) => {
+          console.log(err)
+        })
+
+      },
+      getImage () {//获取镜像
+        const url = 'api/image/images'
+        this.$http.get(url).then((res) => {
+          console.log(res.body)
+        },(err) => {
+          console.log(err)
+        })
+      },
+      getAz () {//获取资源池
+        const url = 'api/az/azs'
+
+        this.$http.get(url).then((res) => {
+          console.log(res.body)
+        },(err) => {
+          console.log(err)
+        })
+
+      },
       addInformation () {//添加虚机
         let count = 0
         this.resourceInformation.forEach((item, index) => {
@@ -171,12 +203,10 @@
         }
 
         this.resourceInformation.push({
-          instance_name: this.resourceInformation[0].instance_name,
           vm_name: '',
-          az: this.resourceInformation[0].az,
           department: '',
           image_id: '',
-          flaver_id: '',
+          flavor_id: '',
           storage: '',
           vm_num: 0
         })
@@ -186,7 +216,7 @@
         this.$router.push({name: 'user_deployExample'})
 
       },
-      sendInformation () { //提交信息
+      sendInformation () { //提交资源申请
         let count = 0
         this.resourceInformation.forEach((item, index) => {
           count += item.vm_num
@@ -198,21 +228,27 @@
           return
         }
 
-//        let requestBody = {
-//          user_name: '用户名',
-//          user_id: 'id',
-//          business_info: this.business_info,
-//          vmlist: this.resourceInformation
-//        }
-//        const url = '/uop/api/resource/resources'
-//
-//        this.$http.post(url,requestBody).then((res) => {
-//          console.log(res)
-//        },(err) => {
-//          console.log(err)
-//        })
+        let requestBody = {
+          user_name: '用户2',
+          user_id: '0696050e-571a-11e7-a83a-fa163e9474c9',
+          business_info: this.business_info,
+          az_id: this.az_id,
+          instance_id: this.instance_id,
+          resources: this.resourceInformation
+        }
 
-        this.$router.push({name: 'user_resourceQuery'})
+        const url = 'api/mpc_resource/mpc_resources'
+
+        this.$http.post(url,requestBody).then((res) => {
+          console.log(res.body)//57ba7aac-571d-11e7-929a-fa163e9474c9
+
+          this.$router.push({name: 'user_resourceQuery'})
+        },(err) => {
+          console.log(err)
+        })
+
+
+
       }
     }
 
@@ -240,8 +276,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    /*padding-top: 30px;*/
-    /*margin-bottom: 20px;*/
+    padding-top: 15px;
+    margin-bottom: 5px;
 
   }
   .item {
