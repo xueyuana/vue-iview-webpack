@@ -1,9 +1,9 @@
 <template>
   <div class="page-changePwd">
     <div class="sub-title cp_title">修改密码</div>
-    <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
+    <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="85">
       <Row type="flex" justify="start">
-        <Col span="8">
+        <Col span="10">
           <Form-item label="原密码:" prop="originPasswd">
             <Input type="password" v-model="formCustom.originPasswd" placeholder="可为空"></Input>
           </Form-item>
@@ -32,7 +32,7 @@
   }
 </style>
 
-<script>
+<script type="text/ecmascript-6">
   export default {
     data() {
       const validatePass = (rule, value, callback) => {
@@ -71,10 +71,10 @@
         ruleCustom: {
           originPasswd: [],
           passwd: [
-            { validator: validatePass, trigger: 'blur' }
+            { required: true, validator: validatePass, trigger: 'blur' }
           ],
           passwdCheck: [
-            { validator: validatePassCheck, trigger: 'blur' }
+            { required: true, validator: validatePassCheck, trigger: 'blur' }
           ]
         }
       }
@@ -82,10 +82,36 @@
     computed: {},
     methods: {
       handleSubmit (name) {
-        console.log('ddsss', this.formCustom);
         this.$refs[name].validate((valid) => {
           if (valid) {
-            this.$Message.success('修改密码成功!');
+            const url = 'api/user/chpasswd/'+this.$store.state.userData.userInfo.id;
+            let passwordData;
+
+            console.log('ddsss', this.formCustom);
+            if(this.formCustom.originPasswd == ''){
+              passwordData = {
+                new_password: this.formCustom.passwd
+              }
+            } else {
+              passwordData = {
+                old_password: this.formCustom.originPasswd,
+                new_password: this.formCustom.passwd
+              }
+            }
+
+//            this.$http.put('api/user/chpasswd/'+this.$store.state.userData.userInfo.id, passwordData)
+//                .then(res => {
+            this.$http.put(url,passwordData).then((res) => {
+                console.log(res.body);
+                if (res.body.code === 200) {
+                  this.$Message.success('修改密码成功!');
+                }
+                if (res.body.code == 400) {
+                  this.$Message.error('原密码不正确');
+                }
+              }, err => {
+                  this.$Message.error(err.body.result.msg)
+                });
           } else {
             this.$Message.error('表单验证失败!');
           }

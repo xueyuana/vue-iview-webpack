@@ -8,7 +8,7 @@
         </div>
         <div class="item date-picker">
           <span class="title">申请日期:</span>
-          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
+          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 440px"></Date-picker>
         </div>
       </div>
       <div class="query">
@@ -22,19 +22,33 @@
       <Modal
           v-model="isCreate"
           title="用户信息"
-          width="300"
-          @on-ok="createOk"
-          @on-cancel="createCancel">
+          width="360"
+          @on-ok="createOk('formInline')"
+          @on-cancel="createCancel('formInline')">
         <div class="createWrap">
-          <span class="modal-title">用户名：</span><Input v-model="createUser.username" placeholder="请输入..." style="width: 200px"></Input>
-          <span class="modal-title">密码：</span><Input v-model="createUser.password" placeholder="请输入..." type="password" style="width: 200px"></Input>
-          <span class="modal-title">部门：</span><Input v-model="createUser.department" placeholder="请输入..." style="width: 200px"></Input>
-          <span class="modal-title">手机：</span><Input v-model="createUser.phone" placeholder="请输入..." style="width: 200px"></Input>
-          <span class="modal-title">邮箱：</span><Input v-model="createUser.email" placeholder="请输入..." style="width: 200px"></Input>
-          <span class="modal-title">角色:</span>
-          <Select v-model="createUser.role" style="width:196px">
-            <Option v-for="item in roleList" :value="item.key" :key="item">{{ item.value }}</Option>
-          </Select>
+
+          <Form ref="formInline" :model="createUser" :rules="ruleInline" label-position="right" :label-width="80" >
+            <Form-item label="用户名：" prop="username">
+              <Input v-model="createUser.username" placeholder="请输入..." style="width: 200px"></Input>
+            </Form-item>
+            <Form-item label="密码：" prop="password">
+              <Input v-model="createUser.password" placeholder="最少6位最多15位..." type="password" style="width: 200px"></Input>
+            </Form-item>
+            <Form-item label="部门：" prop="department">
+              <Input v-model="createUser.department" placeholder="请输入..." style="width: 200px"></Input>
+            </Form-item>
+            <Form-item label="手机：" prop="phone">
+              <Input v-model="createUser.phone" placeholder="请输入..." style="width: 200px"></Input>
+            </Form-item>
+            <Form-item label="邮箱：" prop="email">
+              <Input v-model="createUser.email" placeholder="请输入..." style="width: 200px"></Input>
+            </Form-item>
+            <Form-item label="角色：" prop="role">
+              <Select v-model="createUser.role" style="width:196px">
+                <Option v-for="item in roleList" :value="item.key" :key="item">{{ item.value }}</Option>
+              </Select>
+            </Form-item>
+          </Form>
         </div>
       </Modal>
     </div>
@@ -42,19 +56,33 @@
     <Modal
         v-model="isCompile"
         title="用户信息"
-        width="300"
-        @on-ok="compileOk"
-        @on-cancel="compileCancel">
+        width="360"
+        @on-ok="compileOk('formCompile')"
+        @on-cancel="compileCancel('formCompile')">
       <div class="createWrap">
-        <span class="modal-title">用户名：</span><Input v-model="compileUser.username" placeholder="请输入..." style="width: 200px"></Input>
-        <span class="modal-title">密码：</span><Input v-model="compileUser.password" placeholder="修改后的密码..." type="password" style="width: 200px"></Input>
-        <span class="modal-title">部门：</span><Input v-model="compileUser.department" placeholder="请输入..." style="width: 200px"></Input>
-        <span class="modal-title">手机：</span><Input v-model="compileUser.phone" placeholder="请输入..." style="width: 200px"></Input>
-        <span class="modal-title">邮箱：</span><Input v-model="compileUser.email" placeholder="请输入..." style="width: 200px"></Input>
-        <span class="modal-title">角色:</span>
-        <Select v-model="compileUser.role" style="width:196px">
-          <Option v-for="item in roleList" :value="item.key" :key="item">{{ item.value }}</Option>
-        </Select>
+
+        <Form ref="formCompile" :model="compileUser" :rules="ruleInline" label-position="right" :label-width="80" >
+          <Form-item label="用户名：" prop="username">
+            <Input v-model="compileUser.username" placeholder="请输入..." style="width: 200px"></Input>
+          </Form-item>
+          <Form-item label="密码：" prop="password">
+            <Input v-model="compileUser.password" placeholder="最少6位最多15位..." type="password" style="width: 200px"></Input>
+          </Form-item>
+          <Form-item label="部门：" prop="department">
+            <Input v-model="compileUser.department" placeholder="请输入..." style="width: 200px"></Input>
+          </Form-item>
+          <Form-item label="手机：" prop="phone">
+            <Input v-model="compileUser.phone" placeholder="请输入..." style="width: 200px"></Input>
+          </Form-item>
+          <Form-item label="邮箱：" prop="email">
+            <Input v-model="compileUser.email" placeholder="请输入..." style="width: 200px"></Input>
+          </Form-item>
+          <Form-item label="角色：" prop="role">
+            <Select v-model="compileUser.role" style="width:196px">
+              <Option v-for="item in roleList" :value="item.key" :key="item">{{ item.value }}</Option>
+            </Select>
+          </Form-item>
+        </Form>
       </div>
     </Modal>
     <div class="page">
@@ -62,7 +90,6 @@
     </div>
 
   </div>
-
 
 </template>
 <script>
@@ -72,10 +99,32 @@
     import sha256 from 'crypto-js/sha256'
   export default {
     data () {
+      const validatePhone = (rule,value,callback) => {
+        if (value === '') {
+          callback()
+
+        } else {
+
+          if(!Number.isInteger(Number.parseInt(value))) {
+            callback(new Error('请输入数字'))
+          } else {
+            if (value.length !==11) {
+              callback(new Error('请输入11位数字'))
+            } else {
+              callback()
+            }
+          }
+        }
+
+
+      }
       return {
         data_length: 0,
         current_page: 1,
         page_size: 10,
+        passwordReg: /^[a-zA-Z0-9]{6,15}$/,
+        phoneReg: /^[0-9]{11}$/,
+        emailReg: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
         getResult: [],//获取的全部数据
         query_info: {
           user_name: '',
@@ -92,6 +141,24 @@
           phone: '',
           email: '',
           role: ''
+        },
+        ruleInline: {
+          username: [
+            {required: true,message: '请填写用户名',trigger: 'blur'}
+          ],
+          password: [
+            {required: true, min: 6, max: 15, message: '请填写密码',trigger: 'blur'}
+          ],
+          phone: [
+            {validator: validatePhone,trigger:'blur'}
+          ],
+          email: [
+            {type: 'email',message: '邮箱格式不正确',tirgger: 'blur'}
+          ],
+          role: [
+            {required: true,message: '请选择角色',trigger: 'blur'}
+          ]
+
         },
         compileUser: {
           username: '',
@@ -261,104 +328,111 @@
 
         })
       },
-      compileOk () {//确定编辑
+      compileOk (name) {//确定编辑
 
-        const url = 'api/user/users/'+this.user_id
+        this.$refs[name].validate((valid) => {
+          if(valid) {
+            console.log('验证成功')
 
-        let requestBody
+            const url = 'api/user/users/'+this.user_id
 
-        //判断密码是否修改
-        if(this.compileUser.password){
-          requestBody = this.compileUser
-        }else{
-          requestBody = {
-            username: this.compileUser.username,
-            department: this.compileUser.department,
-            phone: this.compileUser.phone,
-            email: this.compileUser.email,
-            role: this.compileUser.role
-          }
-        }
+            let requestBody
 
-        this.$http.put(url,requestBody).then((res) => {
-         console.log(res.body)
+            //判断密码是否修改
+            if(this.compileUser.password){
+              requestBody = this.compileUser
+            }else{
+              requestBody = {
+                username: this.compileUser.username,
+                department: this.compileUser.department,
+                phone: this.compileUser.phone,
+                email: this.compileUser.email,
+                role: this.compileUser.role
+              }
+            }
 
-          this.current_page = 1
+            this.$http.put(url,requestBody).then((res) => {
+              console.log(res.body)
+
+              this.current_page = 1
 //        修改成功之后改变列表数据
-          for(var key in this.compileUser) {
-            this.queryResult[this.index][key] = this.compileUser[key]
+              for(var key in this.compileUser) {
+                this.queryResult[this.index][key] = this.compileUser[key]
 
+              }
+
+              switch (this.queryResult.role) {
+                case 'admin': item.role = '管理员'
+                  break
+                case 'leader': item.role = '行政审批'
+                  break
+                case 'user': item.role = '普通用户'
+                  break
+              }
+
+            },(err) => {
+              console.log('err',err)
+            })
+
+
+          } else {
+            console.log('验证失败')
           }
-
-          switch (this.queryResult.role) {
-          case 'admin': item.role = '管理员'
-            break
-          case 'leader': item.role = '行政审批'
-            break
-          case 'user': item.role = '普通用户'
-            break
-          }
-
-        },(err) => {
-         console.log('err',err)
         })
 
+        //重置
+        this.$refs[name].resetFields()
+
+
 
       },
-      compileCancel () {//取消编辑
-
-
-      },
-      createOk () {//确定创建用户
-
-        //判断创建用户是否填写完整
-        if(this.createUser.username && this.createUser.password) {
-
-          const url = 'api/user/users'
-          let requestBody = this.createUser
-
-          requestBody.password = sha256(this.createUser.password + '!@#$%^').toString(crypto.enc.Hex)
-
-          this.$http.post(url,requestBody).then((res) => {
-            console.log(res.body.result)
-            //重新获取用户
-            this.getUser()
-
-          },(err) => {
-            console.log(err)
-
-          })
-
-        } else {
-
-          this.$Notice.open({
-            title: '请填写用户名或密码',
-          });
-
-        }
-
-        this.createUser = {
-
-          username: '',
-          password: '',
-          department: '',
-          phone: '',
-          email: '',
-          role: ''
-        }
+      compileCancel (name) {//取消编辑
+        //重置
+        this.$refs[name].resetFields()
 
       },
-      createCancel () {//创建用户取消
-        console.log(this.createUser)
-        //清空
-        this.createUser = {
-          username: '',
-          password: '',
-          department: '',
-          phone: '',
-          email: '',
-          role: ''
-        }
+      createOk (name) {//确定创建用户
+
+        this.$refs[name].validate((valid) => {
+          if(valid) {
+            console.log('验证成功')
+
+            //            发送请求
+            const url = 'api/user/users'
+
+            let requestBody =  {}
+
+            this.createUser.department && (requestBody.department = this.createUser.department)
+            this.createUser.phone && (requestBody.phone = this.createUser.phone)
+            this.createUser.email && (requestBody.email = this.createUser.email)
+            requestBody.username = this.createUser.username
+            requestBody.password = this.createUser.password
+            requestBody.role = this.createUser.role
+
+            requestBody.password = sha256(this.createUser.password + '!@#$%^').toString(crypto.enc.Hex)
+
+            this.$http.post(url,requestBody).then((res) => {
+              console.log(res.body.result)
+              //重新获取用户
+              this.getUser()
+
+            },(err) => {
+              console.log(err)
+
+            })
+
+          } else {
+            console.log('验证失败')
+          }
+        })
+//        重置
+        this.$refs[name].resetFields()
+
+      },
+      createCancel (name) {//创建用户取消
+
+        //重置
+        this.$refs[name].resetFields()
 
       },
       query () {//查询
@@ -477,6 +551,12 @@
 <style scoped>
   .my-resource {
     width: 100%;
+  }
+  .ivu-form-item {
+    margin-bottom: 24px;
+  }
+  .createWrap[data-v-70ebe527] {
+    height: 328px;
   }
   .queryInformation{
     width: 100%;

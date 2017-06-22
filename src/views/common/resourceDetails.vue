@@ -196,11 +196,11 @@
           <!--</Col>-->
           <Col span="24">
           <div class="sub-title">业务信息</div>
-          <Input v-model="ywInfo" type="textarea" :maxlength="100" :autosize="{minRows: 2,maxRows: 5}" placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
+          <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="5" placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
           </Col>
           <Col span="24">
           <div class="sub-title">行政审批意见</div>
-          <Input v-model="xzInfo" type="textarea" :maxlength="100" :autosize="{minRows: 2,maxRows: 5}" placeholder="默认显示同意，最多100个字符"></Input>
+          <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="5" placeholder="默认显示同意，最多100个字符"></Input>
           </Col>
         </Row>
       </Form>
