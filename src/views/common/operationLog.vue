@@ -2,10 +2,10 @@
   <div class="inquire">
     <div class="inquire-form">
       <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="70">
-        <Row>
-          <Col span="5">
+        <Row :gutter="16">
+          <Col span="9">
             <Form-item label="日期:" prop="start_time">
-              <Date-picker type="daterange" format="yyyy-MM-dd" placeholder="选择日期" v-model="formValidate.start_time" @on-change="formatCreateData"></Date-picker>
+              <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" style="min-width: 250px"></Date-picker>
             </Form-item>
           </Col>
           <Col span="7">
@@ -162,9 +162,9 @@
         this.changePage(1)
       },
       // 时间选择器
-      formatCreateData(value) {
-        this.formValidate.start_time = value
-      }
+      //formatCreateData(value) {
+      //  this.formValidate.start_time = value
+      //}
     }
   }
 </script>

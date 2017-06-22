@@ -101,74 +101,84 @@
     mounted: function () {
       //读取cookie中的账号信息，如果有accountInfo的话，则说明该用户之前勾选了记住密码的功能，则需要自动填上账号密码
       // this.loadAccountInfo();
-
-      console.log(sha256('123456').toString(crypto.enc.Hex))
     },
     methods: {
       handleSubmit(name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
             let userName = this.formInline.userName;
-            let passWord = this.formInline.passWord;
+            let passWord = sha256(this.formInline.passWord + '!@#$%^').toString(crypto.enc.Hex);
             let rememberStatus = this.formInline.rememberPassword;
             let accountInfo = "";
             accountInfo = userName + "&" + passWord;
 
-            // June 临时验证
-            if (userName) {
-              setCookie('role', userName)
-              switch (userName) {
-                case 'user':
-                  this.$router.push({name: 'user_manageConsole'})
-                  break
-                case 'admin':
-                  this.$router.push({name: 'admin_manageConsole'})
-                  break
-                case 'approval':
-                  this.$router.push({name: 'approval_approvalQuery'})
-                  break
-                default:
-                  this.$Message.error('权限不存在')
-              }
-            } else {
-              this.$Message.error('用户名不能为空')
-            }
-
-//            let body = {
-//              "username": userName,
-//              "password": passWord,
+//             June 临时验证
+//            if (userName) {
+//              setCookie('role', userName)
+//              switch (userName) {
+//                case 'user':
+//                  this.$router.push({name: 'user_manageConsole'})
+//                  break
+//                case 'admin':
+//                  this.$router.push({name: 'admin_manageConsole'})
+//                  break
+//                case 'approval':
+//                  this.$router.push({name: 'approval_approvalQuery'})
+//                  break
+//                default:
+//                  this.$Message.error('权限不存在')
+//              }
+//            } else {
+//              this.$Message.error('用户名不能为空')
 //            }
-//            this.$http.post('api/user/login', body, {emulateJSON: true})
-//              .then(res => {
-//                console.log('登录', res);
-//                if (rememberStatus) {
-//                  console.log("勾选了记住密码，现在开始写入cookie");
-//                  setCookie('accountInfo', accountInfo, 1440 * 3);
-//                } else {
-//                  console.log("没有勾选记住密码，现在开始删除账号cookie");
-//                  delCookie('accountInfo');
-//                }
-//
-//                if (res.body.code === 200) {
-//                  this.$Message.success('登录成功!');
-//
-//                  let userinfo = {}
-//                  userinfo.user_id = res.body.result.user_id;
-//
-//                  setStroage('userInfo', userinfo)
-//
-//                  // 根据不同用户权限进入不同界面
-//
-//                }
-//
-//                if (res.body.code == 400) {
-//                  this.$Message.error('验证错误!');
-//                }
-//                // 成功回调
-//              }, err => {
-//                this.$Message.error('登陆失败!');
-//                // 失败回调
-//              });
+
+            let body = {
+              "username": userName,
+              "password": passWord
+            }
+            this.$http.post('api/user/login', body)
+              .then(res => {
+                console.log('登录', res)
+                if (rememberStatus) {
+                  console.log("勾选了记住密码，现在开始写入cookie");
+                  setCookie('accountInfo', accountInfo, 1440 * 3);
+                } else {
+                  console.log("没有勾选记住密码，现在开始删除账号cookie");
+                  delCookie('accountInfo');
+                }
+
+                if (res.body.code === 200) {
+                  this.$Message.success('登录成功!');
+
+                  let userinfo = {}
+                  userinfo.id = res.body.result.id
+                  userinfo.role = res.body.result.role
+
+                  setCookie('userInfo', JSON.stringify(userinfo))
+
+                  switch (userinfo.role) {
+                    case 'user':
+                      this.$router.push({name: 'user_manageConsole'})
+                      break
+                    case 'admin':
+                      this.$router.push({name: 'admin_manageConsole'})
+                      break
+                    case 'leader':
+                      this.$router.push({name: 'approval_approvalQuery'})
+                      break
+                    default:
+                      this.$Message.error('权限不存在')
+                  }
+
+                }
+
+                if (res.body.code == 400) {
+                  this.$Message.error(res.body.result.msg)
+                }
+                // 成功回调
+              }, err => {
+                this.$Message.error(err.body.result.msg)
+              });
 
           } else {
             this.$Message.error('表单验证失败!');

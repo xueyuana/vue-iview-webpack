@@ -3,12 +3,12 @@
     <div class="query-form inquire-form">
       <div class="queryInformation">
         <div class="item">
-          <span class="title">用户名</span>
+          <span class="title">用户名:</span>
           <Input v-model="query_info.user_name" placeholder="请输入..." style="width: 300px"></Input>
         </div>
         <div class="item date-picker">
-          <span class="title">申请日期</span>
-          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
+          <span class="title">申请日期:</span>
+          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 440px"></Date-picker>
         </div>
       </div>
       <div class="query">
@@ -16,7 +16,7 @@
         <Button class="reset" type="ghost" @click="reset">重置</Button>
       </div>
     </div>
-    <div class="inquire-table-title">用户列表：</div>
+    <div class="inquire-table-title">用户列表</div>
     <div class="createUser">
       <Button @click="isCreate = true" type="primary" >创 建</Button>
       <Modal

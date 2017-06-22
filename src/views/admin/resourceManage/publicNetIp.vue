@@ -4,12 +4,12 @@
             <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="90">
                 <Row :gutter="16">
                     <Col span="9">
-                    <Form-item label="创建日期:" prop="start_time">
+                    <Form-item label="日期:" prop="start_time">
                         <Date-picker  type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" style="min-width: 250px"></Date-picker>
                     </Form-item>
                     </Col>
                     <Col span="7">
-                    <Form-item label="部署实例名称:" prop="case_name">
+                    <Form-item label="IP地址:" prop="case_name">
                         <Input v-model="formValidate.case_name" placeholder="请输入"></Input>
                     </Form-item>
                     </Col>
@@ -34,28 +34,27 @@
             <!--<Col span="5"></Col>-->
         <!--</Row>-->
         <div class="inquire-table">
-            <div class="inquire-table-title">部署实例列表</div>
+            <div class="inquire-table-title">公网IP列表</div>
             <div class="tjbssl">
-                <Button type="primary" @click.native="addCase">添加部署实例</Button>
+                <Button type="primary" @click.native="addCase">新建</Button>
                 <!--<Button @click="modal1 = true">添加部署实例</Button>-->
                 <Form ref="createUser" :model="createUser" :rules="ruleInline" inline>
                     <Modal
                             v-model="modal1"
-                            title="添加部署实例"
+                            title="新增IP地址池"
                             @on-ok="addmessage('createUser')"
                             @on-cancel="cancel">
+                        <Form-item prop="number">
+                            <p><span class="mubername">名称：</span><Input v-model="createUser.number" placeholder="请输入" style="width: 300px"></Input></p>
+                        </Form-item>
                         <Form-item prop="name">
-                            <p>名称：<Input v-model="createUser.name" placeholder="最多10个字符" style="width: 300px"></Input></p>
+                            <p><span class="mubername">IP范围：</span><Input v-model="createUser.name" placeholder="192.168.2.1" style="width: 145px"></Input> - <Input v-model="createUser.name2" placeholder="192.168.2.6" style="width: 145px"></Input></p>
+                        </Form-item>
+                        <Form-item>
+                            <p><span class="mubername">子网掩码：</span><Input v-model="createUser.subnetmask" placeholder="255.255.255.0" style="width: 300px"></Input></p>
                         </Form-item>
                     </Modal>
                 </Form>
-                <Modal
-                        v-model="modal2"
-                        title="编辑部署实例"
-                        @on-ok="compileOk"
-                        @on-cancel="cancel">
-                    <p>名称：<Input v-model="compileUser.name" placeholder="最多10个字符" style="width: 300px"></Input></p>
-                </Modal>
             </div>
             <Table border :columns="columns7" stripe :data="data6"></Table>
             <div style="margin: 10px;overflow: hidden">
@@ -81,21 +80,21 @@
               },
               createUser: {
                 name: '',
+                name2: '',
                 number: '',
+                subnetmask:'',
+                state: '',
                 time: ''
               },
               ruleInline: {
                   name: [
-                      { required: true, message: '请填写部署实例名称', trigger: 'blur' }
+                      { required: true, message: '请填写IP范围', trigger: 'blur' }
+                  ],
+                  number: [
+                      { required: true, message: '请填写IP类型', trigger: 'blur' }
                   ]
               },
-              compileUser: {
-                  name: '',
-                  number: '',
-                  time: ''
-              },
               modal1: false ,
-              modal2: false ,
               value: '',
               tjname: '',
               columns7: [
@@ -106,64 +105,37 @@
                       align: 'center'
                   },
                   {
-                      title: '部署实例名称',
+                      title: 'IP地址',
                       key: 'name',
                       align: 'center'
                   },
                   {
-                      title: '资源数量',
+                      title: 'IP地址池',
                       key: 'number',
                       align: 'center',
-                      render: (h, params) => {
-                        return h('div', [
-                            h('a', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '5px'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.$router.push({name: 'user_deployExample', query: {number: params.row.number}});
-                                    }
-                                }
-                            }, params.row.number)
-                        ]);
-                      }
                   },
                   {
-                      title: '创建日期',
+                      title: '子网掩码',
+                      key: 'subnetmask',
+                      align: 'center',
+                  },
+                  {
+                      title: '分配状态',
+                      key: 'state',
+                      align: 'center',
+                  },
+                  {
+                      title: '分配时间',
                       key: 'time',
                       align: 'center'
                   },
                   {
                       title: '操作',
                       key: 'action',
-                      width: 260,
+                      width: 100,
                       align: 'center',
                       render: (h, params) => {
                           return h('div', [
-                              h('Button', {
-                                  props: {
-                                      type: 'primary',
-                                      size: 'small'
-                                  },
-                                  style: {
-                                      marginRight: '5px'
-                                  },
-                                  on: {
-                                      click: () => {
-                                        this.modal2 = true
-                                        for(var key in params.row) {
-                                          this.compileUser[key] = params.row[key]
-                                        }
-                                        console.log('5555',this.compileUser);
-                                        this.index = params.index
-                                      }
-                                  }
-                              }, '编辑'),
                               h('Button', {
                                   props: {
                                       type: 'error',
@@ -172,8 +144,8 @@
                                   on: {
                                       click: () => {
                                           this.$Modal.confirm({
-                                              title: '是否下线'+params.row.name+'，下线操作将删除此部署实例内的所有资源并不可恢复，请慎重操作！！！',
-                                              content: '注：删除此部署实例后，实例所属的资源也将一并删除，请谨慎操作！',
+                                              title: '删除IP地址',
+                                              content: '请确认！！！',
                                               onOk: () => {
                                                   this.remove(params.index)
                                               },
@@ -183,15 +155,17 @@
                                           });
                                       }
                                   }
-                              }, '下线')
+                              }, '删除')
                           ]);
                       }
                   }
               ],
               data6: [
                   {
-                      name: '实例1',
-                      number: '10',
+                      name: '192.168.2.1',
+                      number: '测试地址池',
+                      subnetmask:'255.255.255.0',
+                      state: '已分配',
                       time: '2017-06-23 15:00:00'
                   }
               ],
@@ -225,10 +199,12 @@
                             sec = stamp.getSeconds() > 9 ? stamp.getSeconds() : '0' + stamp.getSeconds()
                         this.data6.push({
                             name: this.createUser.name,
-                            number: '0',
+                            number: this.createUser.number,
+                            subnetmask: this.createUser.subnetmask,
                             time: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec
                         });
                         this.createUser.name='';
+                        this.createUser.number='';
                         console.log('333333');
                         this.$Message.info('添加成功');
                   } else {
@@ -239,12 +215,6 @@
           },
           cancel () {
               this.$Message.info('点击了取消');
-          },
-          compileOk () {//编辑后确定
-             for(var key in this.compileUser) {
-               this.data6[this.index][key] = this.compileUser[key]
-             }
-              console.log('result',this.data6)
           },
           // 分页
           changePage(val) {
@@ -296,5 +266,10 @@
 .c_font2{
     line-height: 32px;
     text-align: center;
+}
+.mubername{
+    width: 100px;
+    display: inline-block;
+    text-align: right;
 }
 </style>

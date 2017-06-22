@@ -33,31 +33,22 @@
       <div class="inquire">
         <!--查询条件-->
         <div class="inquire-form">
-          <Form :model="formItem" :label-width="90">
+          <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="90">
             <Row :gutter="60">
               <Col span="14">
-              <Form-item label="创建开始日期:">
-                <Row>
-                  <Col span="11">
-                  <Date-picker type="datetime" placeholder="选择起始日期" @on-change="formatCreateData"></Date-picker>
-                  </Col>
-                  <Col span="2" style="text-align: center">
-                  至</Col>
-                  <Col span="11">
-                  <Date-picker type="datetime" placeholder="选择截止日期" @on-change="formatEndData"></Date-picker>
-                  </Col>
-                </Row>
-              </Form-item>
+                <Form-item label="日期:" prop="date">
+                  <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="width: 250px"></Date-picker>
+                </Form-item>
               </Col>
               <Col span="10">
-                <Form-item label="名称:">
+                <Form-item label="名称:" prop="resource_name">
                   <Input v-model="formItem.resource_name" placeholder="请输入"></Input>
                 </Form-item>
               </Col>
             </Row>
             <Row>
               <Col span="20">
-                <Form-item label="IP地址:">
+                <Form-item label="IP地址:" prop="IP">
                   <Input v-model="formItem.IP" placeholder="请输入" style="max-width: 160px"></Input>
                 </Form-item>
               </Col>
@@ -65,7 +56,7 @@
                 <Button type="primary" @click.native="onInquire">查询</Button>
               </Col>
               <Col span="2">
-                <Button type="ghost" @click.native="onInquire">重置</Button>
+                <Button type="ghost" @click="handleReset('formItem')">重置</Button>
               </Col>
             </Row>
           </Form>
@@ -155,10 +146,14 @@
     data () {
       return {
         formItem: {
-          created_time: '',
-          end_time: '',
+          date: [],
           resource_name: '',
           IP: ''
+        },
+        ruleValidate: {
+          date: [],
+          resource_name: [],
+          IP: []
         },
         userInfo: '',
         columns: [
@@ -173,21 +168,6 @@
             align: 'center'
           },
           {
-            title: '型号',
-            key: 'model',
-            align: 'center'
-          },
-          {
-            title: '规格',
-            key: 'standard',
-            align: 'center'
-          },
-          {
-            title: 'IP',
-            key: 'ip',
-            align: 'center'
-          },
-          {
             title: '虚拟机数量',
             key: 'virtual_machine',
             align: 'center',
@@ -198,7 +178,7 @@
                     this.$router.push({name: 'admin_virtualManage'})
                   }
                 }
-              }, params.row.resource_name)
+              }, params.row.virtual_machine)
             }
           },
           {
@@ -221,9 +201,6 @@
         filterDate: [
           {
             name: '资源池一',
-            model: 20,
-            standard: '',
-            ip: '',
             virtual_machine: 200,
             CPU_proportion: '30%',
             RAM_proportion: '10%',
@@ -444,6 +421,10 @@
 
       },
       // 时间选择器
+
+      handleReset(name) {
+        this.$refs[name].resetFields()
+      },
       formatCreateData(value) {
         this.formItem.created_time = value
       },

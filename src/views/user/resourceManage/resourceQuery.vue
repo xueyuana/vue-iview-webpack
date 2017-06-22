@@ -16,6 +16,7 @@
           <span class="title">部署实例</span>
           <Select v-model="query_info.instance_id" style="width:260px">
             <Option v-for="item in instance" :value="item.id" :key="item">{{ item.value }}</Option>
+
           </Select>
         </div>
       </div>
@@ -25,7 +26,7 @@
 
       </div>
     </div>
-    <div class="inquire-table-title">申请资源列表：</div>
+    <div class="inquire-table-title">申请资源列表</div>
     <Table border stripe :columns="columns" :data="queryResult"></Table>
     <div class="page">
       <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>

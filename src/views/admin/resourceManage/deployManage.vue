@@ -2,22 +2,22 @@
   <div class="inquire">
     <!--查询条件-->
     <div class="inquire-form">
-      <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="70">
+      <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="90">
         <Row :gutter="16">
           <Col span="9">
-            <Form-item label="日期:" prop="date">
-              <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="min-width: 250px"></Date-picker>
-            </Form-item>
+          <Form-item label="选择日期:" prop="date">
+            <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="min-width: 250px"></Date-picker>
+          </Form-item>
           </Col>
           <Col span="6">
-            <Form-item label="镜像格式:" prop="image_format">
-              <Input v-model="formItem.image_format" placeholder="请输入"></Input>
-            </Form-item>
+          <Form-item label="用户:" prop="user">
+            <Input v-model="formItem.user" placeholder="请输入"></Input>
+          </Form-item>
           </Col>
           <Col span="6">
-            <Form-item label="镜像名称:" prop="image_name">
-              <Input v-model="formItem.image_name" placeholder="请输入"></Input>
-            </Form-item>
+          <Form-item label="部署实例名称:" prop="deploy_name">
+            <Input v-model="formItem.deploy_name" placeholder="请输入"></Input>
+          </Form-item>
           </Col>
         </Row>
         <Row type="flex" justify="end">
@@ -30,14 +30,6 @@
           </Form-item>
           </Col>
         </Row>
-
-        <!--<div class="form-btn-wrap clearfix">-->
-          <!--<div class="btns">-->
-            <!--<Button type="primary" @click.native="onInquire" style="margin-right: 10px">查询</Button>-->
-            <!--<Button type="ghost" @click.native="handleReset('formItem')">重置</Button>-->
-          <!--</div>-->
-        <!--</div>-->
-
       </Form>
     </div>
 
@@ -51,6 +43,16 @@
         </div>
       </div>
     </div>
+
+    <!--弹出层-->
+    <Modal
+        title="分配公网IP"
+        v-model="option"
+        :mask-closable="false">
+      <p>对话框内容</p>
+      <p>对话框内容</p>
+      <p>对话框内容</p>
+    </Modal>
 
   </div>
 </template>
@@ -68,13 +70,13 @@
       return {
         formItem: {
           date: [],
-          image_format: '',
-          image_name: ''
+          user: '',
+          deploy_name: ''
         },
         ruleValidate: {
           date: [],
-          image_format: [],
-          image_name: []
+          user: [],
+          deploy_name: []
         },
         userInfo: '',
         columns:  [
@@ -84,45 +86,72 @@
             align: 'center'
           },
           {
-            title: '镜像名称',
-            key: 'image_name',
+            title: '部署实例名称',
+            key: 'deploy_name',
             align: 'center'
           },
           {
-            title: '尺寸 (M)',
-            key: 'image_size',
-            align: 'center',
-            render: (h, params) => {
-              return h('p', parseInt(params.row.image_size/1024/1024))
-            }
-          },
-          {
-            title: '镜像格式',
-            key: 'image_format',
+            title: '用户',
+            key: 'user',
             align: 'center'
           },
           {
-            title: '日期',
+            title: '上线IP',
+            key: 'online_ip',
+            align: 'center'
+          },
+          {
+            title: '测试IP',
+            key: 'test_ip',
+            align: 'center'
+          },
+          {
+            title: '分配日期',
             key: 'created_time',
+            align: 'center'
+          },
+          {
+            title: '操作',
+            key: 'option',
             align: 'center',
             render: (h, params) => {
-              return h('p', params.row.created_time.replace(/[T]/g, ' ').substring(0, 10))
+              return h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                on: {
+                  click: () => {
+                    this.option = true
+                  }
+                }
+              }, '编辑')
             }
           }
+
         ],
         data: [],
-        filterDate: [],
+        filterDate: [
+          {
+            deploy_name: 'mySql',
+            user: 'user',
+            online_ip: '172,16.2.1',
+            test_ip: '',
+            created_time: '2017-06-23'
+          }
+        ],
+        option: false,
         pageSize: 10,
         num: 1
       }
     },
 
     mounted() {
-      this.onInquire()
+//      this.onInquire()
     },
 
     methods: {
-        // 查找
+      // 查找
       onInquire() {
 
         let query = {}
@@ -150,7 +179,7 @@
       handleReset(name) {
         this.$refs[name].resetFields()
       },
-        // 时间选择器
+      // 时间选择器
       formatCreateData(value) {
         this.formItem.start_time = value
       },
@@ -166,7 +195,7 @@
       formatEndData(value) {
         this.formItem.end_time = value
       },
-        // 分页
+      // 分页
       changePage(val) {
         this.filterDate = this.mockTableData(this.data, this.pageSize, val)
       },

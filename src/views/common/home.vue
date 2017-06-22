@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home">
     <!--头部-->
     <div class="uop-header clearfix">
       <div class="logo fl">
@@ -12,11 +12,11 @@
         <ul>
           <li class="username">
             用户：
-            <span>{{userInfo.username}}</span>
+            <span>{{$store.state.userData.userInfo.username }}</span>
           </li>
           <li class="department">
             所属部门：
-            <span>{{userInfo.department}}</span>
+            <span>{{$store.state.userData.userInfo.department}}</span>
           </li>
           <li @click="toLogOut">
             <a href="javascript:void(0);" class="user-logout"><i class="ivu-icon icon-logout"></i>退出</a>
@@ -74,6 +74,8 @@
                 </template>
                 <Menu-item name="21">镜像管理</Menu-item>
                 <Menu-item name="22">虚拟机管理</Menu-item>
+                <Menu-item name="23">部署实例管理</Menu-item>
+                <Menu-item name="24">公网IP管理</Menu-item>
               </Submenu>
               <Submenu name="3">
                 <template slot="title">
@@ -89,7 +91,7 @@
                 <Menu-item name="42">操作日志</Menu-item>
               </Submenu>
             </Menu>
-            <Menu v-if="role === 'approval'" :active-name="$store.state.openMenu.activeItem.activeName"
+            <Menu v-if="role === 'leader'" :active-name="$store.state.openMenu.activeItem.activeName"
                   :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go">
               <div class="layout-logo-left" @click="goConsole">
                 管理控制台
@@ -137,7 +139,14 @@
 </template>
 
 <style lang="less" scoped>
-  /*@import "../../static/mytheme/mytheme.less";*/
+  /*@import "../../static/mytheme/redtheme.less";*/
+  @import "../../static/mytheme/index.less";
+
+  .home {
+    width: 100%;
+    height: 100%;
+  }
+
   .uop-header {
     height: 80px;
     width: 100%;
@@ -200,13 +209,15 @@
   /*主题内容布局*/
   .uop-main {
     width: 100%;
-    margin-top: 80px;
+    height: 100%;
+    padding-top: 80px;
   }
 
   .layout {
-    /*border: 1px solid #d7dde4;*/
-    /*background: #f5f7f9;*/
+    background:#F0F5FA;
+    height: 100%;
     position: relative;
+    overflow: auto;
   }
 
   .layout-breadcrumb {
@@ -233,7 +244,7 @@
 
   .layout-menu-left {
     /*#1E7BE2  #D3371B 100%@menu-dark-active-bg*/
-    background: #1E7BE2;
+    background: @menu-dark-active-bg;
     color: #fff;
     font-size: 16px;
     min-height: 800px;
@@ -294,7 +305,7 @@
     text-align: center;
     height: 50px;
     /*#5cadff #C61E00 #0966CD @menu-dark-active-bg*/
-    background: #0966CD;
+    background: @primary-color;
     margin-bottom: 15px;
     color: #fff;
     cursor: pointer;
@@ -303,9 +314,8 @@
 
 </style>
 <script>
-  import {getCookie, setStroage, getStroage, removeStroage} from 'tools/cookieAction.js';
+  import {getCookie, setStroage, delCookie} from 'tools/cookieAction.js';
   import common from '../../tools/common.js';
-  import {userinfo} from '../../tools/user.js';
 
   export default {
 
@@ -316,9 +326,10 @@
         role: ''
       }
     },
-    mounted () {
-      this.role = getCookie('role')
-      console.log('home用户权限', this.role)
+    created() {
+      console.log('从state中获取用户信息', this.$store.state.userData.userInfo)
+      this.userInfo = this.$store.state.userData.userInfo
+      this.role = this.userInfo.role
     },
     methods: {
       // 获取用户名
@@ -337,7 +348,7 @@
             case 'admin':
               this.$router.push({name: 'admin_manageConsole'})
               break
-            case 'approval':
+            case 'leader':
               this.$router.push({name: 'approval_approvalQuery'})
               break
             default:
@@ -348,9 +359,10 @@
       },
       // 退出登录
       toLogOut() {
-        removeStroage('userInfo');
-        removeStroage('role');
-        console.log('我退出了')
+        delCookie('userInfo')
+        this.$store.commit('getUserInfo', {})
+        console.log('我退出了，清空cookie 和 vuex')
+
         this.$router.push({path: '/login'});
       },
 
@@ -360,7 +372,7 @@
           this.goUser(name)
         } else if (this.role === 'admin') {
           this.goAdmin(name)
-        } else if (this.role === 'approval') {
+        } else if (this.role === 'leader') {
           this.goApproval(name)
         } else {
           this.$Message.warning('没有权限，请重新登录')
@@ -402,6 +414,12 @@
             break;
           case '22': //虚拟机管理
             this.$router.push({name: 'admin_virtualManage'});
+            break;
+          case '23': //部署实例管理
+            this.$router.push({name: 'admin_deployManage'});
+            break;
+          case '24': //公网IP管理
+            this.$router.push({name: 'admin_publicNetIp'});
             break;
 
           case '31': //资源审批
