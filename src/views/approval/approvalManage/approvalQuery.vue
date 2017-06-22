@@ -8,9 +8,9 @@
               <Input v-model="formValidate.apply_name" placeholder="请输入"></Input>
             </Form-item>
           </Col>
-          <Col span="9">
+          <Col span="8">
             <Form-item label="申请日期:" prop="start_time">
-              <Date-picker type="daterange" placement="bottom-end" format="yyyy-MM-dd" placeholder="选择日期" v-model="formValidate.start_time" @on-change="formatCreateData"></Date-picker>
+              <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" @on-change="formatCreateData"></Date-picker>
             </Form-item>
           </Col>
           <Col span="5">

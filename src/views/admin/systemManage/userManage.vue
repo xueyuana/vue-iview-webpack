@@ -8,7 +8,7 @@
         </div>
         <div class="item date-picker">
           <span class="title">申请日期:</span>
-          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
+          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 440px"></Date-picker>
         </div>
       </div>
       <div class="query">

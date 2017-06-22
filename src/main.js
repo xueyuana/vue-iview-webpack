@@ -103,6 +103,16 @@ vueRouters.beforeEach((to, from, next) => {
             nav.activeName = '22'
             bread.level_2 = '虚拟机管理'
             break
+          case 'admin_deployManage':
+            nav.openNames = '2'
+            nav.activeName = '23'
+            bread.level_2 = '部署实例管理'
+            break
+          case 'admin_publicNetIp':
+            nav.openNames = '2'
+            nav.activeName = '24'
+            bread.level_2 = '公网IP管理'
+            break
           case 'admin_resourceApproval':
             nav.openNames = '3'
             nav.activeName = '31'
@@ -204,6 +214,16 @@ vueRouters.beforeEach((to, from, next) => {
               nav.openNames = '2'
               nav.activeName = '22'
               bread.level_2 = '虚拟机管理'
+              break
+            case 'admin_deployManage':
+              nav.openNames = '2'
+              nav.activeName = '23'
+              bread.level_2 = '部署实例管理'
+              break
+            case 'admin_publicNetIp':
+              nav.openNames = '2'
+              nav.activeName = '24'
+              bread.level_2 = '公网IP管理'
               break
             case 'admin_resourceApproval':
               nav.openNames = '3'

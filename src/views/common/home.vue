@@ -74,6 +74,8 @@
                 </template>
                 <Menu-item name="21">镜像管理</Menu-item>
                 <Menu-item name="22">虚拟机管理</Menu-item>
+                <Menu-item name="23">部署实例管理</Menu-item>
+                <Menu-item name="24">公网IP管理</Menu-item>
               </Submenu>
               <Submenu name="3">
                 <template slot="title">
@@ -207,13 +209,15 @@
   /*主题内容布局*/
   .uop-main {
     width: 100%;
-    margin-top: 80px;
+    height: 100%;
+    padding-top: 80px;
   }
 
   .layout {
-    /*border: 1px solid #d7dde4;*/
-    /*background: #f5f7f9;*/
+    background:#F0F5FA;
+    height: 100%;
     position: relative;
+    overflow: auto;
   }
 
   .layout-breadcrumb {
@@ -410,6 +414,12 @@
             break;
           case '22': //虚拟机管理
             this.$router.push({name: 'admin_virtualManage'});
+            break;
+          case '23': //部署实例管理
+            this.$router.push({name: 'admin_deployManage'});
+            break;
+          case '24': //公网IP管理
+            this.$router.push({name: 'admin_publicNetIp'});
             break;
 
           case '31': //资源审批
