@@ -30,6 +30,7 @@ import admin_publicNetIp from 'views/admin/resourceManage/publicNetIp.vue'      
 import admin_resourceApproval from 'views/admin/resourceApproval/resourceApproval.vue'        // 管理员 > 资源审批
 import admin_userManage from 'views/admin/systemManage/userManage.vue'                        // 管理员 > 用户管理
 import admin_operationLog from 'views/common/operationLog.vue'                                // 管理员 > 操作日志
+import admin_deployDetails from 'views/admin/resourceManage/deployDetails.vue'                // 管理员 > 虚拟机管理
 
 import approval_approvalQuery from 'views/approval/approvalManage/approvalQuery.vue'          // 行政审批 > 资源查询（审批查询）
 import approval_resourceDetails from 'views/common/resourceDetails.vue'                       // 行政审批 > 行政审批页面（资源详情）
@@ -63,6 +64,7 @@ var routes = [
       {name: 'admin_resourceApproval', path: 'admin_resourceApproval', component: admin_resourceApproval},
       {name: 'admin_userManage', path: 'admin_userManage', component: admin_userManage},
       {name: 'admin_operationLog', path: 'admin_operationLog', component: admin_operationLog},
+      {name: 'admin_deployDetails', path: 'admin_deployDetails', component: admin_deployDetails},
       // 行政审批
       {name: 'approval_approvalQuery', path: 'approval_approvalQuery', component: approval_approvalQuery},
       {name: 'approval_resourceDetails', path: 'approval_resourceDetails', component: approval_resourceDetails},
