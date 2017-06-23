@@ -41,7 +41,7 @@
                 <Modal
                         v-model="modal1"
                         title="添加部署实例"
-                        width="460"
+                        width="440"
                         @on-ok="addmessage('createUser')"
                         @on-cancel="cancel">
                     <Form ref="createUser" :model="createUser" :rules="ruleInline" label-position="right" :label-width="130" >
