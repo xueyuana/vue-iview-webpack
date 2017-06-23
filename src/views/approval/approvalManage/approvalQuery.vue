@@ -104,7 +104,7 @@
                   },
                   on: {
                     click: () => {
-                      this.$router.push({name: 'approval_resourceDetails', query: {apply_code: params.row.apply_code}});
+                      this.$router.push({name: 'approval_resourceDetails', query: {id: params.row.apply_code}});
                     }
                   }
                 }, params.row.apply_code)
