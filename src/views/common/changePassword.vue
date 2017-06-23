@@ -8,10 +8,10 @@
             <Input type="password" v-model="formCustom.originPasswd" placeholder="可为空"></Input>
           </Form-item>
           <Form-item label="新密码:" prop="passwd">
-            <Input type="password" v-model="formCustom.passwd" :maxlength="16" placeholder="最多16位"></Input>
+            <Input type="password" v-model="formCustom.passwd" :maxlength="15" placeholder="最少6位最多15位"></Input>
           </Form-item>
           <Form-item label="新密码确认:" prop="passwdCheck">
-            <Input type="password" v-model="formCustom.passwdCheck" :maxlength="16" placeholder="最多16位"></Input>
+            <Input type="password" v-model="formCustom.passwdCheck" :maxlength="15" placeholder="最少6位最多15位"></Input>
           </Form-item>
           <Form-item class="btnCss">
             <Button type="primary" @click="handleSubmit('formCustom')">提交</Button>
@@ -42,8 +42,11 @@
         if (value === '') {
           callback(new Error('请输入密码'));
         } else {
-          if (value.length > 16) {
-            callback(new Error('最多可输入16位'));
+          if (value.length < 6) {
+            callback(new Error('最少输入6位'));
+          }
+          if (value.length > 15) {
+            callback(new Error('最多可输入15位'));
           }
           if (this.formCustom.passwdCheck !== '') {
             // 对第二个密码框单独验证
@@ -58,8 +61,11 @@
         } else if (value !== this.formCustom.passwd) {
           callback(new Error('两次输入密码不一致!'));
         } else {
-          if (value.length > 16) {
-            callback(new Error('最多可输入16位'));
+          if (value.length < 6) {
+            callback(new Error('最少输入6位'));
+          }
+          if (value.length > 15) {
+            callback(new Error('最多可输入15位'));
           } else {
             callback();
           }
@@ -74,10 +80,10 @@
         ruleCustom: {
           originPasswd: [],
           passwd: [
-            { required: true, validator: validatePass, trigger: 'blur' }
+            {required: true, min: 6, max: 15, validator: validatePass, trigger: 'blur'}
           ],
           passwdCheck: [
-            { required: true, validator: validatePassCheck, trigger: 'blur' }
+            { required: true, min: 6, max: 15, validator: validatePassCheck, trigger: 'blur' }
           ]
         }
       }

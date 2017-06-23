@@ -4,11 +4,11 @@
       <div class="queryInformation">
         <div class="item date-picker">
           <span class="title">申请日期:</span>
-          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="query_info.applyDate" style="width: 440px"></Date-picker>
+          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="query_info.applyDate" style="max-width: 250px;width: 250px;"></Date-picker>
         </div>
         <div class="item">
           <span class="title">虚拟机名称:</span>
-          <Input v-model="query_info.vm_name" placeholder="请输入..." style="width: 200px"></Input>
+          <Input v-model="query_info.vm_name" placeholder="请输入" style="width: 200px"></Input>
         </div>
 
         <div class="item">

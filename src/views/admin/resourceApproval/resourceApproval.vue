@@ -11,7 +11,7 @@
           </Col>
           <Col span="8">
             <Form-item label="申请日期:" prop="date">
-              <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间"></Date-picker>
+              <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="max-width: 250px"></Date-picker>
             </Form-item>
           </Col>
           <Col span="5">

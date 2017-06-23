@@ -16,11 +16,11 @@
     <div class="contain" v-for="(item,index) in resourceInformation" :class="{border: index == 0?false:true}">
       <div class="item">
         <span class="title">虚拟机名称</span>
-        <Input v-model="item.vm_name" placeholder="请输入..." style="width: 200px"></Input>
+        <Input v-model="item.vm_name" placeholder="请输入" style="width: 200px"></Input>
       </div>
       <div class="item">
         <span class="title">部门</span>
-        <Input v-model="item.department" placeholder="请输入..." style="width: 200px"></Input>
+        <Input v-model="item.department" placeholder="请输入" style="width: 200px"></Input>
       </div>
       <div class="item">
         <span class="title">资源池选择</span>
@@ -58,7 +58,7 @@
       </div>
     </div>
     <div class="inquire-table-title">业务信息</div>
-    <Input class="comment" v-model="business_info" type="textarea" :maxlength="500" :rows=6 placeholder="请输入..."></Input>
+    <Input class="comment" v-model="business_info" type="textarea" :maxlength="500" :rows=6 placeholder="请输入"></Input>
   </div>
 </template>
 

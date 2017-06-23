@@ -4,9 +4,9 @@
     <div class="inquire-form">
       <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="80">
         <Row :gutter="16">
-          <Col span="9">
+          <Col span="8">
             <Form-item label="日期:" prop="date">
-              <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="min-width: 250px"></Date-picker>
+              <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="max-width: 250px"></Date-picker>
             </Form-item>
           </Col>
           <Col span="7">
