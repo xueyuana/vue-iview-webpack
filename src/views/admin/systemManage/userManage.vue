@@ -261,6 +261,8 @@
                         this.compileUser[key] = rowDate[key]
                       }
 
+                      console.log('编辑',this.compileUser)
+
                       this.index = params.index
                       this.user_id = params.row.id
                     }
@@ -358,7 +360,6 @@
 
             //判断密码是否修改
             if(this.compileUser.password){
-//              requestBody = this.compileUser
 
               for(var key in this.compileUser) {
 
@@ -377,6 +378,8 @@
               }
             }
 
+            console.log('请求',requestBody)
+
             this.$http.put(url,requestBody).then((res) => {
               console.log(res.body)
 
@@ -385,16 +388,20 @@
               for(var key in this.compileUser) {
                 this.queryResult[this.index][key] = this.compileUser[key]
 
+                if(key == 'role') {
+
+                  switch (this.queryResult[this.index].role) {
+                    case 'admin': this.queryResult[this.index].role = '管理员'
+                      break
+                    case 'leader': this.queryResult[this.index].role = '行政审批'
+                      break
+                    case 'user': this.queryResult[this.index].role = '普通用户'
+                      break
+                  }
+                }
+
               }
 
-              switch (this.queryResult.role) {
-                case 'admin': item.role = '管理员'
-                  break
-                case 'leader': item.role = '行政审批'
-                  break
-                case 'user': item.role = '普通用户'
-                  break
-              }
 
             },(err) => {
 

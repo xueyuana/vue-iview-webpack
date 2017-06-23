@@ -198,6 +198,10 @@
     },
     created () {
 
+//      this.getFlavor()
+//      this.getImage()
+//      this.getAz()
+
 
 
 //      let id = this.$route.query.id
