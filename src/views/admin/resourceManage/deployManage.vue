@@ -47,18 +47,45 @@
     <!--弹出层-->
     <Modal
         title="分配公网IP"
+        width="300"
         v-model="option"
-        :mask-closable="false">
-      <p>对话框内容</p>
-      <p>对话框内容</p>
-      <p>对话框内容</p>
+        @on-ok="onOk"
+        :mask-closable="false"
+        class-name="vertical-center-modal">
+      <div class="from_wrap">
+        <Form ref="formCustom" :model="formCustom" :label-width="80">
+          <Form-item label="IP类型:">
+            <Select v-model="formCustom.ip_type" placeholder="请选择">
+              <Option value="test_ip">测试IP</Option>
+              <Option value="online_ip">上线IP</Option>
+            </Select>
+          </Form-item>
+          <Form-item label="IP地址:">
+            <Input v-model="formCustom.ip_address" disabled></Input>
+          </Form-item>
+          <Form-item label="子网掩码:">
+            <Input v-model="formCustom.subnet_mask" disabled></Input>
+          </Form-item>
+        </Form>
+      </div>
     </Modal>
 
   </div>
 </template>
 
 <style lang="less">
+  .vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    .ivu-modal{
+      top: 0;
+    }
+  }
+  .from_wrap {
+    padding-right: 25px;
+  }
 </style>
 
 <script>
@@ -140,6 +167,11 @@
             created_time: '2017-06-23'
           }
         ],
+        formCustom: {
+          ip_type: '',
+          ip_address: '',
+          subnet_mask: ''
+        },
         option: false,
         pageSize: 10,
         num: 1
@@ -178,6 +210,10 @@
       },
       handleReset(name) {
         this.$refs[name].resetFields()
+      },
+      // 确定分配
+      onOk() {
+
       },
       // 时间选择器
       formatCreateData(value) {

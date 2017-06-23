@@ -31,37 +31,6 @@
         <span>物理机信息</span>
       </div>
       <div class="inquire">
-        <!--查询条件-->
-        <div class="inquire-form">
-          <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="90">
-            <Row :gutter="60">
-              <Col span="14">
-                <Form-item label="日期:" prop="date">
-                  <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="width: 250px"></Date-picker>
-                </Form-item>
-              </Col>
-              <Col span="10">
-                <Form-item label="名称:" prop="resource_name">
-                  <Input v-model="formItem.resource_name" placeholder="请输入"></Input>
-                </Form-item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span="20">
-                <Form-item label="IP地址:" prop="IP">
-                  <Input v-model="formItem.IP" placeholder="请输入" style="max-width: 160px"></Input>
-                </Form-item>
-              </Col>
-              <Col span="2">
-                <Button type="primary" @click.native="onInquire">查询</Button>
-              </Col>
-              <Col span="2">
-                <Button type="ghost" @click="handleReset('formItem')">重置</Button>
-              </Col>
-            </Row>
-          </Form>
-        </div>
-
         <!--查询结果-->
         <div class="inquire-table">
           <Table border size="small" :columns="columns" :data="filterDate"></Table>
@@ -72,6 +41,7 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -155,7 +125,7 @@
           resource_name: [],
           IP: []
         },
-        userInfo: '',
+        hosts: [],
         columns: [
           {
             title: '序号',
@@ -164,12 +134,12 @@
           },
           {
             title: '名称',
-            key: 'name',
+            key: 'host_name',
             align: 'center'
           },
           {
             title: '虚拟机数量',
-            key: 'virtual_machine',
+            key: 'running_vms',
             align: 'center',
             render: (h, params) => {
               return h('a', {
@@ -178,45 +148,79 @@
                     this.$router.push({name: 'admin_virtualManage'})
                   }
                 }
-              }, params.row.virtual_machine)
+              }, params.row.running_vms)
             }
           },
           {
             title: 'CPU占比',
             key: 'CPU_proportion',
-            align: 'center'
+            align: 'center',
+            render: (h, params) => {
+              return h('p', params.row.vcpu_use + ' / ' + params.row.vcpu_total)
+            }
           },
           {
             title: '内存占比',
             key: 'RAM_proportion',
-            align: 'center'
+            align: 'center',
+            render: (h, params) => {
+              return h('p', params.row.memory_mb_use + ' / ' + params.row.memory_mb_total)
+            }
           },
           {
             title: '磁盘占比',
             key: 'disk_proportion',
-            align: 'center'
+            align: 'center',
+            render: (h, params) => {
+              return h('p', params.row.storage_gb_use + ' / ' + params.row.storage_gb_total)
+            }
           }
         ],
         data1: [],
-        filterDate: [
-          {
-            name: '资源池一',
-            virtual_machine: 200,
-            CPU_proportion: '30%',
-            RAM_proportion: '10%',
-            disk_proportion: '20%'
-          }
-        ],
+        filterDate: [],
         pageSize: 10,
         num: 1
       }
     },
 
     mounted() {
-      this.drawPie();
+      this.hosts = JSON.parse(this.$route.query.hosts)
+      this.onInquire()
+      this.drawPie()
     },
 
     methods: {
+      // 查询
+      onInquire() {
+        let url = 'api/pool/getHosts'
+        let params = ''
+        this.hosts.forEach(item => {
+          params += ('&host=' + item)
+        })
+
+        url += ('?' +  params.slice(1))
+        console.log(url)
+
+        this.$http.get(url).then(res => {
+          if (res.body.code === 200) {
+//            console.log('物理机列表', res)
+            this.data1 = res.body.result.res
+            this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
+            // 开始绘制饼图
+//            console.log(this.countSum(this.data1, 'memory_mb_use'))
+//            this.drawPie()
+          } else {
+            this.$Message.error(res.body.result.msg)
+          }
+        }, err => {
+          this.$Message.error(res.body.result.msg)
+//          console.log('error', err)
+        })
+      },
+      // 重置
+      handleReset(name) {
+        this.$refs[name].resetFields()
+      },
       // 绘制饼图
       drawPie() {
         let myChart1 = echarts.init(document.getElementById('my-resource1'));
@@ -310,7 +314,7 @@
               center: ['50%', '50%'],
               data: [
                 {
-                  value: 335,
+                  value: 400,
                   name: '已经分配',
                   label: {
                     normal: {
@@ -325,7 +329,8 @@
                   }
                 },
                 {
-                  value: 310, name: '未分配',
+                  value: 300,
+                  name: '未分配',
                   label: {
                     normal: {
                       show: true,
@@ -420,26 +425,17 @@
         myChart3.setOption(option3);
 
       },
-      // 时间选择器
-
-      handleReset(name) {
-        this.$refs[name].resetFields()
-      },
-      formatCreateData(value) {
-        this.formItem.created_time = value
-      },
-      onUnitChange(val) {
-        this.formItem.resource_name = ''
-        console.log(val)
-        this.getDeployList()
-        this.onInquire()
-      },
-      onDeployChange(val) {
-        if (!val) return
-        this.onInquire()
-      },
-      formatEndData(value) {
-        this.formItem.end_time = value
+      // 计算所有数据中某条信息的总和
+      countSum(data, attr) {
+        let sum = 0
+        data.forEach((item,index) => {
+          if ((typeof item.attr) == 'number') {
+            sum += item.attr
+          } else {
+            this.$Message.error('非数字')
+          }
+        })
+        return sum
       },
       // 分页
       changePage(val) {
@@ -453,18 +449,8 @@
         let data = [];
         let num = (index - 1) * pageSize
         let maxNum = (num + pageSize) > this.data1.length ? this.data1.length : (num + pageSize)
-        for (let i = num; i < maxNum; i++) {
-          data.push({
-            initiator: originData[i].initiator,
-            created_time: originData[i].created_time.substring(0, 16),
-            project_name: originData[i].project_name,
-            status: this.formatStatus(originData[i].deploy_result),
-            deploy_id: originData[i].deploy_id,
-            deploy_name: originData[i].deploy_name,
-            resource_name: originData[i].resource_name
-          })
-        }
-        return data;
+
+        return originData.slice(num, maxNum)
       }
     }
   }

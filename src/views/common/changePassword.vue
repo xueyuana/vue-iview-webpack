@@ -33,6 +33,9 @@
 </style>
 
 <script type="text/ecmascript-6">
+  //引入sha256加密
+  import crypto from 'crypto-js'
+  import sha256 from 'crypto-js/sha256'
   export default {
     data() {
       const validatePass = (rule, value, callback) => {
@@ -88,14 +91,15 @@
             let passwordData;
 
             console.log('ddsss', this.formCustom);
+            console.log('dd', sha256(this.formCustom.passwd + '!@#$%^').toString(crypto.enc.Hex));
             if(this.formCustom.originPasswd == ''){
               passwordData = {
-                new_password: this.formCustom.passwd
+                new_password: sha256(this.formCustom.passwd + '!@#$%^').toString(crypto.enc.Hex)
               }
             } else {
               passwordData = {
                 old_password: this.formCustom.originPasswd,
-                new_password: this.formCustom.passwd
+                new_password: sha256(this.formCustom.passwd + '!@#$%^').toString(crypto.enc.Hex)
               }
             }
 
