@@ -5,7 +5,7 @@
 
         <div class="item">
           <span class="title">虚拟机名称:</span>
-          <Input v-model="query_info.vm_name" placeholder="请输入..." style="width: 250px"></Input>
+          <Input v-model="query_info.vm_name" placeholder="请输入" style="width: 250px"></Input>
         </div>
 
         <div class="item date-picker">
