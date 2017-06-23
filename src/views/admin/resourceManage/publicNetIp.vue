@@ -3,7 +3,7 @@
         <div class="inquire-form">
             <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="90">
                 <Row :gutter="16">
-                    <Col span="9">
+                    <Col span="8">
                     <Form-item label="日期:" prop="start_time">
                         <Date-picker  type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" style="max-width: 250px"></Date-picker>
                     </Form-item>
@@ -47,9 +47,10 @@
                         <Form-item prop="number">
                             <p><span class="mubername">名称：</span><Input v-model="createUser.number" placeholder="请输入" style="width: 300px"></Input></p>
                         </Form-item>
-                        <Form-item prop="name">
-                            <p><span class="mubername">IP范围：</span><Input v-model="createUser.name" placeholder="192.168.2.1" style="width: 145px"></Input> - <Input v-model="createUser.name2" placeholder="192.168.2.6" style="width: 145px"></Input></p>
-                        </Form-item>
+                        <Form-item prop="name"><p>
+                            <span class="mubername">IP范围：</span>
+                            <Input v-model="createUser.name" placeholder="192.168.2.1" style="width: 145px"></Input> - <Input v-model="createUser.name2" placeholder="192.168.2.6" style="width: 145px"></Input>
+                        </p></Form-item>
                         <Form-item>
                             <p><span class="mubername">子网掩码：</span><Input v-model="createUser.subnetmask" placeholder="255.255.255.0" style="width: 300px"></Input></p>
                         </Form-item>
@@ -88,6 +89,9 @@
               },
               ruleInline: {
                   name: [
+                      { required: true, message: '请填写IP范围', trigger: 'blur' }
+                  ],
+                  name2: [
                       { required: true, message: '请填写IP范围', trigger: 'blur' }
                   ],
                   number: [
@@ -197,6 +201,7 @@
                             hour = stamp.getHours() > 9 ? stamp.getHours() : '0' + stamp.getHours(),
                             minute = stamp.getMinutes() > 9 ? stamp.getMinutes() : '0' + stamp.getMinutes(),
                             sec = stamp.getSeconds() > 9 ? stamp.getSeconds() : '0' + stamp.getSeconds()
+                        console.log(this.createUser.name,this.createUser.name2);
                         this.data6.push({
                             name: this.createUser.name,
                             number: this.createUser.number,

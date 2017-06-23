@@ -16,11 +16,11 @@
     <div class="contain" v-for="(item,index) in resourceInformation" :class="{border: index == 0?false:true}">
       <div class="item">
         <span class="title">虚拟机名称</span>
-        <Input v-model="item.vm_name" placeholder="请输入..." style="width: 200px"></Input>
+        <Input v-model="item.vm_name" placeholder="请输入" style="width: 200px"></Input>
       </div>
       <div class="item">
         <span class="title">部门</span>
-        <Input v-model="item.department" placeholder="请输入..." style="width: 200px"></Input>
+        <Input v-model="item.department" placeholder="请输入" style="width: 200px"></Input>
       </div>
       <div class="item">
         <span class="title">资源池选择</span>
@@ -31,9 +31,43 @@
       <div class="item example">
         <span class="title">部署实例</span>
         <Select v-model="instance_id" style="width:200px" :disabled="index ==0?false:true">
-          <Option v-for="item in instance" :value="item.id" :key="item">{{ item.value }}</Option>
+          <Option v-for="item in instance" @click.native="instanceDetails" :value="item.id" :key="item">{{ item.value }}</Option>
         </Select>
         <Button type="dashed" class="add-example" :class="{hidden: index == 0?false:true}" @click="createExample">新建部署实例</Button>
+        <Modal v-model="instanceCreate" title="提示" :ok-text="okText" :mask-closable="false" :closable="false">
+          <div class="modal-wrap">
+            <div class="instance-title">您的业务类型:</div>
+            <table>
+              <tbody>
+              <tr>
+                <td>用户群体规模</td>
+                <td>内网少量用户</td>
+              </tr>
+              <tr>
+                <td>用户活跃度</td>
+                <td>偶尔使用</td>
+              </tr>
+              <tr>
+                <td>业务类型</td>
+                <td>网站</td>
+              </tr>
+              <tr>
+                <td>数据大小</td>
+                <td>MB级</td>
+              </tr>
+              <tr>
+                <td>高可用</td>
+                <td>不需要</td>
+              </tr>
+              </tbody>
+            </table>
+            <div class="instance-title">推荐配置:</div>
+            <Table :columns="columns" :data="configuration"></Table>
+          </div>
+          <div slot="footer">
+            <Button type="primary" size="large" v-text="okText" @click="closeModal"></Button>
+          </div>
+        </Modal>
       </div>
       <div class="item">
         <span class="title">镜像</span>
@@ -58,7 +92,7 @@
       </div>
     </div>
     <div class="inquire-table-title">业务信息</div>
-    <Input class="comment" v-model="business_info" type="textarea" :maxlength="500" :rows=6 placeholder="请输入..."></Input>
+    <Input class="comment" v-model="business_info" type="textarea" :maxlength="500" :rows=6 placeholder="请输入"></Input>
   </div>
 </template>
 
@@ -69,6 +103,34 @@
     name: 'user-application',
     data () {
       return {
+        instanceCreate: false,
+        okText: '10秒钟后关闭',
+        columns: [
+          {
+            title: '服务器',
+            key: 'server'
+          },
+          {
+            title: '配置',
+            key: 'configuration'
+          },
+          {
+            title: '数量(台)',
+            key: 'number'
+          }
+        ],
+        configuration: [
+          {
+            server: 'WEB',
+            configuration: 'CPU：2核 | 内存：2G | 硬盘：50G',
+            number: 1
+          },
+          {
+            server: '数据库',
+            configuration: 'CPU：4核 | 内存：8G | 硬盘：200G',
+            number: 1
+          }
+        ],
         instance_id: '',
         az_id: '',
         business_info: '',
@@ -249,6 +311,14 @@
 
 
 
+      },
+      instanceDetails () {//展示实例详情推荐配置
+
+        this.instanceCreate = true
+
+      },
+      closeModal () {
+        this.instanceCreate = false
       }
     }
 
@@ -317,6 +387,38 @@
   }
   .border {
     border-top: 1px solid #e4e4e4
+  }
+  .instance-title {
+    font-size: 16px;
+    line-height: 38px;
+  }
+  .modal-wrap {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #657180;
+  }
+  table td,th{
+    text-align: center;
+
+  }
+  table tr {
+    height: 40px;
+    border: 1px solid #dddee1;
+  }
+  table thead tr{
+    background-color: #ebf4fe;
+  }
+  table tbody tr:hover {
+    background-color: #F3FAFF;
+  }
+  table tbody tr td:first-child {
+    background-color: #ebf4fe;
+    width: 120px;
   }
 
 </style>

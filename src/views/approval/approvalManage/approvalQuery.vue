@@ -10,7 +10,7 @@
           </Col>
           <Col span="8">
             <Form-item label="申请日期:" prop="start_time">
-              <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" @on-change="formatCreateData"></Date-picker>
+              <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" style="max-width: 250px"></Date-picker>
             </Form-item>
           </Col>
           <Col span="5">
@@ -192,12 +192,12 @@
       changePageSize(val) {
         this.pageSize = val
         this.changePage(1)
-      },
-      // 时间选择器
-      formatCreateData(value) {
-        console.log('ddsss', this.formValidate);
-        this.formValidate.start_time = value
       }
+      // 时间选择器
+//      formatCreateData(value) {
+//        console.log('ddsss', this.formValidate);
+//        this.formValidate.start_time = value
+//      }
     }
   }
 </script>

@@ -4,23 +4,20 @@
     <div class="inquire-form">
       <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="70">
         <Row :gutter="16">
-          <Col span="24">
+          <Col span="12">
             <Form-item label="镜像名称:" prop="image_name">
               <Input v-model="formItem.image_name" placeholder="请输入" style="max-width: 250px"></Input>
             </Form-item>
           </Col>
-        </Row>
-        <Row type="flex" justify="end">
-          <Col span="24">
-            <Form-item>
-              <div class="inquire-form-query">
-                <Button type="primary" class="inquire-form-query-add" @click.native="onInquire">查询</Button>
-                <Button type="ghost" @click="handleReset('formItem')">重置</Button>
-              </div>
-            </Form-item>
+          <Col span="12">
+          <Form-item>
+            <div class="inquire-form-query">
+              <Button type="primary" class="inquire-form-query-add" @click.native="onInquire">查询</Button>
+              <Button type="ghost" @click="handleReset('formItem')">重置</Button>
+            </div>
+          </Form-item>
           </Col>
         </Row>
-
       </Form>
     </div>
 
