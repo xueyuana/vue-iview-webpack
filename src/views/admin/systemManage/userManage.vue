@@ -177,14 +177,7 @@
             {required: true,message: '请选择角色',trigger: 'blur'}
           ]
         },
-        compileUser: {
-          username: '',
-          password: '',
-          department: '',
-          phone: '',
-          email: '',
-          role: ''
-        },
+        compileUser: {},
         roleList: [
           {
             value: '普通用户',
@@ -256,10 +249,13 @@
                         case '普通用户': rowDate.role = 'user'
                           break
                       }
+                      console.log('row',rowDate)
 
-                      for(var key in rowDate) {
-                        this.compileUser[key] = rowDate[key]
-                      }
+                      Object.assign(this.compileUser,rowDate)
+
+//                      for(var key in rowDate) {
+//                        this.compileUser[key] = rowDate[key]
+//                      }
 
                       console.log('编辑',this.compileUser)
 
@@ -349,32 +345,45 @@
         })
       },
       compileOk (name) {//确定编辑
+        //TODO:表单的坑
+        let temporary = {}
+
+        Object.assign(temporary,this.compileUser)
 
         this.$refs[name].validate((valid) => {
           if(valid) {
+//            this.compileUser = temporary
             console.log('验证成功')
+            console.log('temporary',temporary)
+
+            console.log('表单信息',this.compileUser)
+            console.log('request',requestBody)
+            console.log(this.user_id)
 
             const url = 'api/user/users/'+this.user_id
 
-            let requestBody
+
+            let requestBody = {}
+
 
             //判断密码是否修改
-            if(this.compileUser.password){
+            if(temporary.password){
 
-              for(var key in this.compileUser) {
+              for(var key in temporary) {
 
-                requestBody[key] = this.compileUser[key]
+                requestBody[key] = temporary[key]
               }
 
               requestBody.password = sha256(requestBody.password + '!@#$%^').toString(crypto.enc.Hex)
 
+
             }else{
               requestBody = {
-                username: this.compileUser.username,
-                department: this.compileUser.department,
-                phone: this.compileUser.phone,
-                email: this.compileUser.email,
-                role: this.compileUser.role
+                username: temporary.username,
+                department: temporary.department,
+                phone: temporary.phone,
+                email: temporary.email,
+                role: temporary.role
               }
             }
 
@@ -385,8 +394,8 @@
 
               this.current_page = 1
 //        修改成功之后改变列表数据
-              for(var key in this.compileUser) {
-                this.queryResult[this.index][key] = this.compileUser[key]
+              for(var key in temporary) {
+                this.queryResult[this.index][key] = temporary[key]
 
                 if(key == 'role') {
 
@@ -414,7 +423,7 @@
 
             })
 
-
+//
           } else {
 
             this.$Message.info('编辑用户失败');
