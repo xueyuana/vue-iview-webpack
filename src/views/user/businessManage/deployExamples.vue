@@ -3,9 +3,9 @@
         <div class="inquire-form">
             <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="90">
                 <Row :gutter="16">
-                    <Col span="9">
+                    <Col span="8">
                     <Form-item label="创建日期:" prop="start_time">
-                        <Date-picker  type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" style="min-width: 250px"></Date-picker>
+                        <Date-picker  type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" style="max-width: 250px"></Date-picker>
                     </Form-item>
                     </Col>
                     <Col span="7">
@@ -38,52 +38,43 @@
             <div class="tjbssl">
                 <Button type="primary" @click.native="addCase">添加部署实例</Button>
                 <!--<Button @click="modal1 = true">添加部署实例</Button>-->
-                <Form ref="createUser" :model="createUser" :rules="ruleInline" inline>
-                    <Modal
-                            v-model="modal1"
-                            title="添加部署实例"
-                            @on-ok="addmessage('createUser')"
-                            @on-cancel="cancel">
-                        <Form-item prop="name">
-                            <p>名称：<Input v-model="createUser.name" placeholder="最多10个字符" style="width: 300px"></Input></p>
+                <Modal
+                        v-model="modal1"
+                        title="添加部署实例"
+                        width="440"
+                        @on-ok="addmessage('createUser')"
+                        @on-cancel="cancel">
+                    <Form ref="createUser" :model="createUser" :rules="ruleInline" label-position="right" :label-width="130" >
+                        <Form-item label="名称：" prop="name">
+                            <Input v-model="createUser.name" placeholder="最多10个字符" style="width: 200px"></Input>
                         </Form-item>
-                        <Form-item>
-                            <p>用户群体规模：
-                                <Select v-model="az_id" style="width:200px">
-                                    <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
-                                </Select>
-                            </p>
+                        <Form-item label="用户群体规模：" prop="az_id">
+                            <Select v-model="az_id" style="width:200px">
+                                <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
+                            </Select>
                         </Form-item>
-                        <Form-item>
-                            <p>用户活跃度：
-                                <Select v-model="az_id2" style="width:200px">
-                                    <Option v-for="item in az2" :value="item.az_id2" :key="item">{{ item.az_name2 }}</Option>
-                                </Select>
-                            </p>
+                        <Form-item label="用户活跃度：" prop="az_id2">
+                            <Select v-model="az_id2" style="width:200px">
+                                <Option v-for="item in az2" :value="item.az_id2" :key="item">{{ item.az_name2 }}</Option>
+                            </Select>
                         </Form-item>
-                        <Form-item>
-                            <p>业务类型：
-                                <Select v-model="az_id3" style="width:200px">
-                                    <Option v-for="item in az3" :value="item.az_id3" :key="item">{{ item.az_name3 }}</Option>
-                                </Select>
-                            </p>
+                        <Form-item label="业务类型：" prop="az_id3">
+                            <Select v-model="az_id3" style="width:200px">
+                                <Option v-for="item in az3" :value="item.az_id3" :key="item">{{ item.az_name3 }}</Option>
+                            </Select>
                         </Form-item>
-                        <Form-item>
-                            <p>数据大小：
-                                <Select v-model="az_id4" style="width:200px">
-                                    <Option v-for="item in az4" :value="item.az_id4" :key="item">{{ item.az_name4 }}</Option>
-                                </Select>
-                            </p>
+                        <Form-item label="数据大小：" prop="az_id4">
+                            <Select v-model="az_id4" style="width:200px">
+                                <Option v-for="item in az4" :value="item.az_id4" :key="item">{{ item.az_name4 }}</Option>
+                            </Select>
                         </Form-item>
-                        <Form-item>
-                            <p>高可用：
-                                <Select v-model="az_id5" style="width:200px">
-                                    <Option v-for="item in az5" :value="item.az_id5" :key="item">{{ item.az_name5 }}</Option>
-                                </Select>
-                            </p>
+                        <Form-item label="高可用：" prop="az_id5">
+                            <Select v-model="az_id5" style="width:200px">
+                                <Option v-for="item in az5" :value="item.az_id5" :key="item">{{ item.az_name5 }}</Option>
+                            </Select>
                         </Form-item>
-                    </Modal>
-                </Form>
+                    </Form>
+                </Modal>
                 <Modal
                         v-model="modal2"
                         title="编辑部署实例"

@@ -35,7 +35,7 @@ vueRouters.beforeEach((to, from, next) => {
     return
   }
   let id = getCookie('userInfo') ? JSON.parse(getCookie('userInfo')).id : ''
-  console.log('path：'+ to.path + '\nID：' +  id)
+
   if (id) {
     if (to.path === '/login') {
       next()
@@ -47,7 +47,7 @@ vueRouters.beforeEach((to, from, next) => {
         let name = to.name
         bread.level_1 = '主页'
         switch (to.name) {
-          // 用户
+            // 用户
           case 'user_manageConsole':
             bread.level_2 = '管理控制台'
             break
@@ -81,7 +81,7 @@ vueRouters.beforeEach((to, from, next) => {
             nav.activeName = '32'
             bread.level_2 = '操作日志'
             break
-          // 管理员
+            // 管理员
           case 'admin_manageConsole':
             bread.level_2 = '管理控制台'
             break
@@ -128,7 +128,7 @@ vueRouters.beforeEach((to, from, next) => {
             nav.activeName = '42'
             bread.level_2 = '操作日志'
             break
-          // 行政审批
+            // 行政审批
           case 'approval_approvalQuery':
             nav.openNames = '1'
             nav.activeName = '11'

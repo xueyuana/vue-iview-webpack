@@ -4,29 +4,29 @@
       <div class="queryInformation">
         <div class="item date-picker">
           <span class="title">申请日期:</span>
-          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="query_info.applyDate" style="width: 440px"></Date-picker>
+            <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="query_info.applyDate" style="min-width: 250px"></Date-picker>
         </div>
         <div class="item">
           <span class="title">虚拟机名称:</span>
-          <Input v-model="query_info.vm_name" placeholder="请输入..." style="width: 200px"></Input>
+          <Input v-model="query_info.vm_name" placeholder="请输入" style="width: 250px"></Input>
         </div>
 
         <div class="item">
           <span class="title">资源池:</span>
-          <Select v-model="query_info.az" style="width:200px">
+          <Select v-model="query_info.az" style="width: 250px">
             <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
           </Select>
         </div>
 
         <div class="item">
           <span class="title">状态:</span>
-          <Select v-model="query_info.status" style="width:200px">
+          <Select v-model="query_info.status" style="width:250px">
             <Option v-for="item in status" :value="item.value" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
         <div class="item">
           <span class="title">部署实例:</span>
-          <Select v-model="query_info.instance_name" style="width:200px">
+          <Select v-model="query_info.instance_name" style="width:250px">
             <Option v-for="item in deployExample" :value="item.value" :key="item" >{{ item.value }} </Option>
           </Select>
         </div>
@@ -317,11 +317,10 @@
   }
   table td,th{
     text-align: center;
-    border: 1px solid #dddee1;
   }
   table tr {
-    height: 50px;
-
+    height: 32px;
+    border: 1px solid #dddee1;
   }
   table thead tr{
     background-color: #ebf4fe;

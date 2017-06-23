@@ -1,32 +1,32 @@
 <template>
   <div class="inquire">
     <!--查询条件-->
-    <div class="inquire-form">
-      <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="80">
-        <Row :gutter="16">
-          <Col span="9">
-            <Form-item label="日期:" prop="date">
-              <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="min-width: 250px"></Date-picker>
-            </Form-item>
-          </Col>
-          <Col span="7">
-            <Form-item label="资源池名称:" prop="image_name">
-              <Input v-model="formItem.image_name" placeholder="请输入"></Input>
-            </Form-item>
-          </Col>
-          <Col span="5">
-            <div class="inquire-form-query">
-              <Button type="primary" class="inquire-form-query-add" @click.native="onInquire">查询</Button>
-              <Button type="ghost" @click="handleReset('formItem')">重置</Button>
-            </div>
-          </Col>
-        </Row>
-      </Form>
-    </div>
+    <!--<div class="inquire-form">-->
+      <!--<Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="80">-->
+        <!--<Row :gutter="16">-->
+          <!--<Col span="9">-->
+            <!--<Form-item label="日期:" prop="date">-->
+              <!--<Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="max-width: 250px"></Date-picker>-->
+            <!--</Form-item>-->
+          <!--</Col>-->
+          <!--<Col span="7">-->
+            <!--<Form-item label="资源池名称:" prop="image_name">-->
+              <!--<Input v-model="formItem.image_name" placeholder="请输入"></Input>-->
+            <!--</Form-item>-->
+          <!--</Col>-->
+          <!--<Col span="5">-->
+            <!--<div class="inquire-form-query">-->
+              <!--<Button type="primary" class="inquire-form-query-add" @click.native="onInquire">查询</Button>-->
+              <!--<Button type="ghost" @click="handleReset('formItem')">重置</Button>-->
+            <!--</div>-->
+          <!--</Col>-->
+        <!--</Row>-->
+      <!--</Form>-->
+    <!--</div>-->
 
     <!--查询结果-->
     <div class="inquire-table">
-      <div class="inquire-table-title">资源池列表</div>
+      <div class="inquire-table-title">资源池列表：</div>
       <Table stripe size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
@@ -88,12 +88,13 @@
           },
           {
             title: '虚拟机总数',
-            key: 'virtual_machine',
+            key: 'vms_count',
             align: 'center'
           }
         ],
         data1: [],
         filterDate: [],
+        index: 0,
         pageSize: 10,
         num: 1
       }
@@ -104,22 +105,18 @@
     },
 
     methods: {
-      // 查找
+        // 查找
       onInquire() {
         let url = 'api/pool/pools'
-        let query = {}
-//        this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
-//        this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
-//        this.formItem.image_name && (query.image_name = this.formItem.image_name)
-//        console.log(query)
 
-        this.$http.get(url, {
-          params: query
-        }).then(res => {
+        this.$http.get(url).then(res => {
           if (res.body.code === 200) {
-            console.log('资源池列表', res)
             this.data1 = res.body.result.res
-            this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
+
+            this.data1.forEach(item => {
+              this.onVirtulCount(item, this.data1.length)
+            })
+
           } else {
             this.$Message.error(res.body.result.msg)
           }
@@ -128,6 +125,38 @@
           console.log('error', err)
         })
       },
+        // 查找虚拟机
+      onVirtulCount(obj, len) {
+        let url = 'api/pool/getHosts'
+        let params = ''
+        obj.hosts.forEach(item => {
+          params += ('&host=' + item)
+        })
+        url += ('?' +  params.slice(1))
+
+        this.$http.get(url).then(res => {
+          if (res.body.code === 200) {
+
+            let sum = 0
+            res.body.result.res.forEach(item => {
+              sum += item.running_vms
+            })
+            obj.vms_count = sum
+
+            this.index ++
+            if (this.index == len) {
+              this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
+            }
+
+          } else {
+            this.$Message.error(res.body.result.msg)
+          }
+        }, err => {
+          this.$Message.error(res.body.result.msg)
+        })
+      },
+
+
       handleReset(name) {
         this.$refs[name].resetFields()
       },

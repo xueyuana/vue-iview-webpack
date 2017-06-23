@@ -152,7 +152,7 @@
             }
           },
           {
-            title: 'CPU占比',
+            title: 'CPU占比（已分配/总计）',
             key: 'CPU_proportion',
             align: 'center',
             render: (h, params) => {
@@ -160,7 +160,7 @@
             }
           },
           {
-            title: '内存占比',
+            title: '内存占比（M）',
             key: 'RAM_proportion',
             align: 'center',
             render: (h, params) => {
@@ -168,7 +168,7 @@
             }
           },
           {
-            title: '磁盘占比',
+            title: '磁盘占比（G）',
             key: 'disk_proportion',
             align: 'center',
             render: (h, params) => {
@@ -186,7 +186,6 @@
     mounted() {
       this.hosts = JSON.parse(this.$route.query.hosts)
       this.onInquire()
-      this.drawPie()
     },
 
     methods: {
@@ -199,22 +198,20 @@
         })
 
         url += ('?' +  params.slice(1))
-        console.log(url)
 
         this.$http.get(url).then(res => {
           if (res.body.code === 200) {
-//            console.log('物理机列表', res)
+            console.log('物理机列表', res)
             this.data1 = res.body.result.res
             this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
             // 开始绘制饼图
-//            console.log(this.countSum(this.data1, 'memory_mb_use'))
-//            this.drawPie()
+            this.drawPie(this.data1)
           } else {
             this.$Message.error(res.body.result.msg)
           }
         }, err => {
           this.$Message.error(res.body.result.msg)
-//          console.log('error', err)
+          console.log('error', err)
         })
       },
       // 重置
@@ -222,7 +219,14 @@
         this.$refs[name].resetFields()
       },
       // 绘制饼图
-      drawPie() {
+      drawPie(data) {
+        let cpu_use = this.countSum(data, 'vcpu_use')
+        let cpu_unUse = this.countSum(data, 'vcpu_total') - cpu_use
+        let memory_use = this.countSum(data, 'memory_mb_use')
+        let memory_unUse = this.countSum(data, 'memory_mb_total') - memory_use
+        let storage_use = this.countSum(data, 'storage_gb_use')
+        let storage_unUse = this.countSum(data, 'storage_gb_total') - storage_use
+
         let myChart1 = echarts.init(document.getElementById('my-resource1'));
         let option1 = {
           title: {
@@ -246,7 +250,7 @@
               center: ['50%', '50%'],
               data: [
                 {
-                  value: 335,
+                  value: cpu_use,
                   name: '使用占比',
                   label: {
                     normal: {
@@ -261,8 +265,8 @@
                   }
                 },
                 {
-                  value: 310,
-                  name: '剩余占比',
+                  value: cpu_unUse <= 0 ? 0 : cpu_unUse,
+                  name: cpu_unUse <= 0 ? '' : '剩余占比',
                   label: {
                     normal: {
                       show: true,
@@ -314,7 +318,7 @@
               center: ['50%', '50%'],
               data: [
                 {
-                  value: 400,
+                  value: memory_use,
                   name: '已经分配',
                   label: {
                     normal: {
@@ -329,7 +333,7 @@
                   }
                 },
                 {
-                  value: 300,
+                  value: memory_unUse,
                   name: '未分配',
                   label: {
                     normal: {
@@ -381,7 +385,7 @@
               center: ['50%', '50%'],
               data: [
                 {
-                  value: 335,
+                  value: storage_use,
                   name: '已经分配',
                   label: {
                     normal: {
@@ -396,7 +400,8 @@
                   }
                 },
                 {
-                  value: 310, name: '未分配',
+                  value: storage_unUse,
+                  name: '未分配',
                   label: {
                     normal: {
                       show: true,
@@ -427,10 +432,12 @@
       },
       // 计算所有数据中某条信息的总和
       countSum(data, attr) {
-        let sum = 0
-        data.forEach((item,index) => {
-          if ((typeof item.attr) == 'number') {
-            sum += item.attr
+
+        var sum = 0
+        data.forEach(item => {
+          console.log(item[attr])
+          if ((typeof item[attr]) == 'number') {
+            sum += item[attr]
           } else {
             this.$Message.error('非数字')
           }

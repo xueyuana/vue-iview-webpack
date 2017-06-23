@@ -140,7 +140,65 @@
           </Col>
           <Col span="8">
             <Form-item label="部署实例:" class="form-item">
+              <!--<span class="form-item-span">推荐配置</span>-->
               {{formValidate.case}}
+              <Poptip v-model="isTjpz" placement="left" width="500" v-if="$store.state.userData.userInfo.role == 'admin'">
+                <a class="form-item-span">推荐配置</a>
+                <!--<div slot="title" class="case-title"><i>提示</i></div>-->
+                <div slot="content">
+                  <div class="case-title">提示：</div>
+                  <div class="case-content">
+                    <div class="case-sub-title">您的业务类型为：</div>
+                    <table class="case-custom-table">
+                      <tr>
+                        <td>用户群体规模</td>
+                        <td>内网少量用户</td>
+                      </tr>
+                      <tr>
+                        <td>用户活跃度</td>
+                        <td>偶尔使用</td>
+                      </tr>
+                      <tr>
+                        <td>业务类型</td>
+                        <td>网站</td>
+                      </tr>
+                      <tr>
+                        <td>数据大小</td>
+                        <td>MB级</td>
+                      </tr>
+                      <tr>
+                        <td>不需要</td>
+                        <td>内网少量用户</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="case-title">推荐配置：</div>
+                  <div class="case-content">
+                    <table class="case-data-table">
+                      <thead>
+                        <tr>
+                          <th>服务器</th>
+                          <th>配置</th>
+                          <th>数量（台）</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td>WEB</td>
+                        <td>CPU：2核 | 内存：2G | 硬盘：50G</td>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>服务器</td>
+                        <td>CPU：2核 | 内存：2G | 硬盘：50G</td>
+                        <td>1</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <Button type="primary" class="case-btn" @click="close">确定</Button>
+                </div>
+              </Poptip>
             </Form-item>
             <Form-item label="规格:" class="form-item">
               {{formValidate.spec}}
@@ -196,11 +254,11 @@
           <!--</Col>-->
           <Col span="24">
           <div class="sub-title">业务信息</div>
-          <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="5" placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
+          <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
           </Col>
           <Col span="24">
           <div class="sub-title">行政审批意见</div>
-          <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="5" placeholder="默认显示同意，最多100个字符"></Input>
+          <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" placeholder="默认显示同意，最多100个字符"></Input>
           </Col>
         </Row>
       </Form>
@@ -256,6 +314,69 @@
     .form-info{
       .form-item{
         margin-bottom: 0px;
+        .form-item-span{
+          padding-left:10px;
+          color:#3F94FC;
+          /*cursor: pointer;*/
+        }
+        .case-title{
+          height: 45px;
+          line-height: 45px;
+          font-style: normal;
+          font-size: 16px;
+          clear: both;
+        }
+        .case-btn{
+          margin-top:5px;
+          float: right;
+        }
+        .case-content{
+          .case-sub-title{
+            margin-bottom: 5px;
+            font-size: 14px;
+          }
+          .case-custom-table {
+            width: 50%;
+            border-collapse: collapse;
+            color: #657180;
+            td{
+              text-align: center;
+              border: 1px solid #dddee1;
+            }
+            tr {
+              height: 35px;
+            }
+          }
+          .case-data-table{
+            width:100%;
+            border-collapse: collapse;
+            color: #657180;
+            tr {
+              height: 35px;
+            }
+            th{
+              text-align: center;
+              border: 1px solid #dddee1;
+            }
+            td{
+              text-align: center;
+              border: 1px solid #dddee1;
+            }
+            thead{
+              tr{
+                background-color: #ebf4fe;
+              }
+            }
+          }
+          /*ul{*/
+            /*li{*/
+              /*float: left;*/
+              /*width: 45%;*/
+              /*border-top: 1px solid #e8eaeb;*/
+              /*border-right: 1px solid #e8eaeb;*/
+            /*}*/
+          /*}*/
+        }
       }
     }
   }
@@ -323,6 +444,7 @@
     data() {
       return {
         resourceId: '',
+        isTjpz: false,//推荐配置
         funcBtns: ['返回', '通过', '不通过'],
         formValidate: {
           apply_code: '',
@@ -337,6 +459,35 @@
         },
         ywInfo: '',
         xzInfo: ''
+//        columns: [
+//          {
+//            title: '服务器',
+//            key: 'server',
+//            align: 'center'
+//          },
+//          {
+//            title: '配置',
+//            key: 'setting',
+//            align: 'center'
+//          },
+//          {
+//            title: '数量（台）',
+//            key: 'num',
+//            align: 'center'
+//          }
+//        ],
+//        dataDemo: [
+//          {
+//            server: 'WEB',
+//            setting: 'dd',//CPU：2核 | 内存：2G | 硬盘：50G
+//            num: '1'
+//          },
+//          {
+//            server: '数据库',
+//            setting: 'dd',//CPU：4核 |内存：8G |硬盘：200G
+//            num: '1'
+//          }
+//        ]
       }
     },
     components: { Flow },
@@ -390,6 +541,9 @@
         console.log('ddsss', this.ywInfo);
         console.log('xzInfo', this.xzInfo)
         this.$Message.error('不通过!');
+      },
+      close () {
+        this.isTjpz = false;
       }
     }
   }

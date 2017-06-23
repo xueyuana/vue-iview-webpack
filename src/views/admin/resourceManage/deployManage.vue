@@ -3,21 +3,21 @@
     <!--查询条件-->
     <div class="inquire-form">
       <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="90">
-        <Row :gutter="16">
-          <Col span="9">
+        <Row :gutter="32">
+          <Col span="8">
           <Form-item label="选择日期:" prop="date">
-            <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="min-width: 250px"></Date-picker>
+            <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="max-width: 250px"></Date-picker>
           </Form-item>
           </Col>
-          <Col span="6">
+          <Col span="8">
           <Form-item label="用户:" prop="user">
-            <Input v-model="formItem.user" placeholder="请输入"></Input>
+            <Input v-model="formItem.user" placeholder="请输入" style="max-width: 250px"></Input>
           </Form-item>
           </Col>
-          <Col span="6">
-          <Form-item label="部署实例名称:" prop="deploy_name">
-            <Input v-model="formItem.deploy_name" placeholder="请输入"></Input>
-          </Form-item>
+          <Col span="8">
+            <Form-item label="部署实例名称:" prop="deploy_name">
+              <Input v-model="formItem.deploy_name" placeholder="请输入" style="max-width: 250px"></Input>
+            </Form-item>
           </Col>
         </Row>
         <Row type="flex" justify="end">
@@ -115,7 +115,16 @@
           {
             title: '部署实例名称',
             key: 'deploy_name',
-            align: 'center'
+            align: 'center',
+            render: (h, params) => {
+              return h('a', {
+                  on: {
+                    click: () => {
+                      this.$router.push({name: ''})
+                    }
+                  }
+                }, params.row.deploy_name)
+            }
           },
           {
             title: '用户',

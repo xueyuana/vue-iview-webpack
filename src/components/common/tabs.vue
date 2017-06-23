@@ -35,7 +35,7 @@
       overflow: hidden;
       li {
         max-height: 430px;
-        overflow-y: scroll;
+        overflow-y: auto;
       }
     }
 
