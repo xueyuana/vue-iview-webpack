@@ -409,6 +409,9 @@
 
               console.log('err',err)
 
+              //重置
+              this.$refs[name].resetFields()
+
             })
 
 
@@ -416,14 +419,13 @@
 
             this.$Message.info('编辑用户失败');
 
+            //重置
+            this.$refs[name].resetFields()
+
             console.log('验证失败')
 
           }
         })
-
-        //重置
-        this.$refs[name].resetFields()
-
 
 
       },
