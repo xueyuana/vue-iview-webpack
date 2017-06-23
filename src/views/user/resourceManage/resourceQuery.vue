@@ -2,15 +2,16 @@
   <div class="resouce-query">
     <div class="query-form">
       <div class="queryInformation">
-        <div class="item date-picker">
-          <span class="title">申请日期</span>
-          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.created_date" placeholder="选择日期" style="max-width: 250px;width: 250px"></Date-picker>
-        </div>
+
         <div class="item">
           <span class="title">审批状态</span>
           <Select v-model="query_info.status" style="width:260px">
             <Option v-for="item in approvalStatusVal" :value="item.key" :key="item">{{ item.value }}</Option>
           </Select>
+        </div>
+        <div class="item date-picker">
+          <span class="title">申请日期</span>
+          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.created_date" placeholder="选择日期" style="width: 260px"></Date-picker>
         </div>
         <div class="item">
           <span class="title">部署实例</span>
@@ -27,7 +28,7 @@
       </div>
     </div>
     <div class="inquire-table-title">申请资源列表</div>
-    <Table border stripe :columns="columns" :data="queryResult"></Table>
+    <Table stripe :columns="columns" :data="queryResult"></Table>
     <div class="page">
       <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
     </div>

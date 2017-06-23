@@ -47,6 +47,41 @@
                         <Form-item prop="name">
                             <p>名称：<Input v-model="createUser.name" placeholder="最多10个字符" style="width: 300px"></Input></p>
                         </Form-item>
+                        <Form-item>
+                            <p>用户群体规模：
+                                <Select v-model="az_id" style="width:200px">
+                                    <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
+                                </Select>
+                            </p>
+                        </Form-item>
+                        <Form-item>
+                            <p>用户活跃度：
+                                <Select v-model="az_id2" style="width:200px">
+                                    <Option v-for="item in az2" :value="item.az_id2" :key="item">{{ item.az_name2 }}</Option>
+                                </Select>
+                            </p>
+                        </Form-item>
+                        <Form-item>
+                            <p>业务类型：
+                                <Select v-model="az_id3" style="width:200px">
+                                    <Option v-for="item in az3" :value="item.az_id3" :key="item">{{ item.az_name3 }}</Option>
+                                </Select>
+                            </p>
+                        </Form-item>
+                        <Form-item>
+                            <p>数据大小：
+                                <Select v-model="az_id4" style="width:200px">
+                                    <Option v-for="item in az4" :value="item.az_id4" :key="item">{{ item.az_name4 }}</Option>
+                                </Select>
+                            </p>
+                        </Form-item>
+                        <Form-item>
+                            <p>高可用：
+                                <Select v-model="az_id5" style="width:200px">
+                                    <Option v-for="item in az5" :value="item.az_id5" :key="item">{{ item.az_name5 }}</Option>
+                                </Select>
+                            </p>
+                        </Form-item>
                     </Modal>
                 </Form>
                 <Modal
@@ -71,6 +106,93 @@
   export default {
       data () {
           return {
+              modal1: false ,
+              modal2: false ,
+              value: '',
+              tjname: '',
+              az_id: '',
+              az_id2: '',
+              az_id3: '',
+              az_id4: '',
+              az_id5: '',
+              az:[
+                    {
+                        az_id : "01",
+                        az_name: "内网少量用户",
+                    },
+                    {
+                        az_id : "02",
+                        az_name: "内网大量用户",
+                    },
+                    {
+                        az_id : "03",
+                        az_name: "外网少量用户",
+                    },
+                    {
+                        az_id : "04",
+                        az_name: "外网大量用户",
+                    }
+              ],
+              az2:[
+                    {
+                        az_id2 : "01",
+                        az_name2: "偶尔使用",
+                    },
+                    {
+                        az_id2 : "02",
+                        az_name2: "经常使用",
+                    },
+                    {
+                        az_id2 : "03",
+                        az_name2: "频繁使用",
+                    }
+              ],
+              az3:[
+                    {
+                        az_id3 : "01",
+                        az_name3: "视频",
+                    },
+                    {
+                        az_id3 : "02",
+                        az_name3: "网站",
+                    },
+                    {
+                        az_id3 : "03",
+                        az_name3: "大数据",
+                    },
+                    {
+                        az_id3 : "04",
+                        az_name3: "存储类应用",
+                    },
+                    {
+                        az_id3 : "05",
+                        az_name: "移动应用",
+                    }
+              ],
+              az4:[
+                    {
+                        az_id4 : "01",
+                        az_name4: "MB级",
+                    },
+                    {
+                        az_id4 : "02",
+                        az_name4: "GB级",
+                    },
+                    {
+                        az_id4 : "03",
+                        az_name4: "TB级",
+                    }
+              ],
+              az5:[
+                    {
+                        az_id5 : "01",
+                        az_name5: "需要",
+                    },
+                    {
+                        az_id5 : "02",
+                        az_name5: "不需要",
+                    }
+              ],
               formValidate: {
                   case_name: '',
                   start_time: ''
@@ -94,10 +216,6 @@
                   number: '',
                   time: ''
               },
-              modal1: false ,
-              modal2: false ,
-              value: '',
-              tjname: '',
               columns7: [
                   {
                       title: '序号',
