@@ -4,11 +4,11 @@
       <div class="queryInformation">
         <div class="item">
           <span class="title">用户名:</span>
-          <Input v-model="query_info.user_name" placeholder="请输入..." style="width: 300px"></Input>
+          <Input v-model="query_info.user_name" placeholder="请输入" style="width: 300px"></Input>
         </div>
         <div class="item date-picker">
           <span class="title">申请日期:</span>
-          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 440px"></Date-picker>
+          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
         </div>
       </div>
       <div class="query">
@@ -29,19 +29,19 @@
 
           <Form ref="formInline" :model="createUser" :rules="ruleInline" label-position="right" :label-width="80" >
             <Form-item label="用户名：" prop="username">
-              <Input v-model="createUser.username" placeholder="请输入..." style="width: 200px"></Input>
+              <Input v-model="createUser.username" placeholder="请输入" style="width: 200px"></Input>
             </Form-item>
             <Form-item label="密码：" prop="password">
-              <Input v-model="createUser.password" placeholder="最少6位最多15位..." type="password" style="width: 200px"></Input>
+              <Input v-model="createUser.password" placeholder="最少6位最多15位" type="password" style="width: 200px"></Input>
             </Form-item>
             <Form-item label="部门：" prop="department">
-              <Input v-model="createUser.department" placeholder="请输入..." style="width: 200px"></Input>
+              <Input v-model="createUser.department" placeholder="请输入" style="width: 200px"></Input>
             </Form-item>
             <Form-item label="手机：" prop="phone">
-              <Input v-model="createUser.phone" placeholder="请输入..." style="width: 200px"></Input>
+              <Input v-model="createUser.phone" placeholder="请输入" style="width: 200px"></Input>
             </Form-item>
             <Form-item label="邮箱：" prop="email">
-              <Input v-model="createUser.email" placeholder="请输入..." style="width: 200px"></Input>
+              <Input v-model="createUser.email" placeholder="请输入" style="width: 200px"></Input>
             </Form-item>
             <Form-item label="角色：" prop="role">
               <Select v-model="createUser.role" style="width:196px">
@@ -61,21 +61,21 @@
         @on-cancel="compileCancel('formCompile')">
       <div class="createWrap">
 
-        <Form ref="formCompile" :model="compileUser" :rules="ruleInline" label-position="right" :label-width="80" >
+        <Form ref="formCompile" :model="compileUser" :rules="ruleCompile" label-position="right" :label-width="80" >
           <Form-item label="用户名：" prop="username">
-            <Input v-model="compileUser.username" placeholder="请输入..." style="width: 200px"></Input>
+            <Input v-model="compileUser.username" placeholder="请输入" style="width: 200px"></Input>
           </Form-item>
           <Form-item label="密码：" prop="password">
-            <Input v-model="compileUser.password" placeholder="最少6位最多15位..." type="password" style="width: 200px"></Input>
+            <Input v-model="compileUser.password" placeholder="最少6位最多15位" type="password" style="width: 200px"></Input>
           </Form-item>
           <Form-item label="部门：" prop="department">
-            <Input v-model="compileUser.department" placeholder="请输入..." style="width: 200px"></Input>
+            <Input v-model="compileUser.department" placeholder="请输入" style="width: 200px"></Input>
           </Form-item>
           <Form-item label="手机：" prop="phone">
-            <Input v-model="compileUser.phone" placeholder="请输入..." style="width: 200px"></Input>
+            <Input v-model="compileUser.phone" placeholder="请输入" style="width: 200px"></Input>
           </Form-item>
           <Form-item label="邮箱：" prop="email">
-            <Input v-model="compileUser.email" placeholder="请输入..." style="width: 200px"></Input>
+            <Input v-model="compileUser.email" placeholder="请输入" style="width: 200px"></Input>
           </Form-item>
           <Form-item label="角色：" prop="role">
             <Select v-model="compileUser.role" style="width:196px">
@@ -100,7 +100,7 @@
   export default {
     data () {
       const validatePhone = (rule,value,callback) => {
-        if (value === '') {
+        if (!value) {
           callback()
 
         } else {
@@ -159,6 +159,23 @@
             {required: true,message: '请选择角色',trigger: 'blur'}
           ]
 
+        },
+        ruleCompile: {
+          username: [
+            {required: true,message: '请填写用户名',trigger: 'blur'}
+          ],
+          password: [
+            { min: 6, max: 15, message: '密码最少6位最多15位',trigger: 'blur'}
+          ],
+          phone: [
+            {validator: validatePhone,trigger:'blur'}
+          ],
+          email: [
+            {type: 'email',message: '邮箱格式不正确',tirgger: 'blur'}
+          ],
+          role: [
+            {required: true,message: '请选择角色',trigger: 'blur'}
+          ]
         },
         compileUser: {
           username: '',
@@ -243,6 +260,7 @@
                       for(var key in rowDate) {
                         this.compileUser[key] = rowDate[key]
                       }
+
                       this.index = params.index
                       this.user_id = params.row.id
                     }
@@ -340,7 +358,15 @@
 
             //判断密码是否修改
             if(this.compileUser.password){
-              requestBody = this.compileUser
+//              requestBody = this.compileUser
+
+              for(var key in this.compileUser) {
+
+                requestBody[key] = this.compileUser[key]
+              }
+
+              requestBody.password = sha256(requestBody.password + '!@#$%^').toString(crypto.enc.Hex)
+
             }else{
               requestBody = {
                 username: this.compileUser.username,
@@ -371,12 +397,20 @@
               }
 
             },(err) => {
+
+              this.$Message.info('编辑用户失败');
+
               console.log('err',err)
+
             })
 
 
           } else {
+
+            this.$Message.info('编辑用户失败');
+
             console.log('验证失败')
+
           }
         })
 
@@ -416,17 +450,23 @@
               //重新获取用户
               this.getUser()
 
+              //重置
+              this.$refs[name].resetFields()
+
             },(err) => {
               console.log(err)
+
+              this.$Message.info('创建用户失败');
 
             })
 
           } else {
             console.log('验证失败')
+
+            this.$Message.info('创建用户失败');
+
           }
         })
-//        重置
-        this.$refs[name].resetFields()
 
       },
       createCancel (name) {//创建用户取消
@@ -555,9 +595,9 @@
   .ivu-form-item {
     margin-bottom: 24px;
   }
-  .createWrap[data-v-70ebe527] {
-    height: 328px;
-  }
+  /*.createWrap {*/
+    /*height: 340px;*/
+  /*}*/
   .queryInformation{
     width: 100%;
     display: flex;
@@ -613,11 +653,6 @@
   }
   .createUser {
     margin-bottom: 20px;
-  }
-  .createWrap {
-    height: 240px;
-    display: flex;
-    flex-wrap: wrap;
   }
 
 
