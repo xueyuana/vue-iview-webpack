@@ -38,24 +38,21 @@
             <div class="tjbssl">
                 <Button type="primary" @click.native="addCase">新建</Button>
                 <!--<Button @click="modal1 = true">添加部署实例</Button>-->
-                <Form ref="createUser" :model="createUser" :rules="ruleInline" inline>
-                    <Modal
-                            v-model="modal1"
-                            title="新增IP地址池"
-                            @on-ok="addmessage('createUser')"
-                            @on-cancel="cancel">
-                        <Form-item prop="number">
-                            <p><span class="mubername">名称：</span><Input v-model="createUser.number" placeholder="请输入" style="width: 300px"></Input></p>
-                        </Form-item>
-                        <Form-item prop="name"><p>
+                <Modal
+                        v-model="modal1"
+                        title="新增IP地址池"
+                        @on-ok="addmessage('createUser')"
+                        @on-cancel="cancel">
+                    <Form ref="createUser" :model="createUser" :rules="ruleInline">
+                        <p><span class="mubername">名称：</span><Form-item prop="number" style="display: inline-block;"><Input v-model="createUser.number" placeholder="请输入" style="width: 300px"></Input></Form-item></p>
+                        <p>
                             <span class="mubername">IP范围：</span>
-                            <Input v-model="createUser.name" placeholder="192.168.2.1" style="width: 145px"></Input> - <Input v-model="createUser.name2" placeholder="192.168.2.6" style="width: 145px"></Input>
-                        </p></Form-item>
-                        <Form-item>
-                            <p><span class="mubername">子网掩码：</span><Input v-model="createUser.subnetmask" placeholder="255.255.255.0" style="width: 300px"></Input></p>
-                        </Form-item>
-                    </Modal>
-                </Form>
+                            <Form-item prop="name" style="display: inline-block;"><Input v-model="createUser.name" placeholder="192.168.2.1" style="width: 145px"></Input></Form-item>
+                            <Form-item prop="name2" style="display: inline-block;"> - <Input v-model="createUser.name2" placeholder="192.168.2.6" style="width: 145px"></Input></Form-item>
+                        </p>
+                        <p><span class="mubername">子网掩码：</span><Form-item prop="subnetmask" style="display: inline-block;"><Input v-model="createUser.subnetmask" placeholder="255.255.255.0" style="width: 300px"></Input></Form-item></p>
+                    </Form>
+                </Modal>
             </div>
             <Table border :columns="columns7" stripe :data="data6"></Table>
             <div style="margin: 10px;overflow: hidden">
@@ -96,6 +93,9 @@
                   ],
                   number: [
                       { required: true, message: '请填写IP类型', trigger: 'blur' }
+                  ],
+                  subnetmask: [
+                      { required: true, message: '请填写子网掩码', trigger: 'blur' }
                   ]
               },
               modal1: false ,
@@ -201,14 +201,36 @@
                             hour = stamp.getHours() > 9 ? stamp.getHours() : '0' + stamp.getHours(),
                             minute = stamp.getMinutes() > 9 ? stamp.getMinutes() : '0' + stamp.getMinutes(),
                             sec = stamp.getSeconds() > 9 ? stamp.getSeconds() : '0' + stamp.getSeconds()
-                        console.log(this.createUser.name,this.createUser.name2);
-                        this.data6.push({
-                            name: this.createUser.name,
-                            number: this.createUser.number,
-                            subnetmask: this.createUser.subnetmask,
-                            time: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec
-                        });
+
+                        var str=this.createUser.name;
+                        var ip1=str.split(".")
+                        var str2=this.createUser.name2;
+                        var ip2=str2.split(".");
+                        var data1=ip2[0];
+                        var data2=ip2[1];
+                        var data3=ip2[2];
+                        var data4=ip2[3];
+                        if(ip2[3]-ip1[3]!=0){
+                        	var o=ip2[3]-ip1[3];
+                        	for(var i=1; i<=o-1; i++){
+                        		var a=parseInt(ip1[3])+i;
+                        		this.data6.push({
+                                    name: data1+'.'+data2+'.'+data3+'.'+a,
+                                    number: this.createUser.number,
+                                    subnetmask: this.createUser.subnetmask,
+                                    time: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec
+                                });
+                        	}
+                        }else{
+                        	this.data6.push({
+                                name: data1+'.'+data2+'.'+data3+'.'+data4,
+                                number: this.createUser.number,
+                                subnetmask: this.createUser.subnetmask,
+                                time: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec
+                            });
+                        }
                         this.createUser.name='';
+                        this.createUser.name2='';
                         this.createUser.number='';
                         console.log('333333');
                         this.$Message.info('添加成功');
@@ -274,6 +296,7 @@
 }
 .mubername{
     width: 100px;
+    line-height: 32px;
     display: inline-block;
     text-align: right;
 }
