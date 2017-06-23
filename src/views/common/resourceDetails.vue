@@ -492,7 +492,7 @@
     },
     components: { Flow },
     mounted() {
-      this.resourceId = this.$route.query.apply_code;
+      this.resourceId = this.$route.query.id;
       console.log('resourceId', this.resourceId);
       if (this.resourceId) {
         this.getInfo();

@@ -90,6 +90,13 @@
                   domProps: {
                     innerHTML: params.row.resource_id
                   },
+                  style: {
+                    display: 'inline-block',
+                    width: '80px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
                   on: {
                     click: () => {
                       let id = params.row.resource_id
