@@ -21,7 +21,6 @@ export const userData = {
       let id = JSON.parse(getCookie('userInfo')).id
       return new Promise((resolve, reject) => {
         Vue.http.get('api/user/users/' + id).then(response => {
-          console.log('我是一只小毛驴', response)
           commit('getUserInfo', response.body.result.res)
           resolve(response);
         }).catch(error => {

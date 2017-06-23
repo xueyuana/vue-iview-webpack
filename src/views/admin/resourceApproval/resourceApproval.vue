@@ -3,7 +3,7 @@
     <!--查询条件-->
     <div class="inquire-form">
       <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="70">
-        <Row :gutter="16">
+        <Row :gutter="32">
           <Col span="5">
             <Form-item label="申请人:" prop="applicant">
               <Input v-model="formItem.resource_name" placeholder="请输入"></Input>
@@ -42,12 +42,6 @@
           </Form-item>
           </Col>
         </Row>
-        <!--<div class="form-btn-wrap clearfix">-->
-          <!--<div class="btns">-->
-            <!--<Button type="primary" @click.native="onInquire" style="margin-right: 10px">查询</Button>-->
-            <!--<Button type="ghost" @click.native="handleReset('formItem')">重置</Button>-->
-          <!--</div>-->
-        <!--</div>-->
       </Form>
     </div>
 

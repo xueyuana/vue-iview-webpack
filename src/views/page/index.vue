@@ -19,10 +19,10 @@
               <div class="title">最新公告</div>
               <ul>
                 <li><a>内核‘Dirty Cow’提权漏洞安全预警公告</a><span>2017.6.23</span></li>
+                <li><a>内核‘Dirty Cow’提权漏洞安全预警公告阿萨德风口...</a><span>2017.6.23</span></li>
                 <li><a>内核‘Dirty Cow’提权漏洞安全预警公告</a><span>2017.6.23</span></li>
-                <li><a>内核‘Dirty Cow’提权漏洞安全预警公告</a><span>2017.6.23</span></li>
-                <li><a>内核‘Dirty Cow’提权漏洞安全预警公告</a><span>2017.6.23</span></li>
-                <li><a>内核‘Dirty Cow’提权漏洞安全预警公告</a><span>2017.6.23</span></li>
+                <li><a>内核‘Dirty Cow’提权漏洞安全预警公告2</a><span>2017.6.23</span></li>
+                <li><a>内核‘Dirty Cow’提权漏洞安</a><span>2017.6.23</span></li>
               </ul>
             </div>
           </div>
@@ -293,7 +293,7 @@
                   <tbody>
                     <tr v-for="(item,index) in list" :class="{bac: index%2 != 0}">
                       <td>{{index + 1}}</td>
-                      <td>{{item.title}}</td>
+                      <td><a style="color: #3399ff" href="image/main2.jpg" download="file">{{item.title}}</a></td>
                       <td>{{item.announcer}}</td>
                       <td>{{item.time}}</td>
                     </tr>
@@ -473,11 +473,13 @@
               display: flex;
               a {
                 flex: 1;
+                color: #3399ff;
                 white-space: nowrap;
                 text-overflow: ellipsis;
               }
               span {
                 width: 92px;
+                margin-left: 20px;
                 color: #C3C3C3;
               }
             }
@@ -630,7 +632,6 @@
   }
   table td,th{
     text-align: center;
-    border: 1px solid #dddee1;
   }
   table tr {
     height: 40px;
