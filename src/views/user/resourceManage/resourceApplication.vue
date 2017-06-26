@@ -194,7 +194,7 @@
     },
     watch: {
       routeId (newId,oldId) {
-//        console.log('newid:',newId)
+
         if(newId === undefined) {
 
           this.isDisabled = false
@@ -226,7 +226,7 @@
         const url = 'api/flavor/flavors'
 
         this.$http.get(url).then((res) => {
-//          console.log('规格',res.body)
+          console.log('规格',res.body)
           this.flavor = res.body.result.res
         },(err) => {
           console.log(err)
@@ -236,7 +236,7 @@
       getImage () {//获取镜像
         const url = 'api/image/images'
         this.$http.get(url).then((res) => {
-//          console.log('镜像',res.body)
+          console.log('镜像',res.body)
           this.mirrorImage =  res.body.result.res
         },(err) => {
           console.log(err)
@@ -246,7 +246,7 @@
         const url = 'api/pool/pools'
 
         this.$http.get(url).then((res) => {
-//          console.log('资源池',res.body)
+          console.log('资源池',res.body)
           res.body.result.res.forEach((item ,index) => {
             this.az.push({
               az_name: item.pool_name
@@ -265,7 +265,7 @@
         }
 
         this.$http.get(url,{params:params}).then((res) => {
-//          console.log('实例',res.body)
+          console.log('实例',res.body)
           this.instance = res.body.result.res
 
         },(err) => {
