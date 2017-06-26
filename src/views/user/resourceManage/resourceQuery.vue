@@ -99,7 +99,7 @@
                   },
                   on: {
                     click: () => {
-                      let id = params.row.resource_id
+                      let id = params.row.resource_id//c0967990-5a38-11e7-8a35-fa163e9474c9
                       this.$router.push({name: 'user_resourceApplication',query: {id: id}})
                     }
                   }
@@ -186,7 +186,6 @@
 
         this.getUserResource(requestBody)
 
-
       },
       reset () {
         this.query_info = {
@@ -208,6 +207,8 @@
 
           this.page_size = res.body.result.res.length
 
+//          console.log('查询资源',res.body.result.res)
+
           res.body.result.res.forEach((item,index) => {
 
             switch (item.status) {
@@ -219,17 +220,16 @@
               number: index +1,
               resource_id: item.resource_id,
               status: item.status,
-              instance_name: '实例1',
-              az: '资源池1',
+              instance_name: item.deploy_name,
+              az: item.az_name,
               created_date: item.created_date.slice(0,16),
               applyPerson: item.user_name
 
             })
           })
-          console.log(this.getResult)
+//          console.log(this.getResult)
 
           this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
-
 
 
         },(err) => {
@@ -272,7 +272,7 @@
     },
     created () {
       //获取用户的所有申请资源
-      const id = '0696050e-571a-11e7-a83a-fa163e9474c9'
+      const id = '0753bf1a-5736-11e7-929a-fa163e9474c9'
       const  query = {user_id:id}
       this.getUserResource(query)
 

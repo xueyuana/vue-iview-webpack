@@ -30,7 +30,7 @@ import 'fullpage/build/fullpage.min'
 Vue.prototype.$fullpage = fullpage
 
 vueRouters.beforeEach((to, from, next) => {
-  if (to.path === '/') {
+  if (to.path === '/' || to.path === '/notice') {
     next()
     return
   }
@@ -107,6 +107,9 @@ vueRouters.beforeEach((to, from, next) => {
             nav.openNames = '2'
             nav.activeName = '23'
             bread.level_2 = '部署实例管理'
+            break
+          case 'admin_deployDetails':
+            bread.level_2 = '部署实例详情'
             break
           case 'admin_publicNetIp':
             nav.openNames = '2'
