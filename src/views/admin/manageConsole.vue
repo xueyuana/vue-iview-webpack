@@ -38,6 +38,7 @@
       </Col>
       <Col span="12"></Col>
     </Row>
+
   </div>
 </template>
 
@@ -48,11 +49,11 @@
     margin-top: 10px;
     margin-bottom: 40px;
   }
+
 </style>
 
 <script>
   var echarts = require('echarts/lib/echarts');
-  // 关系图
   require('echarts/lib/chart/pie');
 
   export default {
@@ -60,13 +61,36 @@
       return {}
     },
 
-    mounted() {
-      this.drawPie();
+    created() {
+      this.onInit()
     },
 
     methods: {
-      // 绘制饼图
-      drawPie() {
+        // 查询
+      onInit() {
+        let url = 'api/pool/statistics'
+        this.$http.get(url).then(res => {
+          if (res.body.code === 200) {
+            this.drawPie(res.body.result.res)
+          } else {
+            this.$Message.error(res.body.result.msg)
+          }
+        }).catch(err => {
+          this.$Message.error(err.body.result.msg)
+        })
+      },
+        // 绘制饼图
+      drawPie(data) {
+
+        console.log(data)
+        let vcpu_use = data.vcpu_use
+        let cpu_unUse = data.vcpu_total - vcpu_use
+        let memory_mb_use = data.memory_mb_use
+        let memory_mb_unUse = data.memory_mb_total - memory_mb_use
+        let storage_gb_use = data.storage_gb_use
+        let storage_gb_unUse = data.storage_gb_total - storage_gb_use
+
+
         let myChart1 = echarts.init(document.getElementById('my-resource1'));
         let option1 = {
           title: {
@@ -90,7 +114,7 @@
               center: ['50%', '50%'],
               data: [
                 {
-                  value: 335,
+                  value: vcpu_use,
                   name: '使用占比',
                   label: {
                     normal: {
@@ -105,8 +129,8 @@
                   }
                 },
                 {
-                  value: 310,
-                  name: '剩余占比',
+                  value: cpu_unUse <= 0 ? 0 : cpu_unUse,
+                  name: cpu_unUse <= 0 ? '' : '剩余占比',
                   label: {
                     normal: {
                       show: true,
@@ -158,7 +182,7 @@
               center: ['50%', '50%'],
               data: [
                 {
-                  value: 335,
+                  value: memory_mb_use,
                   name: '已经分配',
                   label: {
                     normal: {
@@ -173,7 +197,8 @@
                   }
                 },
                 {
-                  value: 310, name: '未分配',
+                  value: memory_mb_unUse,
+                  name: '未分配',
                   label: {
                     normal: {
                       show: true,
@@ -224,7 +249,7 @@
               center: ['50%', '50%'],
               data: [
                 {
-                  value: 335,
+                  value: storage_gb_use,
                   name: '已经分配',
                   label: {
                     normal: {
@@ -239,7 +264,8 @@
                   }
                 },
                 {
-                  value: 310, name: '未分配',
+                  value: storage_gb_unUse,
+                  name: '未分配',
                   label: {
                     normal: {
                       show: true,

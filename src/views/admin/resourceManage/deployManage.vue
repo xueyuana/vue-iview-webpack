@@ -60,11 +60,11 @@
               <Option value="online_ip">上线IP</Option>
             </Select>
           </Form-item>
-          <Form-item label="IP地址:">
+          <Form-item label="公网IP地址:">
             <Input v-model="formCustom.ip_address" disabled></Input>
           </Form-item>
-          <Form-item label="子网掩码:">
-            <Input v-model="formCustom.subnet_mask" disabled></Input>
+          <Form-item label="内网IP地址:">
+            <Input v-model="formCustom.subpri_ipnet_mask" placeholder="192.168.2.1/24"></Input>
           </Form-item>
         </Form>
       </div>
@@ -120,7 +120,7 @@
               return h('a', {
                   on: {
                     click: () => {
-                      this.$router.push({name: ''})
+                      this.$router.push({name: 'admin_deployDetails'})
                     }
                   }
                 }, params.row.deploy_name)
@@ -177,9 +177,8 @@
           }
         ],
         formCustom: {
-          ip_type: '',
-          ip_address: '',
-          subnet_mask: ''
+          pub_ip: '',
+          pri_ip: ''
         },
         option: false,
         pageSize: 10,
