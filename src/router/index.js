@@ -9,10 +9,14 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 import page from 'views/page/index.vue'                    // 首页
+import main from 'views/page/main.vue'                     // 首屏
+import notice from 'views/page/notice.vue'                 // 公告
+
+
 import login from 'views/common/login.vue'                // 登录
 import home from 'views/common/home.vue'                  // Home页
 
-import user_manageConsole from 'views/user/manageConsole.vue'                                   // 用户 > 管理控制台
+import user_manageConsole from 'views/user/manageConsole.vue'                                 // 用户 > 管理控制台
 import user_deployExample from 'views/user/businessManage/deployExamples.vue'                 // 用户 > 部署实例
 import user_resourceApplication from 'views/user/resourceManage/resourceApplication.vue'      // 用户 > 资源申请
 import user_resourceQuery from 'views/user/resourceManage/resourceQuery.vue'                  // 用户 > 资源查询
@@ -30,7 +34,7 @@ import admin_publicNetIp from 'views/admin/resourceManage/publicNetIp.vue'      
 import admin_resourceApproval from 'views/admin/resourceApproval/resourceApproval.vue'        // 管理员 > 资源审批
 import admin_userManage from 'views/admin/systemManage/userManage.vue'                        // 管理员 > 用户管理
 import admin_operationLog from 'views/common/operationLog.vue'                                // 管理员 > 操作日志
-import admin_deployDetails from 'views/admin/resourceManage/deployDetails.vue'                // 管理员 > 虚拟机管理
+import admin_deployDetails from 'views/admin/resourceManage/deployDetails.vue'                // 管理员 > 部署实例详情
 
 import approval_approvalQuery from 'views/approval/approvalManage/approvalQuery.vue'          // 行政审批 > 资源查询（审批查询）
 import approval_resourceDetails from 'views/common/resourceDetails.vue'                       // 行政审批 > 行政审批页面（资源详情）
@@ -40,7 +44,12 @@ import approval_operationLog from 'views/common/operationLog.vue'               
 
 // 创建路由对象
 var routes = [
-  {name: 'page', path: '/', component: page},
+  {name: 'page', path: '/', component: page,
+    children: [
+      {path: '', component: main},
+      {name: 'notice', path: 'notice', component: notice}
+    ]
+  },
   {name: 'login', path: '/login', component: login},
   {
     name: 'home', path: '/home', component: home,
