@@ -593,10 +593,8 @@
 
         if (this.role === 'leader') {
           query.suggestion = this.xzInfo
-        } else {
-          query.business_info = this.ywInfo
-          console.log('传参', query)
         }
+        console.log('传参', query)
 
         const url = 'api/mpc_resource/mpc_resources';
 
