@@ -95,7 +95,7 @@
               return h('a', {
                 on: {
                   click: () => {
-                    this.$router.push({name: 'approval_resourceDetails'})
+                    this.$router.push({name: 'approval_resourceDetails', query: { id: params.row.resource_id}})
                   }
                 }
               }, params.row.resource_id)
@@ -121,10 +121,19 @@
             key: 'status',
             align: 'center',
             render: (h, params) => {
-              if (params.row.status === 'summit') {
-                return h('p', '审批中')
+              switch (params.row.status) {
+                case 'submit':
+                  return h('p', '行政审批中')
+                case 'l_fail':
+                  return h('p', '行政审批不通过')
+                case 'l_success':
+                  return h('p', '技术审批中')
+                case 'a_fail':
+                  return h('p', '技术审批不通过')
+                case 'a_success':
+                  return h('p', '审批完成')
+                default:
               }
-
             }
           },
           {

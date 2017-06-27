@@ -10,10 +10,10 @@
           <div class="title">最新公告</div>
           <ul>
             <li><router-link :to="{name: 'notice'}">内核‘Dirty Cow’提权漏洞安全预警公告</router-link><span>2017.6.23</span></li>
-            <li><a>内核‘Dirty Cow’提权漏洞安全预警公告阿萨德风口</a><span>2017.6.23</span></li>
-            <li><a>内核‘Dirty Cow’提权漏洞安全预警公告</a><span>2017.6.23</span></li>
-            <li><a>内核‘Dirty Cow’提权漏洞安全预警公告2</a><span>2017.6.23</span></li>
-            <li><a>内核‘Dirty Cow’提权漏洞安</a><span>2017.6.23</span></li>
+            <li><router-link :to="{name: 'notice'}">内核‘Dirty Cow’提权漏洞安全预警公告阿萨德风口</router-link><span>2017.6.23</span></li>
+            <li><router-link :to="{name: 'notice'}">内核‘Dirty Cow’提权漏洞安全预警公告</router-link><span>2017.6.23</span></li>
+            <li><router-link :to="{name: 'notice'}">内核‘Dirty Cow’提权漏洞安全预警公告2</router-link><span>2017.6.23</span></li>
+            <li><router-link :to="{name: 'notice'}">内核‘Dirty Cow’提权漏洞安</router-link><span>2017.6.23</span></li>
           </ul>
         </div>
       </div>

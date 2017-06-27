@@ -69,6 +69,7 @@
     box-sizing: border-box;
     height: 100%;
     margin: 30px 200px;
+    padding: 10px 30px;
     background-color: #fff;
     font-size: 14px;
     overflow: auto;

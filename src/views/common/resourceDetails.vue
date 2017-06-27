@@ -5,6 +5,7 @@
               type="primary"
               v-for="(item, index) in funcBtns"
               @click="onLink(index)">{{item}}
+
       </Button>
     </div>
     <div class="approval-status">
@@ -15,6 +16,7 @@
         <Step title="审批完成"></Step>
       </Steps>
     </div>
+
     <div class="status-list" v-if="$store.state.userData.userInfo.role == 'admin'">
       <div class="sub-title">DMZ资源池资源使用情况</div>
       <Row>
@@ -111,8 +113,8 @@
           </Col>
           <Col span="24">
             <Form-item label="申请单号:" class="form-item">
-            {{formValidate1.resource_id}}
-          </Form-item>
+              {{formValidate1.resource_id}}
+            </Form-item>
           </Col>
         </Row>
       </Form>
@@ -208,11 +210,11 @@
 </template>
 
 <style lang="less" scoped>
-  .rsource-approval{
-    .sub-title{
-      margin:20px 0 10px 0;
+  .rsource-approval {
+    .sub-title {
+      margin: 20px 0 10px 0;
     }
-    .approval-button{
+    .approval-button {
       display: flex;
       justify-content: flex-end;
       box-sizing: border-box;
@@ -221,35 +223,35 @@
         margin: 0 4px;
       }
     }
-    .approval-status{
+    .approval-status {
       width: 70%;
       margin: 30px auto;
     }
-    .status-list{
-      clear:both;
-      .rd_right{
+    .status-list {
+      clear: both;
+      .rd_right {
         text-align: right;
       }
-      .rd_left{
+      .rd_left {
         text-align: left;
       }
-      .rd_pro1{
+      .rd_pro1 {
         display: inline-block;
         vertical-align: top;
-        padding-right:10px;
-        width:80px;
+        padding-right: 10px;
+        width: 80px;
         min-width: 80px;
-        height:23px;
-        line-height:23px;
+        height: 23px;
+        line-height: 23px;
       }
-      .rd_pro2{
+      .rd_pro2 {
         display: inline-block;
         vertical-align: top;
-        padding-left:10px;
-        width:80px;
+        padding-left: 10px;
+        width: 80px;
         min-width: 80px;
-        height:23px;
-        line-height:23px;
+        height: 23px;
+        line-height: 23px;
       }
     }
     .form-info{
@@ -267,19 +269,19 @@
           color:#3F94FC;
           cursor: pointer;
         }
-        .case-title{
+        .case-title {
           height: 45px;
           line-height: 45px;
           font-style: normal;
           font-size: 16px;
           clear: both;
         }
-        .case-btn{
-          margin-top:5px;
+        .case-btn {
+          margin-top: 5px;
           float: right;
         }
-        .case-content{
-          .case-sub-title{
+        .case-content {
+          .case-sub-title {
             margin-bottom: 5px;
             font-size: 14px;
           }
@@ -287,7 +289,7 @@
             width: 50%;
             border-collapse: collapse;
             color: #657180;
-            td{
+            td {
               text-align: center;
               border: 1px solid #dddee1;
             }
@@ -295,32 +297,34 @@
               height: 35px;
             }
           }
-          .case-data-table{
-            width:100%;
+          .case-data-table {
+            width: 100%;
             border-collapse: collapse;
             color: #657180;
             tr {
               height: 35px;
             }
-            th{
+            th {
               text-align: center;
               border: 1px solid #dddee1;
             }
-            td{
+            td {
               text-align: center;
               border: 1px solid #dddee1;
             }
-            thead{
-              tr{
+            thead {
+              tr {
                 background-color: #ebf4fe;
               }
             }
           }
+
         }
       }
     }
   }
-  .rs_title{
+
+  .rs_title {
     width: 100%;
     height: 20px;
     padding-left: 5px;
@@ -328,53 +332,58 @@
     font-size: 14px;
     line-height: 20px;
     margin: 20px 0;
-    color:#000;
+    color: #000;
   }
-  .rd_status_title{
+
+  .rd_status_title {
     width: 100%;
     height: 20px;
     padding-left: 5px;
     font-size: 14px;
     line-height: 20px;
     margin: 20px 0;
-    color:#000;
+    color: #000;
   }
-  .rd_center{
+
+  .rd_center {
     text-align: center;
   }
-  .rd_graph{
+
+  .rd_graph {
     display: inline-block;
     vertical-align: top;
-    width:80px;
+    width: 80px;
     min-width: 80px;
-    height:23px;
-    line-height:23px;
+    height: 23px;
+    line-height: 23px;
   }
+
   .graph {
     /*float:left;*/
     display: inline-block;
-    margin:0 0 0 15px;
-    background-color:#D7D7D7;
+    margin: 0 0 0 15px;
+    background-color: #D7D7D7;
     -moz-box-shadow: 0px 4px 5px #D7D7D7; /* 老的 Firefox */
     box-shadow: 0px 4px 5px #D7D7D7;
     /*position:relative;*/
-    width:100%;
-    padding:0
+    width: 100%;
+    padding: 0
   }
+
   .graph .bar {
-    display:block;
-    position:relative;
+    display: block;
+    position: relative;
     background-color: #FFDF25;
-    text-align:center;
-    color:#fff;
-    height:19px;
-    font-family:Arial, Helvetica, sans-serif;
-    font-size:12px;
+    text-align: center;
+    color: #fff;
+    height: 19px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
   }
 
   .graph .bar span {
-    position:absolute;
-    left:1em
+    position: absolute;
+    left: 1em
   }
 
   .instance-title {
@@ -447,6 +456,7 @@
         stepNum: 0,
         userId: '',
         resourceId: '',
+
         isTjpz: false,//推荐配置
         flavor_name: '',//规格名称
         flavorList: [],
@@ -471,12 +481,11 @@
         xzInfo: ''
       }
     },
-    components: { Flow },
+    components: {Flow},
     created () {
       //获取资源信息
 //      this.userId = this.$store.state.userData.userInfo.id; user_id:this.userId,
       this.resourceId = this.$route.query.id;
-      console.log('resourceId', this.resourceId);
       if (this.resourceId) {
         const query = {resource_id:this.resourceId};
         this.getFlaver();
@@ -489,8 +498,8 @@
     },
     methods: {
       getInfo (query) {
-        console.log('query', query);
         const url = 'api/mpc_resource/mpc_resources';
+
         this.$http.get(url,{params: query}).then((res) => {
             console.log('sssss', res);
             if (res.body.code === 200) {
@@ -555,7 +564,7 @@
                 this.xzInfo= item.suggestion;
             })
           }
-        },(err) => {
+        }, (err) => {
           console.log(err)
         });
       },
@@ -593,8 +602,9 @@
         }
       },
       onSubmit (status) {
-        const query = {resource_id: this.resourceId, status: status, suggestion:this.xzInfo};
+        const query = {resource_id: this.resourceId, status: status, suggestion: this.xzInfo};
         const url = 'api/mpc_resource/mpc_resources';
+
         this.$http.put(url,query).then((res) => {
             console.log('sssss', res);
             if (res.body.code === 200) {
@@ -605,9 +615,10 @@
                 this.$Message.success('不通过完成!');
               }
             }
-          },(err) => {
-            this.$Message.error(err.body.result.msg)
-          });
+          }
+        }, (err) => {
+          this.$Message.error(err.body.result.msg)
+        });
       },
 //      onNo () {
 //        console.log('ddsss', this.ywInfo);
