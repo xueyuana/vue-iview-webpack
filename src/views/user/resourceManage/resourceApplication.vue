@@ -5,7 +5,7 @@
       <Button type="primary" :disabled="isDisabled" @click="sendInformation">提交</Button>
     </div>
     <div class="steps">
-      <Steps :current="0">
+      <Steps :current="current" :status="stepsStatus">
         <Step title="提交申请" ></Step>
         <Step title="行政审批" ></Step>
         <Step title="技术审批" ></Step>
@@ -103,6 +103,8 @@
     name: 'user-application',
     data () {
       return {
+        current: 0,
+        stepsStatus: 'process',
         user_info: {},
         instanceCreate: false,
         okText: '10秒钟后关闭',
@@ -226,7 +228,7 @@
         const url = 'api/flavor/flavors'
 
         this.$http.get(url).then((res) => {
-          console.log('规格',res.body)
+//          console.log('规格',res.body)
           this.flavor = res.body.result.res
         },(err) => {
           console.log(err)
@@ -236,7 +238,7 @@
       getImage () {//获取镜像
         const url = 'api/image/images'
         this.$http.get(url).then((res) => {
-          console.log('镜像',res.body)
+//          console.log('镜像',res.body)
           this.mirrorImage =  res.body.result.res
         },(err) => {
           console.log(err)
@@ -246,7 +248,7 @@
         const url = 'api/pool/pools'
 
         this.$http.get(url).then((res) => {
-          console.log('资源池',res.body)
+//          console.log('资源池',res.body)
           res.body.result.res.forEach((item ,index) => {
             this.az.push({
               az_name: item.pool_name
@@ -265,7 +267,7 @@
         }
 
         this.$http.get(url,{params:params}).then((res) => {
-          console.log('实例',res.body)
+//          console.log('实例',res.body)
           this.instance = res.body.result.res
 
         },(err) => {
@@ -277,22 +279,6 @@
         Object.assign(this.user_info,this.$store.state.userData.userInfo)
         this.department = this.user_info.department
 
-      },
-      createInstance () {//创建实例
-        const url = 'api/deploy_instance/deploy_instances'
-
-        const requestBody = {
-          instance_name: 'inst_2',
-          instance_num: 3,
-          user_name: 'user',
-          user_id: '0753bf1a-5736-11e7-929a-fa163e9474c9'
-        }
-
-        this.$http.post(url,requestBody).then((res) => {
-          console.log('创建实例',res.body)
-        },(err) => {
-          console.log(err)
-        })
       },
       addInformation () {//添加虚机
         let count = 0
@@ -321,6 +307,19 @@
         this.$http.get(url,{params:query}).then(res => {
           console.log('资源查询',res.body)
           let resourceInformation = res.body.result.res[0]
+
+          switch (resourceInformation.status) {
+            case 'submit': this.current = 1; this.stepsStatus = 'process'
+              break
+            case 'l_success': this.current = 2;this.stepsStatus = 'process'
+              break
+            case 'l_fail': this.current = 1 ; this.stepsStatus = 'error'
+              break
+            case 'a_success': this.current = 3;this.stepsStatus = 'process'
+              break
+            case 'a_fail': this.current = 2 ; this.stepsStatus = 'error'
+              break
+          }
 
           this.business_info = resourceInformation.business_info
           this.az_name = resourceInformation.az_name

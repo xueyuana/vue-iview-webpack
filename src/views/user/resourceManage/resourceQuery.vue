@@ -16,7 +16,7 @@
         <div class="item">
           <span class="title">部署实例</span>
           <Select v-model="query_info.instance_id" style="width:260px">
-            <Option v-for="item in instance" :value="item.id" :key="item">{{ item.value }}</Option>
+            <Option v-for="item in instance" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
 
           </Select>
         </div>
@@ -30,7 +30,7 @@
     <div class="inquire-table-title">申请资源列表</div>
     <Table stripe :columns="columns" :data="queryResult"></Table>
     <div class="page">
-      <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
+      <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page" :page-size="page_size"></Page>
     </div>
 
   </div>
@@ -45,30 +45,30 @@
         page_size: 10,
         current_page: 1,
         getResult: [],
+        user_info: '',
         approvalStatusVal: [
           {
-            value: '待审批',
-            key: 'summit'
+            value: '行政审批中',
+            key: 'submit'
           },
           {
-            value: '审批未通过',
-            key: 'reject'
+            value: '行政审批没通过',
+            key: 'l_fail'
+          },
+          {
+            value: '技术审批中',
+            key: 'l_success'
+          },
+          {
+            value: '技术审批没通过',
+            key: 'a_fail'
           },
           {
             value: '审批完成',
-            key: 'complete'
+            key: 'a_success'
           }
         ],
-        instance: [
-          {
-            value: '实例1',
-            id: '001'
-          },
-          {
-            value: '实例2',
-            id: '002'
-          }
-        ],
+        instance: [],
         query_info: {
           user_name: '',
           created_date: [],
@@ -166,6 +166,21 @@
       goMyResource () {
         this.$router.push({name: 'user_myResource'})
       },
+      getInstance () {//获取实例
+        const url = 'api/deploy_instance/deploy_instances'
+
+        let params = {
+          user_id:'0753bf1a-5736-11e7-929a-fa163e9474c9'
+        }
+
+        this.$http.get(url,{params:params}).then((res) => {
+//          console.log('实例',res.body)
+          this.instance = res.body.result.res
+
+        },(err) => {
+          console.log(err)
+        })
+      },
       changePage (page) {
 
         this.queryResult = this.mockTableData(this.getResult,this.page_size,page)
@@ -173,12 +188,14 @@
         this.current_page = page
       },
       query () {
+        this.current_page = 1
 
         const start_time = this.query_info.created_date[0]
         const end_time = this.query_info.created_date[1]
 
         let requestBody = {}
-        requestBody.user_id = '0696050e-571a-11e7-a83a-fa163e9474c9'
+
+        requestBody.user_id = this.user_info.id
         start_time && (requestBody.start_time = this.timeFormat(start_time))
         end_time && (requestBody.end_time = this.timeFormat(end_time))
         this.query_info.status && (requestBody.status = this.query_info.status)
@@ -197,7 +214,13 @@
         }
 
       },
+      getUser () {
+
+        Object.assign(this.user_info,this.$store.state.userData.userInfo)
+
+      },
       getUserResource (query) {
+        this.getResult = []
 
         this.queryResult = []
         const url = 'api/mpc_resource/mpc_resources'
@@ -205,14 +228,22 @@
 
         this.$http.get(url,{params: query}).then((res) => {
 
-          this.page_size = res.body.result.res.length
+          this.data_length = res.body.result.res.length
 
-//          console.log('查询资源',res.body.result.res)
+          console.log('查询资源',res.body.result.res)
 
           res.body.result.res.forEach((item,index) => {
 
             switch (item.status) {
-              case 'summit': item.status = '审批中'
+              case 'submit': item.status = '行政审批中'
+                break
+              case 'l_success': item.status = '技术审批中'
+                break
+              case 'l_fail': item.status = '行政审批不通过'
+                break
+              case 'a_success': item.status = '审批完成'
+                break
+              case 'a_fail': item.status = '技术审批不通过'
                 break
             }
 
@@ -226,10 +257,14 @@
               applyPerson: item.user_name
 
             })
+
+
           })
 //          console.log(this.getResult)
+          console.log(this.page_size,this.current_page)
 
           this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
+//          console.log(this.queryResult)
 
 
         },(err) => {
@@ -257,6 +292,10 @@
       page_size_change (size) {
         this.page_size = size
 
+        this.current_page = 1
+
+        this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
+
       },
       mockTableData (originData, pageSize, index) {//进行分页
 
@@ -266,13 +305,16 @@
         let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize)
 
         data = originData.slice(num,maxNum)
+//        console.log(num,maxNum)
 
         return data;
       }
     },
     created () {
+      this.getInstance()//获取实例
+      this.getUser()//获取用户信息
       //获取用户的所有申请资源
-      const id = '0753bf1a-5736-11e7-929a-fa163e9474c9'
+      const id = this.user_info.id
       const  query = {user_id:id}
       this.getUserResource(query)
 
