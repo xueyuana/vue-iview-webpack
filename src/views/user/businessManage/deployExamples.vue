@@ -9,8 +9,8 @@
                     </Form-item>
                     </Col>
                     <Col span="7">
-                    <Form-item label="部署实例名称:" prop="case_name">
-                        <Input v-model="formValidate.case_name" placeholder="请输入"></Input>
+                    <Form-item label="部署实例名称:" prop="instance_name">
+                        <Input v-model="formValidate.instance_name" placeholder="请输入"></Input>
                     </Form-item>
                     </Col>
                     <Col span="5">
@@ -45,8 +45,8 @@
                         @on-ok="addmessage('createUser')"
                         @on-cancel="cancel">
                     <Form ref="createUser" :model="createUser" :rules="ruleInline" label-position="right" :label-width="130" >
-                        <Form-item label="名称：" prop="name">
-                            <Input v-model="createUser.name" placeholder="最多10个字符" style="width: 200px"></Input>
+                        <Form-item label="名称：" prop="instance_name">
+                            <Input v-model="createUser.instance_name" placeholder="最多10个字符" style="width: 200px"></Input>
                         </Form-item>
                         <Form-item label="用户群体规模：" prop="az_id">
                             <Select v-model="az_id" style="width:200px">
@@ -80,7 +80,7 @@
                         title="编辑部署实例"
                         @on-ok="compileOk"
                         @on-cancel="cancel">
-                    <p>名称：<Input v-model="compileUser.name" placeholder="最多10个字符" style="width: 300px"></Input></p>
+                    <p>名称：<Input v-model="compileUser.instance_name" placeholder="最多10个字符" style="width: 300px"></Input></p>
                 </Modal>
             </div>
             <Table border :columns="columns7" stripe :data="data6"></Table>
@@ -189,25 +189,25 @@
                     }
               ],
               formValidate: {
-                  case_name: '',
+                  instance_name: '',
                   start_time: ''
               },
               ruleValidate: {
-                  case_name: [],
+                  instance_name: [],
                   start_time: []
               },
               createUser: {
-                name: '',
+                instance_name: '',
                 number: '',
                 time: ''
               },
               ruleInline: {
-                  name: [
+                  instance_name: [
                       { required: true, message: '请填写部署实例名称', trigger: 'blur' }
                   ]
               },
               compileUser: {
-                  name: '',
+                  instance_name: '',
                   number: '',
                   time: ''
               },
@@ -220,7 +220,7 @@
                   },
                   {
                       title: '部署实例名称',
-                      key: 'name',
+                      key: 'instance_name',
                       align: 'center'
                   },
                   {
@@ -239,7 +239,7 @@
                                 },
                                 on: {
                                     click: () => {
-                                        this.$router.push({name: 'user_deployExample', query: {number: params.row.number}});
+                                        this.$router.push({instance_name: 'user_deployExample', query: {number: params.row.number}});
                                     }
                                 }
                             }, params.row.number)
@@ -285,7 +285,7 @@
                                   on: {
                                       click: () => {
                                           this.$Modal.confirm({
-                                              title: '是否下线'+params.row.name+'，下线操作将删除此部署实例内的所有资源并不可恢复，请慎重操作！！！',
+                                              title: '是否下线'+params.row.instance_name+'，下线操作将删除此部署实例内的所有资源并不可恢复，请慎重操作！！！',
                                               content: '注：删除此部署实例后，实例所属的资源也将一并删除，请谨慎操作！',
                                               onOk: () => {
                                                       console.log('删除1',params)
@@ -332,15 +332,15 @@
       },
       methods: {
           goQuery () {
-              let user_name = this.formValidate.case_name
-              console.log('查询',user_name)
+              let instance_name = this.formValidate.instance_name
+              console.log('查询',instance_name)
               let start_time = this.formValidate.start_time[0]
 
               let end_time = this.formValidate.start_time[1]
 
               let params = {}
 
-              user_name && (params.username = user_name)
+              instance_name && (params.instance_name = instance_name)
               start_time && (params.start_time = this.timeFormat(start_time))
               end_time && (params.end_time = this.timeFormat(end_time))
 
@@ -359,7 +359,7 @@
                 res.body.result.res.forEach((item,index) => {
                   this.getResult.push({
                     index: item.user_id,
-                    name: item.instance_name,
+                    instance_name: item.instance_name,
                     number: item.resource_num,
                     time: item.created_date,
                     u_name: item.user_name,
@@ -376,8 +376,8 @@
               })
 
           },
-          handleReset (name) {
-              this.$refs[name].resetFields();
+          handleReset (instance_name) {
+              this.$refs[instance_name].resetFields();
           },
           addCase (){
               this.modal1 = true;
@@ -404,14 +404,14 @@
                           this.getUserResource (query_user)
 
                           //重置
-                          //this.$refs[name].resetFields()
+                          //this.$refs[instance_name].resetFields()
 
                         },(err) => {
                           console.log(err)
                           this.$Message.info('创建用户失败');
 
                         })
-                        this.createUser.name='';
+                        this.createUser.instance_name='';
                         console.log('333333');
                         this.$Message.info('添加成功');
                   } else {
