@@ -3,8 +3,10 @@
     <div class="approval-button">
       <Button class="apply-button-item"
               type="primary"
+              :disabled="index !== 0 && formValidate.status !== 'l_success'"
               v-for="(item, index) in funcBtns"
               @click="onLink(index)">{{item}}
+
 
       </Button>
     </div>
@@ -115,13 +117,16 @@
           <Form-item label="申请单号:" class="form-item">
             {{formValidate.resource_id}}
 
+
           </Form-item>
           <Form-item label="部门:" class="form-item">
             {{formValidate.department}}
 
+
           </Form-item>
           <Form-item label="镜像:" class="form-item">
             {{formValidate.mirror}}
+
 
           </Form-item>
           </Col>
@@ -129,106 +134,105 @@
           <Form-item label="虚拟机名称:" class="form-item">
             {{formValidate.virtual_name}}
 
+
           </Form-item>
           <Form-item label="资源池:" class="form-item">
             {{formValidate.az_name}}
+
 
           </Form-item>
           <Form-item label="存储空间:" class="form-item">
             {{formValidate.storeSpace}}G
 
+
           </Form-item>
           </Col>
           <Col span="8">
 
-            <Form-item label="部署实例:" class="form-item">
-              <!--<span class="form-item-span">推荐配置</span>-->
-              {{formValidate.deploy_name}}
-              <Poptip v-model="isTjpz" placement="left" width="500" v-if="$store.state.userData.userInfo.role == 'admin'">
-                <a class="form-item-span">推荐配置</a>
-                <!--<div slot="title" class="case-title"><i>提示</i></div>-->
-                <div slot="content">
-                  <div class="case-title">提示：</div>
-                  <div class="case-content">
-                    <div class="case-sub-title">您的业务类型为：</div>
-                    <table class="case-custom-table">
-                      <tr>
-                        <td>用户群体规模</td>
-                        <td>内网少量用户</td>
-                      </tr>
-                      <tr>
-                        <td>用户活跃度</td>
-                        <td>偶尔使用</td>
-                      </tr>
-                      <tr>
-                        <td>业务类型</td>
-                        <td>网站</td>
-                      </tr>
-                      <tr>
-                        <td>数据大小</td>
-                        <td>MB级</td>
-                      </tr>
-                      <tr>
-                        <td>不需要</td>
-                        <td>内网少量用户</td>
-                      </tr>
-                    </table>
-                  </div>
-                  <div class="case-title">推荐配置：</div>
-                  <div class="case-content">
-                    <table class="case-data-table">
-                      <thead>
-                        <tr>
-                          <th>服务器</th>
-                          <th>配置</th>
-                          <th>数量（台）</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      <tr>
-                        <td>WEB</td>
-                        <td>CPU：2核 | 内存：2G | 硬盘：50G</td>
-                        <td>1</td>
-                      </tr>
-                      <tr>
-                        <td>服务器</td>
-                        <td>CPU：2核 | 内存：2G | 硬盘：50G</td>
-                        <td>1</td>
-                      </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <Button type="primary" class="case-btn" @click="close">确定</Button>
+          <Form-item label="部署实例:" class="form-item">
+            <!--<span class="form-item-span">推荐配置</span>-->
+            {{formValidate.deploy_name}}
+
+            <Poptip v-model="isTjpz" placement="left" width="500" v-if="$store.state.userData.userInfo.role == 'admin'">
+              <a class="form-item-span">推荐配置</a>
+              <!--<div slot="title" class="case-title"><i>提示</i></div>-->
+              <div slot="content">
+                <div class="case-title">提示：</div>
+                <div class="case-content">
+                  <div class="case-sub-title">您的业务类型为：</div>
+                  <table class="case-custom-table">
+                    <tr>
+                      <td>用户群体规模</td>
+                      <td>内网少量用户</td>
+                    </tr>
+                    <tr>
+                      <td>用户活跃度</td>
+                      <td>偶尔使用</td>
+                    </tr>
+                    <tr>
+                      <td>业务类型</td>
+                      <td>网站</td>
+                    </tr>
+                    <tr>
+                      <td>数据大小</td>
+                      <td>MB级</td>
+                    </tr>
+                    <tr>
+                      <td>不需要</td>
+                      <td>内网少量用户</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="case-title">推荐配置：</div>
+                <div class="case-content">
+                  <table class="case-data-table">
+                    <thead>
+                    <tr>
+                      <th>服务器</th>
+                      <th>配置</th>
+                      <th>数量（台）</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>WEB</td>
+                      <td>CPU：2核 | 内存：2G | 硬盘：50G</td>
+                      <td>1</td>
+                    </tr>
+                    <tr>
+                      <td>服务器</td>
+                      <td>CPU：2核 | 内存：2G | 硬盘：50G</td>
+                      <td>1</td>
+                    </tr>
+                    </tbody>
+                  </table>
                 </div>
                 <Button type="primary" class="case-btn" @click="close">确定</Button>
-              </Poptip>
-            </Form-item>
-            <Form-item label="规格:" class="form-item">
-              {{formValidate.spec}}
+              </div>
+              <Button type="primary" class="case-btn" @click="close">确定</Button>
+            </Poptip>
+          </Form-item>
+          <Form-item label="规格:" class="form-item">
+            {{formValidate.spec}}
 
-            </Form-item>
-            <Form-item label="数量:" class="form-item">
-              {{formValidate.vm_num}}
 
-            </Form-item>
+          </Form-item>
+          <Form-item label="数量:" class="form-item">
+            {{formValidate.vm_num}}
+
+
+          </Form-item>
           </Col>
 
-          <Col span="24" v-if="$store.state.userData.userInfo.role == 'admin'">
-          <div class="sub-title">业务信息</div>
-          <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4"
-                 placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
+          <Col span="24">
+            <div class="sub-title">业务信息</div>
+              <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4"
+                     placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"
+                     :disabled="role !== 'admin'"></Input>
           </Col>
-          <Col span="24" v-else>
-          <div class="sub-title">业务信息</div>
-          <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" disabled></Input>
-          </Col>
-          <Col span="24" v-if="$store.state.userData.userInfo.role == 'leader'">
-          <div class="sub-title">行政审批意见</div>
-          <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" placeholder="默认显示同意，最多100个字符"></Input>
-          </Col>
-          <Col span="24" v-else>
-          <div class="sub-title">行政审批意见</div>
-          <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" disabled></Input>
+          <Col span="24">
+            <div class="sub-title">行政审批意见</div>
+            <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" :disabled="role !== 'leader'"></Input>
           </Col>
         </Row>
       </Form>
@@ -408,14 +412,13 @@
 </style>
 
 <script>
-  import Flow from './../../components/common/flow.vue'
+
   export default {
     data() {
       return {
         stepNum: 0,
         userId: '',
         resourceId: '',
-
         isTjpz: false,//推荐配置
         flavor_name: '',//规格名称
         flavorList: [],
@@ -431,88 +434,84 @@
           deploy_name: '',
           az_name: '',
           mirror: '',
-          vm_num: 0
+          vm_num: 0,
+          status: ''
         },
         ywInfo: '',
-        xzInfo: ''
+        xzInfo: '',
+        role: ''
       }
     },
-    components: {Flow},
+
     created () {
-      //获取资源信息
-//      this.userId = this.$store.state.userData.userInfo.id; user_id:this.userId,
       this.resourceId = this.$route.query.id;
+      this.role = this.$store.state.userData.userInfo.role
       if (this.resourceId) {
-        const query = {resource_id:this.resourceId};
+        const query = {resource_id: this.resourceId};
         this.getFlaver();
         this.getImage();
         this.getInfo(query);
       }
     },
-    computed: {
-
-    },
+    computed: {},
     methods: {
       getInfo (query) {
         const url = 'api/mpc_resource/mpc_resources';
 
-        this.$http.get(url,{params: query}).then((res) => {
-            console.log('sssss', res);
-            if (res.body.code === 200) {
-              res.body.result.res.forEach((item,index) => {
-                switch (item.status) {
-                  case 'submit': this.stepNum = 0
-                    break
-                  case 'l_success': this.stepNum = 1
-                    break
-                  case 'a_success': this.stepNum = 2
-                    break
-                  default:
-                }
-                switch (item.status) {
-                  case 'submit': item.status = '待审批'
-                    break
-                  case 'l_fail': item.status = '审批未通过'
-                    break
-                  case 'l_success': item.status = '审批完成'
-                    break
-                  default:
-                }
-                let vm_name = '';
-                let vm_num = '';
-                let department = '';
-                let storage = '';
-                item.resources.forEach((ritem,index) => {
-                  vm_name = ritem.vm_name;
-                  vm_num = ritem.vm_num;
-                  department = ritem.department;
-                  storage = ritem.storage;
-                  this.flavorList.forEach((fitem,index) => {
-                    if(ritem.flavor_id == fitem.flavor_id){
-                      this.flavor_name=fitem.flavor_name;
-                      return;
-                    }
-                  });
-                  this.imageList.forEach((iitem,index) => {
-                    if(ritem.image_id == iitem.id){
-                      this.image_name=iitem.image_name;
-                      return;
-                    }
-                  });
+        this.$http.get(url, {params: query}).then((res) => {
+          if (res.body.code === 200) {
+            console.log(res.body.result.res)
+            res.body.result.res.forEach((item, index) => {
+              switch (item.status) {
+                case 'submit':
+                  this.stepNum = 0
+                  break
+                case 'l_success':
+                  this.stepNum = 1
+                  break
+                case 'a_success':
+                  this.stepNum = 2
+                  break
+                default:
+              }
+
+              let vm_name = '';
+              let vm_num = '';
+              let department = '';
+              let storage = '';
+
+              item.resources.forEach((ritem, index) => {
+                vm_name = ritem.vm_name;
+                vm_num = ritem.vm_num;
+                department = ritem.department;
+                storage = ritem.storage;
+                this.flavorList.forEach((fitem, index) => {
+                  if (ritem.flavor_id == fitem.flavor_id) {
+                    this.flavor_name = fitem.flavor_name;
+                    return;
+                  }
                 });
-                this.formValidate = {
-                  resource_id: item.resource_id,
-                  deploy_name: item.deploy_name,
-                  virtual_name: vm_name,
-                  department: department || this.$store.state.userData.userInfo.department,
-                  storeSpace: storage,
-                  vm_num: vm_num,
-                  spec: this.flavor_name,//flavor_id,
-                  mirror: this.image_name,//image_id,
-                  az_name: item.az_name
-                }
-                this.ywInfo= item.business_info;
-                this.xzInfo= item.suggestion;
+                this.imageList.forEach((iitem, index) => {
+                  if (ritem.image_id == iitem.id) {
+                    this.image_name = iitem.image_name;
+                    return;
+                  }
+                });
+              });
+              this.formValidate = {
+                resource_id: item.resource_id,
+                deploy_name: item.deploy_name,
+                virtual_name: vm_name,
+                department: department || this.$store.state.userData.userInfo.department,
+                storeSpace: storage,
+                vm_num: vm_num,
+                spec: this.flavor_name,//flavor_id,
+                mirror: this.image_name,//image_id,
+                az_name: item.az_name,
+                status: item.status
+              }
+              this.ywInfo = item.business_info;
+              this.xzInfo = item.suggestion;
             })
           }
         }, (err) => {
@@ -525,17 +524,17 @@
           if (res.body.code === 200) {
             this.flavorList = res.body.result.res;
           }
-        },(err) => {
+        }, (err) => {
           console.log(err)
         });
       },
       getImage () {//获取镜像
         const url = 'api/image/images'
         this.$http.get(url).then((res) => {
-          if (res.body.code === 200){
+          if (res.body.code === 200) {
             this.imageList = res.body.result.res;
           }
-        },(err) => {
+        }, (err) => {
           console.log(err)
         })
       },
@@ -545,24 +544,36 @@
             this.$router.go(-1);
             break;
           case 1:
-            this.onSubmit('l_success');//审批完成
+            if (this.role === 'leader') {
+              this.onSubmit('l_success');//审批完成
+            } else {
+              this.onSubmit('a_success');//审批完成
+            }
             break;
           default:
-            this.onSubmit('l_fail');//未通过
-            break;
+            if (this.role === 'leader') {
+              this.onSubmit('l_fail');//审批完成
+            } else {
+              this.onSubmit('a_fail');//审批完成
+            }
         }
       },
       onSubmit (status) {
-        const query = {resource_id: this.resourceId, status: status, suggestion: this.xzInfo};
+        let query = {resource_id: this.resourceId, status: status}
+        if (this.role === 'leader') {
+          query.suggestion = this.xzInfo
+        } else {
+          query.business_info = this.ywInfo
+        }
+
         const url = 'api/mpc_resource/mpc_resources';
 
-        this.$http.put(url,query).then((res) => {
-          console.log('sssss', res);
+        this.$http.put(url, query).then((res) => {
           if (res.body.code === 200) {
-            if(status == 'l_success'){
-              this.$store.commit('setStatus','审批完成');
+            if (status == 'l_success' || status == 'a_success') {
+              this.$store.commit('setStatus', '审批完成');
               this.$Message.success('通过完成!');
-            } else if(status == 'l_fail'){
+            } else if (status == 'l_fail' || status == 'a_fail') {
               this.$Message.success('不通过完成!');
             }
           }
@@ -570,11 +581,7 @@
           this.$Message.error(err.body.result.msg)
         });
       },
-//      onNo () {
-//        console.log('ddsss', this.ywInfo);
-//        console.log('xzInfo', this.xzInfo)
-//        this.$Message.error('不通过!');
-//      },
+
       close () {
         this.isTjpz = false;
       }
