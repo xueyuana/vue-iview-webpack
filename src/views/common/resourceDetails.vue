@@ -104,120 +104,105 @@
       </Row>
     </div>
     <div class="form-info">
-      <Form ref="formValidate" :model="formValidate" :label-width="120">
-        <Row>
+      <Form :model="formValidate1" :label-width="120">
+        <Row type="flex" justify="start">
           <Col span="24">
-          <div class="sub-title">资源信息</div>
+            <div class="sub-title">资源信息</div>
           </Col>
-          <Col span="8">
+          <Col span="24">
             <Form-item label="申请单号:" class="form-item">
-              {{formValidate.resource_id}}
-            </Form-item>
-            <Form-item label="部门:" class="form-item">
-              {{formValidate.department}}
-            </Form-item>
-            <Form-item label="镜像:" class="form-item">
-              {{formValidate.mirror}}
-            </Form-item>
-          </Col>
-          <Col span="8">
-            <Form-item label="虚拟机名称:" class="form-item">
-              {{formValidate.virtual_name}}
-            </Form-item>
-            <Form-item label="资源池:" class="form-item">
-              {{formValidate.az_name}}
-            </Form-item>
-            <Form-item label="存储空间:" class="form-item">
-              {{formValidate.storeSpace}}G
-            </Form-item>
-          </Col>
-          <Col span="8">
-            <Form-item label="部署实例:" class="form-item">
-              <!--<span class="form-item-span">推荐配置</span>-->
-              {{formValidate.deploy_name}}
-              <Poptip v-model="isTjpz" placement="left" width="500" v-if="$store.state.userData.userInfo.role == 'admin'">
-                <a class="form-item-span">推荐配置</a>
-                <!--<div slot="title" class="case-title"><i>提示</i></div>-->
-                <div slot="content">
-                  <div class="case-title">提示：</div>
-                  <div class="case-content">
-                    <div class="case-sub-title">您的业务类型为：</div>
-                    <table class="case-custom-table">
-                      <tr>
-                        <td>用户群体规模</td>
-                        <td>内网少量用户</td>
-                      </tr>
-                      <tr>
-                        <td>用户活跃度</td>
-                        <td>偶尔使用</td>
-                      </tr>
-                      <tr>
-                        <td>业务类型</td>
-                        <td>网站</td>
-                      </tr>
-                      <tr>
-                        <td>数据大小</td>
-                        <td>MB级</td>
-                      </tr>
-                      <tr>
-                        <td>不需要</td>
-                        <td>内网少量用户</td>
-                      </tr>
-                    </table>
-                  </div>
-                  <div class="case-title">推荐配置：</div>
-                  <div class="case-content">
-                    <table class="case-data-table">
-                      <thead>
-                        <tr>
-                          <th>服务器</th>
-                          <th>配置</th>
-                          <th>数量（台）</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      <tr>
-                        <td>WEB</td>
-                        <td>CPU：2核 | 内存：2G | 硬盘：50G</td>
-                        <td>1</td>
-                      </tr>
-                      <tr>
-                        <td>服务器</td>
-                        <td>CPU：2核 | 内存：2G | 硬盘：50G</td>
-                        <td>1</td>
-                      </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <Button type="primary" class="case-btn" @click="close">确定</Button>
-                </div>
-              </Poptip>
-            </Form-item>
-            <Form-item label="规格:" class="form-item">
-              {{formValidate.spec}}
-            </Form-item>
-            <Form-item label="数量:" class="form-item">
-              {{formValidate.vm_num}}
-            </Form-item>
-          </Col>
-          <Col span="24" v-if="$store.state.userData.userInfo.role == 'admin'">
-            <div class="sub-title">业务信息</div>
-            <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
-          </Col>
-          <Col span="24" v-else>
-            <div class="sub-title">业务信息</div>
-          <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" disabled></Input>
-          </Col>
-          <Col span="24" v-if="$store.state.userData.userInfo.role == 'leader'">
-            <div class="sub-title">行政审批意见</div>
-            <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" placeholder="默认显示同意，最多100个字符"></Input>
-          </Col>
-          <Col span="24" v-else>
-            <div class="sub-title">行政审批意见</div>
-          <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" disabled></Input>
+            {{formValidate1.resource_id}}
+          </Form-item>
           </Col>
         </Row>
       </Form>
+      <Form v-for="(item, idx) in formValidate" :label-width="120" :class="{border: idx == 0?false:true}">
+        <Row>
+          <Col span="8">
+            <Form-item label="虚拟机名称:" class="form-item">
+              {{item.virtual_name}}
+            </Form-item>
+            <Form-item label="部署实例:" class="form-item">
+              {{item.deploy_name}}
+              <span class="form-item-span" @click="instanceDetails" v-if="$store.state.userData.userInfo.role == 'admin'">推荐配置</span>
+              <Modal v-model="instanceCreate" title="提示" :ok-text="okText" :mask-closable="false" :closable="false">
+                <div class="modal-wrap">
+                  <div class="instance-title">您的业务类型:</div>
+                  <table>
+                    <tbody>
+                    <tr>
+                      <td>用户群体规模</td>
+                      <td>内网少量用户</td>
+                    </tr>
+                    <tr>
+                      <td>用户活跃度</td>
+                      <td>偶尔使用</td>
+                    </tr>
+                    <tr>
+                      <td>业务类型</td>
+                      <td>网站</td>
+                    </tr>
+                    <tr>
+                      <td>数据大小</td>
+                      <td>MB级</td>
+                    </tr>
+                    <tr>
+                      <td>高可用</td>
+                      <td>不需要</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <div class="instance-title">推荐配置:</div>
+                  <Table :columns="tj_columns" :data="configuration"></Table>
+                </div>
+                <div slot="footer">
+                  <Button type="primary" size="large" v-text="okText" @click="closeModal"></Button>
+                </div>
+              </Modal>
+            </Form-item>
+            <Form-item label="存储空间:" class="form-item">
+              {{item.storeSpace}}G
+            </Form-item>
+          </Col>
+          <Col span="8">
+            <Form-item label="部门:" class="form-item">
+              {{item.department}}
+            </Form-item>
+            <Form-item label="镜像:" class="form-item">
+              <div class="jingx">{{item.mirror}}</div>
+            </Form-item>
+            <Form-item label="数量:" class="form-item">
+              {{item.vm_num}}
+            </Form-item>
+          </Col>
+          <Col span="8">
+            <Form-item label="资源池:" class="form-item">
+              {{item.az_name}}
+            </Form-item>
+            <Form-item label="规格:" class="form-item">
+              {{item.spec}}
+            </Form-item>
+          </Col>
+        </Row>
+      </Form>
+      <Row>
+        <Col span="24" v-if="$store.state.userData.userInfo.role == 'admin'">
+          <div class="sub-title">业务信息</div>
+          <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
+        </Col>
+        <Col span="24" v-else>
+          <div class="sub-title">业务信息</div>
+          <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" disabled></Input>
+        </Col>
+        <Col span="24" v-if="$store.state.userData.userInfo.role == 'leader'">
+          <div class="sub-title">行政审批意见</div>
+          <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" placeholder="默认显示同意，最多100个字符"></Input>
+        </Col>
+        <Col span="24" v-else>
+          <div class="sub-title">行政审批意见</div>
+          <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" disabled></Input>
+        </Col>
+      </Row>
     </div>
   </div>
 </template>
@@ -268,12 +253,19 @@
       }
     }
     .form-info{
+      .border {
+        border-top: 1px solid #e4e4e4
+      }
       .form-item{
-        margin-bottom: 0px;
+        margin-bottom: 8px;
+        .jingx{
+          word-wrap:break-word;
+          line-height: 20px;
+         }
         .form-item-span{
           padding-left:10px;
           color:#3F94FC;
-          /*cursor: pointer;*/
+          cursor: pointer;
         }
         .case-title{
           height: 45px;
@@ -384,6 +376,39 @@
     position:absolute;
     left:1em
   }
+
+  .instance-title {
+    font-size: 16px;
+    line-height: 38px;
+  }
+  .modal-wrap {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #657180;
+  }
+  table td,th{
+    text-align: center;
+
+  }
+  table tr {
+    height: 40px;
+    border: 1px solid #dddee1;
+  }
+  table thead tr{
+    background-color: #ebf4fe;
+  }
+  table tbody tr:hover {
+    background-color: #F3FAFF;
+  }
+  table tbody tr td:first-child {
+    background-color: #ebf4fe;
+    width: 120px;
+  }
 </style>
 
 <script>
@@ -391,6 +416,34 @@
   export default {
     data() {
       return {
+        instanceCreate: false,
+        okText: '10秒钟后关闭',
+        tj_columns: [
+          {
+            title: '服务器',
+            key: 'server'
+          },
+          {
+            title: '配置',
+            key: 'configuration'
+          },
+          {
+            title: '数量(台)',
+            key: 'number'
+          }
+        ],
+        configuration: [
+          {
+            server: 'WEB',
+            configuration: 'CPU：2核 | 内存：2G | 硬盘：50G',
+            number: 1
+          },
+          {
+            server: '数据库',
+            configuration: 'CPU：4核 | 内存：8G | 硬盘：200G',
+            number: 1
+          }
+        ],
         stepNum: 0,
         userId: '',
         resourceId: '',
@@ -400,17 +453,20 @@
         image_name: '',//镜像名称
         imageList: [],
         funcBtns: ['返回', '通过', '不通过'],
-        formValidate: {
-          resource_id: '',
-          virtual_name: '',
-          department: '',
-          spec: '',
-          storeSpace: '',
-          deploy_name: '',
-          az_name: '',
-          mirror: '',
-          vm_num: 0
+        formValidate1: {
+          resource_id: ''
         },
+        formValidate: [],
+//        formValidate: {
+//          virtual_name: '',
+//          department: '',
+//          spec: '',
+//          storeSpace: '',
+//          deploy_name: '',
+//          az_name: '',
+//          mirror: '',
+//          vm_num: 0
+//        },
         ywInfo: '',
         xzInfo: ''
       }
@@ -457,39 +513,44 @@
                     break
                   default:
                 }
-                let vm_name = '';
-                let vm_num = '';
-                let department = '';
-                let storage = '';
+//                let vm_name = '';
+//                let vm_num = '';
+//                let department = '';
+//                let storage = '';
                 item.resources.forEach((ritem,index) => {
-                  vm_name = ritem.vm_name;
-                  vm_num = ritem.vm_num;
-                  department = ritem.department;
-                  storage = ritem.storage;
+                    let resourceData;
+                    let flavor_name = '';
+                    let image_name = '';
+//                  vm_name = ritem.vm_name;
+//                  vm_num = ritem.vm_num;
+//                  department = ritem.department;
+//                  storage = ritem.storage;
                   this.flavorList.forEach((fitem,index) => {
                     if(ritem.flavor_id == fitem.flavor_id){
-                      this.flavor_name=fitem.flavor_name;
+                      flavor_name = fitem.flavor_name;
                       return;
                     }
                   });
                   this.imageList.forEach((iitem,index) => {
                     if(ritem.image_id == iitem.id){
-                      this.image_name=iitem.image_name;
+                      image_name=iitem.image_name;
                       return;
                     }
                   });
+                  resourceData = {
+                    deploy_name: item.deploy_name,
+                    virtual_name: ritem.vm_name,
+                    department: ritem.department || this.$store.state.userData.userInfo.department,
+                    storeSpace: ritem.storage,
+                    vm_num: ritem.vm_num,
+                    spec: flavor_name,
+                    mirror: image_name,
+                    az_name: item.az_name
+                  }
+                  this.formValidate.push(resourceData);
                 });
-                this.formValidate = {
-                  resource_id: item.resource_id,
-                  deploy_name: item.deploy_name,
-                  virtual_name: vm_name,
-                  department: department || this.$store.state.userData.userInfo.department,
-                  storeSpace: storage,
-                  vm_num: vm_num,
-                  spec: this.flavor_name,//flavor_id,
-                  mirror: this.image_name,//image_id,
-                  az_name: item.az_name
-                }
+                console.log('this.formValidate', this.formValidate);
+                this.formValidate1.resource_id = item.resource_id;
                 this.ywInfo= item.business_info;
                 this.xzInfo= item.suggestion;
             })
@@ -538,7 +599,7 @@
             console.log('sssss', res);
             if (res.body.code === 200) {
               if(status == 'l_success'){
-                this.$store.commit('setStatus','审批完成');
+//                this.$store.commit('setStatus','审批完成');
                 this.$Message.success('通过完成!');
               } else if(status == 'l_fail'){
                 this.$Message.success('不通过完成!');
@@ -553,8 +614,14 @@
 //        console.log('xzInfo', this.xzInfo)
 //        this.$Message.error('不通过!');
 //      },
-      close () {
-        this.isTjpz = false;
+//      close () {
+//        this.isTjpz = false;
+//      }
+      instanceDetails () {//展示实例详情推荐配置
+        this.instanceCreate = true
+      },
+      closeModal () {
+        this.instanceCreate = false
       }
     }
   }
