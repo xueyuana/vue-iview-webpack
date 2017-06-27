@@ -86,7 +86,7 @@
             <Table border :columns="columns7" stripe :data="data6"></Table>
             <div style="margin: 10px;overflow: hidden">
                 <div style="float: right;">
-                    <Page :total="this.data6.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
+                    <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
                 </div>
             </div>
         </div>
@@ -97,10 +97,14 @@
   export default {
       data () {
           return {
+              data_length: 0,
+              page_size: 10,
+              current_page: 1,
               modal1: false ,
               modal2: false ,
               value: '',
               tjname: '',
+              getResult: [],
               az_id: '',
               az_id2: '',
               az_id3: '',
@@ -298,20 +302,70 @@
                   }
               ],
               data6: [
-                  {
-                      name: '实例1',
-                      number: '10',
-                      time: '2017-06-23 15:00:00'
-                  }
-              ],
-              data1: [],
-              pageSize: 10,
-              num: 1
+                  //{
+                  //    name: '实例1',
+                  //    number: '10',
+                  //    time: '2017-06-23 15:00:00'
+                  //}
+              ]
           }
+      },
+      created () {
+        //获取用户的所有申请资源
+        const id = this.$store.state.userData.userInfo.id
+        const  query = {user_id:id}
+        this.getUserResource(query)
+
       },
       methods: {
           goQuery (name) {
-              console.log('ddsss', this.formValidate);
+              const start_time = this.formValidate.start_time[0]
+              const end_time = this.formValidate.start_time[1]
+
+              let requestBody = {}
+              requestBody.user_id = this.$store.state.userData.userInfo.id
+              start_time && (requestBody.start_time = this.timeFormat(start_time))
+              end_time && (requestBody.end_time = this.timeFormat(end_time))
+              requestBody.instance_name = this.formValidate.case_name
+
+              this.getUserResource(requestBody)
+          },
+          getUserResource (query) {
+
+              this.data6 = []
+              const url = 'api/deploy_instance/deploy_instances'
+
+
+              this.$http.get(url,{params: query}).then((res) => {
+
+                this.page_size = res.body.result.res.length
+
+                res.body.result.res.forEach((item,index) => {
+                  this.getResult.push({
+                    index: index +1,
+                    name: item.instance_name,
+                    number: item.resource_num,
+                    time: item.created_date
+
+                  })
+                })
+                console.log(this.getResult)
+
+                this.data6 = this.mockTableData(this.getResult,this.page_size,this.current_page)
+
+
+
+              },(err) => {
+                console.log(err)
+              })
+
+          },
+          mockTableData (originData, pageSize, index) {//进行分页
+              let data = [];
+              let num = (index - 1) * pageSize
+              let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize)
+              data = originData.slice(num,maxNum)
+              return data;
           },
           handleReset (name) {
               this.$refs[name].resetFields();
@@ -325,18 +379,30 @@
           addmessage (create_name) {
               this.$refs[create_name].validate((valid) => {
                   if (valid) {
-                        var stamp = new Date(),
-                            year = stamp.getFullYear(),
-                            month = (stamp.getMonth() + 1) > 9 ? (stamp.getMonth() + 1) : '0' + (stamp.getMonth() + 1),
-                            day = stamp.getDate() > 9 ? stamp.getDate() : '0' + stamp.getDate(),
-                            hour = stamp.getHours() > 9 ? stamp.getHours() : '0' + stamp.getHours(),
-                            minute = stamp.getMinutes() > 9 ? stamp.getMinutes() : '0' + stamp.getMinutes(),
-                            sec = stamp.getSeconds() > 9 ? stamp.getSeconds() : '0' + stamp.getSeconds()
-                        this.data6.push({
-                            name: this.createUser.name,
-                            number: '0',
-                            time: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec
-                        });
+                        console.log('验证成功')
+                        //发送请求
+                        const url = 'api/deploy_instance/deploy_instances'
+
+                        let requestBody =  {}
+                        requestBody.user_id = this.$store.state.userData.userInfo.id;
+                        requestBody.user_name = this.$store.state.userData.userInfo.username;
+                        requestBody.instance_name = this.createUser.name;
+                        requestBody.instance_num = '0';
+                        //requestBody.created_date = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec
+
+                        this.$http.post(url,requestBody).then((res) => {
+                          //重新获取用户
+                          const  query_user = {user_id:this.$store.state.userData.userInfo.id}
+                          this.getUserResource (query_user)
+
+                          //重置
+                          //this.$refs[name].resetFields()
+
+                        },(err) => {
+                          console.log(err)
+                          this.$Message.info('创建用户失败');
+
+                        })
                         this.createUser.name='';
                         console.log('333333');
                         this.$Message.info('添加成功');
@@ -358,16 +424,27 @@
           // 分页
           changePage(val) {
               this.filterDate = this.mockTableData(this.data6, this.pageSize, val)
+              this.current_page = page
           },
-          changePageSize(val) {
-              this.pageSize = val
-              this.changePage(1)
+          page_size_change(val) {
+              this.page_size = size
           },
-          // 时间选择器
-          //formatCreateData(value) {
-          //    console.log('ddsss', this.formValidate);
-          //    this.formValidate.start_time = value
-          //}
+          timeFormat (date) {//时间格式化
+              let Y = date.getFullYear();
+              let M = date.getMonth()+1;
+              let D = date.getDate()
+              let h = date.getHours()
+              let m = date.getMinutes()
+              let s = date.getSeconds()
+              M = M<10?'0' + M:M
+              D = D<10?'0' + D:D
+              h = h<10?'0' + h:h
+              m = m<10? '0' + m:m
+              s = s<10? '0' + s:s
+
+              let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m + ':' + s
+              return applyDate
+          },
       },
       computed: {}
   }
