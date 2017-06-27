@@ -85,16 +85,24 @@
         },
         approvalStatusVal: [
           {
-            value: '待审批',
+            value: '行政待审批',
             key: 'submit'
           },
           {
-            value: '审批未通过',
+            value: '行政审批未通过',
             key: 'l_fail'
           },
           {
-            value: '审批完成',
+            value: '技术待审批',
             key: 'l_success'
+          },
+          {
+            value: '技术审批未通过',
+            key: 'a_fail'
+          },
+          {
+            value: '审批完成',
+            key: 'a_success'
           }
         ],
         instance: [
@@ -214,7 +222,7 @@
                       break
                     case 'l_fail': item.status = '行政审批未通过'
                       break
-                    case 'l_success': item.status = '行政审批完成'
+                    case 'l_success': item.status = '技术待审批'
                       break
                     case 'a_fail': item.status = '技术审批未通过'
                       break
