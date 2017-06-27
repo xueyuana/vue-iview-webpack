@@ -6,7 +6,6 @@
               v-for="(item, index) in funcBtns"
               @click="onLink(index)">{{item}}
 
-
       </Button>
     </div>
     <div class="approval-status">
@@ -489,7 +488,6 @@
         const url = 'api/mpc_resource/mpc_resources';
 
         this.$http.get(url,{params: query}).then((res) => {
-            console.log('sssss', res);
             if (res.body.code === 200) {
               res.body.result.res.forEach((item,index) => {
                 switch (item.status) {
@@ -540,7 +538,6 @@
                   }
                   this.formValidate.push(resourceData);
                 });
-                console.log('this.formValidate', this.formValidate);
                 this.formValidate1.resource_id = item.resource_id;
                 this.formValidate1.status = item.status;
                 this.ywInfo= item.business_info;
@@ -579,7 +576,7 @@
           case 1:
             if (this.role === 'leader') {
               this.onSubmit('l_success');//审批完成
-            } else {
+            } else if (this.role === 'admin') {
               this.onSubmit('a_success');//审批完成
             }
             break;
@@ -593,21 +590,23 @@
       },
       onSubmit (status) {
         let query = {resource_id: this.resourceId, status: status}
+
         if (this.role === 'leader') {
           query.suggestion = this.xzInfo
         } else {
           query.business_info = this.ywInfo
+          console.log('传参', query)
         }
 
         const url = 'api/mpc_resource/mpc_resources';
 
         this.$http.put(url, query).then((res) => {
           if (res.body.code === 200) {
+            console.log('返回', res)
             if (status == 'l_success' || status == 'a_success') {
               this.$Message.success('通过完成!');
             } else if (status == 'l_fail' || status == 'a_fail') {
               this.$Message.success('不通过完成!');
-
             }
           }
         }, (err) => {
