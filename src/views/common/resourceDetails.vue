@@ -193,9 +193,7 @@
       <Row>
         <Col span="24">
         <div class="sub-title">业务信息</div>
-        <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4"
-               placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"
-               :disabled="role !== 'admin'"></Input>
+        <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" disabled placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
         </Col>
         <Col span="24">
         <div class="sub-title">行政审批意见</div>
@@ -605,6 +603,11 @@
               this.$Message.success('通过完成!');
             } else if (status == 'l_fail' || status == 'a_fail') {
               this.$Message.success('不通过完成!');
+            }
+            if (this.role === 'leader') {
+              this.$router.push({name: 'approval_approvalQuery'});
+            } else {
+              this.$router.push({name: 'admin_resourceApproval'});
             }
           }
         }, (err) => {
