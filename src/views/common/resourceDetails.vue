@@ -8,7 +8,7 @@
       </Button>
     </div>
     <div class="approval-status">
-      <Steps :current="0">
+      <Steps :current="stepNum">
         <Step title="提交申请"></Step>
         <Step title="行政审批"></Step>
         <Step title="技术审批"></Step>
@@ -118,7 +118,7 @@
           </Col>
           <Col span="8">
             <Form-item label="申请单号:" class="form-item">
-              {{formValidate.apply_code}}
+              {{formValidate.resource_id}}
             </Form-item>
             <Form-item label="部门:" class="form-item">
               {{formValidate.department}}
@@ -132,7 +132,7 @@
               {{formValidate.virtual_name}}
             </Form-item>
             <Form-item label="资源池:" class="form-item">
-              {{formValidate.resource}}
+              {{formValidate.az_name}}
             </Form-item>
             <Form-item label="存储空间:" class="form-item">
               {{formValidate.storeSpace}}G
@@ -141,7 +141,7 @@
           <Col span="8">
             <Form-item label="部署实例:" class="form-item">
               <!--<span class="form-item-span">推荐配置</span>-->
-              {{formValidate.case}}
+              {{formValidate.instance_id}}
               <Poptip v-model="isTjpz" placement="left" width="500" v-if="$store.state.userData.userInfo.role == 'admin'">
                 <a class="form-item-span">推荐配置</a>
                 <!--<div slot="title" class="case-title"><i>提示</i></div>-->
@@ -204,7 +204,7 @@
               {{formValidate.spec}}
             </Form-item>
             <Form-item label="数量:" class="form-item">
-              {{formValidate.total}}
+              {{formValidate.vm_num}}
             </Form-item>
           </Col>
           <!--<Col span="12">-->
@@ -251,14 +251,22 @@
           <!--<Form-item label="数量:">-->
             <!--<Input-number :max="10" :min="1" v-model="formValidate.total" disabled></Input-number>-->
           <!--</Form-item>-->
-          <!--</Col>-->
-          <Col span="24">
-          <div class="sub-title">业务信息</div>
-          <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
+          <!--</Col> v-if="$store.state.userData.userInfo.role == 'admin'" -->
+          <Col span="24" v-if="$store.state.userData.userInfo.role == 'admin'">
+            <div class="sub-title">业务信息</div>
+            <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
           </Col>
-          <Col span="24">
-          <div class="sub-title">行政审批意见</div>
-          <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" placeholder="默认显示同意，最多100个字符"></Input>
+          <Col span="24" v-else>
+            <div class="sub-title">业务信息</div>
+          <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" disabled></Input>
+          </Col>
+          <Col span="24" v-if="$store.state.userData.userInfo.role == 'leader'">
+            <div class="sub-title">行政审批意见</div>
+            <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" placeholder="默认显示同意，最多100个字符"></Input>
+          </Col>
+          <Col span="24" v-else>
+            <div class="sub-title">行政审批意见</div>
+          <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" disabled></Input>
           </Col>
         </Row>
       </Form>
@@ -443,19 +451,21 @@
   export default {
     data() {
       return {
+        stepNum: '',
+        userId: '',
         resourceId: '',
         isTjpz: false,//推荐配置
         funcBtns: ['返回', '通过', '不通过'],
         formValidate: {
-          apply_code: '',
+          resource_id: '',
           virtual_name: '',
           department: '',
           spec: '',
           storeSpace: '',
-          case: '',
-          resource: '',
+          instance_id: '',
+          az_name: '',
           mirror: '',
-          total: 0
+          vm_num: 0
         },
         ywInfo: '',
         xzInfo: ''
@@ -491,32 +501,94 @@
       }
     },
     components: { Flow },
-    mounted() {
+    created () {
+      //获取资源信息
+      this.userId = this.$store.state.userData.userInfo.id;
       this.resourceId = this.$route.query.id;
       console.log('resourceId', this.resourceId);
       if (this.resourceId) {
-        this.getInfo();
-      } else {}
+        const query = {user_id:this.userId,resource_id:this.resourceId};
+        this.getInfo(query);
+      }
     },
+//    mounted() {
+//      this.userId = this.$store.state.userData.userInfo.id;
+//      this.resourceId = this.$route.query.id;
+//      console.log('resourceId', this.resourceId);
+//      if (this.resourceId) {
+//        const query = {user_id:this.userId,resource_id:this.resourceId};
+//        this.getInfo(query);
+//      }
+//    },
     computed: {
 
     },
     methods: {
-      getInfo () {
-        console.log('resourceId', this.resourceId);
-        this.formValidate = {
-          apply_code: 'ID0001',
-          virtual_name: '虚拟机1',
-          department: '部门1',
-          spec: '4C8G',
-          storeSpace: '20',
-          case: '实例1',
-          resource: 'DMZ',
-          mirror: 'Ubuntu 15.01',
-          total: 2
-        }
-        this.ywInfo='提供互联网服务，此业务位于政务外网区域';
-        this.xzInfo='同意';
+      getInfo (query) {
+        console.log('query', query);
+        const url = 'api/mpc_resource/mpc_resources';
+        this.$http.get(url,{params: query}).then((res) => {
+            console.log('sssss', res);
+            if (res.body.code === 200) {
+              res.body.result.res.forEach((item,index) => {
+                switch (item.status) {
+                  case 'commit': this.stepNum = 0
+                    break
+                  case 'submmit': item.status = '待审批'
+                    break
+                  case 'reject': item.status = '审批未通过'
+                    break
+                  case 'complete': item.status = '审批完成'
+                    break
+                  default:
+                  }
+                  let vm_name = '';
+                  let vm_num = '';
+                  let department = '';
+                  let storage = '';
+                  let image_id = '';
+                  let flavor_id = '';
+                  item.resources.forEach((ritem,index) => {
+                    vm_name = ritem.vm_name;
+                    vm_num = ritem.vm_num;
+                    department = ritem.department;
+                    storage = ritem.storage;
+                    image_id = ritem.image_id;
+                    flavor_id = ritem.flavor_id
+                  });
+
+                this.formValidate = {
+                  resource_id: item.resource_id,
+                  instance_id: item.instance_id,
+                  virtual_name: vm_name,
+                  department: department,
+                  storeSpace: storage,
+                  vm_num: vm_num,
+                  spec: flavor_id,
+                  mirror: image_id,
+                  az_name: item.az_id
+                }
+                this.ywInfo= item.business_info;
+                this.xzInfo= item.suggestion;
+            })
+            console.log(this.formValidate);
+          }
+        },(err) => {
+          console.log(err)
+        });
+//        this.formValidate = {
+//          resource_id: '',
+//          virtual_name: '',
+//          department: '',
+//          spec: '',
+//          storeSpace: '',
+//          instance_id: '',
+//          az_name: '',
+//          mirror: '',
+//          vm_num: 0
+//        }
+//        this.ywInfo='提供互联网服务，此业务位于政务外网区域';
+//        this.xzInfo='同意';
       },
       onLink(index) {
         switch (index) {
@@ -524,24 +596,35 @@
             this.$router.go(-1);
             break;
           case 1:
-            this.onSubmit();
+            this.onSubmit('2');//审批完成
             break;
           default:
-            this.onNo();
+            this.onSubmit('1');//未通过
             break;
         }
       },
-      onSubmit () {
-        console.log('ddsss', this.ywInfo);
-        console.log('xzInfo', this.xzInfo);
-        this.$store.commit('setStatus','审批完成');
-        this.$Message.success('通过!');
+      onSubmit (status) {
+        const query = {resource_id: this.resourceId, status: status, suggestion:this.xzInfo};
+        const url = 'api/mpc_resource/mpc_resources';
+        this.$http.put(url,{params: query}).then((res) => {
+            console.log('sssss', res);
+            if (res.body.code === 200) {
+              if(status == '2'){
+                this.$store.commit('setStatus','审批完成');
+                this.$Message.success('通过完成!');
+              } else if(status == '1'){
+                this.$Message.success('不通过完成!');
+              }
+            }
+          },(err) => {
+            this.$Message.error(err.body.result.msg)
+          });
       },
-      onNo () {
-        console.log('ddsss', this.ywInfo);
-        console.log('xzInfo', this.xzInfo)
-        this.$Message.error('不通过!');
-      },
+//      onNo () {
+//        console.log('ddsss', this.ywInfo);
+//        console.log('xzInfo', this.xzInfo)
+//        this.$Message.error('不通过!');
+//      },
       close () {
         this.isTjpz = false;
       }

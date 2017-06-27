@@ -89,21 +89,21 @@
           },
           {
             title: '申请单号',
-            key: 'order_number',
+            key: 'resource_id',
             align: 'center',
             render: (h, params) => {
-              return h('a',{
+              return h('a', {
                 on: {
                   click: () => {
-                    this.$router.push({name: 'approval_resourceDetails', query: {id: params.row.order_number}})
+                    this.$router.push({name: 'approval_resourceDetails'})
                   }
                 }
-              }, params.row.order_number)
+              }, params.row.resource_id)
             }
           },
           {
             title: '申请人',
-            key: 'applicant',
+            key: 'user_name',
             align: 'center'
           },
           {
@@ -113,18 +113,29 @@
           },
           {
             title: '资源池',
-            key: 'resource_pool',
+            key: 'az_name',
             align: 'center'
           },
           {
             title: '审批状态',
             key: 'status',
-            align: 'center'
+            align: 'center',
+            render: (h, params) => {
+              if (params.row.status === 'summit') {
+                return h('p', '审批中')
+              }
+
+            }
           },
           {
             title: '日期',
-            key: 'data',
-            align: 'center'
+            key: 'created_date',
+            align: 'center',
+            render: (h, params) => {
+              if (params.row.created_date) {
+                return h('p', params.row.created_date.slice(0, 16))
+              }
+            }
           }
         ],
         data1: [],
@@ -143,12 +154,15 @@
       }
     },
 
-    mounted() {},
+    created() {
+      this.userInfo = this.$store.state.userData.userInfo
+      this.onInquire()
+    },
 
     methods: {
       // 查找
       onInquire() {
-        let url = 'deployment/deployments'
+        let url = 'api/mpc_resource/mpc_resources'
         let query = {}
         this.formItem.applicant && (query.applicant = this.formItem.applicant)
         this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
@@ -159,12 +173,17 @@
         this.$http.get(url, {
           params: query
         }).then(data => {
-          console.log('部署列表', data)
-          this.data1 = data.body
-          this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
-          this.num = 1
+          if (data.body.code === 200) {
+            console.log('admin资源审批列表', data)
+            this.data1 = data.body.result.res
+            this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
+          } else {
+            this.$Message.error(data.body.result.msg)
+          }
+
         }, err => {
           console.log('error', err)
+          this.$Message.error(err.body.result.msg)
         })
       },
       handleReset(name) {
@@ -199,18 +218,8 @@
         let data = [];
         let num = (index - 1) * pageSize
         let maxNum = (num + pageSize) > this.data1.length ? this.data1.length : (num + pageSize)
-        for (let i = num; i < maxNum; i++) {
-          data.push({
-            initiator: originData[i].initiator,
-            start_time: originData[i].start_time.substring(0, 16),
-            project_name: originData[i].project_name,
-            status: this.formatStatus(originData[i].deploy_result),
-            deploy_id: originData[i].deploy_id,
-            deploy_name: originData[i].deploy_name,
-            resource_name: originData[i].resource_name
-          })
-        }
-        return data;
+
+        return originData.slice(num, maxNum)
       },
       // 请求部署单元列表
       getProjectList() {
