@@ -288,7 +288,20 @@
                                               title: '是否下线'+params.row.name+'，下线操作将删除此部署实例内的所有资源并不可恢复，请慎重操作！！！',
                                               content: '注：删除此部署实例后，实例所属的资源也将一并删除，请谨慎操作！',
                                               onOk: () => {
-                                                  this.remove(params.index)
+                                                      console.log('删除1',params)
+                                                  const url = 'api/deploy_instance/deploy_instances/' + params.row.id
+                                                      console.log('删除2',params.row.id)
+                                                  this.$http.delete(url).then( (res) => {
+                                                    console.log('删除成功',res)
+                                                      //重新获取用户
+                                                      const  query_user = {user_id:this.$store.state.userData.userInfo.id}
+                                                      this.getUserResource (query_user)
+                                                  },(err) => {
+                                                    console.log('err',err)
+                                                  })
+
+
+                                                  //this.remove(params.index)
                                               },
                                               onCancel: () => {
                                                   this.$Message.info('点击了取消');
@@ -318,23 +331,26 @@
 
       },
       methods: {
-          goQuery (name) {
-              const start_time = this.formValidate.start_time[0]
-              const end_time = this.formValidate.start_time[1]
+          goQuery () {
+              let user_name = this.formValidate.case_name
+              console.log('查询',user_name)
+              let start_time = this.formValidate.start_time[0]
 
-              let requestBody = {}
-              requestBody.user_id = this.$store.state.userData.userInfo.id
-              start_time && (requestBody.start_time = this.timeFormat(start_time))
-              end_time && (requestBody.end_time = this.timeFormat(end_time))
-              requestBody.instance_name = this.formValidate.case_name
+              let end_time = this.formValidate.start_time[1]
 
-              this.getUserResource(requestBody)
+              let params = {}
+
+              user_name && (params.username = user_name)
+              start_time && (params.start_time = this.timeFormat(start_time))
+              end_time && (params.end_time = this.timeFormat(end_time))
+
+              this.getUserResource(params)
           },
           getUserResource (query) {
 
+              this.getResult = []
               this.data6 = []
               const url = 'api/deploy_instance/deploy_instances'
-
 
               this.$http.get(url,{params: query}).then((res) => {
 
@@ -342,11 +358,12 @@
 
                 res.body.result.res.forEach((item,index) => {
                   this.getResult.push({
-                    index: index +1,
+                    index: item.user_id,
                     name: item.instance_name,
                     number: item.resource_num,
-                    time: item.created_date
-
+                    time: item.created_date,
+                    u_name: item.user_name,
+                    id:item.instance_id
                   })
                 })
                 console.log(this.getResult)
@@ -354,18 +371,10 @@
                 this.data6 = this.mockTableData(this.getResult,this.page_size,this.current_page)
 
 
-
               },(err) => {
                 console.log(err)
               })
 
-          },
-          mockTableData (originData, pageSize, index) {//进行分页
-              let data = [];
-              let num = (index - 1) * pageSize
-              let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize)
-              data = originData.slice(num,maxNum)
-              return data;
           },
           handleReset (name) {
               this.$refs[name].resetFields();
@@ -388,7 +397,6 @@
                         requestBody.user_name = this.$store.state.userData.userInfo.username;
                         requestBody.instance_name = this.createUser.name;
                         requestBody.instance_num = '0';
-                        //requestBody.created_date = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec
 
                         this.$http.post(url,requestBody).then((res) => {
                           //重新获取用户
@@ -423,11 +431,25 @@
           },
           // 分页
           changePage(val) {
-              this.filterDate = this.mockTableData(this.data6, this.pageSize, val)
+              this.data6 = this.mockTableData(this.getResult, this.page_size, page)
               this.current_page = page
+          },
+          mockTableData (originData, pageSize, index) {//进行分页
+
+                let data = [];
+                let num = (index - 1) * pageSize
+                let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize)
+
+                data = originData.slice(num,maxNum)
+
+                data.forEach((item,index) => {
+                    item.time = item.time.slice(0,19)
+                })
+                return data;
           },
           page_size_change(val) {
               this.page_size = size
+              this.data6 = this.mockTableData(this.getResult,this.page_size,1)
           },
           timeFormat (date) {//时间格式化
               let Y = date.getFullYear();
