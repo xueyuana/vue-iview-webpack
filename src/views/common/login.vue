@@ -98,16 +98,16 @@
       }
     },
 
-//    beforeRouteEnter (to, from, next) {
-//      // 在渲染该组件的对应路由被 confirm 前调用
-//      // 不！能！获取组件实例 `this`
-//      // 因为当钩子执行前，组件实例还没被创建
-//      console.log(from.path)
-//      if (from.path === '/') {
-//        window.location.reload()
-//      }
-//      next()
-//    },
+    beforeRouteEnter (to, from, next) {
+      // 在渲染该组件的对应路由被 confirm 前调用
+      // 不！能！获取组件实例 `this`
+      // 因为当钩子执行前，组件实例还没被创建
+      console.log(from.path)
+      if (from.path === '/') {
+        history.pushState({}, '', '/login')
+      }
+      next()
+    },
 
     mounted: function () {
       //读取cookie中的账号信息，如果有accountInfo的话，则说明该用户之前勾选了记住密码的功能，则需要自动填上账号密码
