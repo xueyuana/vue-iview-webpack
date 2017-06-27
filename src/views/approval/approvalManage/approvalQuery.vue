@@ -86,15 +86,15 @@
         approvalStatusVal: [
           {
             value: '待审批',
-            key: '0'
+            key: 'submit'
           },
           {
             value: '审批未通过',
-            key: '1'
+            key: 'l_fail'
           },
           {
             value: '审批完成',
-            key: '2'
+            key: 'l_success'
           }
         ],
         instance: [
@@ -146,7 +146,7 @@
           },
           {
             title: '审批状态',
-            key: 'state',
+            key: 'status',
             align: 'center',
             sortable: true
           },
@@ -178,25 +178,27 @@
     },
     created () {
       //获取资源
-      const id = this.$store.state.userData.userInfo.id;
-      const query = {user_id:id};
-      this.getApprovalResource(query);
+//      const id = this.$store.state.userData.userInfo.id;
+//      const query = {user_id:id};
+      this.getApprovalResource();
     },
     computed: {},
     methods: {
       goQuery (name) {
-          console.log('ddsss', this.formValidate);
           const start_time = this.formValidate.start_time[0];
           const end_time = this.formValidate.start_time[1];
 
           let requestBody = {}
-          requestBody.user_id = this.$store.state.userData.userInfo.id;
+//          requestBody.user_id = this.$store.state.userData.userInfo.id;
           start_time && (requestBody.start_time = this.timeFormat(start_time));
           end_time && (requestBody.end_time = this.timeFormat(end_time));
           this.formValidate.user_name && (requestBody.user_name = this.formValidate.user_name);
           this.formValidate.apply_status && (requestBody.status = this.formValidate.apply_status);
           this.formValidate.instance_id && (requestBody.instance_id = this.formValidate.instance_id);
-
+          console.log('ddsss', requestBody.status);
+//          if(requestBody.status == '0'){
+//            requestBody.status = '';
+//          }
           this.getApprovalResource(requestBody);
       },
       getApprovalResource (query) {
@@ -208,14 +210,15 @@
                 this.page_size = res.body.result.res.length;
                 res.body.result.res.forEach((item,index) => {
                   switch (item.status) {
-                    case '0': item.status = '待审批'
+                    case 'submit': item.status = '待审批'
                       break
-                    case '1': item.status = '审批未通过'
+                    case 'l_fail': item.status = '审批未通过'
                       break
-                    case '0': item.status = '审批完成'
+                    case 'l_success': item.status = '审批完成'
                       break
                     default:
                   }
+              console.log('sssssseeeess', item.status);
 
                 this.getResult.push({
                     index: index +1,

@@ -85,27 +85,27 @@
         dataDemo: [
           {
             index: 1,
-            userName: '张三',
-            operation: '点击查询按钮',
+            userName: '陈小红',
+            operation: '申请了4条资源数据',
             create_date: '2016-10-04'
           },
           {
             index: 2,
-            userName: '李四',
-            operation: '点击删除按钮',
+            userName: '李艾',
+            operation: '行政通过了资源申请',
             create_date: '2016-10-05'
           },
           {
             index: 3,
-            userName: '王五',
-            operation: '更新了文件',
-            create_date: '2016-10-01'
+            userName: '吕一',
+            operation: '修改登录密码',
+            create_date: '2016-10-06'
           },
           {
             index: 4,
-            userName: '赵六',
-            operation: '删除了文件',
-            create_date: '2016-10-06'
+            userName: '秦浩',
+            operation: '查询了资源池信息',
+            create_date: '2016-10-07'
           }
         ],
         data1: [],
@@ -118,10 +118,10 @@
       goQuery () {
         console.log('ddsss', this.formValidate);
         this.dataDemo = [{
-          index: 1,
-          userName: '张三',
-          operation: '点击查询按钮',
-          create_date: '2016-10-04'
+          index: 3,
+          userName: '吕一',
+          operation: '修改登录密码',
+          create_date: '2016-10-06'
         }];
       },
       handleReset (name) {
@@ -129,27 +129,27 @@
         this.dataDemo = [
           {
             index: 1,
-            userName: '张三',
-            operation: '点击查询按钮',
+            userName: '陈小红',
+            operation: '申请了4条资源数据',
             create_date: '2016-10-04'
           },
           {
             index: 2,
-            userName: '李四',
-            operation: '点击删除按钮',
-            create_date: '2016-10-04'
+            userName: '李艾',
+            operation: '行政通过了资源申请',
+            create_date: '2016-10-05'
           },
           {
             index: 3,
-            userName: '王五',
-            operation: '更新了文件',
-            create_date: '2016-10-04'
+            userName: '吕一',
+            operation: '修改登录密码',
+            create_date: '2016-10-06'
           },
           {
             index: 4,
-            userName: '赵六',
-            operation: '删除了文件',
-            create_date: '2016-10-04'
+            userName: '秦浩',
+            operation: '查询了资源池信息',
+            create_date: '2016-10-07'
           }
         ];
       },
