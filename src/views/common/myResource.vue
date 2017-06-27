@@ -16,20 +16,20 @@
         <div class="item">
           <span class="title">资源池:</span>
           <Select v-model="query_info.az" style="width:250px">
-            <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
+            <Option v-for="item in az" :value="item.az_name" :key="item">{{ item.az_name }}</Option>
           </Select>
         </div>
 
         <div class="item">
           <span class="title">状态:</span>
           <Select v-model="query_info.status" style="width:250px">
-            <Option v-for="item in status" :value="item.value" :key="item">{{ item.value }}</Option>
+            <Option v-for="item in approvalStatusVal" :value="item.key" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
         <div class="item">
           <span class="title">部署实例:</span>
           <Select v-model="query_info.instance_name" style="width:250px">
-            <Option v-for="item in deployExample" :value="item.value" :key="item" >{{ item.value }} </Option>
+            <Option v-for="item in instance" :value="item.instance_id" :key="item" >{{ item.instance_name }} </Option>
           </Select>
         </div>
       </div>
@@ -84,35 +84,30 @@
   export default {
     data () {
       return {
-        status: [
+        approvalStatusVal: [
           {
-            value: '运行',
+            value: '行政审批中',
+            key: 'submit'
           },
           {
-            value: '关机'
+            value: '行政审批没通过',
+            key: 'l_fail'
           },
           {
-            value: '异常'
+            value: '技术审批中',
+            key: 'l_success'
+          },
+          {
+            value: '技术审批没通过',
+            key: 'a_fail'
+          },
+          {
+            value: '审批完成',
+            key: 'a_success'
           }
         ],
-        deployExample: [
-          {
-            value: '实例1'
-          },
-          {
-            value: '实例2'
-          }
-        ],
-        az: [
-          {
-            az_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
-            az_name: "资源池1",
-          },
-          {
-            az_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
-            az_name: "资源池2",
-          }
-        ],
+        instance: [],
+        az: [],
         query_info: {
           applyDate: [],
           vm_name: '',
@@ -182,6 +177,8 @@
       }
     },
     created () {
+      this.getAz()//获取资源池
+      this.getInstance()//获取实例
         this.queryResult.forEach((item,index) => {
           switch (item.status) {
             case '运行': this.operationList.push([
@@ -234,6 +231,36 @@
 
     },
     methods: {
+      getAz () {//获取资源池
+        const url = 'api/pool/pools'
+
+        this.$http.get(url).then((res) => {
+//          console.log('资源池',res.body)
+          res.body.result.res.forEach((item ,index) => {
+            this.az.push({
+              az_name: item.pool_name
+            })
+          })
+        },(err) => {
+          console.log(err)
+        })
+
+      },
+      getInstance () {//获取实例
+        const url = 'api/deploy_instance/deploy_instances'
+
+        let params = {
+          user_id:'0753bf1a-5736-11e7-929a-fa163e9474c9'
+        }
+
+        this.$http.get(url,{params:params}).then((res) => {
+//          console.log('实例',res.body)
+          this.instance = res.body.result.res
+
+        },(err) => {
+          console.log(err)
+        })
+      },
       clicknative (event,index) {
         //index指的是行数
         this.operationList[index].forEach((item,index) => {

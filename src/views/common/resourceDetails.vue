@@ -73,7 +73,7 @@
           <Progress :percent="100" :stroke-width="20" class="rd_progress" hide-info></Progress>
           </Col>
           <Col span="5" class="rd_left">
-          <div class="rd_pro2">2/30</div>
+          <div class="rd_pro2">4</div>
           </Col>
         </Row>
         </Col>
@@ -86,7 +86,7 @@
           <Progress :percent="100" :stroke-width="20" class="rd_progress" hide-info></Progress>
           </Col>
           <Col span="5" class="rd_left">
-          <div class="rd_pro2">2/30</div>
+          <div class="rd_pro2">4</div>
           </Col>
         </Row>
         </Col>
@@ -99,7 +99,7 @@
           <Progress :percent="100" :stroke-width="20" class="rd_progress" hide-info></Progress>
           </Col>
           <Col span="5" class="rd_left">
-          <div class="rd_pro2">2/30</div>
+          <div class="rd_pro2">4</div>
           </Col>
         </Row>
         </Col>
