@@ -14,7 +14,7 @@
         </div>
 
         <div class="item">
-          <span class="title">资源池:</span>
+          <span class="title">部署区域:</span>
           <Select v-model="query_info.az_name" style="width:250px">
             <Option v-for="item in az" :value="item.az_name" :key="item">{{ item.az_name }}</Option>
           </Select>
@@ -145,7 +145,7 @@
             key: 'ip'
           },
           {
-            title: '镜像名称',
+            title: '操作系统',
             key: 'image_id'
           },
           {
@@ -153,7 +153,7 @@
             key: 'host_name'
           },
           {
-            title: '所属资源池',
+            title: '部署区域',
             key: 'az_name'
           },
           {
@@ -234,7 +234,7 @@
         const url = 'api/image/images'
         this.$http.get(url).then((res) => {
           this.index ++
-//          console.log('镜像',res.body)
+          console.log('镜像',res.body)
           this.mirrorImage =  res.body.result.res
         },(err) => {
           console.log(err)
@@ -271,62 +271,17 @@
         const url = 'api/mpc_resource/mpc_resource_creater'
 
         this.$http.get(url,{params: query}).then((res) => {
-//          console.log('虚机',res.body)
+          this.index ++
+          console.log('虚机',res.body)
           this.getResult = res.body.result.res
 
           this.data_length = this.getResult.length
 
-          this.getResult.forEach((item,index) => {
-            switch (item.status) {
-              case '运行': this.operationList.push([
-                {
-                  value: '重启',
-                  selected: false
-                },
-                {
-                  value: '关机',
-                  selected: false
-                },
-                {
-                  value: '删除',
-                  selected: false
-                }
-              ])
-                break
-              case '异常': this.operationList.push([
-                {
-                  value: '启动',
-                  selected: false
-                },
-                {
-                  value: '开机',
-                  selected: false
-                },
-                {
-                  value: '删除',
-                  selected: false
-                }
-              ])
-                break
-              case '开机': this.operationList.push([
-                {
-                  value: '关机',
-                  selected: false
-                },
-                {
-                  value: '重启',
-                  selected: false
-                },
-                {
-                  value: '删除',
-                  selected: false
-                }
-              ])
-                break
-            }
-          })
+//          this.getResult.forEach((item,index) => {
+//
+//          })
 
-          if(this.index == 3) {
+          if(this.index == 4) {
             this.formatData()
           }
 
@@ -351,6 +306,8 @@
 
         this.queryResult = this.mockTableData(this.getResult,this.page_size,page)
 
+        this.setOptionList()
+
         this.current_page = page
 
       },
@@ -360,6 +317,8 @@
         this.current_page = 1
 
         this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
+
+        this.setOptionList()
 
       },
       formatData () {
@@ -375,7 +334,7 @@
 
           this.mirrorImage.forEach((image) => {//循环镜像
             if(image.id == vm.image_id) {
-              vm.image_id = image.id
+              vm.image_id = image.image_name
             }
           })
 
@@ -388,19 +347,58 @@
           switch (vm.status) {
             case 'summit': vm.status = '提交'
               break
-            case 'l_success': vm.status = '技术审批中'
+            case 'running': vm.status = '运行'
               break
-            case 'l_fail': vm.status = '行政审批不通过'
-              break
-            case 'a_success': vm.status = '审批完成'
-              break
-            case 'a_fail': vm.status = '技术审批不通过'
+            case 'error': vm.status = '异常'
               break
           }
 
         })
 
         this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
+        console.log(this.queryResult)
+
+        this.setOptionList()
+
+
+      },
+      setOptionList () {
+        this.operationList = []
+        this.queryResult.forEach((item,index) => {
+
+          switch (item.status) {
+            case '运行': this.operationList.push([
+              {
+                value: '重启',
+                selected: false
+              },
+              {
+                value: '关机',
+                selected: false
+              },
+              {
+                value: '删除',
+                selected: false
+              }
+            ])
+              break
+            case '异常': this.operationList.push([
+              {
+                value: '删除',
+                selected: false
+              }
+            ])
+              break
+            case '提交': this.operationList.push([
+              {
+                value: '删除',
+                selected: false
+              }
+            ])
+              break
+          }
+
+        })
       },
       reset () {
         this.query_info = {
@@ -444,7 +442,7 @@
     },
     watch: {
       index (newVal,oldVal) {
-        if(newVal == 3 && this.getResult) {
+        if(newVal == 4) {
 //          console.log('instance',this.instance)
 //          console.log('image',this.mirrorImage)
 //          console.log('flavor',this.flavor)

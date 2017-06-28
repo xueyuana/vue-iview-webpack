@@ -26,7 +26,7 @@
         <Input v-model="department" :disabled="isDisabled" disabled style="width: 200px"></Input>
       </div>
       <div class="item">
-        <span class="title">资源池选择</span>
+        <span class="title">部署区域</span>
         <Select v-model="az_name" style="width:200px" :disabled="index ==0 && !isDisabled?false:true">
           <Option v-for="item in az" :value="item.az_name" :key="item">{{ item.az_name }}</Option>
         </Select>
@@ -73,7 +73,7 @@
         </Modal>
       </div>
       <div class="item">
-        <span class="title">镜像</span>
+        <span class="title">操作系统</span>
         <Select v-model="item.image_id" :disabled="isDisabled" style="width:200px">
           <Option v-for="item in mirrorImage" :value="item.id" :key="item">{{ item.image_name }}</Option>
         </Select>
@@ -181,12 +181,11 @@
     },
     created () {
 
-
+      this.getUser()//获取用户信息
       this.getFlavor()//获取规格
       this.getImage()//获取镜像
       this.getInstance()//获取实例
       this.getAz()//获取资源池
-      this.getUser()//获取用户信息
 
       let id = this.$route.query.id
       if(id === undefined) {
@@ -325,7 +324,7 @@
               break
             case 'l_fail': this.current = 1 ; this.stepsStatus = 'error'
               break
-            case 'a_success': this.current = 3;this.stepsStatus = 'process'
+            case 'a_success': this.current = 3;this.stepsStatus = 'finish'
               break
             case 'a_fail': this.current = 2 ; this.stepsStatus = 'error'
               break
@@ -365,6 +364,7 @@
           business_info: this.business_info,
           az_name: this.az_name,
           instance_id: this.instance_id,
+          department: this.department,
           resources: this.resourceInformation
         }
 

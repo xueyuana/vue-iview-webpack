@@ -46,6 +46,8 @@
         current_page: 1,
         getResult: [],
         user_info: {},
+        createResourceIndex: 0,
+        text: '创建资源',
         approvalStatusVal: [
           {
             value: '行政待审批',
@@ -121,7 +123,7 @@
             key: 'instance_name'
           },
           {
-            title: '资源池',
+            title: '部署区域',
             key: 'az'
           },
           {
@@ -142,21 +144,34 @@
                 on: {
                   click: () => {
 
-                    const url = 'api/mpc_resource/mpc_resource_creater'
-                    let requestBody = {
+                    const url_post = 'api/mpc_resource/mpc_resource_creater'
+                    let requestBody_post = {
                       resource_id: params.row.resource_id
                     }
-                    console.log('request',requestBody)
-                    this.$http.post(url,requestBody).then((res) => {
-//                      console.log('创建',res.body)
-                      this.$router.push({name: 'user_myResource'})
 
-                    },(err) => {
-                      console.log(err)
-                    })
+                    const url_put = 'api/mpc_resource/mpc_resources'
+                    let requestBody_put = {
+                      resource_id: params.row.resource_id,
+                      status: 'created_success'
+                    }
+
+                      this.$http.post(url_post,requestBody_post).then((res) => {
+                        console.log('创建资源',res.body)
+
+                        this.$http.put(url_put,requestBody_put).then((res) => {
+                          console.log('该状态',res.body)
+
+                          this.$router.push({name: 'user_myResource'})
+
+                        })
+//
+                      },(err) => {
+                        console.log(err)
+                      })
+
                   }
                 }
-              },'创建资源')
+              }, params.row.status == '创建资源成功'?'已创建':'创建资源')
             }
           }
         ],
@@ -241,7 +256,7 @@
 
           this.data_length = res.body.result.res.length
 
-//          console.log('查询资源',res.body.result.res)
+          console.log('查询资源',res.body.result.res)
 
           res.body.result.res.forEach((item,index) => {
 
@@ -256,6 +271,8 @@
                 break
               case 'a_fail': item.status = '技术审批未通过'
                 break
+              case 'created_success': item.status = '创建资源完成'
+                break
             }
 
             this.getResult.push({
@@ -265,7 +282,10 @@
               instance_name: item.deploy_name,
               az: item.az_name,
               created_date: item.created_date.slice(0,16),
-              applyPerson: item.user_name
+              applyPerson: item.user_name,
+              cellClassName: {
+                status: 'demo-table-info-cell-address',
+              }
 
             })
 
@@ -273,7 +293,7 @@
           })
 
           this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
-//          console.log(this.queryResult)
+          console.log(this.queryResult)
 
 
         },(err) => {
@@ -314,7 +334,6 @@
         let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize)
 
         data = originData.slice(num,maxNum)
-//        console.log(num,maxNum)
 
         return data;
       }
@@ -381,6 +400,10 @@
   }
   .ghost {
     margin-left: 20px;
+  }
+  .ivu-table .demo-table-info-cell-address {
+    background-color: #187;
+    color: #fff;
   }
 
 
