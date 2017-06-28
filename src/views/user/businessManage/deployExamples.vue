@@ -22,17 +22,6 @@
                 </Row>
             </Form>
         </div>
-        <!--<Row>-->
-            <!--<Col span="2" class="c_font">创建日期：</Col>-->
-            <!--<Col span="4">-->
-                <!--<Date-picker type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 200px"></Date-picker>-->
-            <!--</Col>-->
-            <!--<Col span="2" class="c_font">部署实例名称：</Col>-->
-            <!--<Col span="4">-->
-                <!--<Input v-model="value" placeholder="请输入..."></Input>-->
-            <!--</Col>-->
-            <!--<Col span="5"></Col>-->
-        <!--</Row>-->
         <div class="inquire-table">
             <div class="inquire-table-title">部署实例列表</div>
             <div class="tjbssl">
@@ -80,7 +69,36 @@
                         title="编辑部署实例"
                         @on-ok="compileOk"
                         @on-cancel="cancel">
-                    <p>名称：<Input v-model="compileUser.instance_name" placeholder="最多10个字符" style="width: 300px"></Input></p>
+                    <Form ref="compileUser" :model="compileUser" label-position="right" :label-width="130" >
+                        <Form-item label="名称：" prop="instance_name">
+                            <Input v-model="compileUser.instance_name" placeholder="最多10个字符" style="width: 200px"></Input>
+                        </Form-item>
+                        <Form-item label="用户群体规模：" prop="az_id">
+                            <Select v-model="az_id" style="width:200px">
+                                <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
+                            </Select>
+                        </Form-item>
+                        <Form-item label="用户活跃度：" prop="az_id2">
+                            <Select v-model="az_id2" style="width:200px">
+                                <Option v-for="item in az2" :value="item.az_id2" :key="item">{{ item.az_name2 }}</Option>
+                            </Select>
+                        </Form-item>
+                        <Form-item label="业务类型：" prop="az_id3">
+                            <Select v-model="az_id3" style="width:200px">
+                                <Option v-for="item in az3" :value="item.az_id3" :key="item">{{ item.az_name3 }}</Option>
+                            </Select>
+                        </Form-item>
+                        <Form-item label="数据大小：" prop="az_id4">
+                            <Select v-model="az_id4" style="width:200px">
+                                <Option v-for="item in az4" :value="item.az_id4" :key="item">{{ item.az_name4 }}</Option>
+                            </Select>
+                        </Form-item>
+                        <Form-item label="高可用：" prop="az_id5">
+                            <Select v-model="az_id5" style="width:200px">
+                                <Option v-for="item in az5" :value="item.az_id5" :key="item">{{ item.az_name5 }}</Option>
+                            </Select>
+                        </Form-item>
+                    </Form>
                 </Modal>
             </div>
             <Table border :columns="columns7" stripe :data="data6"></Table>
@@ -395,7 +413,7 @@
                         let requestBody =  {}
                         requestBody.user_id = this.$store.state.userData.userInfo.id;
                         requestBody.user_name = this.$store.state.userData.userInfo.username;
-                        requestBody.instance_name = this.createUser.name;
+                        requestBody.instance_name = this.createUser.instance_name;
                         requestBody.instance_num = '0';
 
                         this.$http.post(url,requestBody).then((res) => {
