@@ -57,7 +57,7 @@
       <div class="inquire-table-title">申请资源列表</div>
       <Table stripe :columns="columns" :data="queryResult"></Table>
       <div class="inquire-table-page">
-        <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
+        <Page :total="data_length" :page-size="page_size" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
       </div>
     </div>
   </div>
@@ -85,16 +85,24 @@
         },
         approvalStatusVal: [
           {
-            value: '待审批',
+            value: '行政待审批',
             key: 'submit'
           },
           {
-            value: '审批未通过',
+            value: '行政审批未通过',
             key: 'l_fail'
           },
           {
-            value: '审批完成',
+            value: '技术待审批',
             key: 'l_success'
+          },
+          {
+            value: '技术审批未通过',
+            key: 'a_fail'
+          },
+          {
+            value: '审批完成',
+            key: 'a_success'
           }
         ],
         instance: [
@@ -207,14 +215,18 @@
         this.$http.get(url,{params: query}).then((res) => {
             console.log('sssss', res);
             if (res.body.code === 200) {
-                this.page_size = res.body.result.res.length;
+                this.data_length = res.body.result.res.length;
                 res.body.result.res.forEach((item,index) => {
                   switch (item.status) {
-                    case 'submit': item.status = '待审批'
+                    case 'submit': item.status = '行政待审批'
                       break
-                    case 'l_fail': item.status = '审批未通过'
+                    case 'l_fail': item.status = '行政审批未通过'
                       break
-                    case 'l_success': item.status = '审批完成'
+                    case 'l_success': item.status = '技术待审批'
+                      break
+                    case 'a_fail': item.status = '技术审批未通过'
+                      break
+                    case 'a_success': item.status = '技术审批完成'
                       break
                     default:
                   }
