@@ -45,22 +45,22 @@
         page_size: 10,
         current_page: 1,
         getResult: [],
-        user_info: '',
+        user_info: {},
         approvalStatusVal: [
           {
-            value: '行政审批中',
+            value: '行政待审批',
             key: 'submit'
           },
           {
-            value: '行政审批没通过',
+            value: '行政审批未通过',
             key: 'l_fail'
           },
           {
-            value: '技术审批中',
+            value: '技术待审批',
             key: 'l_success'
           },
           {
-            value: '技术审批没通过',
+            value: '技术审批未通过',
             key: 'a_fail'
           },
           {
@@ -140,7 +140,21 @@
                   disabled:  params.row.status == '审批完成'?false:true
                 },
                 on: {
-                  click: this.goMyResource
+                  click: () => {
+
+                    const url = 'api/mpc_resource/mpc_resource_creater'
+                    let requestBody = {
+                      resource_id: params.row.resource_id
+                    }
+                    console.log('request',requestBody)
+                    this.$http.post(url,requestBody).then((res) => {
+//                      console.log('创建',res.body)
+                      this.$router.push({name: 'user_myResource'})
+
+                    },(err) => {
+                      console.log(err)
+                    })
+                  }
                 }
               },'创建资源')
             }
@@ -163,14 +177,11 @@
     },
     methods: {
 
-      goMyResource () {
-        this.$router.push({name: 'user_myResource'})
-      },
       getInstance () {//获取实例
         const url = 'api/deploy_instance/deploy_instances'
 
         let params = {
-          user_id:'0753bf1a-5736-11e7-929a-fa163e9474c9'
+          user_id: this.user_info.id
         }
 
         this.$http.get(url,{params:params}).then((res) => {
@@ -230,20 +241,20 @@
 
           this.data_length = res.body.result.res.length
 
-          console.log('查询资源',res.body.result.res)
+//          console.log('查询资源',res.body.result.res)
 
           res.body.result.res.forEach((item,index) => {
 
             switch (item.status) {
-              case 'submit': item.status = '行政审批中'
+              case 'submit': item.status = '行政待审批'
                 break
-              case 'l_success': item.status = '技术审批中'
+              case 'l_success': item.status = '技术待审批'
                 break
-              case 'l_fail': item.status = '行政审批不通过'
+              case 'l_fail': item.status = '行政审批未通过'
                 break
               case 'a_success': item.status = '审批完成'
                 break
-              case 'a_fail': item.status = '技术审批不通过'
+              case 'a_fail': item.status = '技术审批未通过'
                 break
             }
 
@@ -260,8 +271,6 @@
 
 
           })
-//          console.log(this.getResult)
-          console.log(this.page_size,this.current_page)
 
           this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
 //          console.log(this.queryResult)
