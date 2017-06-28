@@ -68,6 +68,10 @@
           {
             value: '审批完成',
             key: 'a_success'
+          },
+          {
+            value: '创建资源完成',
+            key: 'created_success'
           }
         ],
         instance: [],
@@ -139,10 +143,13 @@
                 props: {
                   type: 'primary',
                   size: 'small',
-                  disabled:  params.row.status == '审批完成'?false:true
+                  disabled:  params.row.status == '审批完成' || '创建资源完成'?false:true
                 },
                 on: {
                   click: () => {
+                    if(params.row.status == '创建资源完成') {
+                      return
+                    }
 
                     const url_post = 'api/mpc_resource/mpc_resource_creater'
                     let requestBody_post = {
@@ -171,7 +178,7 @@
 
                   }
                 }
-              }, params.row.status == '创建资源成功'?'已创建':'创建资源')
+              }, params.row.text)
             }
           }
         ],
@@ -283,6 +290,7 @@
               az: item.az_name,
               created_date: item.created_date.slice(0,16),
               applyPerson: item.user_name,
+              text: item.status == '创建资源完成'?'已创建':'创建资源',
               cellClassName: {
                 status: 'demo-table-info-cell-address',
               }
