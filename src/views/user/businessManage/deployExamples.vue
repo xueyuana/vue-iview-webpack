@@ -303,11 +303,6 @@
                                           this.index = params.index
                                           this.user_id = params.row.id
 
-                                          //for(var key in params.row) {
-                                          //  this.compileUser[key] = params.row[key]
-                                          //}
-                                          //console.log('5555',this.compileUser);
-                                          //this.index = params.index
                                       }
                                   }
                               }, '编辑'),
@@ -322,9 +317,7 @@
                                               title: '是否下线'+params.row.instance_name+'，下线操作将删除此部署实例内的所有资源并不可恢复，请慎重操作！！！',
                                               content: '注：删除此部署实例后，实例所属的资源也将一并删除，请谨慎操作！',
                                               onOk: () => {
-                                                      console.log('删除1',params)
                                                   const url = 'api/deploy_instance/deploy_instances/' + params.row.id
-                                                      console.log('删除2',params.row.id)
                                                   this.$http.delete(url).then( (res) => {
                                                     console.log('删除成功',res)
                                                       //重新获取用户
@@ -334,8 +327,6 @@
                                                     console.log('err',err)
                                                   })
 
-
-                                                  //this.remove(params.index)
                                               },
                                               onCancel: () => {
                                                   this.$Message.info('点击了取消');
@@ -471,13 +462,11 @@
                         console.log('temporary',temporary)
 
                         console.log('表单信息',this.compileUser)
-                        console.log('request',requestBody)
                         console.log('user_id',this.user_id)
 
-                        const url = 'api/deploy_instance/deploy_instances/'+this.user_id
+                        const url = 'api/deploy_instance/deploy_instances'
 
                         let requestBody = {}
-
 
                         requestBody = {
                             instance_id: temporary.id,
