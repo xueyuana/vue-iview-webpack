@@ -67,9 +67,9 @@
                 <Modal
                         v-model="modal2"
                         title="编辑部署实例"
-                        @on-ok="compileOk"
+                        @on-ok="compileOk('formCompile')"
                         @on-cancel="cancel">
-                    <Form ref="compileUser" :model="compileUser" label-position="right" :label-width="130" >
+                    <Form ref="formCompile" :model="compileUser" label-position="right" :label-width="130" >
                         <Form-item label="名称：" prop="instance_name">
                             <Input v-model="compileUser.instance_name" placeholder="最多10个字符" style="width: 200px"></Input>
                         </Form-item>
@@ -286,12 +286,26 @@
                                   },
                                   on: {
                                       click: () => {
-                                        this.modal2 = true
-                                        for(var key in params.row) {
-                                          this.compileUser[key] = params.row[key]
-                                        }
-                                        console.log('5555',this.compileUser);
-                                        this.index = params.index
+                                          this.modal2 = true
+
+                                          let rowDate = {}
+                                          for(var key in params.row) {
+                                            rowDate[key] = params.row[key]
+                                          }
+                                          console.log('row',rowDate)
+
+                                          Object.assign(this.compileUser,rowDate)
+
+                                          console.log('编辑',this.compileUser)
+
+                                          this.index = params.index
+                                          this.user_id = params.row.id
+
+                                          //for(var key in params.row) {
+                                          //  this.compileUser[key] = params.row[key]
+                                          //}
+                                          //console.log('5555',this.compileUser);
+                                          //this.index = params.index
                                       }
                                   }
                               }, '编辑'),
@@ -441,11 +455,63 @@
           cancel () {
               this.$Message.info('点击了取消');
           },
-          compileOk () {//编辑后确定
-             for(var key in this.compileUser) {
-               this.data6[this.index][key] = this.compileUser[key]
-             }
-              console.log('result',this.data6)
+          compileOk (name) {//编辑后确定
+
+                let temporary = {}
+
+                Object.assign(temporary,this.compileUser)
+
+                this.$refs[name].validate((valid) => {
+                      if(valid) {
+                        console.log('验证成功')
+                        console.log('temporary',temporary)
+
+                        console.log('表单信息',this.compileUser)
+                        console.log('request',requestBody)
+                        console.log('user_id',this.user_id)
+
+                        const url = 'uop/api/deploy_instance/deploy_instances/'+this.user_id
+
+                        let requestBody = {}
+
+
+                        requestBody = {
+                            instance_id: temporary.id,
+                            instance_name: temporary.instance_name,
+                            instance_num: temporary.number
+                        }
+
+                        console.log('请求',requestBody)
+
+                        this.$http.put(url,requestBody).then((res) => {
+                          console.log(res.body)
+
+                          this.current_page = 1
+                          //修改成功之后改变列表数据
+                          for(var key in temporary) {
+                            this.data6[this.index][key] = temporary[key]
+                          }
+                        },(err) => {
+
+                          this.$Message.info('编辑用户失败');
+                          console.log('err',err)
+                          //重置
+                          this.$refs[name].resetFields()
+                        })
+
+                      } else {
+
+                        this.$Message.info('编辑用户失败');
+                        //重置
+                        this.$refs[name].resetFields()
+                        console.log('验证失败')
+                      }
+                })
+
+             //for(var key in this.compileUser) {
+             //  this.data6[this.index][key] = this.compileUser[key]
+             //}
+             //console.log('result',this.data6)
           },
           // 分页
           changePage(val) {
