@@ -14,6 +14,9 @@
     </div>
     <div class="inquire-table-title">资源信息</div>
     <div class="contain" v-for="(item,index) in resourceInformation" :class="{border: index == 0?false:true}">
+     <div class="delete" :class="{hidden: index == 0 || isDisabled? true:false}">
+       <Button type="primary" @click="deleteVm(index)">删除</Button>
+     </div>
       <div class="item">
         <span class="title">虚拟机名称</span>
         <Input v-model="item.vm_name" placeholder="请输入" :disabled="isDisabled" style="width: 200px"></Input>
@@ -93,6 +96,10 @@
     </div>
     <div class="inquire-table-title">业务信息</div>
     <Input class="comment" v-model="business_info" :disabled="isDisabled" type="textarea" :maxlength="500" :rows=6 placeholder="请输入"></Input>
+    <div :class="{hidden: !isDisabled}">
+      <div class="inquire-table-title">行政审批意见</div>
+      <Input class="comment" v-model="suggestion" :disabled="isDisabled" type="textarea" :maxlength="100" :rows=6 placeholder="暂无审批意见"></Input>
+    </div>
   </div>
 </template>
 
@@ -109,6 +116,7 @@
         instanceCreate: false,
         okText: '10秒钟后关闭',
         isDisabled: false,
+        suggestion: '',
         columns: [
           {
             title: '服务器',
@@ -205,7 +213,6 @@
             {
               vm_name: '',
               vm_num: 0,
-              department: '',
               flavor_id: '',
               image_id: '',
               storage: ''
@@ -263,7 +270,7 @@
         const url = 'api/deploy_instance/deploy_instances'
 
         let params = {
-          user_id:'0753bf1a-5736-11e7-929a-fa163e9474c9'
+          user_id: this.user_info.id
         }
 
         this.$http.get(url,{params:params}).then((res) => {
@@ -294,21 +301,24 @@
 
         this.resourceInformation.push({
           vm_name: '',
-          department: '',
-          image_id: '',
+          vm_num: 0,
           flavor_id: '',
-          storage: '',
-          vm_num: 0
+          image_id: '',
+          storage: ''
         })
       },
+      deleteVm (index) {
+        this.resourceInformation.splice(index,1)
+      },
+
       getResource (query) {//根据资源ID查询资源
         const url = 'api/mpc_resource/mpc_resources'
 
         this.$http.get(url,{params:query}).then(res => {
-          console.log('资源查询',res.body)
-          let resourceInformation = res.body.result.res[0]
+//          console.log('资源查询',res.body)
+          let resource_info = res.body.result.res[0]
 
-          switch (resourceInformation.status) {
+          switch (resource_info.status) {
             case 'submit': this.current = 1; this.stepsStatus = 'process'
               break
             case 'l_success': this.current = 2;this.stepsStatus = 'process'
@@ -321,10 +331,11 @@
               break
           }
 
-          this.business_info = resourceInformation.business_info
-          this.az_name = resourceInformation.az_name
-          this.instance_id = resourceInformation.instance_id
-          this.resourceInformation = resourceInformation.resources
+          this.business_info = resource_info.business_info
+          this.az_name = resource_info.az_name
+          this.instance_id = resource_info.instance_id
+          this.resourceInformation = resource_info.resources
+          this.suggestion = resource_info.suggestion
 
         },(err) => {
           console.log(err)
@@ -346,6 +357,7 @@
           })
           return
         }
+
 
         let requestBody = {
           user_name: this.user_info.username,
@@ -453,6 +465,15 @@
   .modal-wrap {
     width: 90%;
     margin: 0 auto;
+  }
+
+  .delete {
+    width: 100%;
+    padding-left: 94%;
+
+  }
+  .hidden {
+    display: none;
   }
 
   table {
