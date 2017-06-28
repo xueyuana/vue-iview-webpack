@@ -170,7 +170,7 @@
         this.$fullpage.moveTo(index+2)
       },
       toConsole() {
-        this.$router.push({path: '/login'})
+        this.$router.push({name: 'login'})
       },
       toTop() {
         this.$fullpage.moveTo(1)
