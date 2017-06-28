@@ -257,7 +257,8 @@
                                 },
                                 on: {
                                     click: () => {
-                                        this.$router.push({instance_name: 'user_deployExample', query: {number: params.row.number}});
+                                        //this.$router.push({instance_name: 'user_resourceQuery', query: {number: params.row.number}});
+                                        this.$router.push({name: 'user_resourceQuery'});
                                     }
                                 }
                             }, params.row.number)
@@ -370,6 +371,7 @@
 
               let end_time = this.formValidate.start_time[1]
 
+              this.current_page = 1
               let params = {}
 
               instance_name && (params.instance_name = instance_name)
@@ -386,7 +388,8 @@
 
               this.$http.get(url,{params: query}).then((res) => {
 
-                this.page_size = res.body.result.res.length
+                this.data_length = res.body.result.res.length
+                this.current_page = 1
 
                 res.body.result.res.forEach((item,index) => {
                   this.getResult.push({
@@ -514,7 +517,7 @@
              //console.log('result',this.data6)
           },
           // 分页
-          changePage(val) {
+          changePage(page) {
               this.data6 = this.mockTableData(this.getResult, this.page_size, page)
               this.current_page = page
           },
