@@ -473,7 +473,7 @@
                         console.log('request',requestBody)
                         console.log('user_id',this.user_id)
 
-                        const url = 'uop/api/deploy_instance/deploy_instances/'+this.user_id
+                        const url = 'api/deploy_instance/deploy_instances/'+this.user_id
 
                         let requestBody = {}
 
