@@ -217,8 +217,8 @@
               },
               createUser: {
                 instance_name: '',
-                number: '',
-                time: ''
+                instance_num: '',
+                created_time: ''
               },
               ruleInline: {
                   instance_name: [
@@ -227,8 +227,8 @@
               },
               compileUser: {
                   instance_name: '',
-                  number: '',
-                  time: ''
+                  instance_num: '',
+                  created_time: ''
               },
               columns7: [
                   {
@@ -244,7 +244,7 @@
                   },
                   {
                       title: '资源数量',
-                      key: 'number',
+                      key: 'instance_num',
                       align: 'center',
                       render: (h, params) => {
                         return h('div', [
@@ -258,17 +258,17 @@
                                 },
                                 on: {
                                     click: () => {
-                                        //this.$router.push({instance_name: 'user_resourceQuery', query: {number: params.row.number}});
+                                        //this.$router.push({instance_name: 'user_resourceQuery', query: {instance_num: params.row.instance_num}});
                                         this.$router.push({name: 'user_resourceQuery'});
                                     }
                                 }
-                            }, params.row.number)
+                            }, params.row.instance_num)
                         ]);
                       }
                   },
                   {
                       title: '创建日期',
-                      key: 'time',
+                      key: 'created_time',
                       align: 'center'
                   },
                   {
@@ -342,8 +342,8 @@
               data6: [
                   //{
                   //    name: '实例1',
-                  //    number: '10',
-                  //    time: '2017-06-23 15:00:00'
+                  //    instance_num: '10',
+                  //    created_time: '2017-06-23 15:00:00'
                   //}
               ]
           }
@@ -358,9 +358,7 @@
       methods: {
           goQuery () {
               let instance_name = this.formValidate.instance_name
-              console.log('查询',instance_name)
               let start_time = this.formValidate.start_time[0]
-
               let end_time = this.formValidate.start_time[1]
 
               this.current_page = 1
@@ -370,6 +368,8 @@
               start_time && (params.start_time = this.timeFormat(start_time))
               end_time && (params.end_time = this.timeFormat(end_time))
 
+              console.log('查询',params)
+
               this.getUserResource(params)
           },
           getUserResource (query) {
@@ -378,8 +378,10 @@
               this.data6 = []
               const url = 'api/deploy_instance/deploy_instances'
 
-              this.$http.get(url,{params: query}).then((res) => {
-
+              this.$http.get(url,{
+                params: query
+              }).then((res) => {
+                console.log('查询',res)
                 this.data_length = res.body.result.res.length
                 this.current_page = 1
 
@@ -387,9 +389,9 @@
                   this.getResult.push({
                     index: item.user_id,
                     instance_name: item.instance_name,
-                    number: item.resource_num,
-                    time: item.created_date,
-                    u_name: item.user_name,
+                    instance_num: item.instance_num,
+                    created_time: item.created_date,
+                    user_name: item.user_name,
                     id:item.instance_id
                   })
                 })
@@ -403,8 +405,8 @@
               })
 
           },
-          handleReset (instance_name) {
-              this.$refs[instance_name].resetFields();
+          handleReset (name) {
+              this.$refs[name].resetFields();
           },
           addCase (){
               this.modal1 = true;
@@ -431,7 +433,7 @@
                           this.getUserResource (query_user)
 
                           //重置
-                          //this.$refs[instance_name].resetFields()
+                          this.$refs[create_name].resetFields()
 
                         },(err) => {
                           console.log(err)
@@ -471,7 +473,7 @@
                         requestBody = {
                             instance_id: temporary.id,
                             instance_name: temporary.instance_name,
-                            instance_num: temporary.number
+                            instance_num: temporary.instance_num
                         }
 
                         console.log('请求',requestBody)
@@ -489,14 +491,14 @@
                           this.$Message.info('编辑用户失败');
                           console.log('err',err)
                           //重置
-                          this.$refs[name].resetFields()
+                          this.$refs[instance_name].resetFields()
                         })
 
                       } else {
 
                         this.$Message.info('编辑用户失败');
                         //重置
-                        this.$refs[name].resetFields()
+                        this.$refs[instance_name].resetFields()
                         console.log('验证失败')
                       }
                 })
@@ -520,11 +522,11 @@
                 data = originData.slice(num,maxNum)
 
                 data.forEach((item,index) => {
-                    item.time = item.time.slice(0,19)
+                    item.created_time = item.created_time.slice(0,19)
                 })
                 return data;
           },
-          page_size_change(val) {
+          page_size_change(size) {
               this.page_size = size
               this.data6 = this.mockTableData(this.getResult,this.page_size,1)
           },
