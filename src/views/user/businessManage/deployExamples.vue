@@ -4,8 +4,8 @@
             <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="90">
                 <Row :gutter="16">
                     <Col span="8">
-                    <Form-item label="创建日期:" prop="start_time">
-                        <Date-picker  type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" style="max-width: 250px"></Date-picker>
+                    <Form-item label="创建日期:" prop="created_time">
+                        <Date-picker  type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.created_time" style="max-width: 250px"></Date-picker>
                     </Form-item>
                     </Col>
                     <Col span="7">
@@ -204,16 +204,16 @@
               ],
               formValidate: {
                   instance_name: '',
-                  start_time: ''
+                  created_time: ''
               },
               ruleValidate: {
                   instance_name: [],
-                  start_time: []
+                  created_time: []
               },
               createUser: {
                 instance_name: '',
-                number: '',
-                time: '',
+                instance_num: '',
+                created_time: '',
                 user_size: '',
                 liveness: '',
                 business_type: '',
@@ -262,8 +262,8 @@
               },
               compileUser: {
                 instance_name: '',
-                number: '',
-                time: '',
+                instance_num: '',
+                created_time: '',
                 user_size: '',
                 liveness: '',
                 business_type: '',
@@ -284,7 +284,7 @@
                   },
                   {
                       title: '资源数量',
-                      key: 'number',
+                      key: 'instance_num',
                       align: 'center',
                       render: (h, params) => {
                         return h('div', [
@@ -298,17 +298,17 @@
                                 },
                                 on: {
                                     click: () => {
-                                        //this.$router.push({instance_name: 'user_resourceQuery', query: {number: params.row.number}});
+                                        //this.$router.push({instance_name: 'user_resourceQuery', query: {instance_num: params.row.instance_num}});
                                         this.$router.push({name: 'user_resourceQuery'});
                                     }
                                 }
-                            }, params.row.number)
+                            }, params.row.instance_num)
                         ]);
                       }
                   },
                   {
                       title: '创建日期',
-                      key: 'time',
+                      key: 'created_time',
                       align: 'center'
                   },
                   {
@@ -382,8 +382,8 @@
               data6: [
                   //{
                   //    name: '实例1',
-                  //    number: '10',
-                  //    time: '2017-06-23 15:00:00'
+                  //    instance_num: '10',
+                  //    created_time: '2017-06-23 15:00:00'
                   //}
               ]
           }
@@ -398,8 +398,8 @@
       methods: {
           goQuery () {
               let instance_name = this.formValidate.instance_name
-              let start_time = this.formValidate.start_time[0]
-              let end_time = this.formValidate.start_time[1]
+              let start_time = this.formValidate.created_time[0]
+              let end_time = this.formValidate.created_time[1]
 
               this.current_page = 1
               let params = {}
@@ -426,11 +426,11 @@
 
                 res.body.result.res.forEach((item,index) => {
                   this.getResult.push({
-                        index: item.user_id,
+                        user_id: item.user_id,
                         instance_name: item.instance_name,
-                        number: item.resource_num,
-                        time: item.created_date,
-                        u_name: item.user_name,
+                        instance_num: item.resource_num,
+                        created_time: item.created_date,
+                        user_name: item.user_name,
                         id:item.instance_id,
                         user_size:item.user_size,
                         liveness:item.liveness,
@@ -491,7 +491,6 @@
 
                         })
                         this.createUser.instance_name='';
-                        console.log('333333');
                         this.$Message.info('添加成功');
                   } else {
                         this.modal1 = false;
@@ -523,7 +522,7 @@
                         requestBody = {
                             instance_id: temporary.id,
                             instance_name: temporary.instance_name,
-                            instance_num: temporary.number,
+                            instance_num: temporary.instance_num,
                             user_size: temporary.user_size,
                             liveness: temporary.liveness,
                             business_type: temporary.business_type,
@@ -577,7 +576,7 @@
                 data = originData.slice(num,maxNum)
 
                 data.forEach((item,index) => {
-                    item.time = item.time.slice(0,19)
+                    item.created_time = item.created_time.slice(0,19)
                 })
                 return data;
           },
