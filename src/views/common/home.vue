@@ -31,7 +31,7 @@
         <Row type="flex">
           <i-col span="4" class="layout-menu-left">
             <Menu v-if="role === 'user'" :active-name="$store.state.openMenu.activeItem.activeName"
-                  :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go">
+                  :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go" accordion>
               <div class="layout-logo-left" @click="goConsole">
                 管理控制台
               </div>
@@ -58,21 +58,22 @@
               </Submenu>
             </Menu>
             <Menu v-if="role === 'admin'" :active-name="$store.state.openMenu.activeItem.activeName"
-                  :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go">
+                  :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go" accordion>
               <div class="layout-logo-left" @click="goConsole">
                 管理控制台
               </div>
               <Submenu name="1">
                 <template slot="title">
-                  <i class="ivu-icon icon-resource-chi"></i>资源池
+                  <i class="ivu-icon icon-resource-chi"></i>
+                  部署区域
                 </template>
-                <Menu-item name="11">资源池管理</Menu-item>
+                <Menu-item name="11">部署区域管理</Menu-item>
               </Submenu>
               <Submenu name="2">
                 <template slot="title">
                   <i class="ivu-icon icon-resource"></i>资源管理
                 </template>
-                <Menu-item name="21">镜像管理</Menu-item>
+                <Menu-item name="21">操作系统管理</Menu-item>
                 <Menu-item name="22">虚拟机管理</Menu-item>
                 <Menu-item name="23">部署实例管理</Menu-item>
                 <Menu-item name="24">公网IP管理</Menu-item>
@@ -92,7 +93,7 @@
               </Submenu>
             </Menu>
             <Menu v-if="role === 'leader'" :active-name="$store.state.openMenu.activeItem.activeName"
-                  :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go">
+                  :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go" accordion>
               <div class="layout-logo-left" @click="goConsole">
                 管理控制台
               </div>
@@ -139,7 +140,6 @@
 </template>
 
 <style lang="less" scoped>
-  /*@import "../../static/mytheme/redtheme.less";*/
   @import "../../static/mytheme/index.less";
 
   .home {

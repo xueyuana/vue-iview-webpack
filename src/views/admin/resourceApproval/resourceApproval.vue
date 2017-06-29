@@ -16,18 +16,19 @@
           </Col>
           <Col span="5">
             <Form-item label="审批状态:" prop="status">
-              <Select v-model="formItem.status" clearable style="">
-                <Option :value="1" :key="1">待审批</Option>
-                <Option :value="2" :key="2">审批未通过</Option>
-                <Option :value="3" :key="3">审批完成</Option>
+              <Select v-model="formItem.status" clearable>
+                <Option value="submit">行政待审批</Option>
+                <Option value="l_fail">行政审批不通过</Option>
+                <Option value="l_success">技术待审批</Option>
+                <Option value="a_success">审批完成</Option>
+                <Option value="a_fail">技术审批不通过</Option>
               </Select>
             </Form-item>
           </Col>
-          <Col span="5">
-            <Form-item label="部署实例:" prop="deploy_name">
-              <Select v-model="formItem.deploy_name" clearable>
-                <Option :value="1" :key="1">部署实例1</Option>
-                <Option :value="2" :key="2">部署实例2</Option>
+          <Col span="5"><Option v-for="item in instance" @click.native="instanceDetails" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
+            <Form-item label="部署实例:" prop="instance_id">
+              <Select v-model="formItem.instance_id" clearable>
+                <Option :value="item.instance_id" v-for="item in formItem.instance">{{item.instance_name}}</Option>
               </Select>
             </Form-item>
           </Col>
@@ -48,7 +49,7 @@
     <!--查询结果-->
     <div class="inquire-table">
       <div class="inquire-table-title">资源审批列表</div>
-      <Table stripe size="small" :columns="columns" :data="filterDate"></Table>
+      <Table size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
           <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
@@ -72,20 +73,22 @@
           applicant: '',
           date: '',
           status: '',
-          deploy_name: ''
+          instance_id: ''
         },
+        instance: [],
         ruleValidate: {
           applicant: [],
           date: [],
           status: [],
-          deploy_name: []
+          instance_id: []
         },
         userInfo: '',
         columns:  [
           {
             title: '序号',
-            type: 'index',
-            align: 'center'
+            key: 'index',
+            align: 'center',
+            width: '100'
           },
           {
             title: '申请单号',
@@ -93,6 +96,14 @@
             align: 'center',
             render: (h, params) => {
               return h('a', {
+                style: {
+                  display: 'inline-block',
+                  width: '80px',
+                  margin: '0 auto',
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis'
+                },
                 on: {
                   click: () => {
                     this.$router.push({name: 'approval_resourceDetails', query: { id: params.row.resource_id}})
@@ -112,7 +123,7 @@
             align: 'center'
           },
           {
-            title: '资源池',
+            title: '部署区域',
             key: 'az_name',
             align: 'center'
           },
@@ -123,15 +134,17 @@
             render: (h, params) => {
               switch (params.row.status) {
                 case 'submit':
-                  return h('p', '行政审批中')
+                  return h('p', '行政待审批')
                 case 'l_fail':
                   return h('p', '行政审批不通过')
                 case 'l_success':
-                  return h('p', '技术审批中')
+                  return h('p', '技术待审批')
                 case 'a_fail':
                   return h('p', '技术审批不通过')
                 case 'a_success':
                   return h('p', '审批完成')
+                case 'created_success':
+                  return h('p', '资源已创建')
                 default:
               }
             }
@@ -165,19 +178,24 @@
 
     created() {
       this.userInfo = this.$store.state.userData.userInfo
+      this.getInstanceList()
       this.onInquire()
+
     },
 
     methods: {
-      // 查找
+        // 查找
       onInquire() {
         let url = 'api/mpc_resource/mpc_resources'
         let query = {}
-        this.formItem.applicant && (query.applicant = this.formItem.applicant)
+          // 只能通过用户ID 查询
+//        this.formItem.applicant && (query.applicant = this.formItem.applicant)
+
         this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
         this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
         this.formItem.status && (query.status = this.formItem.status)
-        this.formItem.deploy_name && (query.deploy_name = this.formItem.deploy_name)
+        this.formItem.instance_id && (query.instance_id = this.formItem.instance_id)
+        console.log(query)
 
         this.$http.get(url, {
           params: query
@@ -185,6 +203,9 @@
           if (data.body.code === 200) {
             console.log('admin资源审批列表', data)
             this.data1 = data.body.result.res
+            this.data1.forEach((item, index) => {
+              item.index = index + 1
+            })
             this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
           } else {
             this.$Message.error(data.body.result.msg)
@@ -198,24 +219,24 @@
       handleReset(name) {
         this.$refs[name].resetFields()
       },
-      // 时间选择器
-      formatCreateData(value) {
-        this.formItem.start_time = value
+
+        // 获取实例列表
+      getInstanceList () {
+        const url = 'api/deploy_instance/deploy_instances'
+
+        this.$http.get(url).then((res) => {
+          if (res.body.code === 200) {
+            console.log(res.body)
+            this.formItem.instance = res.body.result.res
+          } else {
+            this.$Message.error(res.body.result.msg)
+          }
+        },(err) => {
+          console.log(err)
+        })
       },
-      onUnitChange(val) {
-        this.formItem.resource_name = ''
-        console.log(val)
-        this.getDeployList()
-        this.onInquire()
-      },
-      onDeployChange(val) {
-        if (!val) return
-        this.onInquire()
-      },
-      formatEndData(value) {
-        this.formItem.end_time = value
-      },
-      // 分页
+
+        // 分页
       changePage(val) {
         this.filterDate = this.mockTableData(this.data1, this.pageSize, val)
       },
@@ -229,46 +250,8 @@
         let maxNum = (num + pageSize) > this.data1.length ? this.data1.length : (num + pageSize)
 
         return originData.slice(num, maxNum)
-      },
-      // 请求部署单元列表
-      getProjectList() {
-        let url = baseUrl.apihost + 'iteminfo/iteminfoes/local/' + this.userInfo.user_id
-        this.$http.get(url).then(data => {
-          console.log('部署单元列表', data)
-          this.project_list = data.body.result.res
-        }, err => {
-          console.log('error', err)
-        })
-      },
-      // 获取部署单元下对应部署列表
-      getDeployList() {
-        let url = baseUrl.apihost + 'resource/'
-        let query = {}
-        this.userInfo.user_id && (query.user_id = this.userInfo.user_id)
-        this.formItem.project_name && (query.project = this.formItem.project_name)
-
-        this.$http.get(url, {
-          params: query
-        }).then(data => {
-          console.log('资源列表', data)
-          this.resource_list = data.body.result.msg.filter(item => item.reservation_status === 'ok')
-        }, err => {
-          console.log('error', err)
-        })
-      },
-      formatStatus(val){
-        switch (val) {
-          case 'deploying':
-            return '部署中'
-          case 'not_deployed':
-            return '未部署'
-          case 'fail':
-            return '失败'
-          case 'success':
-            return '成功'
-          default:
-        }
       }
+
     }
   }
 </script>

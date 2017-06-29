@@ -10,7 +10,6 @@ import {store} from './store/store.js'
 // 导入iview 以及 iview的css
 import iView from 'iview'
 Vue.use(iView)
-// import './static/mytheme/redtheme.less'
 import './static/mytheme/index.less'
 
 // 引入vue-resource
@@ -25,8 +24,9 @@ import vueRouters from './router/index.js'
 
 import {getCookie} from 'tools/cookieAction.js'
 
-import 'fullpage/build/fullpage.css'
-import 'fullpage/build/fullpage.min'
+// 引入 fullpage
+import './tools/fullpage/index.js'
+import './tools/fullpage/fullpage.css'
 Vue.prototype.$fullpage = fullpage
 
 vueRouters.beforeEach((to, from, next) => {
@@ -88,10 +88,10 @@ vueRouters.beforeEach((to, from, next) => {
           case 'admin_poolManage':
             nav.openNames = '1'
             nav.activeName = '11'
-            bread.level_2 = '资源池管理'
+            bread.level_2 = '部署区域管理'
             break
           case 'admin_poolDetails':
-            bread.level_2 = '资源池详情'
+            bread.level_2 = '部署区域详情'
             break
           case 'admin_mirrorManagement':
             nav.openNames = '2'
@@ -138,7 +138,7 @@ vueRouters.beforeEach((to, from, next) => {
             bread.level_2 = '资源查询'
             break
           case 'approval_resourceDetails':
-            bread.level_2 = '资源池详情'
+            bread.level_2 = '部署区域详情'
             break
           case 'approval_changePassword':
             nav.openNames = '2'
@@ -203,10 +203,10 @@ vueRouters.beforeEach((to, from, next) => {
             case 'admin_poolManage':
               nav.openNames = '1'
               nav.activeName = '11'
-              bread.level_2 = '资源池管理'
+              bread.level_2 = '部署区域管理'
               break
             case 'admin_poolDetails':
-              bread.level_2 = '资源池详情'
+              bread.level_2 = '部署区域详情'
               break
             case 'admin_mirrorManagement':
               nav.openNames = '2'
@@ -250,7 +250,7 @@ vueRouters.beforeEach((to, from, next) => {
               bread.level_2 = '资源查询'
               break
             case 'approval_resourceDetails':
-              bread.level_2 = '资源池详情'
+              bread.level_2 = '部署区域详情'
               break
             case 'approval_changePassword':
               nav.openNames = '2'

@@ -33,7 +33,7 @@
       <div class="inquire">
         <!--查询结果-->
         <div class="inquire-table">
-          <Table border size="small" :columns="columns" :data="filterDate"></Table>
+          <Table size="small" :columns="columns" :data="filterDate"></Table>
           <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
               <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage"
@@ -130,7 +130,8 @@
           {
             title: '序号',
             type: 'index',
-            align: 'center'
+            align: 'center',
+            width: '100'
           },
           {
             title: '名称',
@@ -201,7 +202,6 @@
 
         this.$http.get(url).then(res => {
           if (res.body.code === 200) {
-            console.log('物理机列表', res)
             this.data1 = res.body.result.res
             this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
             // 开始绘制饼图
@@ -435,7 +435,6 @@
 
         var sum = 0
         data.forEach(item => {
-          console.log(item[attr])
           if ((typeof item[attr]) == 'number') {
             sum += item[attr]
           } else {
