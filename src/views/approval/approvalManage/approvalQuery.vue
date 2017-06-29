@@ -23,7 +23,8 @@
           <Col span="5">
             <Form-item label="部署实例:" prop="instance_id">
               <Select v-model="formValidate.instance_id" clearable style="">
-                <Option v-for="item in instance" :value="item.id" :key="item">{{ item.value }}</Option>
+                <!--<Option v-for="item in instance" :value="item.id" :key="item">{{ item.value }}</Option>-->
+                <Option v-for="item in instance" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
               </Select>
             </Form-item>
           </Col>
@@ -72,36 +73,31 @@
         },
         approvalStatusVal: [
           {
-            value: '行政待审批',
+            value: '直属领导待审批',
             key: 'submit'
           },
           {
-            value: '行政审批未通过',
+            value: '直属领导审批未通过',
             key: 'l_fail'
           },
           {
-            value: '技术待审批',
+            value: '经信委技术待审批',
             key: 'l_success'
           },
           {
-            value: '技术审批未通过',
+            value: '经信委技术审批未通过',
             key: 'a_fail'
           },
           {
             value: '审批完成',
             key: 'a_success'
-          }
-        ],
-        instance: [
-          {
-            value: '实例1',
-            id: '001'
           },
           {
-            value: '实例2',
-            id: '002'
+            value: '创建资源完成',
+            key: 'created_success'
           }
         ],
+        instance: [],
         columns: [
           {
             title: '序号',
@@ -172,12 +168,27 @@
       }
     },
     created () {
+      this.getInstance();//获取实例
       //获取资源
-      this.getApprovalResource();
+      const department = this.$store.state.userData.userInfo.department;
+      const query = {department:department};
+      this.getApprovalResource(query);
     },
     computed: {},
     methods: {
+      getInstance () {//获取实例
+        const url = 'api/deploy_instance/deploy_instances'
+        let params = {
+          user_id: this.$store.state.userData.userInfo.id
+        }
+        this.$http.get(url).then((res) => {
+          this.instance = res.body.result.res
+        },(err) => {
+          console.log(err)
+        })
+      },
       goQuery (name) {
+          this.current_page = 1
           const start_time = this.formValidate.start_time[0];
           const end_time = this.formValidate.start_time[1];
 
@@ -191,7 +202,8 @@
           this.getApprovalResource(requestBody);
       },
       getApprovalResource (query) {
-        this.queryResult = []
+        this.queryResult = [];
+        this.getResult = [];
         const url = 'api/mpc_resource/mpc_resources';
         this.$http.get(url,{params: query}).then((res) => {
             console.log('sssss', res);
@@ -199,15 +211,17 @@
                 this.data_length = res.body.result.res.length;
                 res.body.result.res.forEach((item,index) => {
                   switch (item.status) {
-                    case 'submit': item.status = '行政待审批'
+                    case 'submit': item.status = '直属领导待审批'
                       break
-                    case 'l_fail': item.status = '行政审批未通过'
+                    case 'l_fail': item.status = '直属领导审批未通过'
                       break
-                    case 'l_success': item.status = '技术待审批'
+                    case 'l_success': item.status = '经信委技术待审批'
                       break
-                    case 'a_fail': item.status = '技术审批未通过'
+                    case 'a_fail': item.status = '经信委技术审批未通过'
                       break
-                    case 'a_success': item.status = '技术审批完成'
+                    case 'a_success': item.status = '经信委技术审批完成'
+                      break
+                    case 'created_success': item.status = '创建资源完成'
                       break
                     default:
                   }

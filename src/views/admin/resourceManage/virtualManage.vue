@@ -12,7 +12,7 @@
         </div>
 
         <div class="item">
-          <span class="title">资源池:</span>
+          <span class="title">部署区域:</span>
           <Select v-model="query_info.az" style="width: 250px">
             <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
           </Select>
@@ -104,11 +104,11 @@
         az: [
           {
             az_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
-            az_name: "资源池1",
+            az_name: "部署区域1",
           },
           {
             az_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
-            az_name: "资源池2",
+            az_name: "部署区域2",
           }
         ],
         query_info: {
@@ -138,7 +138,7 @@
             key: 'ip'
           },
           {
-            title: '镜像名称',
+            title: '操作系统名称',
             key: 'mirrorImage'
           },
           {
@@ -146,7 +146,7 @@
             key: 'physicalMachine'
           },
           {
-            title: '所属资源池',
+            title: '所属部署区域',
             key: 'resourcePool'
           },
           {

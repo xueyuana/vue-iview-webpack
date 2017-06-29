@@ -110,7 +110,8 @@
           {
             title: '序号',
             type: 'index',
-            align: 'center'
+            align: 'center',
+            width: '100'
           },
           {
             title: '部署实例名称',
@@ -199,7 +200,6 @@
         this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
         this.formItem.image_format && (query.image_format = this.formItem.image_format)
         this.formItem.image_name && (query.image_name = this.formItem.image_name)
-        console.log(query)
 
         this.$http.get('api/image/images', {
           params: query
