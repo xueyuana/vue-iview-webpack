@@ -7,8 +7,8 @@
     <div class="steps">
       <Steps :current="current" :status="stepsStatus">
         <Step title="提交申请" ></Step>
-        <Step title="行政审批" ></Step>
-        <Step title="技术审批" ></Step>
+        <Step title="直属领导审批" ></Step>
+        <Step title="经信委技术审批" ></Step>
         <Step title="审批完成" ></Step>
       </Steps>
     </div>

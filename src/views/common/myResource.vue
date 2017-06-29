@@ -55,6 +55,7 @@
           <td>{{item.host_name}}</td>
           <td>{{item.az_name}}</td>
           <td>{{item.flavor_id}}</td>
+          <td>{{item.storage}}</td>
           <td> {{item.status}} </td>
           <td>
             <Dropdown>
@@ -151,6 +152,10 @@
           {
             title: '规格',
             key: 'flavor_id'
+          },
+          {
+            title: '存储空间',
+            key: 'storage'
           },
           {
             title: '状态',
