@@ -37,28 +37,28 @@
                         <Form-item label="名称：" prop="instance_name">
                             <Input v-model="createUser.instance_name" placeholder="最多10个字符" style="width: 200px"></Input>
                         </Form-item>
-                        <Form-item label="用户群体规模：" prop="az_id">
-                            <Select v-model="az_id" style="width:200px">
+                        <Form-item label="用户群体规模：" prop="user_size">
+                            <Select v-model="createUser.user_size" style="width:200px">
                                 <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
                             </Select>
                         </Form-item>
-                        <Form-item label="用户活跃度：" prop="az_id2">
-                            <Select v-model="az_id2" style="width:200px">
+                        <Form-item label="用户活跃度：" prop="liveness">
+                            <Select v-model="createUser.liveness" style="width:200px">
                                 <Option v-for="item in az2" :value="item.az_id2" :key="item">{{ item.az_name2 }}</Option>
                             </Select>
                         </Form-item>
-                        <Form-item label="业务类型：" prop="az_id3">
-                            <Select v-model="az_id3" style="width:200px">
+                        <Form-item label="业务类型：" prop="business_type">
+                            <Select v-model="createUser.business_type" style="width:200px">
                                 <Option v-for="item in az3" :value="item.az_id3" :key="item">{{ item.az_name3 }}</Option>
                             </Select>
                         </Form-item>
-                        <Form-item label="数据大小：" prop="az_id4">
-                            <Select v-model="az_id4" style="width:200px">
+                        <Form-item label="数据大小：" prop="data_unit">
+                            <Select v-model="createUser.data_unit" style="width:200px">
                                 <Option v-for="item in az4" :value="item.az_id4" :key="item">{{ item.az_name4 }}</Option>
                             </Select>
                         </Form-item>
-                        <Form-item label="高可用：" prop="az_id5">
-                            <Select v-model="az_id5" style="width:200px">
+                        <Form-item label="高可用：" prop="ha">
+                            <Select v-model="createUser.ha" style="width:200px">
                                 <Option v-for="item in az5" :value="item.az_id5" :key="item">{{ item.az_name5 }}</Option>
                             </Select>
                         </Form-item>
@@ -69,32 +69,32 @@
                         title="编辑部署实例"
                         @on-ok="compileOk('formCompile')"
                         @on-cancel="cancel">
-                    <Form ref="formCompile" :model="compileUser" label-position="right" :label-width="130" >
+                    <Form ref="formCompile" :model="compileUser" :rules="ruleCompile" label-position="right" :label-width="130" >
                         <Form-item label="名称：" prop="instance_name">
                             <Input v-model="compileUser.instance_name" placeholder="最多10个字符" style="width: 200px"></Input>
                         </Form-item>
-                        <Form-item label="用户群体规模：" prop="az_id">
-                            <Select v-model="az_id" style="width:200px">
+                        <Form-item label="用户群体规模：" prop="user_size">
+                            <Select v-model="compileUser.user_size" style="width:200px">
                                 <Option v-for="item in az" :value="item.az_id" :key="item">{{ item.az_name }}</Option>
                             </Select>
                         </Form-item>
-                        <Form-item label="用户活跃度：" prop="az_id2">
-                            <Select v-model="az_id2" style="width:200px">
+                        <Form-item label="用户活跃度：" prop="liveness">
+                            <Select v-model="compileUser.liveness" style="width:200px">
                                 <Option v-for="item in az2" :value="item.az_id2" :key="item">{{ item.az_name2 }}</Option>
                             </Select>
                         </Form-item>
-                        <Form-item label="业务类型：" prop="az_id3">
-                            <Select v-model="az_id3" style="width:200px">
+                        <Form-item label="业务类型：" prop="business_type">
+                            <Select v-model="compileUser.business_type" style="width:200px">
                                 <Option v-for="item in az3" :value="item.az_id3" :key="item">{{ item.az_name3 }}</Option>
                             </Select>
                         </Form-item>
-                        <Form-item label="数据大小：" prop="az_id4">
-                            <Select v-model="az_id4" style="width:200px">
+                        <Form-item label="数据大小：" prop="data_unit">
+                            <Select v-model="compileUser.data_unit" style="width:200px">
                                 <Option v-for="item in az4" :value="item.az_id4" :key="item">{{ item.az_name4 }}</Option>
                             </Select>
                         </Form-item>
-                        <Form-item label="高可用：" prop="az_id5">
-                            <Select v-model="az_id5" style="width:200px">
+                        <Form-item label="高可用：" prop="ha">
+                            <Select v-model="compileUser.ha" style="width:200px">
                                 <Option v-for="item in az5" :value="item.az_id5" :key="item">{{ item.az_name5 }}</Option>
                             </Select>
                         </Form-item>
@@ -124,86 +124,81 @@
               index: '',
               user_id: '',
               getResult: [],
-              az_id: '',
-              az_id2: '',
-              az_id3: '',
-              az_id4: '',
-              az_id5: '',
               az:[
                     {
-                        az_id : "01",
+                        az_id : "内网少量用户",
                         az_name: "内网少量用户",
                     },
                     {
-                        az_id : "02",
+                        az_id : "内网大量用户",
                         az_name: "内网大量用户",
                     },
                     {
-                        az_id : "03",
+                        az_id : "外网少量用户",
                         az_name: "外网少量用户",
                     },
                     {
-                        az_id : "04",
+                        az_id : "外网大量用户",
                         az_name: "外网大量用户",
                     }
               ],
               az2:[
                     {
-                        az_id2 : "01",
+                        az_id2 : "偶尔使用",
                         az_name2: "偶尔使用",
                     },
                     {
-                        az_id2 : "02",
+                        az_id2 : "经常使用",
                         az_name2: "经常使用",
                     },
                     {
-                        az_id2 : "03",
+                        az_id2 : "频繁使用",
                         az_name2: "频繁使用",
                     }
               ],
               az3:[
                     {
-                        az_id3 : "01",
+                        az_id3 : "视频",
                         az_name3: "视频",
                     },
                     {
-                        az_id3 : "02",
+                        az_id3 : "网站",
                         az_name3: "网站",
                     },
                     {
-                        az_id3 : "03",
+                        az_id3 : "大数据",
                         az_name3: "大数据",
                     },
                     {
-                        az_id3 : "04",
+                        az_id3 : "存储类应用",
                         az_name3: "存储类应用",
                     },
                     {
-                        az_id3 : "05",
+                        az_id3 : "移动应用",
                         az_name: "移动应用",
                     }
               ],
               az4:[
                     {
-                        az_id4 : "01",
+                        az_id4 : "MB级",
                         az_name4: "MB级",
                     },
                     {
-                        az_id4 : "02",
+                        az_id4 : "GB级",
                         az_name4: "GB级",
                     },
                     {
-                        az_id4 : "03",
+                        az_id4 : "TB级",
                         az_name4: "TB级",
                     }
               ],
               az5:[
                     {
-                        az_id5 : "01",
+                        az_id5 : "需要",
                         az_name5: "需要",
                     },
                     {
-                        az_id5 : "02",
+                        az_id5 : "不需要",
                         az_name5: "不需要",
                     }
               ],
@@ -217,18 +212,63 @@
               },
               createUser: {
                 instance_name: '',
-                instance_num: '',
-                created_time: ''
+                number: '',
+                time: '',
+                user_size: '',
+                liveness: '',
+                business_type: '',
+                data_unit: '',
+                ha: ''
               },
               ruleInline: {
-                  instance_name: [
-                      { required: true, message: '请填写部署实例名称', trigger: 'blur' }
-                  ]
+                    instance_name: [
+                        { required: true, message: '请填写部署实例名称', trigger: 'blur' }
+                    ],
+                    user_size: [
+                        {required: true,message: '请选择用户群体规模',trigger: 'blur'}
+                    ],
+                    liveness: [
+                        {required: true,message: '请选择用户活跃度',trigger: 'blur'}
+                    ],
+                    business_type: [
+                        {required: true,message: '请选择业务类型',trigger: 'blur'}
+                    ],
+                    data_unit: [
+                        {required: true,message: '请选择数据大小',trigger: 'blur'}
+                    ],
+                    ha: [
+                        {required: true,message: '请选择高可用',trigger: 'blur'}
+                    ]
+              },
+              ruleCompile: {
+                    instance_name: [
+                        { required: true, message: '请填写部署实例名称', trigger: 'blur' }
+                    ],
+                    user_size: [
+                        {required: true,message: '请选择用户群体规模',trigger: 'blur'}
+                    ],
+                    liveness: [
+                        {required: true,message: '请选择用户活跃度',trigger: 'blur'}
+                    ],
+                    business_type: [
+                        {required: true,message: '请选择业务类型',trigger: 'blur'}
+                    ],
+                    data_unit: [
+                        {required: true,message: '请选择数据大小',trigger: 'blur'}
+                    ],
+                    ha: [
+                        {required: true,message: '请选择高可用',trigger: 'blur'}
+                    ]
               },
               compileUser: {
-                  instance_name: '',
-                  instance_num: '',
-                  created_time: ''
+                instance_name: '',
+                number: '',
+                time: '',
+                user_size: '',
+                liveness: '',
+                business_type: '',
+                data_unit: '',
+                ha: ''
               },
               columns7: [
                   {
@@ -244,7 +284,7 @@
                   },
                   {
                       title: '资源数量',
-                      key: 'instance_num',
+                      key: 'number',
                       align: 'center',
                       render: (h, params) => {
                         return h('div', [
@@ -258,17 +298,17 @@
                                 },
                                 on: {
                                     click: () => {
-                                        //this.$router.push({instance_name: 'user_resourceQuery', query: {instance_num: params.row.instance_num}});
+                                        //this.$router.push({instance_name: 'user_resourceQuery', query: {number: params.row.number}});
                                         this.$router.push({name: 'user_resourceQuery'});
                                     }
                                 }
-                            }, params.row.instance_num)
+                            }, params.row.number)
                         ]);
                       }
                   },
                   {
                       title: '创建日期',
-                      key: 'created_time',
+                      key: 'time',
                       align: 'center'
                   },
                   {
@@ -342,8 +382,8 @@
               data6: [
                   //{
                   //    name: '实例1',
-                  //    instance_num: '10',
-                  //    created_time: '2017-06-23 15:00:00'
+                  //    number: '10',
+                  //    time: '2017-06-23 15:00:00'
                   //}
               ]
           }
@@ -367,7 +407,6 @@
               instance_name && (params.instance_name = instance_name)
               start_time && (params.start_time = this.timeFormat(start_time))
               end_time && (params.end_time = this.timeFormat(end_time))
-
               console.log('查询',params)
 
               this.getUserResource(params)
@@ -387,12 +426,17 @@
 
                 res.body.result.res.forEach((item,index) => {
                   this.getResult.push({
-                    index: item.user_id,
-                    instance_name: item.instance_name,
-                    instance_num: item.instance_num,
-                    created_time: item.created_date,
-                    user_name: item.user_name,
-                    id:item.instance_id
+                        index: item.user_id,
+                        instance_name: item.instance_name,
+                        number: item.resource_num,
+                        time: item.created_date,
+                        u_name: item.user_name,
+                        id:item.instance_id,
+                        user_size:item.user_size,
+                        liveness:item.liveness,
+                        business_type:item.business_type,
+                        data_unit:item.data_unit,
+                        ha:item.ha
                   })
                 })
                 console.log(this.getResult)
@@ -426,7 +470,13 @@
                         requestBody.user_name = this.$store.state.userData.userInfo.username;
                         requestBody.instance_name = this.createUser.instance_name;
                         requestBody.instance_num = '0';
+                        requestBody.user_size = this.createUser.user_size;
+                        requestBody.liveness = this.createUser.liveness;
+                        requestBody.business_type = this.createUser.business_type;
+                        requestBody.data_unit = this.createUser.data_unit;
+                        requestBody.ha = this.createUser.ha;
 
+                        console.log('添加',requestBody)
                         this.$http.post(url,requestBody).then((res) => {
                           //重新获取用户
                           const  query_user = {user_id:this.$store.state.userData.userInfo.id}
@@ -473,7 +523,12 @@
                         requestBody = {
                             instance_id: temporary.id,
                             instance_name: temporary.instance_name,
-                            instance_num: temporary.instance_num
+                            instance_num: temporary.number,
+                            user_size: temporary.user_size,
+                            liveness: temporary.liveness,
+                            business_type: temporary.business_type,
+                            data_unit: temporary.data_unit,
+                            ha: temporary.ha
                         }
 
                         console.log('请求',requestBody)
@@ -522,7 +577,7 @@
                 data = originData.slice(num,maxNum)
 
                 data.forEach((item,index) => {
-                    item.created_time = item.created_time.slice(0,19)
+                    item.time = item.time.slice(0,19)
                 })
                 return data;
           },
@@ -554,16 +609,6 @@
 <style scoped>
 .tjbssl Button{
     margin-bottom: 20px;
-    /*display: block;*/
-    /*width: 150px;*/
-    /*height: 30px;*/
-    /*line-height: 30px;*/
-    /*background: #2d8cf0;*/
-    /*text-align: center;*/
-    /*color: #fff;*/
-    /*font-size: 14px;*/
-    /*border-radius: 6px;*/
-    /*padding: 0;*/
 }
 .bssl-list{
      height: 35px;
