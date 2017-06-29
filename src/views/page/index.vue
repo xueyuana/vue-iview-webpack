@@ -8,7 +8,9 @@
       <div class="button" @click="toConsole">控制台</div>
     </header>
     <div class="content">
-      <router-view  @changactive="changeIndex"></router-view>
+      <keep-alive>
+        <router-view  @changactive="changeIndex"></router-view>
+      </keep-alive>
     </div>
     <footer class="item foot">
       <div class="copyright"><p>© 2017 MEHIEFKSHNK - All Right Reserved</p></div>
@@ -138,21 +140,6 @@
         currentIndex: 1,
         tabsData: ['最新公告', '云资源', '帮助与支持', '关于我们'],
       }
-    },
-
-    mounted() {
-
-    },
-
-    beforeRouteEnter (to, from, next) {
-      // 在渲染该组件的对应路由被 confirm 前调用
-      // 不！能！获取组件实例 `this`
-      // 因为当钩子执行前，组件实例还没被创建
-      console.log(from.path)
-      if (from.path !== '/') {
-        window.location.reload()
-      }
-      next()
     },
 
     computed: {

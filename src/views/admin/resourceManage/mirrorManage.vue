@@ -2,10 +2,10 @@
   <div class="inquire">
     <!--查询条件-->
     <div class="inquire-form">
-      <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="70">
+      <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="100">
         <Row :gutter="16">
           <Col span="12">
-            <Form-item label="镜像名称:" prop="image_name">
+            <Form-item label="操作系统名称:" prop="image_name">
               <Input v-model="formItem.image_name" placeholder="请输入" style="max-width: 250px"></Input>
             </Form-item>
           </Col>
@@ -23,7 +23,7 @@
 
     <!--查询结果-->
     <div class="inquire-table">
-      <div class="inquire-table-title">镜像列表：</div>
+      <div class="inquire-table-title">操作系统列表：</div>
       <Table stripe size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
@@ -36,7 +36,9 @@
 </template>
 
 <style lang="less">
-
+  .a{
+    text-overflow: ellipsis;
+  }
 </style>
 
 <script>
@@ -47,8 +49,6 @@
     data() {
       return {
         formItem: {
-          date: [],
-          image_format: '',
           image_name: ''
         },
         ruleValidate: {
@@ -56,17 +56,28 @@
           image_format: [],
           image_name: []
         },
-        userInfo: '',
         columns:  [
           {
             title: '序号',
-            type: 'index',
-            align: 'center'
+            key: 'index',
+            align: 'center',
+            width: '100'
           },
           {
-            title: '镜像名称',
+            title: '操作系统名称',
             key: 'image_name',
-            align: 'center'
+            align: 'center',
+            render: (h, params) => {
+              return h('p', {
+                style: {
+                  width: '80px',
+                  margin: '0 auto',
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis'
+                }
+              }, params.row.image_name)
+            }
           },
           {
             title: '尺寸 (M)',
@@ -77,7 +88,7 @@
             }
           },
           {
-            title: '镜像格式',
+            title: '操作系统格式',
             key: 'image_format',
             align: 'center'
           },
@@ -86,7 +97,7 @@
             key: 'created_time',
             align: 'center',
             render: (h, params) => {
-              return h('p', params.row.created_time.replace(/[T]/g, ' ').substring(0, 10))
+              return h('p', params.row.created_time.replace(/[T]/g, ' ').substring(0, 16))
             }
           }
         ],
@@ -106,19 +117,19 @@
       onInquire() {
 
         let query = {}
-        this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
-        this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
-        this.formItem.image_format && (query.image_format = this.formItem.image_format)
         this.formItem.image_name && (query.image_name = this.formItem.image_name)
-        console.log(query)
 
         this.$http.get('api/image/images', {
           params: query
         }).then(res => {
-          console.log('镜像列表', res)
+          console.log('操作系统列表', res)
           if (res.body.code === 200) {
             this.data = res.body.result.res
+            this.data.forEach((item, index) => {
+              item.index = index + 1
+            })
             this.filterDate = this.mockTableData(this.data, this.pageSize, 1)
+            this.num = 1
           } else {
             this.$Message.error(res.body.result.msg)
           }
@@ -127,28 +138,16 @@
           this.$Message.error(err.body.result.msg)
         })
       },
+
       handleReset(name) {
         this.$refs[name].resetFields()
-      },
-        // 时间选择器
-      formatCreateData(value) {
-        this.formItem.start_time = value
-      },
-      onUnitChange(val) {
-        this.formItem.image_name = ''
-        this.getDeployList()
         this.onInquire()
       },
-      onDeployChange(val) {
-        if (!val) return
-        this.onInquire()
-      },
-      formatEndData(value) {
-        this.formItem.end_time = value
-      },
+
         // 分页
       changePage(val) {
         this.filterDate = this.mockTableData(this.data, this.pageSize, val)
+        this.num = val
       },
       changePageSize(val) {
         this.pageSize = val

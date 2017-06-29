@@ -29,6 +29,7 @@
     <div class="sub-title-bg">
       <span>待审批</span>
     </div>
+
     <Row class="c_application">
       <Col span="12">
         <div @click="toApproval">

@@ -4,21 +4,23 @@
       <Button class="apply-button-item"
               type="primary"
               v-for="(item, index) in funcBtns"
+              :disabled="index !== 0 && disableStatus"
               @click="onLink(index)">{{item}}
+
 
       </Button>
     </div>
     <div class="approval-status">
-      <Steps :current="stepNum">
+      <Steps :current="stepNum" :status="stepsStatus">
         <Step title="提交申请"></Step>
-        <Step title="行政审批"></Step>
-        <Step title="技术审批"></Step>
+        <Step title="直属领导审批"></Step>
+        <Step title="经信委技术审批"></Step>
         <Step title="审批完成"></Step>
       </Steps>
     </div>
 
     <div class="status-list" v-if="$store.state.userData.userInfo.role == 'admin'">
-      <div class="sub-title">DMZ资源池资源使用情况</div>
+      <div class="sub-title">DMZ部署区域资源使用情况</div>
       <Row>
         <Col span="8">
         <Row>
@@ -26,10 +28,10 @@
           <div class="rd_pro1" style="padding-right:12px;">vCPU个</div>
           </Col>
           <Col span="10">
-          <Progress :percent="25" :stroke-width="20" class="rd_progress" hide-info></Progress>
+          <Progress :percent="poolStatus.cpu_use/poolStatus.cpu_total*100" :stroke-width="18" class="rd_progress" hide-info></Progress>
           </Col>
           <Col span="5" class="rd_left">
-          <div class="rd_pro2">2/30</div>
+          <div class="rd_pro2">{{poolStatus.cpu_use + '&nbsp;/&nbsp;' + poolStatus.cpu_total}}</div>
           </Col>
         </Row>
         </Col>
@@ -39,10 +41,10 @@
           <div class="rd_pro1">内存（GB）</div>
           </Col>
           <Col span="10">
-          <Progress :percent="25" :stroke-width="20" class="rd_progress" hide-info></Progress>
+          <Progress :percent="poolStatus.memory_use/poolStatus.memory_total*100" :stroke-width="18" class="rd_progress" hide-info></Progress>
           </Col>
           <Col span="5" class="rd_left">
-          <div class="rd_pro2">2/30</div>
+          <div class="rd_pro2">{{poolStatus.memory_use + '&nbsp;/&nbsp;' + poolStatus.memory_total}}</div>
           </Col>
         </Row>
         </Col>
@@ -52,10 +54,10 @@
           <div class="rd_pro1">硬盘（GB）</div>
           </Col>
           <Col span="10" class="rd_progress">
-          <Progress :percent="25" :stroke-width="20" class="rd_progress" hide-info></Progress>
+          <Progress :percent="poolStatus.storage_use/poolStatus.storage_total*100" :stroke-width="18" class="rd_progress" hide-info></Progress>
           </Col>
           <Col span="5" class="rd_left">
-          <div class="rd_pro2">2/30</div>
+          <div class="rd_pro2">{{poolStatus.storage_use + '&nbsp;/&nbsp;' + poolStatus.storage_total}}</div>
           </Col>
         </Row>
         </Col>
@@ -70,10 +72,10 @@
           <div class="rd_pro1" style="padding-right:12px;">vCPU个</div>
           </Col>
           <Col span="10">
-          <Progress :percent="100" :stroke-width="20" class="rd_progress" hide-info></Progress>
+          <Progress :percent="100" :stroke-width="18" class="rd_progress" hide-info></Progress>
           </Col>
           <Col span="5" class="rd_left">
-          <div class="rd_pro2">4</div>
+          <div class="rd_pro2">{{formValidate.vCPU_total}}</div>
           </Col>
         </Row>
         </Col>
@@ -83,10 +85,10 @@
           <div class="rd_pro1">内存（GB）</div>
           </Col>
           <Col span="10">
-          <Progress :percent="100" :stroke-width="20" class="rd_progress" hide-info></Progress>
+          <Progress :percent="100" :stroke-width="18" class="rd_progress" hide-info></Progress>
           </Col>
           <Col span="5" class="rd_left">
-          <div class="rd_pro2">4</div>
+          <div class="rd_pro2">{{formValidate.memory_total}}</div>
           </Col>
         </Row>
         </Col>
@@ -96,108 +98,112 @@
           <div class="rd_pro1">硬盘（GB）</div>
           </Col>
           <Col span="10" class="rd_progress">
-          <Progress :percent="100" :stroke-width="20" class="rd_progress" hide-info></Progress>
+          <Progress :percent="100" :stroke-width="18" class="rd_progress" hide-info></Progress>
           </Col>
           <Col span="5" class="rd_left">
-          <div class="rd_pro2">4</div>
+          <div class="rd_pro2">{{formValidate.storage_total}}</div>
           </Col>
         </Row>
         </Col>
       </Row>
     </div>
     <div class="form-info">
-      <Form :model="formValidate1" :label-width="120">
+      <Form :model="formValidate" :label-width="120">
         <Row type="flex" justify="start">
           <Col span="24">
-            <div class="sub-title">资源信息</div>
+          <div class="sub-title">资源信息</div>
           </Col>
 
           <Col span="24">
-            <Form-item label="申请单号:" class="form-item">
-              {{formValidate1.resource_id}}
-            </Form-item>
+          <Form-item label="申请单号:" class="form-item">
+            {{formValidate.resource_id}}
+
+          </Form-item>
+          </Col>
+          <Col span="8">
+          <Form-item label="部署实例:" class="form-item">
+            {{formValidate.deploy_name}}
+                <span class="form-item-span" @click="instanceDetails"
+                      v-if="$store.state.userData.userInfo.role == 'admin'">推荐配置</span>
+            <Modal v-model="instanceCreate" title="提示" :ok-text="okText" :mask-closable="false" :closable="false">
+              <div class="modal-wrap">
+                <div class="instance-title">您的业务类型:</div>
+                <table>
+                  <tbody>
+                  <tr>
+                    <td>用户群体规模</td>
+                    <td>内网少量用户</td>
+                  </tr>
+                  <tr>
+                    <td>用户活跃度</td>
+                    <td>偶尔使用</td>
+                  </tr>
+                  <tr>
+                    <td>业务类型</td>
+                    <td>网站</td>
+                  </tr>
+                  <tr>
+                    <td>数据大小</td>
+                    <td>MB级</td>
+                  </tr>
+                  <tr>
+                    <td>高可用</td>
+                    <td>不需要</td>
+                  </tr>
+                  </tbody>
+                </table>
+                <div class="instance-title">推荐配置:</div>
+                <Table :columns="tj_columns" :data="configuration"></Table>
+              </div>
+              <div slot="footer">
+                <Button type="primary" size="large" v-text="okText" @click="closeModal"></Button>
+              </div>
+            </Modal>
+          </Form-item>
+          </Col>
+          <Col span="8">
+          <Form-item label="部署区域:" class="form-item">{{formValidate.az_name}}</Form-item>
+          </Col>
+          <Col span="8">
+          <Form-item label="部门:" class="form-item">
+            {{formValidate.department}}
+
+          </Form-item>
           </Col>
         </Row>
       </Form>
 
-      <Form v-for="(item, idx) in formValidate" :label-width="120" :class="{border: idx == 0?false:true}">
+      <Form v-for="(item, idx) in formValidate.resources" :label-width="120" :class="{border: idx == 0?false:true}">
         <Row>
           <Col span="8">
-
-            <Form-item label="虚拟机名称:" class="form-item">
-              {{item.virtual_name}}
-            </Form-item>
-            <Form-item label="部署实例:" class="form-item">
-              {{item.deploy_name}}
-              <span class="form-item-span" @click="instanceDetails" v-if="$store.state.userData.userInfo.role == 'admin'">推荐配置</span>
-              <Modal v-model="instanceCreate" title="提示" :ok-text="okText" :mask-closable="false" :closable="false">
-                <div class="modal-wrap">
-                  <div class="instance-title">您的业务类型:</div>
-                  <table>
-                    <tbody>
-                    <tr>
-                      <td>用户群体规模</td>
-                      <td>内网少量用户</td>
-                    </tr>
-                    <tr>
-                      <td>用户活跃度</td>
-                      <td>偶尔使用</td>
-                    </tr>
-                    <tr>
-                      <td>业务类型</td>
-                      <td>网站</td>
-                    </tr>
-                    <tr>
-                      <td>数据大小</td>
-                      <td>MB级</td>
-                    </tr>
-                    <tr>
-                      <td>高可用</td>
-                      <td>不需要</td>
-                    </tr>
-                    </tbody>
-                  </table>
-                  <div class="instance-title">推荐配置:</div>
-                  <Table :columns="tj_columns" :data="configuration"></Table>
-                </div>
-                <div slot="footer">
-                  <Button type="primary" size="large" v-text="okText" @click="closeModal"></Button>
-                </div>
-              </Modal>
-            </Form-item>
-            <Form-item label="存储空间:" class="form-item">
-              {{item.storeSpace}}G
-            </Form-item>
+          <Form-item label="虚拟机名称:" class="form-item">{{item.vm_name}}</Form-item>
+          <Form-item label="存储空间:" class="form-item">{{item.storage}} G</Form-item>
           </Col>
           <Col span="8">
-            <Form-item label="部门:" class="form-item">
-              {{item.department}}
-            </Form-item>
-            <Form-item label="镜像:" class="form-item">
-              <div class="jingx">{{item.mirror}}</div>
-            </Form-item>
-            <Form-item label="数量:" class="form-item">
-              {{item.vm_num}}
-            </Form-item>
+          <Form-item label="操作系统:" class="form-item">
+            <div class="jingx">{{item.image_name}}</div>
+          </Form-item>
+          <Form-item label="数量:" class="form-item">{{item.vm_num}}</Form-item>
           </Col>
           <Col span="8">
-            <Form-item label="资源池:" class="form-item">
-              {{item.az_name}}
-            </Form-item>
-            <Form-item label="规格:" class="form-item">
-              {{item.spec}}
-            </Form-item>
+          <Form-item label="规格:" class="form-item">{{item.flavor_name}}</Form-item>
           </Col>
         </Row>
       </Form>
+
       <Row>
         <Col span="24">
         <div class="sub-title">业务信息</div>
-        <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" disabled placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
+        <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" disabled
+               placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
         </Col>
         <Col span="24">
-        <div class="sub-title">行政审批意见</div>
+        <div class="sub-title">直属领导审批意见</div>
         <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" :disabled="role !== 'leader'"></Input>
+        </Col>
+        <Col span="24">
+        <div class="sub-title">经信委技术审批意见</div>
+        <Input v-model="jxwInfo" type="textarea" :maxlength="100" :rows="4" v-if="role === 'admin'"></Input>
         </Col>
       </Row>
     </div>
@@ -243,25 +249,25 @@
         display: inline-block;
         vertical-align: top;
         padding-left: 10px;
-        width: 80px;
         min-width: 80px;
         height: 23px;
         line-height: 23px;
       }
     }
-    .form-info{
+    .form-info {
       .border {
         border-top: 1px solid #e4e4e4
       }
-      .form-item{
+      .form-item {
         margin-bottom: 8px;
-        .jingx{
-          word-wrap:break-word;
-          line-height: 20px;
-         }
-        .form-item-span{
-          padding-left:10px;
-          color:#3F94FC;
+        .jingx {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .form-item-span {
+          padding-left: 10px;
+          color: #3F94FC;
           cursor: pointer;
         }
         .case-title {
@@ -385,6 +391,7 @@
     font-size: 16px;
     line-height: 38px;
   }
+
   .modal-wrap {
     width: 90%;
     margin: 0 auto;
@@ -395,20 +402,25 @@
     border-collapse: collapse;
     color: #657180;
   }
-  table td,th{
+
+  table td, th {
     text-align: center;
 
   }
+
   table tr {
     height: 40px;
     border: 1px solid #dddee1;
   }
-  table thead tr{
+
+  table thead tr {
     background-color: #ebf4fe;
   }
+
   table tbody tr:hover {
     background-color: #F3FAFF;
   }
+
   table tbody tr td:first-child {
     background-color: #ebf4fe;
     width: 120px;
@@ -425,15 +437,20 @@
         tj_columns: [
           {
             title: '服务器',
-            key: 'server'
+            key: 'server',
+            align: 'center',
+            width: '100'
           },
           {
             title: '配置',
-            key: 'configuration'
+            key: 'configuration',
+            align: 'center'
           },
           {
             title: '数量(台)',
-            key: 'number'
+            key: 'number',
+            align: 'center',
+            width: '100'
           }
         ],
         configuration: [
@@ -449,24 +466,37 @@
           }
         ],
         stepNum: 0,
+        stepsStatus: 'process',
         userId: '',
         resourceId: '',
         isTjpz: false,//推荐配置
         flavor_name: '',//规格名称
         flavorList: [],
-        image_name: '',//镜像名称
+        image_name: '',//操作系统名称
         imageList: [],
         funcBtns: ['返回', '通过', '不通过'],
 
-        formValidate1: {
-          resource_id: '',
+        formValidate: {
           status: ''
         },
-        formValidate: [],
+
+        someHosts: [],
+
+        poolStatus: {
+          cpu_use: 0,
+          cpu_total: 0,
+          memory_use: 0,
+          memory_total: 0,
+          storage_use: 0,
+          storage_total: 0,
+        },
 
         ywInfo: '',
-        xzInfo: '',
-        role: ''
+        xzInfo: '同意！',
+        jxwInfo: '同意！',
+        role: '',
+
+        index: 0
       }
     },
 
@@ -475,97 +505,179 @@
       this.role = this.$store.state.userData.userInfo.role
       if (this.resourceId) {
         const query = {resource_id: this.resourceId};
-        this.getFlaver();
-        this.getImage();
-        this.getInfo(query);
+        // 规格列表
+        this.getFlaver()
+        // 镜像列表
+        this.getImage()
+        // 资源信息
+        this.getInfo(query)
       }
     },
-    computed: {},
+
+    computed: {
+      disableStatus() {
+        if (this.role === 'leader') {
+          switch (this.formValidate.status) {
+            case 'submit':
+              return false
+            default:
+              return true
+          }
+        } else if (this.role === 'admin') {
+          switch (this.formValidate.status) {
+            case 'l_success':
+              return false
+            default:
+              return true
+          }
+        }
+
+      }
+    },
+
+    watch: {
+      index(newVal)  {
+        if (newVal === 3) {
+
+          switch (this.formValidate.status) {
+            case 'submit':
+              this.stepNum = 1;
+              this.stepsStatus = 'process'
+              break
+            case 'l_success':
+              this.stepNum = 2;
+              this.stepsStatus = 'process'
+              break
+            case 'l_fail':
+              this.stepNum = 1;
+              this.stepsStatus = 'error'
+              break
+            case 'a_success':
+              this.stepNum = 3;
+              this.stepsStatus = 'process'
+              break
+            case 'a_fail':
+              this.stepNum = 2;
+              this.stepsStatus = 'error'
+              break
+          }
+
+          this.ywInfo = this.formValidate.business_info;
+          this.xzInfo = this.formValidate.suggestion;
+
+          this.formValidate.vCPU_total = 0
+          this.formValidate.memory_total = 0
+          this.formValidate.storage_total = 0
+
+          this.formValidate.resources.forEach((ritem, index) => {
+
+            this.flavorList.forEach((fitem, index) => {
+              if (ritem.flavor_id == fitem.flavor_id) {
+                ritem.flavor_name = fitem.flavor_name;
+                ritem.cpu = fitem.cpu;
+                ritem.memory = fitem.memory;
+                return;
+              }
+            });
+            this.imageList.forEach((iitem, index) => {
+              if (ritem.image_id == iitem.id) {
+                ritem.image_name = iitem.image_name;
+                return;
+              }
+            })
+            this.formValidate.vCPU_total += ritem.cpu
+            this.formValidate.memory_total += ritem.memory
+            this.formValidate.storage_total += ritem.storage
+          })
+          console.log('formValidate', this.formValidate)
+          // 请求资源池列表
+          this.getPoolList()
+        }
+      }
+    },
+
     methods: {
       getInfo (query) {
         const url = 'api/mpc_resource/mpc_resources';
-
-        this.$http.get(url,{params: query}).then((res) => {
-            if (res.body.code === 200) {
-              res.body.result.res.forEach((item,index) => {
-                switch (item.status) {
-                  case 'submit': this.stepNum = 0
-                    break
-                  case 'l_success': this.stepNum = 1
-                    break
-                  case 'a_success': this.stepNum = 2
-                    break
-                  default:
-                }
-                switch (item.status) {
-                  case 'submit': item.status = '待审批'
-                    break
-                  case 'l_fail': item.status = '审批未通过'
-                    break
-                  case 'l_success': item.status = '审批完成'
-                    break
-                  default:
-                }
-
-                item.resources.forEach((ritem,index) => {
-                    let resourceData;
-                    let flavor_name = '';
-                    let image_name = '';
-
-                  this.flavorList.forEach((fitem,index) => {
-                    if(ritem.flavor_id == fitem.flavor_id){
-                      flavor_name = fitem.flavor_name;
-                      return;
-                    }
-                  });
-                  this.imageList.forEach((iitem,index) => {
-                    if(ritem.image_id == iitem.id){
-                      image_name=iitem.image_name;
-                      return;
-                    }
-                  });
-                  resourceData = {
-                    deploy_name: item.deploy_name,
-                    virtual_name: ritem.vm_name,
-                    department: ritem.department || this.$store.state.userData.userInfo.department,
-                    storeSpace: ritem.storage,
-                    vm_num: ritem.vm_num,
-                    spec: flavor_name,
-                    mirror: image_name,
-                    az_name: item.az_name
-                  }
-                  this.formValidate.push(resourceData);
-                });
-                this.formValidate1.resource_id = item.resource_id;
-                this.formValidate1.status = item.status;
-                this.ywInfo= item.business_info;
-                this.xzInfo= item.suggestion;
-            })
+        this.$http.get(url, {params: query}).then((res) => {
+          if (res.body.code === 200) {
+            this.formValidate = res.body.result.res[0]
+            this.index++
           }
         }, (err) => {
           console.log(err)
         });
       },
+
       getFlaver () {//获取规格
         const url = 'api/flavor/flavors'
         this.$http.get(url).then((res) => {
           if (res.body.code === 200) {
             this.flavorList = res.body.result.res;
+            this.index++
           }
         }, (err) => {
           console.log(err)
         });
       },
-      getImage () {//获取镜像
+
+      getImage () { //  获取操作系统
         const url = 'api/image/images'
         this.$http.get(url).then((res) => {
           if (res.body.code === 200) {
             this.imageList = res.body.result.res;
+            this.index++
           }
         }, (err) => {
           console.log(err)
         })
       },
+
+      getPoolList() {
+        let url = 'api/pool/pools'
+        this.$http.get(url).then(res => {
+          if (res.body.code === 200) {
+            let someHosts = null
+            res.body.result.res.forEach(item => {
+              if (item.pool_name === this.formValidate.az_name) {
+                someHosts = item.hosts
+                return
+              }
+            })
+              // 请求资源池详情
+            this.getHosts(someHosts)
+          } else {
+            this.$Message.error(res.body.result.msg)
+          }
+        }, err => {
+          this.$Message.error(res.body.result.msg)
+        })
+      },
+
+      getHosts(hosts) {
+        let url = 'api/pool/getHosts'
+        let params = ''
+        hosts.forEach(item => {
+          params += ('&host=' + item)
+        })
+        url += ('?' +  params.slice(1))
+
+        this.$http.get(url).then(res => {
+          if (res.body.code === 200) {
+            this.poolStatus.cpu_use = this.countSum(res.body.result.res, 'vcpu_use')
+            this.poolStatus.cpu_total = this.countSum(res.body.result.res, 'vcpu_total')
+            this.poolStatus.memory_use = this.countSum(res.body.result.res, 'memory_mb_use')
+            this.poolStatus.memory_total = this.countSum(res.body.result.res, 'memory_mb_total')
+            this.poolStatus.storage_use = this.countSum(res.body.result.res, 'storage_gb_use')
+            this.poolStatus.storage_total = this.countSum(res.body.result.res, 'storage_gb_total')
+          } else {
+            this.$Message.error(res.body.result.msg)
+          }
+        }, err => {
+          console.log('error', err)
+        })
+      },
+
       onLink(index) {
         switch (index) {
           case 0:
@@ -586,19 +698,20 @@
             }
         }
       },
+
       onSubmit (status) {
         let query = {resource_id: this.resourceId, status: status}
 
         if (this.role === 'leader') {
           query.suggestion = this.xzInfo
+        } else if (this.role === 'admin') {
+          query.admin_suggestion = this.jxwInfo
         }
-        console.log('传参', query)
 
         const url = 'api/mpc_resource/mpc_resources';
 
-        this.$http.put(url, query).then((res) => {
+        this.$http.put(url, query).then(res => {
           if (res.body.code === 200) {
-            console.log('返回', res)
             if (status == 'l_success' || status == 'a_success') {
               this.$Message.success('通过完成!');
             } else if (status == 'l_fail' || status == 'a_fail') {
@@ -610,7 +723,7 @@
               this.$router.push({name: 'admin_resourceApproval'});
             }
           }
-        }, (err) => {
+        }, err => {
           this.$Message.error(err.body.result.msg)
         });
       },
@@ -618,9 +731,23 @@
       instanceDetails () {//展示实例详情推荐配置
         this.instanceCreate = true
       },
+
       closeModal () {
         this.instanceCreate = false
-      }
+      },
+
+        // 计算数据中某条信息的总和
+      countSum(data, attr) {
+        var sum = 0
+        data.forEach(item => {
+          if ((typeof item[attr]) == 'number') {
+            sum += item[attr]
+          } else {
+            this.$Message.error('非数字')
+          }
+        })
+        return sum
+      },
     }
   }
 </script>

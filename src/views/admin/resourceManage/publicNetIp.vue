@@ -54,7 +54,7 @@
                     </Form>
                 </Modal>
             </div>
-            <Table border :columns="columns7" stripe :data="data6"></Table>
+            <Table :columns="columns7" stripe :data="data6"></Table>
             <div style="margin: 10px;overflow: hidden">
                 <div style="float: right;">
                     <Page :total="this.data6.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
@@ -105,7 +105,7 @@
                   {
                       title: '序号',
                       type: 'index',
-                      width: 80,
+                      width: 100,
                       align: 'center'
                   },
                   {

@@ -673,9 +673,7 @@
         }
       })
     },
-    methods: {
 
-    },
     components: {
       mTabs: Tabs
     }

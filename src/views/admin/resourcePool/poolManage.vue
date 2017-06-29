@@ -1,32 +1,8 @@
 <template>
   <div class="inquire">
-    <!--查询条件-->
-    <!--<div class="inquire-form">-->
-      <!--<Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="80">-->
-        <!--<Row :gutter="16">-->
-          <!--<Col span="9">-->
-            <!--<Form-item label="日期:" prop="date">-->
-              <!--<Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="max-width: 250px"></Date-picker>-->
-            <!--</Form-item>-->
-          <!--</Col>-->
-          <!--<Col span="7">-->
-            <!--<Form-item label="资源池名称:" prop="image_name">-->
-              <!--<Input v-model="formItem.image_name" placeholder="请输入"></Input>-->
-            <!--</Form-item>-->
-          <!--</Col>-->
-          <!--<Col span="5">-->
-            <!--<div class="inquire-form-query">-->
-              <!--<Button type="primary" class="inquire-form-query-add" @click.native="onInquire">查询</Button>-->
-              <!--<Button type="ghost" @click="handleReset('formItem')">重置</Button>-->
-            <!--</div>-->
-          <!--</Col>-->
-        <!--</Row>-->
-      <!--</Form>-->
-    <!--</div>-->
-
     <!--查询结果-->
     <div class="inquire-table">
-      <div class="inquire-table-title">资源池列表：</div>
+      <div class="inquire-table-title">部署区域列表：</div>
       <Table stripe size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
@@ -61,11 +37,12 @@
         columns: [
           {
             title: '序号',
-            type: 'index',
-            align: 'center'
+            key: 'index',
+            align: 'center',
+            width: '100'
           },
           {
-            title: '资源池名称',
+            title: '部署区域',
             key: 'pool_name',
             align: 'center',
             render: (h, params) => {
@@ -108,12 +85,13 @@
         // 查找
       onInquire() {
         let url = 'api/pool/pools'
-
         this.$http.get(url).then(res => {
           if (res.body.code === 200) {
             this.data1 = res.body.result.res
 
-            this.data1.forEach(item => {
+            this.data1.forEach((item, index) => {
+              item.index = index + 1
+                // 查找对应 物理机添加到数据
               this.onVirtulCount(item, this.data1.length)
             })
 
@@ -122,17 +100,16 @@
           }
         }, err => {
           this.$Message.error(res.body.result.msg)
-          console.log('error', err)
         })
       },
         // 查找虚拟机
       onVirtulCount(obj, len) {
         let url = 'api/pool/getHosts'
-        let params = ''
+        let query = ''
         obj.hosts.forEach(item => {
-          params += ('&host=' + item)
+          query += ('&host=' + item)
         })
-        url += ('?' +  params.slice(1))
+        url += ('?' +  query.slice(1))
 
         this.$http.get(url).then(res => {
           if (res.body.code === 200) {
@@ -161,7 +138,7 @@
         this.$refs[name].resetFields()
       },
 
-      // 分页
+        // 分页
       changePage(val) {
         this.filterDate = this.mockTableData(this.data1, this.pageSize, val)
       },
