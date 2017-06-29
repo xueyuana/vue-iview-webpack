@@ -5,8 +5,8 @@
       <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="70">
         <Row :gutter="32">
           <Col span="5">
-            <Form-item label="申请人:" prop="applicant">
-              <Input v-model="formItem.resource_name" placeholder="请输入"></Input>
+            <Form-item label="申请人:" prop="userName">
+              <Input v-model="formItem.userName" placeholder="请输入"></Input>
             </Form-item>
           </Col>
           <Col span="8">
@@ -17,11 +17,10 @@
           <Col span="5">
             <Form-item label="审批状态:" prop="status">
               <Select v-model="formItem.status" clearable>
-                <Option value="submit">行政待审批</Option>
-                <Option value="l_fail">行政审批不通过</Option>
-                <Option value="l_success">技术待审批</Option>
-                <Option value="a_success">审批完成</Option>
-                <Option value="a_fail">技术审批不通过</Option>
+                <Option value="l_success">待审批</Option>
+                <Option value="a_success">已审批</Option>
+                <Option value="a_fail">审批不通过</Option>
+                <Option value="created_success">已创建</Option>
               </Select>
             </Form-item>
           </Col>
@@ -70,14 +69,14 @@
     data() {
       return {
         formItem: {
-          applicant: '',
+          userName: '',
           date: '',
           status: '',
           instance_id: ''
         },
         instance: [],
         ruleValidate: {
-          applicant: [],
+          userName: [],
           date: [],
           status: [],
           instance_id: []
@@ -134,13 +133,17 @@
             render: (h, params) => {
               switch (params.row.status) {
                 case 'submit':
-                  return h('p', '行政待审批')
+                  return h('p', '直属领导待审批')
                 case 'l_fail':
-                  return h('p', '行政审批不通过')
+                  return h('p', '直属领导审批不通过')
                 case 'l_success':
-                  return h('p', '技术待审批')
+                  return h('p',{
+                    style: {
+                      color: 'red'
+                    }
+                  }, '经信委技术待审批')
                 case 'a_fail':
-                  return h('p', '技术审批不通过')
+                  return h('p', '经信委技术审批不通过')
                 case 'a_success':
                   return h('p', '审批完成')
                 case 'created_success':
@@ -164,7 +167,7 @@
         filterDate: [
           {
             order_number: 'ID0001',
-            applicant: 'user',
+            userName: 'user',
             deploy_name: '实例1',
             resource_pool: 'MDZ',
             status: '审批中',
@@ -178,9 +181,10 @@
 
     created() {
       this.userInfo = this.$store.state.userData.userInfo
+        // 部署实例列表
       this.getInstanceList()
+        // 资源列表
       this.onInquire()
-
     },
 
     methods: {
@@ -188,24 +192,32 @@
       onInquire() {
         let url = 'api/mpc_resource/mpc_resources'
         let query = {}
-          // 只能通过用户ID 查询
-//        this.formItem.applicant && (query.applicant = this.formItem.applicant)
-
+        this.formItem.userName && (query.user_name = this.formItem.userName)
         this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
         this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
         this.formItem.status && (query.status = this.formItem.status)
         this.formItem.instance_id && (query.instance_id = this.formItem.instance_id)
-        console.log(query)
 
         this.$http.get(url, {
           params: query
         }).then(data => {
           if (data.body.code === 200) {
-            console.log('admin资源审批列表', data)
             this.data1 = data.body.result.res
+              // 排序
+            let pending = []
+            this.data1.forEach((item, index) => {
+              if (item.status === 'l_success') {
+                pending.push(item)
+                this.data1.splice(index, 1)
+              }
+            })
+            this.data1 = pending.concat(...this.data1)
+
             this.data1.forEach((item, index) => {
               item.index = index + 1
             })
+            console.log('排序后的数组', this.data1)
+
             this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
           } else {
             this.$Message.error(data.body.result.msg)
@@ -219,14 +231,12 @@
       handleReset(name) {
         this.$refs[name].resetFields()
       },
-
         // 获取实例列表
       getInstanceList () {
         const url = 'api/deploy_instance/deploy_instances'
 
         this.$http.get(url).then((res) => {
           if (res.body.code === 200) {
-            console.log(res.body)
             this.formItem.instance = res.body.result.res
           } else {
             this.$Message.error(res.body.result.msg)
@@ -235,7 +245,6 @@
           console.log(err)
         })
       },
-
         // 分页
       changePage(val) {
         this.filterDate = this.mockTableData(this.data1, this.pageSize, val)
@@ -251,7 +260,6 @@
 
         return originData.slice(num, maxNum)
       }
-
     }
   }
 </script>

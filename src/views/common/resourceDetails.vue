@@ -4,8 +4,10 @@
       <Button class="apply-button-item"
               type="primary"
               v-for="(item, index) in funcBtns"
-              :disabled="index !== 0 && disableStatus"
+              :disabled="index !== 0 && buttonDisable"
               @click="onLink(index)">{{item}}
+
+
 
 
       </Button>
@@ -18,7 +20,7 @@
         <Step title="审批完成"></Step>
       </Steps>
     </div>
-
+    <!--DMZ部署区域资源使用情况-->
     <div class="status-list" v-if="$store.state.userData.userInfo.role == 'admin'">
       <div class="sub-title">DMZ部署区域资源使用情况</div>
       <Row>
@@ -28,7 +30,10 @@
           <div class="rd_pro1" style="padding-right:12px;">vCPU个</div>
           </Col>
           <Col span="10">
-          <Progress :percent="poolStatus.cpu_use/poolStatus.cpu_total*100" :stroke-width="18" class="rd_progress" hide-info></Progress>
+          <Progress
+              :percent="poolStatus.cpu_use/poolStatus.cpu_total*100 > 100 ? 100 : poolStatus.cpu_use/poolStatus.cpu_total*100"
+              :stroke-width="18" class="rd_progress"
+              hide-info></Progress>
           </Col>
           <Col span="5" class="rd_left">
           <div class="rd_pro2">{{poolStatus.cpu_use + '&nbsp;/&nbsp;' + poolStatus.cpu_total}}</div>
@@ -41,7 +46,8 @@
           <div class="rd_pro1">内存（GB）</div>
           </Col>
           <Col span="10">
-          <Progress :percent="poolStatus.memory_use/poolStatus.memory_total*100" :stroke-width="18" class="rd_progress" hide-info></Progress>
+          <Progress :percent="poolStatus.memory_use/poolStatus.memory_total*100" :stroke-width="18" class="rd_progress"
+                    hide-info></Progress>
           </Col>
           <Col span="5" class="rd_left">
           <div class="rd_pro2">{{poolStatus.memory_use + '&nbsp;/&nbsp;' + poolStatus.memory_total}}</div>
@@ -54,7 +60,8 @@
           <div class="rd_pro1">硬盘（GB）</div>
           </Col>
           <Col span="10" class="rd_progress">
-          <Progress :percent="poolStatus.storage_use/poolStatus.storage_total*100" :stroke-width="18" class="rd_progress" hide-info></Progress>
+          <Progress :percent="poolStatus.storage_use/poolStatus.storage_total*100" :stroke-width="18"
+                    class="rd_progress" hide-info></Progress>
           </Col>
           <Col span="5" class="rd_left">
           <div class="rd_pro2">{{poolStatus.storage_use + '&nbsp;/&nbsp;' + poolStatus.storage_total}}</div>
@@ -107,6 +114,7 @@
         </Col>
       </Row>
     </div>
+    <!--资源信息-->
     <div class="form-info">
       <Form :model="formValidate" :label-width="120">
         <Row type="flex" justify="start">
@@ -118,13 +126,17 @@
           <Form-item label="申请单号:" class="form-item">
             {{formValidate.resource_id}}
 
+
+
           </Form-item>
           </Col>
           <Col span="8">
           <Form-item label="部署实例:" class="form-item">
             {{formValidate.deploy_name}}
-                <span class="form-item-span" @click="instanceDetails"
+                <span class="form-item-span" @click="onInstanceDetails"
                       v-if="$store.state.userData.userInfo.role == 'admin'">推荐配置</span>
+
+            <!--推荐配置-->
             <Modal v-model="instanceCreate" title="提示" :ok-text="okText" :mask-closable="false" :closable="false">
               <div class="modal-wrap">
                 <div class="instance-title">您的业务类型:</div>
@@ -132,23 +144,23 @@
                   <tbody>
                   <tr>
                     <td>用户群体规模</td>
-                    <td>内网少量用户</td>
+                    <td>{{recomConfig.user_size}}</td>
                   </tr>
                   <tr>
                     <td>用户活跃度</td>
-                    <td>偶尔使用</td>
+                    <td>{{recomConfig.liveness}}</td>
                   </tr>
                   <tr>
                     <td>业务类型</td>
-                    <td>网站</td>
+                    <td>{{recomConfig.business_type}}</td>
                   </tr>
                   <tr>
                     <td>数据大小</td>
-                    <td>MB级</td>
+                    <td>{{recomConfig.data_unit}}</td>
                   </tr>
                   <tr>
                     <td>高可用</td>
-                    <td>不需要</td>
+                    <td>{{recomConfig.ha}}</td>
                   </tr>
                   </tbody>
                 </table>
@@ -159,6 +171,7 @@
                 <Button type="primary" size="large" v-text="okText" @click="closeModal"></Button>
               </div>
             </Modal>
+
           </Form-item>
           </Col>
           <Col span="8">
@@ -167,6 +180,8 @@
           <Col span="8">
           <Form-item label="部门:" class="form-item">
             {{formValidate.department}}
+
+
 
           </Form-item>
           </Col>
@@ -193,17 +208,17 @@
 
       <Row>
         <Col span="24">
-        <div class="sub-title">业务信息</div>
-        <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" disabled
-               placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
+          <div class="sub-title">业务信息</div>
+          <Input v-model="ywInfo" type="textarea" :maxlength="100" :rows="4" disabled
+                 placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
         </Col>
         <Col span="24">
-        <div class="sub-title">直属领导审批意见</div>
-        <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" :disabled="role !== 'leader'"></Input>
+          <div class="sub-title">直属领导审批意见</div>
+          <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" :disabled="leaderDisable"></Input>
         </Col>
-        <Col span="24">
-        <div class="sub-title">经信委技术审批意见</div>
-        <Input v-model="jxwInfo" type="textarea" :maxlength="100" :rows="4" v-if="role === 'admin'"></Input>
+        <Col span="24" v-if="role === 'admin'">
+          <div class="sub-title">经信委技术审批意见</div>
+          <Input v-model="jxwInfo" type="textarea" :maxlength="100" :rows="4" :disabled="adminDisable"></Input>
         </Col>
       </Row>
     </div>
@@ -453,18 +468,7 @@
             width: '100'
           }
         ],
-        configuration: [
-          {
-            server: 'WEB',
-            configuration: 'CPU：2核 | 内存：2G | 硬盘：50G',
-            number: 1
-          },
-          {
-            server: '数据库',
-            configuration: 'CPU：4核 | 内存：8G | 硬盘：200G',
-            number: 1
-          }
-        ],
+        
         stepNum: 0,
         stepsStatus: 'process',
         userId: '',
@@ -480,7 +484,7 @@
           status: ''
         },
 
-        someHosts: [],
+        someHosts: [],      // 某个hosts
 
         poolStatus: {
           cpu_use: 0,
@@ -489,6 +493,14 @@
           memory_total: 0,
           storage_use: 0,
           storage_total: 0,
+        },  // 资源池使用情况
+
+        recomConfig: {},    // 推荐配置
+        configData: {
+          cpu: 2,
+          memory: 4,
+          storage: 50,
+          num: 1
         },
 
         ywInfo: '',
@@ -515,7 +527,7 @@
     },
 
     computed: {
-      disableStatus() {
+      buttonDisable() {
         if (this.role === 'leader') {
           switch (this.formValidate.status) {
             case 'submit':
@@ -532,6 +544,29 @@
           }
         }
 
+      },
+
+      leaderDisable() {
+        return this.role !== 'leader' || !(this.formValidate.status === 'submit')
+      },
+
+      adminDisable() {
+        return !(this.formValidate.status === 'l_success')
+      },
+
+      configuration() {
+        return [
+          {
+            server: 'WEB',
+            configuration: 'CPU：'+ this.configData.cpu +'核 | 内存：'+ this.configData.memory +'G | 硬盘：'+ this.configData.storage +'G',
+            number: this.configData.num
+          },
+          {
+            server: '数据库',
+            configuration: 'CPU：'+ this.configData.cpu +'核 | 内存：'+ this.configData.memory +'G | 硬盘：'+ this.configData.storage +'G',
+            number: this.configData.num
+          }
+        ]
       }
     },
 
@@ -563,7 +598,8 @@
           }
 
           this.ywInfo = this.formValidate.business_info;
-          this.xzInfo = this.formValidate.suggestion;
+          this.xzInfo = this.formValidate.suggestion || '同意！';
+          this.jxwInfo = this.formValidate.admin_suggestion || '同意！';
 
           this.formValidate.vCPU_total = 0
           this.formValidate.memory_total = 0
@@ -597,87 +633,6 @@
     },
 
     methods: {
-      getInfo (query) {
-        const url = 'api/mpc_resource/mpc_resources';
-        this.$http.get(url, {params: query}).then((res) => {
-          if (res.body.code === 200) {
-            this.formValidate = res.body.result.res[0]
-            this.index++
-          }
-        }, (err) => {
-          console.log(err)
-        });
-      },
-
-      getFlaver () {//获取规格
-        const url = 'api/flavor/flavors'
-        this.$http.get(url).then((res) => {
-          if (res.body.code === 200) {
-            this.flavorList = res.body.result.res;
-            this.index++
-          }
-        }, (err) => {
-          console.log(err)
-        });
-      },
-
-      getImage () { //  获取操作系统
-        const url = 'api/image/images'
-        this.$http.get(url).then((res) => {
-          if (res.body.code === 200) {
-            this.imageList = res.body.result.res;
-            this.index++
-          }
-        }, (err) => {
-          console.log(err)
-        })
-      },
-
-      getPoolList() {
-        let url = 'api/pool/pools'
-        this.$http.get(url).then(res => {
-          if (res.body.code === 200) {
-            let someHosts = null
-            res.body.result.res.forEach(item => {
-              if (item.pool_name === this.formValidate.az_name) {
-                someHosts = item.hosts
-                return
-              }
-            })
-              // 请求资源池详情
-            this.getHosts(someHosts)
-          } else {
-            this.$Message.error(res.body.result.msg)
-          }
-        }, err => {
-          this.$Message.error(res.body.result.msg)
-        })
-      },
-
-      getHosts(hosts) {
-        let url = 'api/pool/getHosts'
-        let params = ''
-        hosts.forEach(item => {
-          params += ('&host=' + item)
-        })
-        url += ('?' +  params.slice(1))
-
-        this.$http.get(url).then(res => {
-          if (res.body.code === 200) {
-            this.poolStatus.cpu_use = this.countSum(res.body.result.res, 'vcpu_use')
-            this.poolStatus.cpu_total = this.countSum(res.body.result.res, 'vcpu_total')
-            this.poolStatus.memory_use = this.countSum(res.body.result.res, 'memory_mb_use')
-            this.poolStatus.memory_total = this.countSum(res.body.result.res, 'memory_mb_total')
-            this.poolStatus.storage_use = this.countSum(res.body.result.res, 'storage_gb_use')
-            this.poolStatus.storage_total = this.countSum(res.body.result.res, 'storage_gb_total')
-          } else {
-            this.$Message.error(res.body.result.msg)
-          }
-        }, err => {
-          console.log('error', err)
-        })
-      },
-
       onLink(index) {
         switch (index) {
           case 0:
@@ -728,15 +683,191 @@
         });
       },
 
-      instanceDetails () {//展示实例详情推荐配置
+      onInstanceDetails () {    //展示实例详情推荐配置
         this.instanceCreate = true
+        this.getDeploy(this.formValidate.instance_id)
+      },
+
+      getInfo (query) {
+        const url = 'api/mpc_resource/mpc_resources';
+        this.$http.get(url, {params: query}).then((res) => {
+          if (res.body.code === 200) {
+            this.formValidate = res.body.result.res[0]
+            this.index++
+          }
+        }, (err) => {
+          console.log(err)
+        });
+      },
+
+      getFlaver () {//获取规格
+        const url = 'api/flavor/flavors'
+        this.$http.get(url).then((res) => {
+          if (res.body.code === 200) {
+            this.flavorList = res.body.result.res;
+            this.index++
+          }
+        }, (err) => {
+          console.log(err)
+        });
+      },
+
+      getImage () { //  获取操作系统
+        const url = 'api/image/images'
+        this.$http.get(url).then((res) => {
+          if (res.body.code === 200) {
+            this.imageList = res.body.result.res;
+            this.index++
+          }
+        }, (err) => {
+          console.log(err)
+        })
+      },
+
+      getPoolList() {
+        let url = 'api/pool/pools'
+        this.$http.get(url).then(res => {
+          if (res.body.code === 200) {
+            let someHosts = null
+            res.body.result.res.forEach(item => {
+              if (item.pool_name === this.formValidate.az_name) {
+                someHosts = item.hosts
+                return
+              }
+            })
+            // 请求资源池详情
+            this.getHosts(someHosts)
+          } else {
+            this.$Message.error(res.body.result.msg)
+          }
+        }, err => {
+          this.$Message.error(res.body.result.msg)
+        })
+      },
+
+      getHosts(hosts) {
+        let url = 'api/pool/getHosts'
+        let params = ''
+        hosts.forEach(item => {
+          params += ('&host=' + item)
+        })
+        url += ('?' + params.slice(1))
+
+        this.$http.get(url).then(res => {
+          if (res.body.code === 200) {
+            this.poolStatus.cpu_use = this.countSum(res.body.result.res, 'vcpu_use')
+            this.poolStatus.cpu_total = this.countSum(res.body.result.res, 'vcpu_total')
+            this.poolStatus.memory_use = this.countSum(res.body.result.res, 'memory_mb_use')
+            this.poolStatus.memory_total = this.countSum(res.body.result.res, 'memory_mb_total')
+            this.poolStatus.storage_use = this.countSum(res.body.result.res, 'storage_gb_use')
+            this.poolStatus.storage_total = this.countSum(res.body.result.res, 'storage_gb_total')
+          } else {
+            this.$Message.error(res.body.result.msg)
+          }
+        }, err => {
+          console.log('error', err)
+        })
+      },
+
+      getDeploy(id) {
+        let url = 'api/deploy_instance/deploy_instances'
+        let query = {instance_id: id}
+        this.$http.get(url, {params: query}).then((res) => {
+          if (res.body.code === 200) {
+            this.recomConfig = res.body.result.res[0]
+            this.countConfig(this.recomConfig)
+          }
+        }, (err) => {
+          console.log(err)
+        });
+      },
+
+      countConfig(config) {
+        let cpu = []
+        let memory = []
+        let storage = []
+        let num = []
+        switch (config.user_size) {
+          case '内网少量用户':
+            cpu.push(2); memory.push(4); storage.push(50); num.push(1)
+            break
+          case '内网大量用户':
+            cpu.push(4); memory.push(8); storage.push(100); num.push(1)
+            break
+          case '外网少量用户':
+            cpu.push4; memory.push(8); storage.push(100); num.push(1)
+            break
+          case '外网大量用户':
+            cpu.push(8); memory.push(16); storage.push(200); num.push(1)
+            break
+          default:
+        }
+        switch (config.liveness) {
+          case '偶尔使用':
+            cpu.push(2); memory.push(4); storage.push(50); num.push(1)
+            break
+          case '经常使用':
+            cpu.push(4); memory.push(8); storage.push(100); num.push(2)
+            break
+          case '频繁使用':
+            cpu.push(8); memory.push(16); storage.push(200); num.push(4)
+            break
+          default:
+        }
+        switch (config.business_type) {
+          case '网站':
+            cpu.push(2); memory.push(4); storage.push(50); num.push(2)
+            break
+          case '存储类应用':
+            cpu.push(4); memory.push(8); storage.push(500); num.push(4)
+            break
+          case '视频':
+            cpu.push(8); memory.push(16); storage.push(500); num.push(4)
+            break
+          case '大数据':
+            cpu.push(8); memory.push(16); storage.push(500); num.push(4)
+            break
+          default:
+        }
+        switch (config.data_unit) {
+          case 'MB':
+            cpu.push(2); memory.push(4); storage.push(50); num.push(1)
+            break
+          case 'GB':
+            cpu.push(4); memory.push(8); storage.push(500); num.push(2)
+            break
+          case 'TB':
+            cpu.push(8); memory.push(16); storage.push(500); num.push(4)
+            break
+          default:
+        }
+        cpu.sort((a,b) => {return b - a});
+        memory.sort((a,b) => {return b - a});
+        storage.sort((a,b) => {return b - a});
+        num.sort((a,b) => {return b - a});
+        this.configData.cpu = cpu[0]
+        this.configData.memory = memory[0]
+        this.configData.storage = storage[0]
+        this.configData.num = num[0]
+
+        switch (config.ha) {
+          case '需要':
+            this.configData.cpu *= 2
+            this.configData.memory *= 2
+            this.configData.storage *= 2
+            this.configData.num *= 2
+            break
+          default:
+        }
+        console.log('配置信息', this.configData)
+
       },
 
       closeModal () {
         this.instanceCreate = false
       },
 
-        // 计算数据中某条信息的总和
+      // 计算数据中某条信息的总和
       countSum(data, attr) {
         var sum = 0
         data.forEach(item => {
