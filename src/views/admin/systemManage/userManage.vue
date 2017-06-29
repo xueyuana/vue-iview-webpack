@@ -149,6 +149,9 @@
           password: [
             {required: true, min: 6, max: 15, message: '请填写密码',trigger: 'blur'}
           ],
+          department: [
+            {required: true, message: '请填写部门', trigger: 'blur'}
+          ],
           phone: [
             {validator: validatePhone,trigger:'blur'}
           ],
@@ -166,6 +169,9 @@
           ],
           password: [
             { min: 6, max: 15, message: '密码最少6位最多15位',trigger: 'blur'}
+          ],
+          department: [
+            {required: true, message: '请填写部门', trigger: 'blur'}
           ],
           phone: [
             {validator: validatePhone,trigger:'blur'}

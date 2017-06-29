@@ -97,8 +97,12 @@
     <div class="inquire-table-title">业务信息</div>
     <Input class="comment" v-model="business_info" :disabled="isDisabled" type="textarea" :maxlength="500" :rows=6 placeholder="请输入"></Input>
     <div :class="{hidden: !isDisabled}">
-      <div class="inquire-table-title">行政审批意见</div>
+      <div class="inquire-table-title">直属领导审批意见</div>
       <Input class="comment" v-model="suggestion" :disabled="isDisabled" type="textarea" :maxlength="100" :rows=6 placeholder="暂无审批意见"></Input>
+    </div>
+    <div :class="{hidden: !isDisabled}">
+      <div class="inquire-table-title">经信委技术审批意见</div>
+      <Input class="comment" v-model="admin_suggestion" :disabled="isDisabled" type="textarea" :maxlength="100" :rows=6 placeholder="暂无审批意见"></Input>
     </div>
   </div>
 </template>
@@ -117,6 +121,7 @@
         okText: '10秒钟后关闭',
         isDisabled: false,
         suggestion: '',
+        admin_suggestion: '',
         columns: [
           {
             title: '服务器',

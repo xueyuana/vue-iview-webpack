@@ -40,7 +40,7 @@
                                     <Icon type="easel" size="62" color="#8BC34A"></Icon>
                                 </div>
                                 <div class="top_right fr">
-                                    <div class="count">{{ cpu }}</div>
+                                    <div class="count">{{ cpu }}C</div>
                                     <div class="name">VCPU</div>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                                 <Icon type="android-options" size="62" color="#3BCCE1"></Icon>
                             </div>
                             <div class="top_right fr">
-                                <div class="count">{{ memory }}</div>
+                                <div class="count">{{ memory }}G</div>
                                 <div class="name">内存</div>
                             </div>
                         </div>
@@ -193,7 +193,7 @@
 
               res.body.result.res.forEach((item,index) => {
 
-                if(item.status == 'a_success') {
+                if(item.status == 'a_success' || item.status == 'created_success') {
                   this.success ++
                 }else {
                   this.no_success ++

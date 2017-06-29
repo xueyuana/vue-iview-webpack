@@ -143,7 +143,7 @@
                 props: {
                   type: 'primary',
                   size: 'small',
-                  disabled:  params.row.status == '审批完成' || '创建资源完成'?false:true
+                  disabled:  params.row.status == '审批完成' || params.row.status == '创建资源完成'?false:true
                 },
                 on: {
                   click: () => {
