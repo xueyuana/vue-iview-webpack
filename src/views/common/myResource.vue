@@ -55,6 +55,7 @@
           <td>{{item.host_name}}</td>
           <td>{{item.az_name}}</td>
           <td>{{item.flavor_id}}</td>
+          <td>{{item.storage}}</td>
           <td> {{item.status}} </td>
           <td>
             <Dropdown>
@@ -63,7 +64,7 @@
                 <Icon type="arrow-down-b"></Icon>
               </a>
               <Dropdown-menu slot="list">
-                <Dropdown-item v-for="item in operationList[index]" @click.native="clicknative($event,index)" :selected="item.selected">{{ item.value }}</Dropdown-item>
+                <Dropdown-item v-for="operation in operationList[index]" @click.native="operationClick($event,index,item.vm_uuid,item.number)" :selected="operation.selected">{{ operation.value }}</Dropdown-item>
               </Dropdown-menu>
             </Dropdown>
           </td>
@@ -94,24 +95,16 @@
         user_info: {},
         approvalStatusVal: [
           {
-            value: '行政审批中',
-            key: 'submit'
+            value: '运行',
+            key: 'running'
           },
           {
-            value: '行政审批没通过',
-            key: 'l_fail'
+            value: '异常',
+            key: 'error'
           },
           {
-            value: '技术审批中',
-            key: 'l_success'
-          },
-          {
-            value: '技术审批没通过',
-            key: 'a_fail'
-          },
-          {
-            value: '审批完成',
-            key: 'a_success'
+            value: '提交',
+            key: 'summit'
           }
         ],
         instance: [],
@@ -159,6 +152,10 @@
           {
             title: '规格',
             key: 'flavor_id'
+          },
+          {
+            title: '存储空间',
+            key: 'storage'
           },
           {
             title: '状态',
@@ -234,7 +231,7 @@
         const url = 'api/image/images'
         this.$http.get(url).then((res) => {
           this.index ++
-          console.log('镜像',res.body)
+//          console.log('镜像',res.body)
           this.mirrorImage =  res.body.result.res
         },(err) => {
           console.log(err)
@@ -262,24 +259,28 @@
         this.query_info.instance_id && (requestBody.instance_id = this.query_info.instance_id)
         this.query_info.az_name && (requestBody.az_name = this.query_info.az_name)
         this.query_info.vm_name && (requestBody.vm_name = this.query_info.vm_name)
-        console.log('res',requestBody)
+//        console.log('res',requestBody)
 
         this.getVm(requestBody)
 
       },
       getVm (query) {//获取虚拟机
+
+        this.getResult = []
+        this.queryResult = []
+        this.current_page = 1
+
         const url = 'api/mpc_resource/mpc_resource_creater'
 
         this.$http.get(url,{params: query}).then((res) => {
-          this.index ++
-          console.log('虚机',res.body)
+          if(this.index !== 4) {
+            this.index ++
+          }
+//          console.log('虚机',res.body)
           this.getResult = res.body.result.res
 
           this.data_length = this.getResult.length
 
-//          this.getResult.forEach((item,index) => {
-//
-//          })
 
           if(this.index == 4) {
             this.formatData()
@@ -291,38 +292,9 @@
         })
 
       },
-      clicknative (event,index) {//点击高亮显示
-        //index指的是行数
-        this.operationList[index].forEach((item,index) => {
-          if(item.value == event.target.firstChild.data) {
-            item.selected = true
-          }else {
-            item.selected = false
-          }
-        })
-
-      },
-      changePage (page) {
-
-        this.queryResult = this.mockTableData(this.getResult,this.page_size,page)
-
-        this.setOptionList()
-
-        this.current_page = page
-
-      },
-      page_size_change (size) {
-        this.page_size = size
-
-        this.current_page = 1
-
-        this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
-
-        this.setOptionList()
-
-      },
       formatData () {
-//        console.log(this.getResult)
+
+
         this.getResult.forEach((vm,index) => {
          vm.number = index +1
 
@@ -354,9 +326,10 @@
           }
 
         })
+        console.log('vm',this.getResult)
 
         this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
-        console.log(this.queryResult)
+
 
         this.setOptionList()
 
@@ -369,14 +342,17 @@
           switch (item.status) {
             case '运行': this.operationList.push([
               {
+                key: 'restart',
                 value: '重启',
                 selected: false
               },
               {
+                key: 'stop',
                 value: '关机',
                 selected: false
               },
               {
+                key: 'delete',
                 value: '删除',
                 selected: false
               }
@@ -384,6 +360,7 @@
               break
             case '异常': this.operationList.push([
               {
+                key: 'delete',
                 value: '删除',
                 selected: false
               }
@@ -391,6 +368,7 @@
               break
             case '提交': this.operationList.push([
               {
+                key: 'delete',
                 value: '删除',
                 selected: false
               }
@@ -399,6 +377,61 @@
           }
 
         })
+      },
+      operationClick (event,index,vm_uuid,number) {//点击高亮显示
+        console.log('vm_id',vm_uuid)
+        //index指的是行数
+        console.log(this.operationList[index])
+        this.operationList[index].forEach((item,index) => {
+          if(item.value == event.target.firstChild.data) {//确定用户点击的操作
+
+            item.selected = true
+
+            let restartType = ''
+
+            switch (this.user_info.role) {
+              case 'user': restartType = 'SOFT'
+                break
+              case 'admin': restartType = 'HARD'
+                break
+            }
+
+
+            const url = 'api/mpc_vm_operation/operations'
+
+            let requestBody = {
+              vm_uuid: vm_uuid,
+              operation: item.key
+            }
+
+
+            item.key == 'restart' && (requestBody.reboot_type = restartType )//operation为restart的时候可以传reboot_type
+
+            this.$http.post(url,requestBody).then((res) => {
+
+              if(res.body.code == 200) {
+
+
+                if(item.key == 'delete') {
+
+                  this.getVm({user_id: this.user_info.id})
+
+                }
+
+                this.$Message.info('操作成功');
+
+              }
+
+            },(err) => {
+              console.log(err)
+              this.$Message.info('操作失败');
+            })
+
+          }else {
+            item.selected = false
+          }
+        })
+
       },
       reset () {
         this.query_info = {
@@ -409,6 +442,25 @@
           instance_id: ''
 
         }
+      },
+      changePage (page) {
+
+        this.queryResult = this.mockTableData(this.getResult,this.page_size,page)
+
+        this.setOptionList()
+
+        this.current_page = page
+
+      },
+      page_size_change (size) {
+        this.page_size = size
+
+        this.current_page = 1
+
+        this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
+
+        this.setOptionList()
+
       },
       mockTableData (originData, pageSize, index) {//进行分页
 

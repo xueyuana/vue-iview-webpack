@@ -40,7 +40,7 @@
                                     <Icon type="easel" size="62" color="#8BC34A"></Icon>
                                 </div>
                                 <div class="top_right fr">
-                                    <div class="count">{{ cpu }}C</div>
+                                    <div class="count">{{ cpu }}</div>
                                     <div class="name">VCPU</div>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                                 <Icon type="social-instagram" size="62" color="#BA68C8"></Icon>
                             </div>
                             <div class="top_right fr">
-                                <div class="count">{{ storage }}</div>
+                                <div class="count">{{ storage }}G</div>
                                 <div class="name">硬盘</div>
                             </div>
                         </div>

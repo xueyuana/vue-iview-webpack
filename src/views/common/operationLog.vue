@@ -20,23 +20,13 @@
             </div>
           </Col>
         </Row>
-        <!--<Row type="flex" justify="end">-->
-          <!--<Col span="24" style="min-height: 20px">-->
-          <!--<div class="operation-form-query">-->
-            <!--<Button type="primary" class="operation-form-query-add" @click.native="goQuery">查询</Button>-->
-            <!--<Button type="ghost" @click="handleReset('formValidate')">重置</Button>-->
-          <!--</div>-->
-          <!--</Col>-->
-        <!--</Row>-->
       </Form>
     </div>
     <div class="inquire-table">
       <div class="inquire-table-title">日志列表</div>
-      <Table :columns="columns" :data="dataDemo" stripe class="inquire-table-tb"></Table>
-      <div style="margin: 10px;overflow: hidden">
-        <div style="float: right;">
-          <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
-        </div>
+      <Table :columns="columns" :data="queryResult" stripe class="inquire-table-tb"></Table>
+      <div class="inquire-table-page">
+        <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
       </div>
     </div>
   </div>
@@ -47,6 +37,7 @@
 </style>
 
 <script>
+  import {formatDate} from 'tools/formatDate.js'
   export default {
     data() {
       return {
@@ -67,104 +58,103 @@
           },
           {
             title: '用户',
-            key: 'userName',
+            key: 'user_name',
             align: 'center'
           },
           {
             title: '操作日志',
-            key: 'operation',
+            key: 'description',
             align: 'center'
           },
           {
             title: '日期',
-            key: 'create_date',
+            key: 'created_time',
             align: 'center',
             sortable: true
           }
         ],
-        dataDemo: [
-          {
-            index: 1,
-            userName: '陈小红',
-            operation: '申请了4条资源数据',
-            create_date: '2016-10-04'
-          },
-          {
-            index: 2,
-            userName: '李艾',
-            operation: '行政通过了资源申请',
-            create_date: '2016-10-05'
-          },
-          {
-            index: 3,
-            userName: '吕一',
-            operation: '修改登录密码',
-            create_date: '2016-10-06'
-          },
-          {
-            index: 4,
-            userName: '秦浩',
-            operation: '查询了资源池信息',
-            create_date: '2016-10-07'
-          }
-        ],
-        data1: [],
-        pageSize: 10,
-        num: 1
+        queryResult: [],
+        getResult: [],
+        data_length: 0,
+        page_size: 10,
+        current_page: 1
       }
+    },
+    created () {
+      //获取操作日志
+      const id = this.$store.state.userData.userInfo.id;
+      const  query = {user_id:id};
+      this.getOperationLog(query);
     },
     computed: {},
     methods: {
       goQuery () {
+        this.current_page = 1
         console.log('ddsss', this.formValidate);
-        this.dataDemo = [{
-          index: 3,
-          userName: '吕一',
-          operation: '修改登录密码',
-          create_date: '2016-10-06'
-        }];
+        const start_time = this.formValidate.start_time[0];
+        const end_time = this.formValidate.start_time[1];
+
+        let requestBody = {}
+        requestBody.user_id = this.$store.state.userData.userInfo.id;
+        start_time && (requestBody.start_time = formatDate(start_time));
+        end_time && (requestBody.end_time = formatDate(end_time));
+        this.formValidate.key_name && (requestBody.key_name = this.formValidate.key_name);
+
+        this.getOperationLog(requestBody);
+      },
+      getOperationLog (query) {
+        this.queryResult = [];
+        this.getResult = [];
+        const url = 'api/oper_history/oper_historys';
+        this.$http.get(url,{params: query}).then((res) => {
+          console.log('sssss', res);
+        if (res.body.code === 200) {
+          this.page_size = res.body.result.res.length;
+          res.body.result.res.forEach((item,index) => {
+            this.getResult.push({
+            index: index +1,
+            description: item.description,
+            created_time: item.created_date.slice(0,16),
+            user_name: item.user_name
+          })
+        })
+          console.log(this.getResult);
+          this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page);
+        }
+      },(err) => {
+          console.log(err)
+        });
       },
       handleReset (name) {
         this.$refs[name].resetFields();
         this.dataDemo = [
           {
             index: 1,
-            userName: '陈小红',
-            operation: '申请了4条资源数据',
+            userName: '张三',
+            operation: '点击查询按钮',
             create_date: '2016-10-04'
-          },
-          {
-            index: 2,
-            userName: '李艾',
-            operation: '行政通过了资源申请',
-            create_date: '2016-10-05'
-          },
-          {
-            index: 3,
-            userName: '吕一',
-            operation: '修改登录密码',
-            create_date: '2016-10-06'
-          },
-          {
-            index: 4,
-            userName: '秦浩',
-            operation: '查询了资源池信息',
-            create_date: '2016-10-07'
           }
         ];
       },
       // 分页
-      changePage(val) {
-        this.filterDate = this.mockTableData(this.data1, this.pageSize, val)
+      changePage (page) {
+        this.queryResult = this.mockTableData(this.getResult,this.page_size,page);
+        this.current_page = page
       },
-      changePageSize(val) {
-        this.pageSize = val
-        this.changePage(1)
+      page_size_change (size) {
+        this.page_size = size
+
+        this.current_page = 1
+
+        this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
       },
-      // 时间选择器
-      //formatCreateData(value) {
-      //  this.formValidate.start_time = value
-      //}
+      mockTableData (originData, pageSize, index) {//进行分页
+        let data = [];
+        let num = (index - 1) * pageSize
+        let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize);
+        data = originData.slice(num,maxNum);
+        return data;
+      }
     }
   }
 </script>

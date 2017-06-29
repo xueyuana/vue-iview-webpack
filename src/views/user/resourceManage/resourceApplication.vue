@@ -7,8 +7,8 @@
     <div class="steps">
       <Steps :current="current" :status="stepsStatus">
         <Step title="提交申请" ></Step>
-        <Step title="行政审批" ></Step>
-        <Step title="技术审批" ></Step>
+        <Step title="直属领导审批" ></Step>
+        <Step title="经信委技术审批" ></Step>
         <Step title="审批完成" ></Step>
       </Steps>
     </div>
@@ -125,15 +125,20 @@
         columns: [
           {
             title: '服务器',
-            key: 'server'
+            key: 'server',
+            width: 100,
+            align: 'center'
           },
           {
             title: '配置',
-            key: 'configuration'
+            key: 'configuration',
+            align: 'center'
           },
           {
             title: '数量(台)',
-            key: 'number'
+            key: 'number',
+            width: 100,
+            align: 'center'
           }
         ],
         configuration: [
@@ -159,27 +164,10 @@
           image_id: '',
           storage: ''
         }],
-        instance: [
-//          {
-//            instance_name: '部署实例1',
-//            instance_id: '001'
-//          }
-        ],
+        instance: [],
         az:[],//资源池
-        flavor: [//虚机规格
-//          {
-//            flavor_id : "03b8acba-3c6c-11e7-826c-fa163e9474c7",
-//            flavor_name: "flaver1",
-//            cpu : "3c",
-//            memory: "4g"
-//          }
-        ],
-        mirrorImage: [
-//          {
-//            image_name: '',
-//            id: ''
-//          }
-        ]//镜像
+        flavor: [],//虚机规格
+        mirrorImage: []//镜像
 
 
       }
@@ -319,7 +307,7 @@
         const url = 'api/mpc_resource/mpc_resources'
 
         this.$http.get(url,{params:query}).then(res => {
-//          console.log('资源查询',res.body)
+          console.log('资源查询',res.body)
           let resource_info = res.body.result.res[0]
 
           switch (resource_info.status) {
@@ -333,6 +321,8 @@
               break
             case 'a_fail': this.current = 2 ; this.stepsStatus = 'error'
               break
+            case 'created_success': this.current = 3; this.stepsStatus = 'finish'
+              break
           }
 
           this.business_info = resource_info.business_info
@@ -340,6 +330,7 @@
           this.instance_id = resource_info.instance_id
           this.resourceInformation = resource_info.resources
           this.suggestion = resource_info.suggestion
+          this.admin_suggestion = resource_info.admin_suggestion
 
         },(err) => {
           console.log(err)

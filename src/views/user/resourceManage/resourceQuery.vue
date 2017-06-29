@@ -48,21 +48,22 @@
         user_info: {},
         createResourceIndex: 0,
         text: '创建资源',
+        fontColor: 'fail',
         approvalStatusVal: [
           {
-            value: '行政待审批',
+            value: '直属领导待审批',
             key: 'submit'
           },
           {
-            value: '行政审批未通过',
+            value: '直属领导审批未通过',
             key: 'l_fail'
           },
           {
-            value: '技术待审批',
+            value: '经信委技术待审批',
             key: 'l_success'
           },
           {
-            value: '技术审批未通过',
+            value: '经信委技术审批未通过',
             key: 'a_fail'
           },
           {
@@ -70,7 +71,7 @@
             key: 'a_success'
           },
           {
-            value: '创建资源完成',
+            value: '资源已创建',
             key: 'created_success'
           }
         ],
@@ -85,11 +86,16 @@
         columns: [
           {
             title: '序号',
-            key: 'number'
+            key: 'number',
+            width: 80,
+            align: 'center'
+
           },
           {
             title: '申请单号',
             key: 'resource_id',
+            width: 130,
+            align: 'center',
             render: (h,params) => {
               return h('a',
                 {
@@ -116,63 +122,76 @@
           },
           {
             title: '申请人',
-            key: 'applyPerson'
+            key: 'applyPerson',
+            width: 80,
+            align: 'center'
           },
           {
             title: '状态',
-            key: 'status'
+            key: 'status',
+            width: 160,
+            align: 'center'
           },
           {
             title: '部署实例',
-            key: 'instance_name'
+            key: 'instance_name',
+            align: 'center'
           },
           {
             title: '部署区域',
-            key: 'az'
+            key: 'az',
+            align: 'center'
           },
           {
             title: '申请日期',
-            key: 'created_date'
+            key: 'created_date',
+            align: 'center'
           },
           {
             title: '操作',
             key: 'operate',
+            align: 'center',
             render: (h,params) => {
 //              console.log(params.row)
               return h('Button',{
                 props: {
                   type: 'primary',
                   size: 'small',
-                  disabled:  params.row.status == '审批完成' || params.row.status == '创建资源完成'?false:true
+                  disabled:  params.row.status == '审批完成' || params.row.status == '资源已创建'?false:true
                 },
                 on: {
-                  click: () => {
-                    if(params.row.status == '创建资源完成') {
+                  click: () => {//创建资源
+                    if(params.row.status == '资源已创建') {
                       return
                     }
 
                     const url_post = 'api/mpc_resource/mpc_resource_creater'
+
                     let requestBody_post = {
                       resource_id: params.row.resource_id
                     }
 
                     const url_put = 'api/mpc_resource/mpc_resources'
+
                     let requestBody_put = {
                       resource_id: params.row.resource_id,
                       status: 'created_success'
                     }
 
-                      this.$http.post(url_post,requestBody_post).then((res) => {
-                        console.log('创建资源',res.body)
+                      this.$http.post(url_post,requestBody_post).then((res) => {//成功创建资源
+                        if(res.body.code = 200) {
 
-                        this.$http.put(url_put,requestBody_put).then((res) => {
-                          console.log('该状态',res.body)
+                          this.$http.put(url_put,requestBody_put).then((res) => {//修改状态
+                            console.log('状态',res.body)
 
-                          this.$router.push({name: 'user_myResource'})
+                            this.$router.push({name: 'user_myResource'})
 
-                        })
+                          })
+
+                        }
 //
                       },(err) => {
+                        this.$Message.info('创建资源失败');
                         console.log(err)
                       })
 
@@ -267,19 +286,27 @@
 
           res.body.result.res.forEach((item,index) => {
 
+
             switch (item.status) {
-              case 'submit': item.status = '行政待审批'
+              case 'submit': item.status = '直属领导待审批'
                 break
-              case 'l_success': item.status = '技术待审批'
+              case 'l_success': item.status = '经信委技术待审批'
                 break
-              case 'l_fail': item.status = '行政审批未通过'
+              case 'l_fail': item.status = '直属领导审批未通过'
                 break
               case 'a_success': item.status = '审批完成'
                 break
-              case 'a_fail': item.status = '技术审批未通过'
+              case 'a_fail': item.status = '经信委技术审批未通过'
                 break
-              case 'created_success': item.status = '创建资源完成'
+              case 'created_success': item.status = '资源已创建'
                 break
+            }
+
+            if(item.status == '直属领导审批未通过' || item.status == '经信委技术审批未通过') {
+
+              this.fontColor = 'fail'
+            }else {
+              this.fontColor = 'success'
             }
 
             this.getResult.push({
@@ -290,9 +317,9 @@
               az: item.az_name,
               created_date: item.created_date.slice(0,16),
               applyPerson: item.user_name,
-              text: item.status == '创建资源完成'?'已创建':'创建资源',
+              text: item.status == '资源已创建'?'已创建':'创建资源',
               cellClassName: {
-                status: 'demo-table-info-cell-address',
+                status: this.fontColor
               }
 
             })
@@ -409,10 +436,7 @@
   .ghost {
     margin-left: 20px;
   }
-  .ivu-table .demo-table-info-cell-address {
-    background-color: #187;
-    color: #fff;
-  }
+
 
 
 </style>
