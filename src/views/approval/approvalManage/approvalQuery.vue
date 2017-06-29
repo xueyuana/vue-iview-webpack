@@ -17,9 +17,6 @@
             <Form-item label="审批状态:" prop="apply_status">
               <Select v-model="formValidate.apply_status" clearable style="">
                 <Option v-for="item in approvalStatusVal" :value="item.key" :key="item">{{ item.value }}</Option>
-                <!--<Option :value="1" :key="1">待审批</Option>-->
-                <!--<Option :value="2" :key="2">审批未通过</Option>-->
-                <!--<Option :value="3" :key="3">审批完成</Option>-->
               </Select>
             </Form-item>
           </Col>
@@ -27,19 +24,9 @@
             <Form-item label="部署实例:" prop="instance_id">
               <Select v-model="formValidate.instance_id" clearable style="">
                 <Option v-for="item in instance" :value="item.id" :key="item">{{ item.value }}</Option>
-                <!--<Option :value="1" :key="1">部署实例1</Option>-->
-                <!--<Option :value="2" :key="2">部署实例2</Option>-->
               </Select>
             </Form-item>
           </Col>
-          <!--<Col span="4">-->
-          <!--<Form-item>-->
-            <!--<div class="inquire-form-query">-->
-              <!--<Button type="primary" class="inquire-form-query-add" @click.native="goQuery">查询</Button>-->
-              <!--<Button type="ghost" @click="handleReset('formValidate')">重置</Button>-->
-            <!--</div>-->
-          <!--</Form-item>-->
-          <!--</Col>-->
         </Row>
         <Row type="flex" justify="end">
           <Col span="24">
@@ -57,7 +44,7 @@
       <div class="inquire-table-title">申请资源列表</div>
       <Table stripe :columns="columns" :data="queryResult"></Table>
       <div class="inquire-table-page">
-        <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
+        <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page" :page-size="page_size"></Page>
       </div>
     </div>
   </div>
@@ -67,14 +54,14 @@
 </style>
 
 <script>
-//  import formatDate from '../../../tools/formatDate';
+  import {formatDate} from 'tools/formatDate.js'
   export default {
     data() {
       return {
         formValidate: {
           user_name: '',
           start_time: '',
-          apply_status: '0',
+          apply_status: '',
           instance_id: ''
         },
         ruleValidate: {
@@ -85,16 +72,24 @@
         },
         approvalStatusVal: [
           {
-            value: '待审批',
+            value: '行政待审批',
             key: 'submit'
           },
           {
-            value: '审批未通过',
+            value: '行政审批未通过',
             key: 'l_fail'
           },
           {
-            value: '审批完成',
+            value: '技术待审批',
             key: 'l_success'
+          },
+          {
+            value: '技术审批未通过',
+            key: 'a_fail'
+          },
+          {
+            value: '审批完成',
+            key: 'a_success'
           }
         ],
         instance: [
@@ -111,25 +106,25 @@
           {
             title: '序号',
             key: 'index',
-            align: 'center',
-            width: 100
+            align: 'center'
           },
           {
             title: '申请单号',
             key: 'resource_id',
+            align: 'center',
             render: (h,params) => {
               return h('a',
                       {
                         domProps: {
                           innerHTML: params.row.resource_id
                         },
-                        style: {
-                          display: 'inline-block',
-                          width: '80px',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap'
-                        },
+//                        style: {
+//                          display: 'inline-block',
+//                          width: '80px',
+//                          overflow: 'hidden',
+//                          textOverflow: 'ellipsis',
+//                          whiteSpace: 'nowrap'
+//                        },
                         on: {
                           click: () => {
                           let id = params.row.resource_id;
@@ -145,20 +140,20 @@
             align: 'center'
           },
           {
-            title: '审批状态',
-            key: 'status',
-            align: 'center',
-            sortable: true
-          },
-          {
             title: '部署实例',
             key: 'instance_id',
             align: 'center',
             sortable: true
           },
           {
-            title: '资源池',
+            title: '部署区域',
             key: 'az_name',
+            align: 'center',
+            sortable: true
+          },
+          {
+            title: '审批状态',
+            key: 'status',
             align: 'center',
             sortable: true
           },
@@ -178,8 +173,6 @@
     },
     created () {
       //获取资源
-//      const id = this.$store.state.userData.userInfo.id;
-//      const query = {user_id:id};
       this.getApprovalResource();
     },
     computed: {},
@@ -189,16 +182,12 @@
           const end_time = this.formValidate.start_time[1];
 
           let requestBody = {}
-//          requestBody.user_id = this.$store.state.userData.userInfo.id;
-          start_time && (requestBody.start_time = this.timeFormat(start_time));
-          end_time && (requestBody.end_time = this.timeFormat(end_time));
+          start_time && (requestBody.start_time = formatDate(start_time));
+          end_time && (requestBody.end_time = formatDate(end_time));
           this.formValidate.user_name && (requestBody.user_name = this.formValidate.user_name);
           this.formValidate.apply_status && (requestBody.status = this.formValidate.apply_status);
           this.formValidate.instance_id && (requestBody.instance_id = this.formValidate.instance_id);
           console.log('ddsss', requestBody.status);
-//          if(requestBody.status == '0'){
-//            requestBody.status = '';
-//          }
           this.getApprovalResource(requestBody);
       },
       getApprovalResource (query) {
@@ -207,14 +196,18 @@
         this.$http.get(url,{params: query}).then((res) => {
             console.log('sssss', res);
             if (res.body.code === 200) {
-                this.page_size = res.body.result.res.length;
+                this.data_length = res.body.result.res.length;
                 res.body.result.res.forEach((item,index) => {
                   switch (item.status) {
-                    case 'submit': item.status = '待审批'
+                    case 'submit': item.status = '行政待审批'
                       break
-                    case 'l_fail': item.status = '审批未通过'
+                    case 'l_fail': item.status = '行政审批未通过'
                       break
-                    case 'l_success': item.status = '审批完成'
+                    case 'l_success': item.status = '技术待审批'
+                      break
+                    case 'a_fail': item.status = '技术审批未通过'
+                      break
+                    case 'a_success': item.status = '技术审批完成'
                       break
                     default:
                   }
@@ -224,7 +217,7 @@
                     index: index +1,
                     resource_id: item.resource_id,
                     status: item.status,
-                    instance_id: item.instance_id,
+                    instance_id: item.deploy_name,
                     az_name: item.az_name,
                     created_time: item.created_date.slice(0,16),
                     user_name: item.user_name
@@ -239,25 +232,21 @@
       },
       handleReset (name) {
         this.$refs[name].resetFields();
-        this.queryResult = [
-          {
-            index: 1,
-            resource_id: 'ID0001',
-            user_name: 'user',
-            state: '待审批',
-            instance_id: '实例1',
-            az_name: '资源池1',
-            created_time: '2016-06-23'
-          }
-        ];
+//        this.getApprovalResource();
       },
       // 分页
       changePage (page) {
-        this.queryResult = this.mockTableData(this.getResult,this.page_size,page);
+
+        this.queryResult = this.mockTableData(this.getResult,this.page_size,page)
+
         this.current_page = page
       },
       page_size_change (size) {
         this.page_size = size
+
+        this.current_page = 1
+
+        this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
 
       },
       mockTableData (originData, pageSize, index) {//进行分页
@@ -270,28 +259,7 @@
         data = originData.slice(num,maxNum)
 
         return data;
-      },
-      timeFormat (date) {//时间格式化
-        let Y = date.getFullYear();
-        let M = date.getMonth()+1;
-        let D = date.getDate()
-        let h = date.getHours()
-        let m = date.getMinutes()
-        let s = date.getSeconds()
-        M = M<10?'0' + M:M
-        D = D<10?'0' + D:D
-        h = h<10?'0' + h:h
-        m = m<10? '0' + m:m
-        s = s<10? '0' + s:s
-
-        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m + ':' + s
-        return applyDate
       }
-      // 时间选择器
-//      formatCreateData(value) {
-//        console.log('ddsss', this.formValidate);
-//        this.formValidate.start_time = value
-//      }
     }
   }
 </script>

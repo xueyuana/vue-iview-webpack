@@ -14,6 +14,9 @@
     </div>
     <div class="inquire-table-title">资源信息</div>
     <div class="contain" v-for="(item,index) in resourceInformation" :class="{border: index == 0?false:true}">
+     <div class="delete" :class="{hidden: index == 0 || isDisabled? true:false}">
+       <Button type="primary" @click="deleteVm(index)">删除</Button>
+     </div>
       <div class="item">
         <span class="title">虚拟机名称</span>
         <Input v-model="item.vm_name" placeholder="请输入" :disabled="isDisabled" style="width: 200px"></Input>
@@ -23,7 +26,7 @@
         <Input v-model="department" :disabled="isDisabled" disabled style="width: 200px"></Input>
       </div>
       <div class="item">
-        <span class="title">资源池选择</span>
+        <span class="title">部署区域</span>
         <Select v-model="az_name" style="width:200px" :disabled="index ==0 && !isDisabled?false:true">
           <Option v-for="item in az" :value="item.az_name" :key="item">{{ item.az_name }}</Option>
         </Select>
@@ -70,7 +73,7 @@
         </Modal>
       </div>
       <div class="item">
-        <span class="title">镜像</span>
+        <span class="title">操作系统</span>
         <Select v-model="item.image_id" :disabled="isDisabled" style="width:200px">
           <Option v-for="item in mirrorImage" :value="item.id" :key="item">{{ item.image_name }}</Option>
         </Select>
@@ -93,6 +96,14 @@
     </div>
     <div class="inquire-table-title">业务信息</div>
     <Input class="comment" v-model="business_info" :disabled="isDisabled" type="textarea" :maxlength="500" :rows=6 placeholder="请输入"></Input>
+    <div :class="{hidden: !isDisabled}">
+      <div class="inquire-table-title">直属领导审批意见</div>
+      <Input class="comment" v-model="suggestion" :disabled="isDisabled" type="textarea" :maxlength="100" :rows=6 placeholder="暂无审批意见"></Input>
+    </div>
+    <div :class="{hidden: !isDisabled}">
+      <div class="inquire-table-title">经信委技术审批意见</div>
+      <Input class="comment" v-model="admin_suggestion" :disabled="isDisabled" type="textarea" :maxlength="100" :rows=6 placeholder="暂无审批意见"></Input>
+    </div>
   </div>
 </template>
 
@@ -109,6 +120,8 @@
         instanceCreate: false,
         okText: '10秒钟后关闭',
         isDisabled: false,
+        suggestion: '',
+        admin_suggestion: '',
         columns: [
           {
             title: '服务器',
@@ -173,12 +186,11 @@
     },
     created () {
 
-
+      this.getUser()//获取用户信息
       this.getFlavor()//获取规格
       this.getImage()//获取镜像
       this.getInstance()//获取实例
       this.getAz()//获取资源池
-      this.getUser()//获取用户信息
 
       let id = this.$route.query.id
       if(id === undefined) {
@@ -205,7 +217,6 @@
             {
               vm_name: '',
               vm_num: 0,
-              department: '',
               flavor_id: '',
               image_id: '',
               storage: ''
@@ -263,7 +274,7 @@
         const url = 'api/deploy_instance/deploy_instances'
 
         let params = {
-          user_id:'0753bf1a-5736-11e7-929a-fa163e9474c9'
+          user_id: this.user_info.id
         }
 
         this.$http.get(url,{params:params}).then((res) => {
@@ -294,37 +305,41 @@
 
         this.resourceInformation.push({
           vm_name: '',
-          department: '',
-          image_id: '',
+          vm_num: 0,
           flavor_id: '',
-          storage: '',
-          vm_num: 0
+          image_id: '',
+          storage: ''
         })
       },
+      deleteVm (index) {
+        this.resourceInformation.splice(index,1)
+      },
+
       getResource (query) {//根据资源ID查询资源
         const url = 'api/mpc_resource/mpc_resources'
 
         this.$http.get(url,{params:query}).then(res => {
-          console.log('资源查询',res.body)
-          let resourceInformation = res.body.result.res[0]
+//          console.log('资源查询',res.body)
+          let resource_info = res.body.result.res[0]
 
-          switch (resourceInformation.status) {
+          switch (resource_info.status) {
             case 'submit': this.current = 1; this.stepsStatus = 'process'
               break
             case 'l_success': this.current = 2;this.stepsStatus = 'process'
               break
             case 'l_fail': this.current = 1 ; this.stepsStatus = 'error'
               break
-            case 'a_success': this.current = 3;this.stepsStatus = 'process'
+            case 'a_success': this.current = 3;this.stepsStatus = 'finish'
               break
             case 'a_fail': this.current = 2 ; this.stepsStatus = 'error'
               break
           }
 
-          this.business_info = resourceInformation.business_info
-          this.az_name = resourceInformation.az_name
-          this.instance_id = resourceInformation.instance_id
-          this.resourceInformation = resourceInformation.resources
+          this.business_info = resource_info.business_info
+          this.az_name = resource_info.az_name
+          this.instance_id = resource_info.instance_id
+          this.resourceInformation = resource_info.resources
+          this.suggestion = resource_info.suggestion
 
         },(err) => {
           console.log(err)
@@ -347,12 +362,14 @@
           return
         }
 
+
         let requestBody = {
           user_name: this.user_info.username,
           user_id: this.user_info.id,
           business_info: this.business_info,
           az_name: this.az_name,
           instance_id: this.instance_id,
+          department: this.department,
           resources: this.resourceInformation
         }
 
@@ -453,6 +470,15 @@
   .modal-wrap {
     width: 90%;
     margin: 0 auto;
+  }
+
+  .delete {
+    width: 100%;
+    padding-left: 94%;
+
+  }
+  .hidden {
+    display: none;
   }
 
   table {

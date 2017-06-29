@@ -13,7 +13,7 @@
                                     <Icon type="ios-monitor" size="62" color="#8BC34A"></Icon>
                                 </div>
                                 <div class="top_right fr">
-                                    <div class="count" v-model="dataList.list">{{ resourceNum }}</div>
+                                    <div class="count">{{ instance }}</div>
                                     <div class="name">部署实例</div>
                                 </div>
                             </div>
@@ -27,7 +27,7 @@
                                     <Icon type="ios-cloud" size="62" color="#ff8a65"></Icon>
                                 </div>
                                 <div class="top_right fr">
-                                    <div class="count" v-model="dataList.count">{{ projectNum }}</div>
+                                    <div class="count">{{ vm_length }}</div>
                                     <div class="name">云主机</div>
                                 </div>
                             </div>
@@ -40,7 +40,7 @@
                                     <Icon type="easel" size="62" color="#8BC34A"></Icon>
                                 </div>
                                 <div class="top_right fr">
-                                    <div class="count" v-model="dataList.sqlmongo">{{ vcpuNum }}</div>
+                                    <div class="count">{{ cpu }}C</div>
                                     <div class="name">VCPU</div>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                                 <Icon type="android-options" size="62" color="#3BCCE1"></Icon>
                             </div>
                             <div class="top_right fr">
-                                <div class="count" v-model="dataList.redies">{{ databaseNum }}</div>
+                                <div class="count">{{ memory }}G</div>
                                 <div class="name">内存</div>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
                                 <Icon type="social-instagram" size="62" color="#BA68C8"></Icon>
                             </div>
                             <div class="top_right fr">
-                                <div class="count" v-model="dataList.redies">{{ memeryNum }}</div>
+                                <div class="count">{{ storage }}</div>
                                 <div class="name">硬盘</div>
                             </div>
                         </div>
@@ -93,8 +93,8 @@
             <Col span="12">
                 <div @click="myApplication">
                     <Icon type="record" size="10"></Icon>我的申请
-                    <span class="title">待审批：</span><span class="num">{{ pendingApproval }}</span>
-                    <span class="title">已审批：</span><span class="num">{{ approved }}</span>
+                    <span class="title">待审批：</span><span class="num">{{ no_success }}</span>
+                    <span class="title">审批完成：</span><span class="num">{{ success }}</span>
                 </div>
             </Col>
             <Col span="12"></Col>
@@ -105,29 +105,155 @@
     export default {
         data () {
             return {
-                dataList: {},
+              user_info: {},
+              flavor: [],
+              index: 0,
+              vm: [],
                 // 统计个数
-                projectNum: 1,
-                resourceNum: 1,
-                vcpuNum: 1,
-                databaseNum: 1,
-                memeryNum: 1,
-                pendingApproval: 1,
-                approved:1
+              instance: 0,
+              vm_length: 0,
+              cpu: 0,
+              memory: 0,
+              storage: 0,
+              pendingApproval: 1,
+              approved: 1,
+              success: 0,
+              no_success: 0,
+
             }
         },
 
-        mounted() {
+        created() {
+
+          this.getUser()//获取用户信息
+          this.getInstance()//获取实例
+          this.getFlavor()//获取规格
+
+          this.getVm()
+          this.getUserResource()
 
         },
         methods: {
-            goResourceApp () {
+          getFlavor () {//获取虚拟规格
+            const url = 'api/flavor/flavors'
+
+            this.$http.get(url).then((res) => {
+//
+              this.flavor = res.body.result.res
+
+              this.index ++
+              console.log('规格',this.flavor)
+            },(err) => {
+              console.log(err)
+            })
+
+          },
+          getInstance () {//获取实例
+            const url = 'api/deploy_instance/deploy_instances'
+
+            let params = {
+              user_id: this.user_info.id
+            }
+
+            this.$http.get(url,{params:params}).then((res) => {
+
+              this.instance = res.body.result.res.length
+
+            },(err) => {
+              console.log(err)
+            })
+          },
+          getVm () {//获取虚拟机
+            const url = 'api/mpc_resource/mpc_resource_creater'
+
+            let query = {user_id: this.user_info.id}
+
+            this.$http.get(url,{params: query}).then((res) => {
+
+              this.vm_length = res.body.result.res.length
+              this.vm = res.body.result.res
+
+              this.index ++
+              console.log('虚机',res.body.result.res)
+
+            },(err) => {
+              console.log(err)
+            })
+
+          },
+          getUserResource () {
+
+            const url = 'api/mpc_resource/mpc_resources'
+
+            let query = {user_id: this.user_info.id}
+
+
+            this.$http.get(url,{params: query}).then((res) => {
+              console.log(res)
+
+              res.body.result.res.forEach((item,index) => {
+
+                if(item.status == 'a_success' || item.status == 'created_success') {
+                  this.success ++
+                }else {
+                  this.no_success ++
+                }
+              })
+
+
+
+
+            },(err) => {
+              console.log(err)
+            })
+
+          },
+          getUser () {
+
+            Object.assign(this.user_info,this.$store.state.userData.userInfo)
+
+          },
+          formatData () {
+
+            this.vm.forEach((vm,index) => {
+
+              this.flavor.forEach((flavor,index) => {
+                if(vm.flavor_id == flavor.flavor_id) {
+
+                  this.cpu += flavor.cpu
+
+                  this.memory += flavor.memory/1024
+
+                  this.storage += vm.storage
+
+                }
+
+              })
+
+
+            })
+            console.log(this.cpu,this.memory)
+
+
+          },
+
+          goResourceApp () {
                 this.$router.push({name: 'user_resourceApplication'});
             },
-            myApplication () {
+          myApplication () {
                 this.$router.push({name: 'user_resourceQuery'});
             }
+        },
+      watch: {
+        index (newVal) {
+          if(newVal == 2) {
+
+            this.formatData()
+
+          }
+
         }
+      }
     }
 </script>
 
@@ -167,7 +293,7 @@
 
     }
     .top .top_right {
-        font-size: 16px;
+        font-size: 20px;
         text-align: center;
         margin-top: 20px;
     }

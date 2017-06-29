@@ -14,8 +14,8 @@
         </div>
 
         <div class="item">
-          <span class="title">资源池:</span>
-          <Select v-model="query_info.az" style="width:250px">
+          <span class="title">部署区域:</span>
+          <Select v-model="query_info.az_name" style="width:250px">
             <Option v-for="item in az" :value="item.az_name" :key="item">{{ item.az_name }}</Option>
           </Select>
         </div>
@@ -28,7 +28,7 @@
         </div>
         <div class="item">
           <span class="title">部署实例:</span>
-          <Select v-model="query_info.instance_name" style="width:250px">
+          <Select v-model="query_info.instance_id" style="width:250px">
             <Option v-for="item in instance" :value="item.instance_id" :key="item" >{{ item.instance_name }} </Option>
           </Select>
         </div>
@@ -47,14 +47,14 @@
       </thead>
       <tbody>
         <tr v-for="(item,index) in queryResult" :class="{bac: index%2 != 0}">
-          <td>{{index + 1}}</td>
-          <td>{{item.virtualMachine}}</td>
-          <td>{{item.deployExample}}</td>
+          <td>{{item.number}}</td>
+          <td>{{item.vm_name}}</td>
+          <td>{{item.deploy_inst_id}}</td>
           <td>{{item.ip}}</td>
-          <td>{{item.mirrorImage}}</td>
-          <td>{{item.physicalMachine}}</td>
-          <td>{{item.resourcePool}}</td>
-          <td>{{item.standard}}</td>
+          <td>{{item.image_id}}</td>
+          <td>{{item.host_name}}</td>
+          <td>{{item.az_name}}</td>
+          <td>{{item.flavor_id}}</td>
           <td> {{item.status}} </td>
           <td>
             <Dropdown>
@@ -68,12 +68,15 @@
             </Dropdown>
           </td>
         </tr>
+        <tr :class="{hidden: data_length}">
+         <td colspan="10"> 暂无数据</td>
+        </tr>
 
       </tbody>
 
     </table>
     <div class="page">
-      <Page :total="100" show-sizer @on-change="changePage"></Page>
+      <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page" :page-size="page_size"></Page>
     </div>
 
   </div>
@@ -84,6 +87,11 @@
   export default {
     data () {
       return {
+        index: 0,
+        data_length: 0,
+        current_page: 1,
+        page_size: 10,
+        user_info: {},
         approvalStatusVal: [
           {
             value: '行政审批中',
@@ -107,13 +115,15 @@
           }
         ],
         instance: [],
+        flavor: [],
         az: [],
+        mirrorImage: [],
         query_info: {
           applyDate: [],
           vm_name: '',
-          az: '',
+          az_name: '',
           status: '',
-          instance_name: ''
+          instance_id: ''
         },
         operationList: [],
         model2: '',
@@ -124,31 +134,31 @@
           },
           {
             title: '虚拟机名称',
-            key: 'virtualMachine'
+            key: 'vm_name'
           },
           {
             title: '部署实例',
-            key: 'deployExample'
+            key: 'deploy_inst_id'
           },
           {
             title: 'IP',
             key: 'ip'
           },
           {
-            title: '镜像名称',
-            key: 'mirrorImage'
+            title: '操作系统',
+            key: 'image_id'
           },
           {
             title: '所在物理机',
-            key: 'physicalMachine'
+            key: 'host_name'
           },
           {
-            title: '所属资源池',
-            key: 'resourcePool'
+            title: '部署区域',
+            key: 'az_name'
           },
           {
             title: '规格',
-            key: 'standard'
+            key: 'flavor_id'
           },
           {
             title: '状态',
@@ -159,78 +169,36 @@
             key: 'operate',
           }
         ],
-        queryResult: [
-          {
-            number: 1,
-            virtualMachine: '虚拟机1',
-            deployExample: '部署实例1',
-            ip: '127.29.11.200',
-            mirrorImage: 'Centos 7.2',
-            physicalMachine: '物理机1',
-            resourcePool: 'DMZ',
-            standard: '2C/2G/200G',
-            status: '运行'
-          }
-
-        ]
+        getResult: [],
+        queryResult: []
 
       }
     },
     created () {
+      this.getUser()
+
+      this.getVm({user_id: this.user_info.id})//获取虚机
       this.getAz()//获取资源池
       this.getInstance()//获取实例
-        this.queryResult.forEach((item,index) => {
-          switch (item.status) {
-            case '运行': this.operationList.push([
-              {
-                value: '重启',
-                selected: false
-              },
-              {
-                value: '关机',
-                selected: false
-              },
-              {
-                value: '删除',
-                selected: false
-              }
-            ])
-              break
-            case '异常': this.operationList.push([
-              {
-                value: '启动',
-                selected: false
-              },
-              {
-                value: '开机',
-                selected: false
-              },
-              {
-                value: '删除',
-                selected: false
-              }
-            ])
-              break
-            case '开机': this.operationList.push([
-              {
-                value: '关机',
-                selected: false
-              },
-              {
-                value: '重启',
-                selected: false
-              },
-              {
-                value: '删除',
-                selected: false
-              }
-            ])
-              break
-          }
-        })
+
+      this.getFlavor()//获取规格
+      this.getImage()//获取镜像
+
 
     },
     methods: {
+      getFlavor () {//获取虚拟规格
+        const url = 'api/flavor/flavors'
+
+        this.$http.get(url).then((res) => {
+          this.index ++
+//          console.log('规格',res.body)
+          this.flavor = res.body.result.res
+        },(err) => {
+          console.log(err)
+        })
+
+      },
       getAz () {//获取资源池
         const url = 'api/pool/pools'
 
@@ -250,10 +218,11 @@
         const url = 'api/deploy_instance/deploy_instances'
 
         let params = {
-          user_id:'0753bf1a-5736-11e7-929a-fa163e9474c9'
+          user_id: this.user_info.id
         }
 
         this.$http.get(url,{params:params}).then((res) => {
+          this.index ++
 //          console.log('实例',res.body)
           this.instance = res.body.result.res
 
@@ -261,7 +230,68 @@
           console.log(err)
         })
       },
-      clicknative (event,index) {
+      getImage () {//获取镜像
+        const url = 'api/image/images'
+        this.$http.get(url).then((res) => {
+          this.index ++
+          console.log('镜像',res.body)
+          this.mirrorImage =  res.body.result.res
+        },(err) => {
+          console.log(err)
+        })
+      },
+      getUser () {
+
+        Object.assign(this.user_info,this.$store.state.userData.userInfo)
+
+      },
+      query () {
+        this.getResult = []
+        this.queryResult = []
+        this.current_page = 1
+
+        const start_time = this.query_info.applyDate[0]
+        const end_time = this.query_info.applyDate[1]
+
+        let requestBody = {}
+
+        requestBody.user_id = this.user_info.id
+        start_time && (requestBody.start_time = this.timeFormat(start_time))
+        end_time && (requestBody.end_time = this.timeFormat(end_time))
+        this.query_info.status && (requestBody.status = this.query_info.status)
+        this.query_info.instance_id && (requestBody.instance_id = this.query_info.instance_id)
+        this.query_info.az_name && (requestBody.az_name = this.query_info.az_name)
+        this.query_info.vm_name && (requestBody.vm_name = this.query_info.vm_name)
+        console.log('res',requestBody)
+
+        this.getVm(requestBody)
+
+      },
+      getVm (query) {//获取虚拟机
+        const url = 'api/mpc_resource/mpc_resource_creater'
+
+        this.$http.get(url,{params: query}).then((res) => {
+          this.index ++
+          console.log('虚机',res.body)
+          this.getResult = res.body.result.res
+
+          this.data_length = this.getResult.length
+
+//          this.getResult.forEach((item,index) => {
+//
+//          })
+
+          if(this.index == 4) {
+            this.formatData()
+          }
+
+
+        },(err) => {
+          console.log(err)
+        })
+
+      },
+      clicknative (event,index) {//点击高亮显示
         //index指的是行数
         this.operationList[index].forEach((item,index) => {
           if(item.value == event.target.firstChild.data) {
@@ -272,20 +302,155 @@
         })
 
       },
-      changePage () {
+      changePage (page) {
+
+        this.queryResult = this.mockTableData(this.getResult,this.page_size,page)
+
+        this.setOptionList()
+
+        this.current_page = page
 
       },
-      query () {
+      page_size_change (size) {
+        this.page_size = size
 
+        this.current_page = 1
+
+        this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
+
+        this.setOptionList()
+
+      },
+      formatData () {
+//        console.log(this.getResult)
+        this.getResult.forEach((vm,index) => {
+         vm.number = index +1
+
+          this.instance.forEach((inst) => {//循环实例
+            if(inst.instance_id == vm.deploy_inst_id) {
+              vm.deploy_inst_id = inst.instance_name
+            }
+          })
+
+          this.mirrorImage.forEach((image) => {//循环镜像
+            if(image.id == vm.image_id) {
+              vm.image_id = image.image_name
+            }
+          })
+
+          this.flavor.forEach((flavor) => {//循环规格
+            if(flavor.flavor_id == vm.flavor_id) {
+              vm.flavor_id = flavor.flavor_name
+            }
+          })
+
+          switch (vm.status) {
+            case 'summit': vm.status = '提交'
+              break
+            case 'running': vm.status = '运行'
+              break
+            case 'error': vm.status = '异常'
+              break
+          }
+
+        })
+
+        this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
+        console.log(this.queryResult)
+
+        this.setOptionList()
+
+
+      },
+      setOptionList () {
+        this.operationList = []
+        this.queryResult.forEach((item,index) => {
+
+          switch (item.status) {
+            case '运行': this.operationList.push([
+              {
+                value: '重启',
+                selected: false
+              },
+              {
+                value: '关机',
+                selected: false
+              },
+              {
+                value: '删除',
+                selected: false
+              }
+            ])
+              break
+            case '异常': this.operationList.push([
+              {
+                value: '删除',
+                selected: false
+              }
+            ])
+              break
+            case '提交': this.operationList.push([
+              {
+                value: '删除',
+                selected: false
+              }
+            ])
+              break
+          }
+
+        })
       },
       reset () {
         this.query_info = {
           applyDate: [],
           vm_name: '',
-          az: '',
+          az_name: '',
           status: '',
-          instance_name: ''
+          instance_id: ''
+
         }
+      },
+      mockTableData (originData, pageSize, index) {//进行分页
+
+        let data = [];
+
+        let num = (index - 1) * pageSize
+        let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize)
+
+        data = originData.slice(num,maxNum)
+//        console.log(num,maxNum)
+
+        return data;
+      },
+      timeFormat (date) {//时间格式化
+
+        let Y = date.getFullYear();
+        let M = date.getMonth()+1;
+        let D = date.getDate()
+        let h = date.getHours()
+        let m = date.getMinutes()
+        let s = date.getSeconds()
+        M = M<10?'0' + M:M
+        D = D<10?'0' + D:D
+        h = h<10?'0' + h:h
+        m = m<10? '0' + m:m
+        s = s<10? '0' + s:s
+
+        let applyDate = Y + '-'+ M +'-'+D +' '+ h +':'+ m + ':' + s
+        return applyDate
+      },
+    },
+    watch: {
+      index (newVal,oldVal) {
+        if(newVal == 4) {
+//          console.log('instance',this.instance)
+//          console.log('image',this.mirrorImage)
+//          console.log('flavor',this.flavor)
+//          console.log('vm',this.getResult)
+          this.formatData()
+
+        }
+
       }
     }
   }
@@ -360,6 +525,10 @@
   table tbody tr:hover {
     background-color: #F3FAFF;
   }
+
+ .hidden {
+   display: none;
+ }
 
   .ivu-dropdown-menu {
     min-width: 60px;

@@ -61,7 +61,7 @@
             </Select>
           </Form-item>
           <Form-item label="公网IP地址:">
-            <Input v-model="formCustom.ip_address" disabled></Input>
+            <Input v-model="formCustom.ip_address" disabled placeholder="192.168.3.1"></Input>
           </Form-item>
           <Form-item label="内网IP地址:">
             <Input v-model="formCustom.subpri_ipnet_mask" placeholder="192.168.2.1/24"></Input>
@@ -162,7 +162,7 @@
                     this.option = true
                   }
                 }
-              }, '编辑')
+              }, '发布')
             }
           }
 
