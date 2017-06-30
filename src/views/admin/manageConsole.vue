@@ -34,7 +34,7 @@
       <Col span="12">
         <div @click="toApproval">
           <Icon type="record" size="10"></Icon>资源审批
-          <span class="title">待审批：</span><span class="num">6</span>
+          <span class="title">待审批：</span><span class="num">{{approvalList.length}}</span>
         </div>
       </Col>
       <Col span="12"></Col>
@@ -58,16 +58,19 @@
   require('echarts/lib/chart/pie');
 
   export default {
-    data () {
-      return {}
+    data() {
+      return {
+        approvalList: []
+      }
     },
 
     created() {
       this.onInit()
+      this.onInquire()
     },
 
     methods: {
-        // 查询
+        // 查询资源概览
       onInit() {
         let url = 'api/pool/statistics'
         this.$http.get(url).then(res => {
@@ -80,6 +83,24 @@
           this.$Message.error(err.body.result.msg)
         })
       },
+        // 技术待审批
+      onInquire() {
+        let url = 'api/mpc_resource/mpc_resources'
+        let query = {status: 'l_success'}
+
+        this.$http.get(url, {
+          params: query
+        }).then(res => {
+          if (res.body.code === 200) {
+            this.approvalList = res.body.result.res
+          } else {
+            this.$Message.error(res.body.result.msg)
+          }
+        }, err => {
+          console.log('error', err)
+        })
+      },
+
         // 绘制饼图
       drawPie(data) {
 
