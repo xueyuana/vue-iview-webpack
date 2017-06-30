@@ -280,7 +280,6 @@
 
       },
       reload () {
-        console.log('shuaxin')
 
         if (this.user_info.role === 'user') {
           this.getVm({user_id: this.user_info.id})//获取虚机
@@ -341,11 +340,19 @@
           })
 
           switch (vm.status) {
-            case 'summit': vm.status = '提交'
+            case 'build': vm.status = '创建中'
               break
-            case 'running': vm.status = '运行'
+            case 'active': vm.status = '运行中'
               break
-            case 'error': vm.status = '异常'
+            case 'shutoff': vm.status = '关机'
+              break
+            case 'reboot': vm.status = '重启中'
+              break
+            case 'hard_reboot': vm.status = '硬重启中'
+              break
+            case 'vm_error': vm.status = '虚机创建失败'
+              break
+            case 'vol_error': vm.status = '存储空间创建失败'
               break
           }
 
@@ -364,7 +371,9 @@
         this.queryResult.forEach((item,index) => {
 
           switch (item.status) {
-            case '运行': this.operationList.push([
+            case '创建中': this.operationList.push([])
+              break
+            case '运行中': this.operationList.push([
               {
                 key: 'restart',
                 value: '重启',
@@ -382,7 +391,20 @@
               }
             ])
               break
-            case '异常': this.operationList.push([
+            case '关机': this.operationList.push([
+              {
+                key: 'delete',
+                value: '删除',
+                selected: false
+              },
+              {
+                key: 'start',
+                value: '开机',
+                selected: false
+              }
+            ])
+              break
+            case '重启中': this.operationList.push([
               {
                 key: 'delete',
                 value: '删除',
@@ -390,7 +412,23 @@
               }
             ])
               break
-            case '提交': this.operationList.push([
+            case '硬重启中': this.operationList.push([
+              {
+                key: 'delete',
+                value: '删除',
+                selected: false
+              }
+            ])
+              break
+            case '虚机创建失败': this.operationList.push([
+              {
+                key: 'delete',
+                value: '删除',
+                selected: false
+              }
+            ])
+              break
+            case '存储空间创建失败': this.operationList.push([
               {
                 key: 'delete',
                 value: '删除',
