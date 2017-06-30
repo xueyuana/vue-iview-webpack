@@ -101,7 +101,7 @@
                     </Form>
                 </Modal>
             </div>
-            <Table border :columns="columns7" stripe :data="data6"></Table>
+            <Table :columns="columns7" stripe :data="data6"></Table>
             <div style="margin: 10px;overflow: hidden">
                 <div style="float: right;">
                     <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>

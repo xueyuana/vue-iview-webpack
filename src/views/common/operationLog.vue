@@ -63,7 +63,7 @@
           },
           {
             title: '操作日志',
-            key: 'description',
+            key: 'content',
             align: 'center'
           },
           {
@@ -98,7 +98,7 @@
         requestBody.user_id = this.$store.state.userData.userInfo.id;
         start_time && (requestBody.start_time = formatDate(start_time));
         end_time && (requestBody.end_time = formatDate(end_time));
-        this.formValidate.key_name && (requestBody.key_name = this.formValidate.key_name);
+        this.formValidate.key_name && (requestBody.user_name = this.formValidate.key_name);
 
         this.getOperationLog(requestBody);
       },
@@ -113,7 +113,7 @@
           res.body.result.res.forEach((item,index) => {
             this.getResult.push({
             index: index +1,
-            description: item.description,
+            content: item.content,
             created_time: item.created_date.slice(0,16),
             user_name: item.user_name
           })
@@ -127,14 +127,6 @@
       },
       handleReset (name) {
         this.$refs[name].resetFields();
-        this.dataDemo = [
-          {
-            index: 1,
-            userName: '张三',
-            operation: '点击查询按钮',
-            create_date: '2016-10-04'
-          }
-        ];
       },
       // 分页
       changePage (page) {
