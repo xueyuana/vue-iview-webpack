@@ -15,7 +15,7 @@
     <div class="inquire-table-title">资源信息</div>
     <div class="contain" v-for="(item,index) in resourceInformation" :class="{border: index == 0?false:true}">
      <div class="delete" :class="{hidden: index == 0 || isDisabled? true:false}">
-       <Button type="primary" @click="deleteVm(index)">删除</Button>
+       <Icon type="trash-a" @click.native="deleteVm(index)" size="26" color="#0063d0"></Icon>
      </div>
       <div class="item">
         <span class="title">虚拟机名称</span>
@@ -556,9 +556,9 @@
   }
 
   .delete {
-    width: 100%;
-    padding-left: 94%;
-
+    width: 50px;
+    margin-left: 94%;
+    cursor: pointer;
   }
   .hidden {
     display: none;
