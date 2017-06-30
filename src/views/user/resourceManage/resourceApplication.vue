@@ -33,9 +33,9 @@
       </div>
       <div class="item example">
         <span class="title">部署实例</span>
-        <Select v-model="instance_id" style="width:200px" :disabled="index ==0 && !isDisabled?false:true">
-          <Option v-for="item in instance" @click.native="instanceDetails" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
-        </Select>
+          <Select v-model="instance_id" style="width:200px" :disabled="index ==0 && !isDisabled?false:true">
+            <Option v-for="item in instance" @click.native="instanceDetails" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
+          </Select>
         <Button type="dashed" class="add-example" :class="{hidden: index == 0?false:true}" @click="createExample">新建部署实例</Button>
         <Modal v-model="instanceCreate" title="提示" :ok-text="okText" :mask-closable="false" :closable="false">
           <div class="modal-wrap">
@@ -44,23 +44,23 @@
               <tbody>
               <tr>
                 <td>用户群体规模</td>
-                <td>内网少量用户</td>
+                <td>{{recomConfig.user_size}}</td>
               </tr>
               <tr>
                 <td>用户活跃度</td>
-                <td>偶尔使用</td>
+                <td>{{recomConfig.liveness}}</td>
               </tr>
               <tr>
                 <td>业务类型</td>
-                <td>网站</td>
+                <td>{{recomConfig.business_type}}</td>
               </tr>
               <tr>
                 <td>数据大小</td>
-                <td>MB级</td>
+                <td>{{recomConfig.data_unit}}</td>
               </tr>
               <tr>
                 <td>高可用</td>
-                <td>不需要</td>
+                <td>{{recomConfig.ha}}</td>
               </tr>
               </tbody>
             </table>
@@ -118,17 +118,11 @@
         stepsStatus: 'process',
         user_info: {},
         instanceCreate: false,
-        okText: '10秒钟后关闭',
+        okText: '关闭',
         isDisabled: false,
         suggestion: '',
         admin_suggestion: '',
         columns: [
-          {
-            title: '服务器',
-            key: 'server',
-            width: 100,
-            align: 'center'
-          },
           {
             title: '配置',
             key: 'configuration',
@@ -137,22 +131,18 @@
           {
             title: '数量(台)',
             key: 'number',
-            width: 100,
-            align: 'center'
+            align: 'center',
+            width: '150'
           }
         ],
-        configuration: [
-          {
-            server: 'WEB',
-            configuration: 'CPU：2核 | 内存：2G | 硬盘：50G',
-            number: 1
-          },
-          {
-            server: '数据库',
-            configuration: 'CPU：4核 | 内存：8G | 硬盘：200G',
-            number: 1
-          }
-        ],
+        recomConfig: {},    // 推荐配置
+        configData: {
+          cpu: 2,
+          memory: 4,
+          storage: 50,
+          num: 1
+        },
+
         instance_id: '',
         az_name: '',
         business_info: '',
@@ -220,6 +210,15 @@
     computed: {
       routeId () {
         return this.$route.query.id
+      },
+
+      configuration() {
+        return [
+          {
+            configuration: 'CPU：'+ this.configData.cpu +'核 | 内存：'+ this.configData.memory +'G | 硬盘：'+ this.configData.storage +'G',
+            number: this.configData.num
+          }
+        ]
       }
     },
     methods: {
@@ -378,14 +377,107 @@
 
 
       },
+
       instanceDetails () {//展示实例详情推荐配置
-
         this.instanceCreate = true
-
+        this.getDeploy(this.instance_id)
       },
       closeModal () {
         this.instanceCreate = false
-      }
+      },
+
+      getDeploy(id) {     // 某条部署实例
+        let url = 'api/deploy_instance/deploy_instances'
+        let query = {instance_id: id}
+        this.$http.get(url, {params: query}).then((res) => {
+          if (res.body.code === 200) {
+            this.recomConfig = res.body.result.res[0]
+            this.countConfig(this.recomConfig)
+          }
+        }, (err) => {
+          console.log(err)
+        });
+      },
+
+      countConfig(config) {
+        let cpu = []
+        let memory = []
+        let storage = []
+        let num = []
+        switch (config.user_size) {
+          case '内网少量用户':
+            cpu.push(2); memory.push(4); storage.push(50); num.push(1)
+            break
+          case '内网大量用户':
+            cpu.push(4); memory.push(8); storage.push(100); num.push(1)
+            break
+          case '外网少量用户':
+            cpu.push4; memory.push(8); storage.push(100); num.push(1)
+            break
+          case '外网大量用户':
+            cpu.push(8); memory.push(16); storage.push(200); num.push(1)
+            break
+          default:
+        }
+        switch (config.liveness) {
+          case '偶尔使用':
+            cpu.push(2); memory.push(4); storage.push(50); num.push(1)
+            break
+          case '经常使用':
+            cpu.push(4); memory.push(8); storage.push(100); num.push(2)
+            break
+          case '频繁使用':
+            cpu.push(8); memory.push(16); storage.push(200); num.push(4)
+            break
+          default:
+        }
+        switch (config.business_type) {
+          case '网站':
+            cpu.push(2); memory.push(4); storage.push(50); num.push(2)
+            break
+          case '存储类应用':
+            cpu.push(4); memory.push(8); storage.push(500); num.push(4)
+            break
+          case '视频':
+            cpu.push(8); memory.push(16); storage.push(500); num.push(4)
+            break
+          case '大数据':
+            cpu.push(8); memory.push(16); storage.push(500); num.push(4)
+            break
+          default:
+        }
+        switch (config.data_unit) {
+          case 'MB':
+            cpu.push(2); memory.push(4); storage.push(50); num.push(1)
+            break
+          case 'GB':
+            cpu.push(4); memory.push(8); storage.push(500); num.push(2)
+            break
+          case 'TB':
+            cpu.push(8); memory.push(16); storage.push(500); num.push(4)
+            break
+          default:
+        }
+        cpu.sort((a,b) => {return b - a});
+        memory.sort((a,b) => {return b - a});
+        storage.sort((a,b) => {return b - a});
+        num.sort((a,b) => {return b - a});
+        this.configData.cpu = cpu[0]
+        this.configData.memory = memory[0]
+        this.configData.storage = storage[0]
+        this.configData.num = num[0]
+
+        switch (config.ha) {
+          case '需要':
+            this.configData.cpu *= 2
+            this.configData.memory *= 2
+            this.configData.storage *= 2
+            this.configData.num *= 2
+            break
+          default:
+        }
+
+      },
     }
 
   }

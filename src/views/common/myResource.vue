@@ -38,7 +38,13 @@
         <Button class="reset" type="ghost" @click="reset">重置</Button>
       </div>
     </div>
-    <div class="inquire-table-title">资源列表</div>
+
+    <div class="inquire-table-title">
+      资源列表
+      <div class="reload">
+        <Icon type="refresh" :size="30" @click.native="reload"></Icon>
+      </div>
+    </div>
     <table>
       <thead>
         <tr>
@@ -70,7 +76,7 @@
           </td>
         </tr>
         <tr :class="{hidden: data_length}">
-         <td colspan="10"> 暂无数据</td>
+         <td colspan="11"> 暂无数据</td>
         </tr>
 
       </tbody>
@@ -174,7 +180,12 @@
     created () {
       this.getUser()
 
-      this.getVm({user_id: this.user_info.id})//获取虚机
+      if (this.user_info.role === 'user') {
+        this.getVm({user_id: this.user_info.id})//获取虚机
+      } else {
+        this.getVm({})
+      }
+
       this.getAz()//获取资源池
       this.getInstance()//获取实例
 
@@ -214,8 +225,10 @@
       getInstance () {//获取实例
         const url = 'api/deploy_instance/deploy_instances'
 
-        let params = {
-          user_id: this.user_info.id
+        let params = {}
+
+        if (this.user_info.role === 'user') {
+          params.user_id = this.user_info.id
         }
 
         this.$http.get(url,{params:params}).then((res) => {
@@ -252,7 +265,9 @@
 
         let requestBody = {}
 
-        requestBody.user_id = this.user_info.id
+        if (this.user_info.role) {
+          requestBody.user_id = this.user_info.id
+        }
         start_time && (requestBody.start_time = this.timeFormat(start_time))
         end_time && (requestBody.end_time = this.timeFormat(end_time))
         this.query_info.status && (requestBody.status = this.query_info.status)
@@ -263,6 +278,15 @@
 
         this.getVm(requestBody)
 
+      },
+      reload () {
+        console.log('shuaxin')
+
+        if (this.user_info.role === 'user') {
+          this.getVm({user_id: this.user_info.id})//获取虚机
+        } else {
+          this.getVm({})
+        }
       },
       getVm (query) {//获取虚拟机
 
@@ -589,6 +613,15 @@
   .bac {
     background-color: #fcfcfc;
   }
+  .reload {
+    position: absolute;
+    padding-top: 10px;
+    right: 34px;
+    top: 0;
+  }
+
+
+
 
 
 

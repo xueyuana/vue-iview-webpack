@@ -219,6 +219,8 @@
             console.log('排序后的数组', this.data1)
 
             this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
+            this.num = 1
+
           } else {
             this.$Message.error(data.body.result.msg)
           }
@@ -248,6 +250,7 @@
         // 分页
       changePage(val) {
         this.filterDate = this.mockTableData(this.data1, this.pageSize, val)
+        this.num = val
       },
       changePageSize(val) {
         this.pageSize = val
