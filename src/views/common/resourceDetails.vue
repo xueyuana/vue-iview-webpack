@@ -577,11 +577,15 @@
               break
             case 'a_success':
               this.stepNum = 3;
-              this.stepsStatus = 'process'
+              this.stepsStatus = 'finish'
               break
             case 'a_fail':
               this.stepNum = 2;
               this.stepsStatus = 'error'
+              break
+            case 'created_success':
+              this.stepNum = 3;
+              this.stepsStatus = 'finish'
               break
           }
 
