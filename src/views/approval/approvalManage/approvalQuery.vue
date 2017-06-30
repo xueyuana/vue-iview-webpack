@@ -187,7 +187,8 @@
         })
       },
       goQuery (name) {
-          this.current_page = 1
+          this.current_page = 1;
+          const department = this.$store.state.userData.userInfo.department;
           const start_time = this.formValidate.start_time[0];
           const end_time = this.formValidate.start_time[1];
 
@@ -197,6 +198,7 @@
           this.formValidate.user_name && (requestBody.user_name = this.formValidate.user_name);
           this.formValidate.apply_status && (requestBody.status = this.formValidate.apply_status);
           this.formValidate.instance_id && (requestBody.instance_id = this.formValidate.instance_id);
+          department && (requestBody.department = department);
           console.log('ddsss', requestBody.status);
           this.getApprovalResource(requestBody);
       },
