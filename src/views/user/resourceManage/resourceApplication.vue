@@ -14,8 +14,13 @@
     </div>
     <div class="inquire-table-title">资源信息</div>
     <div class="contain" v-for="(item,index) in resourceInformation" :class="{border: index == 0?false:true}">
-     <div class="delete" :class="{hidden: index == 0 || isDisabled? true:false}">
-       <Icon type="trash-a" @click.native="deleteVm(index)" size="26" color="#0063d0"></Icon>
+     <div class="option" :class="{hidden: index == 0 || isDisabled? true:false}">
+       <div class="delete" @click="deleteVm(index)">
+         <Icon type="trash-a"  size="26" color="#0063d0"></Icon>
+       </div>
+       <div class="add-s" @click="addInformation">
+         <Icon type="plus-round" size="26" color="#0063d0"></Icon>
+       </div>
      </div>
       <div class="item">
         <span class="title">虚拟机名称</span>
@@ -555,9 +560,16 @@
     margin: 0 auto;
   }
 
+  .option {
+    width: 100%;
+    display: flex;
+    padding-left: 90%;
+  }
+  .add-s {
+    margin-left: 30px;
+    cursor: pointer;
+  }
   .delete {
-    width: 50px;
-    margin-left: 94%;
     cursor: pointer;
   }
   .hidden {

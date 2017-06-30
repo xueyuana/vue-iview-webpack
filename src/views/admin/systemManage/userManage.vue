@@ -52,7 +52,7 @@
         </div>
       </Modal>
     </div>
-    <Table border stripe :columns="columns" :data="queryResult"></Table>
+    <Table stripe :columns="columns" :data="queryResult"></Table>
     <Modal
         v-model="isCompile"
         title="用户信息"
@@ -201,7 +201,9 @@
         columns: [
           {
             title: '序号',
-            key: 'number'
+            key: 'number',
+            width: 80,
+            align: 'center'
           },
           {
             title: '用户名',
@@ -619,9 +621,6 @@
   .ivu-form-item {
     margin-bottom: 24px;
   }
-  /*.createWrap {*/
-    /*height: 340px;*/
-  /*}*/
   .queryInformation{
     width: 100%;
     display: flex;
