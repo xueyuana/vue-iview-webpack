@@ -38,7 +38,13 @@
         <Button class="reset" type="ghost" @click="reset">重置</Button>
       </div>
     </div>
-    <div class="inquire-table-title">资源列表</div>
+
+    <div class="inquire-table-title">
+      资源列表
+      <div class="reload">
+        <Icon type="refresh" :size="30" @click.native="reload"></Icon>
+      </div>
+    </div>
     <table>
       <thead>
         <tr>
@@ -70,7 +76,7 @@
           </td>
         </tr>
         <tr :class="{hidden: data_length}">
-         <td colspan="10"> 暂无数据</td>
+         <td colspan="11"> 暂无数据</td>
         </tr>
 
       </tbody>
@@ -263,6 +269,10 @@
 
         this.getVm(requestBody)
 
+      },
+      reload () {
+        console.log('shuaxin')
+        this.getVm({user_id: this.user_info.id})
       },
       getVm (query) {//获取虚拟机
 
@@ -589,6 +599,15 @@
   .bac {
     background-color: #fcfcfc;
   }
+  .reload {
+    position: absolute;
+    padding-top: 10px;
+    right: 34px;
+    top: 0;
+  }
+
+
+
 
 
 
