@@ -183,7 +183,7 @@
       if (this.user_info.role === 'user') {
         this.getVm({user_id: this.user_info.id})//获取虚机
       } else {
-        this.getVm()
+        this.getVm({})
       }
 
       this.getAz()//获取资源池
@@ -281,7 +281,12 @@
       },
       reload () {
         console.log('shuaxin')
-        this.getVm({user_id: this.user_info.id})
+
+        if (this.user_info.role === 'user') {
+          this.getVm({user_id: this.user_info.id})//获取虚机
+        } else {
+          this.getVm({})
+        }
       },
       getVm (query) {//获取虚拟机
 
