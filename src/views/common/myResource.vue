@@ -615,9 +615,10 @@
   }
   .reload {
     position: absolute;
-    padding-top: 10px;
+    padding-top: 12px;
     right: 34px;
     top: 0;
+    cursor: pointer;
   }
 
 

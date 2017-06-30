@@ -586,6 +586,7 @@
             case 'created_success':
               this.stepNum = 3;
               this.stepsStatus = 'finish'
+
               break
           }
 
