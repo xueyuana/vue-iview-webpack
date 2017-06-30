@@ -73,27 +73,19 @@
         },
         approvalStatusVal: [
           {
-            value: '直属领导待审批',
+            value: '待审批',
             key: 'submit'
           },
           {
-            value: '直属领导审批未通过',
+            value: '审批未通过',
             key: 'l_fail'
           },
           {
-            value: '经信委技术待审批',
+            value: '已审批',
             key: 'l_success'
           },
           {
-            value: '经信委技术审批未通过',
-            key: 'a_fail'
-          },
-          {
-            value: '审批完成',
-            key: 'a_success'
-          },
-          {
-            value: '创建资源完成',
+            value: '已创建',
             key: 'created_success'
           }
         ],
@@ -114,13 +106,6 @@
                         domProps: {
                           innerHTML: params.row.resource_id
                         },
-//                        style: {
-//                          display: 'inline-block',
-//                          width: '80px',
-//                          overflow: 'hidden',
-//                          textOverflow: 'ellipsis',
-//                          whiteSpace: 'nowrap'
-//                        },
                         on: {
                           click: () => {
                           let id = params.row.resource_id;
@@ -151,7 +136,21 @@
             title: '审批状态',
             key: 'status',
             align: 'center',
-            sortable: true
+            sortable: true,
+            render: (h, params) => {
+              const row = params.row;
+              const color = row.status === 'submit' ? '#f00' : '#657180';
+              const text = row.status === 'submit' ? '直属领导待审批' :
+                      row.status === 'l_fail' ? '直属领导审批未通过' :
+                      row.status === 'l_success' ? '经信委技术待审批' :
+                      row.status === 'a_fail' ? '经信委技术审批未通过' :
+                      row.status === 'a_success' ? '经信委技术审批完成' : '创建资源完成';
+              return h('span', {
+                style: {
+                  color: color
+                },
+              }, text);
+            }
           },
           {
             title: '申请日期',
@@ -188,7 +187,8 @@
         })
       },
       goQuery (name) {
-          this.current_page = 1
+          this.current_page = 1;
+          const department = this.$store.state.userData.userInfo.department;
           const start_time = this.formValidate.start_time[0];
           const end_time = this.formValidate.start_time[1];
 
@@ -198,6 +198,7 @@
           this.formValidate.user_name && (requestBody.user_name = this.formValidate.user_name);
           this.formValidate.apply_status && (requestBody.status = this.formValidate.apply_status);
           this.formValidate.instance_id && (requestBody.instance_id = this.formValidate.instance_id);
+          department && (requestBody.department = department);
           console.log('ddsss', requestBody.status);
           this.getApprovalResource(requestBody);
       },
@@ -210,34 +211,33 @@
             if (res.body.code === 200) {
                 this.data_length = res.body.result.res.length;
                 res.body.result.res.forEach((item,index) => {
-                  switch (item.status) {
-                    case 'submit': item.status = '直属领导待审批'
-                      break
-                    case 'l_fail': item.status = '直属领导审批未通过'
-                      break
-                    case 'l_success': item.status = '经信委技术待审批'
-                      break
-                    case 'a_fail': item.status = '经信委技术审批未通过'
-                      break
-                    case 'a_success': item.status = '经信委技术审批完成'
-                      break
-                    case 'created_success': item.status = '创建资源完成'
-                      break
-                    default:
+                  console.log('sssssseeeess', item.status);
+                  if (item.status == 'submit'){
+                    this.getResult.unshift({
+//                      index: index + 1,
+                      resource_id: item.resource_id,
+                      status: item.status,
+                      instance_id: item.deploy_name,
+                      az_name: item.az_name,
+                      created_time: item.created_date.slice(0, 16),
+                      user_name: item.user_name
+                    });
+                  } else {
+                    this.getResult.push({
+//                      index: index + 1,
+                      resource_id: item.resource_id,
+                      status: item.status,
+                      instance_id: item.deploy_name,
+                      az_name: item.az_name,
+                      created_time: item.created_date.slice(0, 16),
+                      user_name: item.user_name
+                    });
                   }
-              console.log('sssssseeeess', item.status);
-
-                this.getResult.push({
-                    index: index +1,
-                    resource_id: item.resource_id,
-                    status: item.status,
-                    instance_id: item.deploy_name,
-                    az_name: item.az_name,
-                    created_time: item.created_date.slice(0,16),
-                    user_name: item.user_name
-                  })
                 })
                 console.log(this.getResult);
+                this.getResult.forEach((item,index) => {
+                    item.index=index + 1;
+                });
                 this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page);
             }
         },(err) => {
