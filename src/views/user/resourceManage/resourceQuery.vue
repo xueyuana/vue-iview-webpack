@@ -127,12 +127,6 @@
             align: 'center'
           },
           {
-            title: '状态',
-            key: 'status',
-            width: 160,
-            align: 'center'
-          },
-          {
             title: '部署实例',
             key: 'instance_name',
             align: 'center'
@@ -140,6 +134,12 @@
           {
             title: '部署区域',
             key: 'az',
+            align: 'center'
+          },
+          {
+            title: '状态',
+            key: 'status',
+            width: 160,
             align: 'center'
           },
           {
