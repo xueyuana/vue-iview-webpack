@@ -6,7 +6,8 @@
         <Row :gutter="32">
           <Col span="8">
           <Form-item label="选择日期:" prop="date">
-            <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="max-width: 250px"></Date-picker>
+            <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间"
+                         style="max-width: 250px"></Date-picker>
           </Form-item>
           </Col>
           <Col span="8">
@@ -15,9 +16,9 @@
           </Form-item>
           </Col>
           <Col span="8">
-            <Form-item label="部署实例名称:" prop="deploy_name">
-              <Input v-model="formItem.deploy_name" placeholder="请输入" style="max-width: 250px"></Input>
-            </Form-item>
+          <Form-item label="部署实例名称:" prop="deploy_name">
+            <Input v-model="formItem.deploy_name" placeholder="请输入" style="max-width: 250px"></Input>
+          </Form-item>
           </Col>
         </Row>
         <Row type="flex" justify="end">
@@ -39,7 +40,8 @@
       <Table stripe size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
-          <Page :total="this.data.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
+          <Page :total="this.data.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage"
+                @on-page-size-change="changePageSize"></Page>
         </div>
       </div>
     </div>
@@ -61,10 +63,13 @@
             </Select>
           </Form-item>
           <Form-item label="公网IP地址:">
-            <Input v-model="formCustom.ip_address" disabled placeholder="192.168.3.1"></Input>
+            <Select v-model="formCustom.pub_ip" placeholder="请选择" filterable clearable>
+              <Option value="192.168.1.2">192.168.1.2</Option>
+              <Option value="294.192.56.2">294.192.56.2</Option>
+            </Select>
           </Form-item>
           <Form-item label="内网IP地址:">
-            <Input v-model="formCustom.subpri_ipnet_mask" placeholder="192.168.2.1/24"></Input>
+            <Input v-model="formCustom.pri_ip" placeholder="192.168.2.1/24"></Input>
           </Form-item>
         </Form>
       </div>
@@ -74,15 +79,16 @@
 </template>
 
 <style lang="less">
-  .vertical-center-modal{
+  .vertical-center-modal {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    .ivu-modal{
+    .ivu-modal {
       top: 0;
     }
   }
+
   .from_wrap {
     padding-right: 25px;
   }
@@ -106,7 +112,7 @@
           deploy_name: []
         },
         userInfo: '',
-        columns:  [
+        columns: [
           {
             title: '序号',
             type: 'index',
@@ -119,12 +125,12 @@
             align: 'center',
             render: (h, params) => {
               return h('a', {
-                  on: {
-                    click: () => {
-                      this.$router.push({name: 'admin_deployDetails'})
-                    }
+                on: {
+                  click: () => {
+                    this.$router.push({name: 'admin_deployDetails'})
                   }
-                }, params.row.deploy_name)
+                }
+              }, params.row.deploy_name)
             }
           },
           {
@@ -178,6 +184,7 @@
           }
         ],
         formCustom: {
+          ip_type: '',
           pub_ip: '',
           pri_ip: ''
         },
@@ -194,12 +201,11 @@
     methods: {
       // 查找
       onInquire() {
-
         let query = {}
         this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
         this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
-        this.formItem.image_format && (query.image_format = this.formItem.image_format)
-        this.formItem.image_name && (query.image_name = this.formItem.image_name)
+        this.formItem.user && (query.user = this.formItem.user)
+        this.formItem.deploy_name && (query.deploy_name = this.formItem.deploy_name)
 
         this.$http.get('api/image/images', {
           params: query
@@ -223,22 +229,7 @@
       onOk() {
 
       },
-      // 时间选择器
-      formatCreateData(value) {
-        this.formItem.start_time = value
-      },
-      onUnitChange(val) {
-        this.formItem.image_name = ''
-        this.getDeployList()
-        this.onInquire()
-      },
-      onDeployChange(val) {
-        if (!val) return
-        this.onInquire()
-      },
-      formatEndData(value) {
-        this.formItem.end_time = value
-      },
+
       // 分页
       changePage(val) {
         this.filterDate = this.mockTableData(this.data, this.pageSize, val)

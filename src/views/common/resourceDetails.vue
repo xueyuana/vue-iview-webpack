@@ -448,14 +448,8 @@
     data() {
       return {
         instanceCreate: false,
-        okText: '10秒钟后关闭',
+        okText: '关闭',
         tj_columns: [
-          {
-            title: '服务器',
-            key: 'server',
-            align: 'center',
-            width: '100'
-          },
           {
             title: '配置',
             key: 'configuration',
@@ -465,10 +459,10 @@
             title: '数量(台)',
             key: 'number',
             align: 'center',
-            width: '100'
+            width: '150'
           }
         ],
-        
+
         stepNum: 0,
         stepsStatus: 'process',
         userId: '',
@@ -557,12 +551,6 @@
       configuration() {
         return [
           {
-            server: 'WEB',
-            configuration: 'CPU：'+ this.configData.cpu +'核 | 内存：'+ this.configData.memory +'G | 硬盘：'+ this.configData.storage +'G',
-            number: this.configData.num
-          },
-          {
-            server: '数据库',
             configuration: 'CPU：'+ this.configData.cpu +'核 | 内存：'+ this.configData.memory +'G | 硬盘：'+ this.configData.storage +'G',
             number: this.configData.num
           }
@@ -859,7 +847,6 @@
             break
           default:
         }
-        console.log('配置信息', this.configData)
 
       },
 
@@ -867,7 +854,7 @@
         this.instanceCreate = false
       },
 
-      // 计算数据中某条信息的总和
+        // 计算数据中某条信息的总和
       countSum(data, attr) {
         var sum = 0
         data.forEach(item => {

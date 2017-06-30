@@ -174,7 +174,12 @@
     created () {
       this.getUser()
 
-      this.getVm({user_id: this.user_info.id})//获取虚机
+      if (this.user_info.role === 'user') {
+        this.getVm({user_id: this.user_info.id})//获取虚机
+      } else {
+        this.getVm()
+      }
+
       this.getAz()//获取资源池
       this.getInstance()//获取实例
 
@@ -214,8 +219,10 @@
       getInstance () {//获取实例
         const url = 'api/deploy_instance/deploy_instances'
 
-        let params = {
-          user_id: this.user_info.id
+        let params = {}
+
+        if (this.user_info.role === 'user') {
+          params.user_id = this.user_info.id
         }
 
         this.$http.get(url,{params:params}).then((res) => {
@@ -252,7 +259,9 @@
 
         let requestBody = {}
 
-        requestBody.user_id = this.user_info.id
+        if (this.user_info.role) {
+          requestBody.user_id = this.user_info.id
+        }
         start_time && (requestBody.start_time = this.timeFormat(start_time))
         end_time && (requestBody.end_time = this.timeFormat(end_time))
         this.query_info.status && (requestBody.status = this.query_info.status)
