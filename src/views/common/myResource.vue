@@ -8,11 +8,6 @@
           <Input v-model="query_info.vm_name" placeholder="请输入" style="width: 250px"></Input>
         </div>
 
-        <div class="item date-picker">
-          <span class="title">申请日期:</span>
-          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="query_info.applyDate" style="width: 250px"></Date-picker>
-        </div>
-
         <div class="item">
           <span class="title">部署区域:</span>
           <Select v-model="query_info.az_name" style="width:250px">
@@ -31,6 +26,10 @@
           <Select v-model="query_info.instance_id" style="width:250px">
             <Option v-for="item in instance" :value="item.instance_id" :key="item" >{{ item.instance_name }} </Option>
           </Select>
+        </div>
+        <div class="item date-picker">
+          <span class="title">申请日期:</span>
+          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="query_info.applyDate" style="width: 250px"></Date-picker>
         </div>
       </div>
       <div class="query">
@@ -53,7 +52,7 @@
       </thead>
       <tbody>
         <tr v-for="(item,index) in queryResult" :class="{bac: index%2 != 0}">
-          <td>{{item.number}}</td>
+          <td width="50">{{item.number}}</td>
           <td>{{item.vm_name}}</td>
           <td>{{item.deploy_inst_id}}</td>
           <td>{{item.ip}}</td>
@@ -101,17 +100,34 @@
         user_info: {},
         approvalStatusVal: [
           {
-            value: '运行',
-            key: 'running'
+            value: '创建中',
+            key: 'build'
           },
           {
-            value: '异常',
-            key: 'error'
+            value: '运行中',
+            key: 'active'
           },
           {
-            value: '提交',
-            key: 'summit'
+            value: '关机',
+            key: 'shutoff'
+          },
+          {
+            value: '重启中',
+            key: 'reboot'
+          },
+          {
+            value: '硬重启中',
+            key: 'hard_reboot'
+          },
+          {
+            value: '虚机创建失败',
+            key: 'vm_error'
+          },
+          {
+            value: '存储空间创建失败',
+            key: 'vol_error'
           }
+
         ],
         instance: [],
         flavor: [],
@@ -132,7 +148,7 @@
             key: 'number'
           },
           {
-            title: '虚拟机名称',
+            title: '虚拟机',
             key: 'vm_name'
           },
           {
@@ -148,7 +164,7 @@
             key: 'image_id'
           },
           {
-            title: '所在物理机',
+            title: '物理机',
             key: 'host_name'
           },
           {
@@ -622,9 +638,14 @@
     width: 100%;
     border-collapse: collapse;
     color: #657180;
+    table-layout: fixed;
+    /*word-break: break-all;*/
   }
   table td,th{
     text-align: center;
+    padding: 4px;
+    word-wrap: break-word;
+
   }
   table tr {
     height: 48px;
@@ -638,6 +659,10 @@
   }
   table tbody tr:hover {
     background-color: #F3FAFF;
+  }
+
+  table tr td:first-child {
+    /*width: 50px;*/
   }
 
  .hidden {
