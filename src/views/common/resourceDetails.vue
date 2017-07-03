@@ -19,7 +19,7 @@
     </div>
     <!--DMZ部署区域资源使用情况-->
     <div class="status-list" v-if="$store.state.userData.userInfo.role == 'admin'">
-      <div class="sub-title">DMZ部署区域资源使用情况</div>
+      <div class="sub-title">{{formValidate.az_name}}部署区域资源使用情况</div>
 
       <ul class="status-content">
         <li>
