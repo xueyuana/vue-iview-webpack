@@ -1,41 +1,46 @@
 'use strict'
 
-// 导入vue
+  // 导入vue
 import Vue from 'vue'
 import App from './App.vue'
 
-// 导入状态池
+  // 导入状态池
 import {store} from './store/store.js'
 
-// 导入iview 以及 iview的css
+  // 导入iview 以及 iview的css
 import iView from 'iview'
 Vue.use(iView)
 import './static/mytheme/index.less'
 
-// 引入vue-resource
+  // 引入vue-resource
 import VueResource from 'tools/ajax.js'
 
-// 导入初始化的css
+  // 导入初始化的css
 import './static/css/reset.css'
 import './static/css/common.less'
 
-// 引入路由系统
+  // 引入路由系统
 import vueRouters from './router/index.js'
 
-import {getCookie} from 'tools/cookieAction.js'
 
-// 引入 fullpage
+  // 引入 fullpage
 import './tools/fullpage/index.js'
 import './tools/fullpage/fullpage.css'
 Vue.prototype.$fullpage = fullpage
+
+  // 引入cookie工具
+import Cookie from 'js-cookie'
+Vue.prototype.$Cookie = Cookie
 
 vueRouters.beforeEach((to, from, next) => {
   if (to.path === '/' || to.path === '/notice') {
     next()
     return
   }
-  let id = getCookie('userInfo') ? JSON.parse(getCookie('userInfo')).id : ''
 
+  console.log(Cookie.getJSON('userInfo'))
+
+  let id = Cookie.get('userInfo') ? Cookie.getJSON('userInfo').id : ''
   if (id) {
     if (to.path === '/login') {
       next()

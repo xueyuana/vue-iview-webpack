@@ -4,7 +4,7 @@
       <Row type="flex" justify="center" align="middle"
            style="text-align: center;font-size: 30px;color:#3399ff;margin-bottom:20px">
         <Col span="24" @click.native="goHome" style="cursor: pointer">
-        门头沟政务云资源管理平台
+        <h1>门头沟政务云资源管理平台</h1>
       </Col>
       </Row>
 
@@ -73,7 +73,6 @@
 </style>
 
 <script>
-  import {setCookie, getCookie, delCookie, setStroage} from 'tools/cookieAction.js';
   import common from 'tools/common.js';
   import crypto from 'crypto-js';
   import sha256 from 'crypto-js/sha256';
@@ -113,25 +112,6 @@
             let accountInfo = "";
             accountInfo = userName + "&" + passWord;
 
-//             June 临时验证
-//            if (userName) {
-//              setCookie('role', userName)
-//              switch (userName) {
-//                case 'user':
-//                  this.$router.push({name: 'user_manageConsole'})
-//                  break
-//                case 'admin':
-//                  this.$router.push({name: 'admin_manageConsole'})
-//                  break
-//                case 'approval':
-//                  this.$router.push({name: 'approval_approvalQuery'})
-//                  break
-//                default:
-//                  this.$Message.error('权限不存在')
-//              }
-//            } else {
-//              this.$Message.error('用户名不能为空')
-//            }
 
             let body = {
               "username": userName,
@@ -139,14 +119,13 @@
             }
             this.$http.post('api/user/login', body)
               .then(res => {
-                console.log('登录', res)
-                if (rememberStatus) {
-                  console.log("勾选了记住密码，现在开始写入cookie");
-                  setCookie('accountInfo', accountInfo, 1440 * 3);
-                } else {
-                  console.log("没有勾选记住密码，现在开始删除账号cookie");
-                  delCookie('accountInfo');
-                }
+//                if (rememberStatus) {
+//                  console.log("勾选了记住密码，现在开始写入cookie");
+//                  setCookie('accountInfo', accountInfo, 1440 * 3);
+//                } else {
+//                  console.log("没有勾选记住密码，现在开始删除账号cookie");
+//                  delCookie('accountInfo');
+//                }
 
                 if (res.body.code === 200) {
                   this.$Message.success('登录成功!');
@@ -155,7 +134,7 @@
                   userinfo.id = res.body.result.id
                   userinfo.role = res.body.result.role
 
-                  setCookie('userInfo', JSON.stringify(userinfo))
+                  this.$Cookie.set('userInfo', userinfo)
 
                   switch (userinfo.role) {
                     case 'user':
@@ -190,9 +169,7 @@
       doRememberPassword: function (event) {
         let mySelf = this;
         let rememberStatus = mySelf.formInline.rememberPassword;
-        // event.preventDefault();
         mySelf.formInline.rememberPassword = !rememberStatus;
-
       },
 
       loadAccountInfo: function () {

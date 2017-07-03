@@ -7,9 +7,6 @@
               :disabled="index !== 0 && buttonDisable"
               @click="onLink(index)">{{item}}
 
-
-
-
       </Button>
     </div>
     <div class="approval-status">
@@ -23,96 +20,101 @@
     <!--DMZ部署区域资源使用情况-->
     <div class="status-list" v-if="$store.state.userData.userInfo.role == 'admin'">
       <div class="sub-title">DMZ部署区域资源使用情况</div>
-      <Row>
-        <Col span="8">
-        <Row>
-          <Col span="5" class="rd_right">
-          <div class="rd_pro1" style="padding-right:12px;">vCPU个</div>
-          </Col>
-          <Col span="10">
-          <Progress
-              :percent="poolStatus.cpu_use/poolStatus.cpu_total*100 > 100 ? 100 : poolStatus.cpu_use/poolStatus.cpu_total*100"
-              :stroke-width="18" class="rd_progress"
-              hide-info></Progress>
-          </Col>
-          <Col span="5" class="rd_left">
-          <div class="rd_pro2">{{poolStatus.cpu_use + '&nbsp;/&nbsp;' + poolStatus.cpu_total}}</div>
-          </Col>
-        </Row>
-        </Col>
-        <Col span="8">
-        <Row>
-          <Col span="5" class="rd_right">
-          <div class="rd_pro1">内存（GB）</div>
-          </Col>
-          <Col span="10">
-          <Progress :percent="poolStatus.memory_use/poolStatus.memory_total*100" :stroke-width="18" class="rd_progress"
-                    hide-info></Progress>
-          </Col>
-          <Col span="5" class="rd_left">
-          <div class="rd_pro2">{{poolStatus.memory_use + '&nbsp;/&nbsp;' + poolStatus.memory_total}}</div>
-          </Col>
-        </Row>
-        </Col>
-        <Col span="8">
-        <Row>
-          <Col span="5" class="rd_right">
-          <div class="rd_pro1">硬盘（GB）</div>
-          </Col>
-          <Col span="10" class="rd_progress">
-          <Progress :percent="poolStatus.storage_use/poolStatus.storage_total*100" :stroke-width="18"
-                    class="rd_progress" hide-info></Progress>
-          </Col>
-          <Col span="5" class="rd_left">
-          <div class="rd_pro2">{{poolStatus.storage_use + '&nbsp;/&nbsp;' + poolStatus.storage_total}}</div>
-          </Col>
-        </Row>
-        </Col>
-      </Row>
+
+      <ul class="status-content">
+        <li>
+          <Row>
+            <Col span="5" class="rd_right">
+            <div class="rd_pro1" style="padding-right:12px;">vCPU个</div>
+            </Col>
+            <Col span="10">
+            <Progress
+                :percent="poolStatus.cpu_use/poolStatus.cpu_total*100 > 100 ? 100 : poolStatus.cpu_use/poolStatus.cpu_total*100"
+                :stroke-width="18" class="rd_progress"
+                hide-info></Progress>
+            </Col>
+            <Col span="5" class="rd_left">
+            <div class="rd_pro2">{{poolStatus.cpu_use + '&nbsp;/&nbsp;' + poolStatus.cpu_total}}</div>
+            </Col>
+          </Row>
+        </li>
+        <li>
+          <Row>
+            <Col span="5" class="rd_right">
+            <div class="rd_pro1">内存（GB）</div>
+            </Col>
+            <Col span="10">
+            <Progress :percent="poolStatus.memory_use/poolStatus.memory_total*100" :stroke-width="18" class="rd_progress"
+                      hide-info></Progress>
+            </Col>
+            <Col span="5" class="rd_left">
+            <div class="rd_pro2">{{poolStatus.memory_use + '&nbsp;/&nbsp;' + poolStatus.memory_total}}</div>
+            </Col>
+          </Row>
+        </li>
+        <li>
+          <Row>
+            <Col span="5" class="rd_right">
+            <div class="rd_pro1">硬盘（GB）</div>
+            </Col>
+            <Col span="10" class="rd_progress">
+            <Progress :percent="poolStatus.storage_use/poolStatus.storage_total*100" :stroke-width="18"
+                      class="rd_progress" hide-info></Progress>
+            </Col>
+            <Col span="5" class="rd_left">
+            <div class="rd_pro2">{{poolStatus.storage_use + '&nbsp;/&nbsp;' + poolStatus.storage_total}}</div>
+            </Col>
+          </Row>
+        </li>
+      </ul>
+
     </div>
     <div class="status-list" v-if="$store.state.userData.userInfo.role == 'admin'">
       <div class="sub-title">本次申请占用资源情况</div>
-      <Row>
-        <Col span="8">
-        <Row>
-          <Col span="5" class="rd_right">
-          <div class="rd_pro1" style="padding-right:12px;">vCPU个</div>
-          </Col>
-          <Col span="10">
-          <Progress :percent="100" :stroke-width="18" class="rd_progress" hide-info></Progress>
-          </Col>
-          <Col span="5" class="rd_left">
-          <div class="rd_pro2">{{formValidate.vCPU_total}}</div>
-          </Col>
-        </Row>
-        </Col>
-        <Col span="8">
-        <Row>
-          <Col span="5" class="rd_right">
-          <div class="rd_pro1">内存（GB）</div>
-          </Col>
-          <Col span="10">
-          <Progress :percent="100" :stroke-width="18" class="rd_progress" hide-info></Progress>
-          </Col>
-          <Col span="5" class="rd_left">
-          <div class="rd_pro2">{{formValidate.memory_total}}</div>
-          </Col>
-        </Row>
-        </Col>
-        <Col span="8">
-        <Row>
-          <Col span="5" class="rd_right">
-          <div class="rd_pro1">硬盘（GB）</div>
-          </Col>
-          <Col span="10" class="rd_progress">
-          <Progress :percent="100" :stroke-width="18" class="rd_progress" hide-info></Progress>
-          </Col>
-          <Col span="5" class="rd_left">
-          <div class="rd_pro2">{{formValidate.storage_total}}</div>
-          </Col>
-        </Row>
-        </Col>
-      </Row>
+
+      <ul class="status-content">
+        <li>
+          <Row>
+            <Col span="5" class="rd_right">
+            <div class="rd_pro1" style="padding-right:12px;">vCPU个</div>
+            </Col>
+            <Col span="10">
+            <Progress :percent="100" :stroke-width="18" class="rd_progress" hide-info></Progress>
+            </Col>
+            <Col span="5" class="rd_left">
+            <div class="rd_pro2">{{formValidate.vCPU_total}}</div>
+            </Col>
+          </Row>
+        </li>
+        <li>
+          <Row>
+            <Col span="5" class="rd_right">
+            <div class="rd_pro1">内存（GB）</div>
+            </Col>
+            <Col span="10">
+            <Progress :percent="100" :stroke-width="18" class="rd_progress" hide-info></Progress>
+            </Col>
+            <Col span="5" class="rd_left">
+            <div class="rd_pro2">{{formValidate.memory_total}}</div>
+            </Col>
+          </Row>
+        </li>
+        <li>
+          <Row>
+            <Col span="5" class="rd_right">
+            <div class="rd_pro1">硬盘（GB）</div>
+            </Col>
+            <Col span="10" class="rd_progress">
+            <Progress :percent="100" :stroke-width="18" class="rd_progress" hide-info></Progress>
+            </Col>
+            <Col span="5" class="rd_left">
+            <div class="rd_pro2">{{formValidate.storage_total}}</div>
+            </Col>
+          </Row>
+        </li>
+      </ul>
+
+
     </div>
     <!--资源信息-->
     <div class="form-info">
@@ -168,7 +170,7 @@
                 <Table :columns="tj_columns" :data="configuration"></Table>
               </div>
               <div slot="footer">
-                <Button type="primary" size="large" v-text="okText" @click="closeModal"></Button>
+                <Button type="primary" size="large" v-text="okText" @click.native="closeModal"></Button>
               </div>
             </Modal>
 
@@ -239,10 +241,13 @@
         margin: 0 4px;
       }
     }
+
+
     .approval-status {
-      width: 70%;
+      width: 80%;
       margin: 30px auto;
     }
+
     .status-list {
       clear: both;
       .rd_right {
@@ -267,6 +272,16 @@
         min-width: 80px;
         height: 23px;
         line-height: 23px;
+      }
+
+      .status-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        li {
+          width: 340px;
+          margin: 10px 0;
+        }
       }
     }
     .form-info {
@@ -440,6 +455,19 @@
     background-color: #ebf4fe;
     width: 120px;
   }
+
+  @media all and (max-width: 1024px) {
+    .approval-status {
+      width: 90%;
+    }
+  }
+
+  @media all and (max-width: 1024px) {
+    .approval-status {
+      width: 90%;
+    }
+  }
+
 </style>
 
 <script>
@@ -676,9 +704,15 @@
         });
       },
 
+        // 点击推荐配置
       onInstanceDetails () {    //展示实例详情推荐配置
-        this.instanceCreate = true
-        this.getDeploy(this.formValidate.instance_id)
+        if (this.formValidate.instance_id) {
+          this.instanceCreate = true
+          this.getDeploy(this.formValidate.instance_id)
+        } else {
+          this.$Message.error('没有实例ID')
+        }
+
       },
 
       getInfo (query) {
@@ -750,8 +784,8 @@
           if (res.body.code === 200) {
             this.poolStatus.cpu_use = this.countSum(res.body.result.res, 'vcpu_use')
             this.poolStatus.cpu_total = this.countSum(res.body.result.res, 'vcpu_total')
-            this.poolStatus.memory_use = this.countSum(res.body.result.res, 'memory_mb_use')
-            this.poolStatus.memory_total = this.countSum(res.body.result.res, 'memory_mb_total')
+            this.poolStatus.memory_use = parseInt(this.countSum(res.body.result.res, 'memory_mb_use')/1024)
+            this.poolStatus.memory_total = parseInt(this.countSum(res.body.result.res, 'memory_mb_total')/1024)
             this.poolStatus.storage_use = this.countSum(res.body.result.res, 'storage_gb_use')
             this.poolStatus.storage_total = this.countSum(res.body.result.res, 'storage_gb_total')
           } else {
@@ -767,8 +801,12 @@
         let query = {instance_id: id}
         this.$http.get(url, {params: query}).then((res) => {
           if (res.body.code === 200) {
-            this.recomConfig = res.body.result.res[0]
-            this.countConfig(this.recomConfig)
+            if (res.body.result.res.length) {
+              this.recomConfig = res.body.result.res[0]
+              this.countConfig(this.recomConfig)
+            } else {
+              this.$Message.error('没有部署实例')
+            }
           }
         }, (err) => {
           console.log(err)
