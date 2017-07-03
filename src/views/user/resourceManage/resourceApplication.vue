@@ -520,7 +520,7 @@
 
   }
   .item {
-    padding-right: 100px;
+    padding-right: 110px;
     padding-bottom: 10px;
 
   }
@@ -531,7 +531,7 @@
   }
   .add-example {
     position: absolute;
-    right: -12px;
+    right: 0;
     top: 0;
   }
   .example {

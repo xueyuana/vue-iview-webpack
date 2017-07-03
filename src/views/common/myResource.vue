@@ -52,7 +52,7 @@
       </thead>
       <tbody>
         <tr v-for="(item,index) in queryResult" :class="{bac: index%2 != 0}">
-          <td width="50">{{item.number}}</td>
+          <td>{{item.number}}</td>
           <td>{{item.vm_name}}</td>
           <td>{{item.deploy_inst_id}}</td>
           <td>{{item.ip}}</td>
@@ -176,7 +176,7 @@
             key: 'flavor_id'
           },
           {
-            title: '存储空间',
+            title: '存储空间(G)',
             key: 'storage'
           },
           {
@@ -638,8 +638,8 @@
     width: 100%;
     border-collapse: collapse;
     color: #657180;
-    table-layout: fixed;
-    /*word-break: break-all;*/
+    /*table-layout: fixed;*/
+    word-break: break-all;
   }
   table td,th{
     text-align: center;
@@ -662,8 +662,41 @@
   }
 
   table tr td:first-child {
-    /*width: 50px;*/
+    width: 34px;
   }
+  table tr td:nth-child(2) {
+    min-width: 60px;
+  }
+  table tr td:nth-child(3) {
+    width: 8%;
+  }
+
+  table tr td:nth-child(4) {
+    width: 88px;
+  }
+  table tr td:nth-child(5) {
+    width: 14%;
+  }
+
+  table tr td:nth-child(6) {
+    min-width: 60px;
+  }
+  table tr td:nth-child(7) {
+    width: 8%;
+  }
+  table tr td:nth-child(8) {
+    min-width: 90px;
+  }
+  table tr td:nth-child(9) {
+    width: 78px;
+  }
+  table tr td:nth-child(10) {
+    width: 50px;
+  }
+  table tr td:nth-child(11) {
+    width: 50px;
+  }
+
 
  .hidden {
    display: none;
