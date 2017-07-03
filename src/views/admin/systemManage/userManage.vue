@@ -2,14 +2,15 @@
   <div class="my-resource">
     <div class="query-form inquire-form">
       <div class="queryInformation">
-        <div class="item">
-          <span class="title">用户名:</span>
-          <Input v-model="query_info.user_name" placeholder="请输入" style="width: 300px"></Input>
-        </div>
         <div class="item date-picker">
           <span class="title">申请日期:</span>
-          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
+          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 260px"></Date-picker>
         </div>
+        <div class="item">
+          <span class="title">用户名:</span>
+          <Input v-model="query_info.user_name" placeholder="请输入" style="width: 260px"></Input>
+        </div>
+
       </div>
       <div class="query">
         <Button type="primary" @click="query">查询</Button>
@@ -52,7 +53,7 @@
         </div>
       </Modal>
     </div>
-    <Table border stripe :columns="columns" :data="queryResult"></Table>
+    <Table stripe :columns="columns" :data="queryResult"></Table>
     <Modal
         v-model="isCompile"
         title="用户信息"
@@ -201,7 +202,8 @@
         columns: [
           {
             title: '序号',
-            key: 'number'
+            key: 'number',
+            align: 'center'
           },
           {
             title: '用户名',
@@ -230,6 +232,7 @@
           {
             title: '操作',
             key: 'operate',
+            width: 130,
             render: (h,params) => {
               return h('div',[
                 h('Button',{
@@ -619,9 +622,6 @@
   .ivu-form-item {
     margin-bottom: 24px;
   }
-  /*.createWrap {*/
-    /*height: 340px;*/
-  /*}*/
   .queryInformation{
     width: 100%;
     display: flex;
@@ -640,7 +640,7 @@
   }
   .item {
     margin: 10px 30px;
-    margin-right: 50px;
+    margin-right: 30px;
   }
   .title {
     display: inline-block;
