@@ -267,10 +267,7 @@
                       console.log('row',rowDate)
 
                       Object.assign(this.compileUser,rowDate)
-
-//                      for(var key in rowDate) {
-//                        this.compileUser[key] = rowDate[key]
-//                      }
+                      this.compileUser.password = null
 
                       console.log('编辑',this.compileUser)
 
@@ -365,7 +362,7 @@
       },
       compileOk (name) {//确定编辑
         //TODO:表单的坑
-        let temporary = {}
+        let temporary = {}//存储表单内筒
 
         Object.assign(temporary,this.compileUser)
 
