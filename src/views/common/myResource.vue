@@ -322,9 +322,9 @@
           this.data_length = this.getResult.length
 
 
-//          if(this.index == 4) {
-//            this.formatData()
-//          }
+          if(this.index == 4) {
+            this.formatData()
+          }
 
 
         },(err) => {
@@ -580,7 +580,7 @@
 //          console.log('image',this.mirrorImage)
 //          console.log('flavor',this.flavor)
 //          console.log('vm',this.getResult)
-//          this.formatData()
+          this.formatData()
 
         }
 
