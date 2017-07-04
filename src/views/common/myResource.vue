@@ -10,20 +10,20 @@
 
         <div class="item">
           <span class="title">部署区域:</span>
-          <Select v-model="query_info.az_name" style="width:250px">
+          <Select v-model="query_info.az_name" clearable style="width:250px">
             <Option v-for="item in az" :value="item.az_name" :key="item">{{ item.az_name }}</Option>
           </Select>
         </div>
 
         <div class="item">
           <span class="title">状态:</span>
-          <Select v-model="query_info.status" style="width:250px">
+          <Select v-model="query_info.status" clearable style="width:250px">
             <Option v-for="item in approvalStatusVal" :value="item.key" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
         <div class="item">
           <span class="title">部署实例:</span>
-          <Select v-model="query_info.instance_id" style="width:250px">
+          <Select v-model="query_info.instance_id" clearable style="width:250px">
             <Option v-for="item in instance" :value="item.instance_id" :key="item" >{{ item.instance_name }} </Option>
           </Select>
         </div>
@@ -249,7 +249,7 @@
 
         this.$http.get(url,{params:params}).then((res) => {
           this.index ++
-//          console.log('实例',res.body)
+          console.log('实例',res.body)
           this.instance = res.body.result.res
 
         },(err) => {
@@ -269,6 +269,7 @@
       getUser () {
 
         Object.assign(this.user_info,this.$store.state.userData.userInfo)
+        console.log('yonghu',this.user_info)
 
       },
       query () {
@@ -315,15 +316,15 @@
           if(this.index !== 4) {
             this.index ++
           }
-//          console.log('虚机',res.body)
+          console.log('虚机',res.body)
           this.getResult = res.body.result.res
 
           this.data_length = this.getResult.length
 
 
-          if(this.index == 4) {
-            this.formatData()
-          }
+//          if(this.index == 4) {
+//            this.formatData()
+//          }
 
 
         },(err) => {
@@ -340,6 +341,8 @@
           this.instance.forEach((inst) => {//循环实例
             if(inst.instance_id == vm.deploy_inst_id) {
               vm.deploy_inst_id = inst.instance_name
+            }else {
+              vm.deploy_inst_id = ''
             }
           })
 
@@ -577,7 +580,7 @@
 //          console.log('image',this.mirrorImage)
 //          console.log('flavor',this.flavor)
 //          console.log('vm',this.getResult)
-          this.formatData()
+//          this.formatData()
 
         }
 
