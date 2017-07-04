@@ -318,7 +318,7 @@
       },
       // 跳转资源审批
       toApproval() {
-        this.$router.push({name: 'admin_resourceApproval'})
+        this.$router.push({name: '资源审批管理'})
       }
     }
   }

@@ -31,6 +31,7 @@ import admin_virtualManage from 'views/common/myResource.vue'                   
 import admin_deployManage from 'views/admin/resourceManage/deployManage.vue'                  // 管理员 > 部署实例管理
 import admin_publicNetIp from 'views/admin/resourceManage/publicNetIp.vue'                    // 管理员 > 公网IP管理
 import admin_resourceApproval from 'views/admin/resourceApproval/resourceApproval.vue'        // 管理员 > 资源审批
+import admin_resourceDetails from 'views/common/resourceDetails.vue'                          // 管理员 >（资源详情）
 import admin_userManage from 'views/admin/systemManage/userManage.vue'                        // 管理员 > 用户管理
 import admin_operationLog from 'views/common/operationLog.vue'                                // 管理员 > 操作日志
 import admin_deployDetails from 'views/admin/resourceManage/deployDetails.vue'                // 管理员 > 部署实例详情
@@ -49,38 +50,99 @@ var routes = [
       {name: 'notice', path: 'notice', component: notice}
     ]
   },
-  {name: 'login', path: '/login', component: login},
+  {name: 'login', path: '/login', component: login}
+]
+
+export var userRoutes = [
   {
-    name: 'home', path: '/home', component: home,
+    name: '管理控制台', path: '/home', redirect: '/home/user_manageConsole', component: home,
     children: [
-      // 用户
-      {name: 'user_manageConsole', path: 'user_manageConsole', component: user_manageConsole},
-      {name: 'user_deployExample', path: 'user_deployExample', component: user_deployExample},
-      {name: 'user_resourceApplication', path: 'user_resourceApplication', component: user_resourceApplication},
-      {name: 'user_resourceQuery', path: 'user_resourceQuery', component: user_resourceQuery},
-      {name: 'user_myResource', path: 'user_myResource', component: user_myResource},
-      {name: 'user_changePassword', path: 'user_changePassword', component: user_changePassword},
-      {name: 'user_operationLog', path: 'user_operationLog', component: user_operationLog},
-      // 管理员
-      {name: 'admin_manageConsole', path: 'admin_manageConsole', component: admin_manageConsole},
-      {name: 'admin_poolManage', path: 'admin_poolManage', component: admin_poolManage},
-      {name: 'admin_poolDetails', path: 'admin_poolDetails', component: admin_poolDetails},
-      {name: 'admin_mirrorManagement', path: 'admin_mirrorManagement', component: admin_mirrorManagement},
-      {name: 'admin_virtualManage', path: 'admin_virtualManage', component: admin_virtualManage},
-      {name: 'admin_deployManage', path: 'admin_deployManage', component: admin_deployManage},
-      {name: 'admin_publicNetIp', path: 'admin_publicNetIp', component: admin_publicNetIp},
-      {name: 'admin_resourceApproval', path: 'admin_resourceApproval', component: admin_resourceApproval},
-      {name: 'admin_userManage', path: 'admin_userManage', component: admin_userManage},
-      {name: 'admin_operationLog', path: 'admin_operationLog', component: admin_operationLog},
-      {name: 'admin_deployDetails', path: 'admin_deployDetails', component: admin_deployDetails},
-      // 行政审批
-      {name: 'approval_approvalQuery', path: 'approval_approvalQuery', component: approval_approvalQuery},
-      {name: 'approval_resourceDetails', path: 'approval_resourceDetails', component: approval_resourceDetails},
-      {name: 'approval_changePassword', path: 'approval_changePassword', component: approval_changePassword},
-      {name: 'approval_operationLog', path: 'approval_operationLog', component: approval_operationLog}
+      {path: 'user_manageConsole', component: user_manageConsole}
+    ]
+  },
+  {
+    name: '业务管理', path: '/home', component: home, icon: 'icon-business',
+    children: [
+      {name: '部署实例', path: 'user_deployExample', component: user_deployExample}
+    ]
+  },
+  {
+    name: '资源管理', path: '/home', component: home, icon: 'icon-resource',
+    children: [
+      {name: '资源申请', path: 'user_resourceApplication', component: user_resourceApplication},
+      {name: '资源查询', path: 'user_resourceQuery', component: user_resourceQuery},
+      {name: '我的资源', path: 'user_myResource', component: user_myResource}
+    ]
+  },
+  {
+    name: '系统管理', path: '/home', component: home, icon: 'icon-system',
+    children: [
+      {name: '用户管理', path: 'user_changePassword', component: user_changePassword},
+      {name: '操作日志', path: 'user_operationLog', component: user_operationLog}
     ]
   }
 ]
+
+export var adminRoutes = [
+  {
+    name: '管理控制台', path: '/home', redirect: '/home/admin_manageConsole', component: home,
+    children: [
+      {path: 'admin_manageConsole', component: admin_manageConsole}
+    ]
+  },
+  {
+    name: '部署区域', path: '/home', component: home, icon: 'icon-resource',
+    children: [
+      {name: '部署区域管理', path: 'admin_poolManage', component: admin_poolManage},
+      {name: '部署区域详情', path: 'admin_poolDetails', component: admin_poolDetails, hidden: true}
+    ]
+  },
+  {
+    name: '资源管理', path: '/home', component: home, icon: 'icon-system',
+    children: [
+      {name: '操作系统管理', path: 'admin_mirrorManagement', component: admin_mirrorManagement},
+      {name: '虚拟机管理', path: 'admin_virtualManage', component: admin_virtualManage},
+      {name: '部署实例管理', path: 'admin_deployManage', component: admin_deployManage},
+      {name: '部署实例详情', path: 'admin_deployDetails', component: admin_deployDetails, hidden: true},
+      {name: '公网IP管理', path: 'admin_publicNetIp', component: admin_publicNetIp}
+    ]
+  },
+  {
+    name: '资源审批', path: '/home', component: home, icon: 'icon-system',
+    children: [
+      {name: '资源审批管理', path: 'admin_resourceApproval', component: admin_resourceApproval},
+      {name: '资源详情', path: 'admin_resourceDetails', component: admin_resourceDetails, hidden: true}
+    ]
+  },
+  {
+    name: '系统管理', path: '/home', component: home, icon: 'icon-system',
+    children: [
+      {name: '用户管理', path: 'admin_userManage', component: admin_userManage},
+      {name: '操作日志', path: 'admin_operationLog', component: admin_operationLog}
+    ]
+  }
+]
+
+export var leaderRoutes = [
+  {
+    name: '管理控制台', path: '/home', redirect: '/home/approval_approvalQuery', component: home
+  },
+  {
+    name: '资源管理', path: '/home', component: home, icon: 'icon-resource',
+    children: [
+      {name: '资源查询', path: 'approval_approvalQuery', component: approval_approvalQuery},
+      {name: '资源详情', path: 'approval_resourceDetails', component: approval_resourceDetails, hidden: true}
+    ]
+  },
+  {
+    name: '系统管理', path: '/home', component: home, icon: 'icon-system',
+    children: [
+      {name: '用户管理', path: 'approval_changePassword', component: approval_changePassword},
+      {name: '操作日志', path: 'approval_operationLog', component: approval_operationLog}
+    ]
+  }
+]
+
 
 
 export default new VueRouter({

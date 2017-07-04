@@ -146,7 +146,7 @@
               return h('a', {
                 on: {
                   click: () => {
-                    this.$router.push({name: 'admin_virtualManage'})
+                    this.$router.push({name: '虚拟机管理'})
                   }
                 }
               }, params.row.running_vms)

@@ -91,7 +91,7 @@
               return h('a', {
                 on: {
                   click: () => {
-                    this.$router.push({name: 'approval_resourceDetails', query: { id: params.row.resource_id}})
+                    this.$router.push({name: '资源详情', query: { id: params.row.resource_id}})
                   }
                 }
               }, params.row.resource_id)

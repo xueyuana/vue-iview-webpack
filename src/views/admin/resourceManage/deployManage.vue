@@ -125,7 +125,7 @@
               return h('a', {
                 on: {
                   click: () => {
-                    this.$router.push({name: 'admin_deployDetails'})
+                    this.$router.push({path: '/home/admin_deployDetails'})
                   }
                 }
               }, params.row.instance_name)

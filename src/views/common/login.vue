@@ -135,21 +135,7 @@
                   userinfo.role = res.body.result.role
 
                   this.$Cookie.set('userInfo', userinfo)
-
-                  switch (userinfo.role) {
-                    case 'user':
-                      this.$router.push({name: 'user_manageConsole'})
-                      break
-                    case 'admin':
-                      this.$router.push({name: 'admin_manageConsole'})
-                      break
-                    case 'leader':
-                      this.$router.push({name: 'approval_approvalQuery'})
-                      break
-                    default:
-                      this.$Message.error('权限不存在')
-                  }
-
+                  this.$router.push({path: '/home'})
                 }
 
                 if (res.body.code == 400) {

@@ -49,7 +49,7 @@
               return h('a', {
                 on: {
                   click: () => {
-                    this.$router.push({name: 'admin_poolDetails', query: {hosts: JSON.stringify(params.row.hosts)}})
+                    this.$router.push({name: '部署区域详情', query: {hosts: JSON.stringify(params.row.hosts)}})
                   }
                 }
               }, params.row.pool_name)

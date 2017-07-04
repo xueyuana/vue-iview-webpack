@@ -5,9 +5,6 @@
       <div class="logo fl">
         <a class="logo_icon" href="/"></a>
       </div>
-      <!--<div class="uop-title fl">-->
-        <!--<p>门头沟政务云资源管理平台</p>-->
-      <!--</div>-->
       <div class="user-info fr">
         <ul>
           <li class="username">
@@ -29,99 +26,34 @@
     <div class="uop-main">
       <div class="layout">
         <Row type="flex">
+
           <i-col span="4" class="layout-menu-left">
-            <Menu v-if="role === 'user'" :active-name="$store.state.openMenu.activeItem.activeName"
-                  :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go" accordion>
-              <div class="layout-logo-left" @click="goConsole">
-                管理控制台
-              </div>
-              <Submenu name="1">
-                <template slot="title">
-                  <i class="ivu-icon icon-business"></i>业务管理
-                </template>
-                <Menu-item name="11">部署实例</Menu-item>
-              </Submenu>
-              <Submenu name="2">
-                <template slot="title">
-                  <i class="ivu-icon icon-resource"></i>资源管理
-                </template>
-                <Menu-item name="21">资源申请</Menu-item>
-                <Menu-item name="22">资源查询</Menu-item>
-                <Menu-item name="23">我的资源</Menu-item>
-              </Submenu>
-              <Submenu name="3">
-                <template slot="title">
-                  <i class="ivu-icon icon-system"></i>系统管理
-                </template>
-                <Menu-item name="31">用户管理</Menu-item>
-                <Menu-item name="32">操作日志</Menu-item>
-              </Submenu>
-            </Menu>
-            <Menu v-if="role === 'admin'" :active-name="$store.state.openMenu.activeItem.activeName"
-                  :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go" accordion>
-              <div class="layout-logo-left" @click="goConsole">
-                管理控制台
-              </div>
-              <Submenu name="1">
-                <template slot="title">
-                  <i class="ivu-icon icon-resource-chi"></i>
-                  部署区域
-                </template>
-                <Menu-item name="11">部署区域管理</Menu-item>
-              </Submenu>
-              <Submenu name="2">
-                <template slot="title">
-                  <i class="ivu-icon icon-resource"></i>资源管理
-                </template>
-                <Menu-item name="21">操作系统管理</Menu-item>
-                <Menu-item name="22">虚拟机管理</Menu-item>
-                <Menu-item name="23">部署实例管理</Menu-item>
-                <Menu-item name="24">公网IP管理</Menu-item>
-              </Submenu>
-              <Submenu name="3">
-                <template slot="title">
-                  <i class="ivu-icon icon-approval"></i>资源审批
-                </template>
-                <Menu-item name="31">资源审批</Menu-item>
-              </Submenu>
-              <Submenu name="4">
-                <template slot="title">
-                  <i class="ivu-icon icon-system"></i>系统管理
-                </template>
-                <Menu-item name="41">用户管理</Menu-item>
-                <Menu-item name="42">操作日志</Menu-item>
-              </Submenu>
-            </Menu>
-            <Menu v-if="role === 'leader'" :active-name="$store.state.openMenu.activeItem.activeName"
-                  :open-names="[$store.state.openMenu.activeItem.openNames]" theme="dark" width="auto" @on-select="go" accordion>
-              <div class="layout-logo-left" @click="goConsole">
-                管理控制台
-              </div>
-              <Submenu name="1">
-                <template slot="title">
-                  <i class="ivu-icon icon-resource"></i>资源管理
-                </template>
-                <Menu-item name="11">资源查询</Menu-item>
-              </Submenu>
-              <Submenu name="2">
-                <template slot="title">
-                  <i class="ivu-icon icon-system"></i>系统管理
-                </template>
-                <Menu-item name="21">用户管理</Menu-item>
-                <Menu-item name="22">操作日志</Menu-item>
-              </Submenu>
+            <Menu :open-names="[$route.matched[0].name]" :active-name="$route.path"
+                  theme="dark" width="auto" accordion>
+
+              <template v-for="(item, index) in asyncRouters">
+                <div v-if="!index" class="layout-logo-left" @click="goConsole">{{item.name}}</div>
+
+                <Submenu v-else :name="item.name">
+                  <template slot="title">
+                    <i :class="'ivu-icon ' + item.icon"></i>{{item.name}}
+                  </template>
+                  <router-link v-for="child in item.children" :key="child.path" :to="item.path+'/'+child.path" v-if="!child.hidden">
+                    <Menu-item :name="item.path+'/'+child.path">
+                      {{child.name}}
+                    </Menu-item>
+                  </router-link>
+                </Submenu>
+              </template>
+
             </Menu>
           </i-col>
+
           <i-col span="20" offset="4" class="right-col">
             <div class="layout-header">
-              <Breadcrumb separator=">" v-if="$store.state.breadcrumbData.level.level_3">
-                <Breadcrumb-item href="#">{{ $store.state.breadcrumbData.level.level_1 }}</Breadcrumb-item>
-                <Breadcrumb-item href="/resource_view">{{ $store.state.breadcrumbData.level.level_2 }}</Breadcrumb-item>
-                <Breadcrumb-item>{{ $store.state.breadcrumbData.level.level_3 }}</Breadcrumb-item>
-              </Breadcrumb>
-              <Breadcrumb separator=">" v-else>
-                <Breadcrumb-item href="#">{{ $store.state.breadcrumbData.level.level_1 }}</Breadcrumb-item>
-                <Breadcrumb-item>{{ $store.state.breadcrumbData.level.level_2 }}</Breadcrumb-item>
+              <Breadcrumb separator=">" >
+                <Breadcrumb-item href="/home">主页</Breadcrumb-item>
+                <Breadcrumb-item v-for="item in $route.matched" v-if="item.name" :href="item.path">{{item.name}}</Breadcrumb-item>
               </Breadcrumb>
             </div>
             <div class="layout-content">
@@ -314,7 +246,7 @@
 
 </style>
 <script>
-  import {getCookie, setStroage, delCookie} from 'tools/cookieAction.js';
+  import { mapState } from 'vuex'
   import common from '../../tools/common.js';
 
   export default {
@@ -323,36 +255,33 @@
       return {
         // 保存用户名
         userInfo: {},
-        role: ''
+        role: '',
+        openName: []
       }
     },
     created() {
-      console.log('从state中获取用户信息', this.$store.state.userData.userInfo)
       this.userInfo = this.$store.state.userData.userInfo
       this.role = this.userInfo.role
+      console.log(this.$route)
     },
+
+    computed: {
+      ...mapState({
+        asyncRouters: state => state.asyncRoutes.asyncRoutes
+      })
+    },
+
     methods: {
-      // 获取用户名
+        // 获取用户名
       getUserInfo () {
         this.userInfo = getStroage('userInfo');
         console.log('用户信息', this.userInfo)
       },
-      // 跳转到管理控制台
+        // 跳转到管理控制台
       goConsole () {
         // 根据不同身份跳转不同界面
         if (this.role) {
-          switch (this.role) {
-            case 'user':
-              this.$router.push({name: 'user_manageConsole'})
-              break
-            case 'admin':
-              this.$router.push({name: 'admin_manageConsole'})
-              break
-            case 'leader':
-              this.$router.push({name: 'approval_approvalQuery'})
-              break
-            default:
-          }
+          this.$router.push({path: '/home'})
         } else {
           this.$Message.error('没有权限，请重新登录')
         }
@@ -363,93 +292,7 @@
         this.$store.commit('getUserInfo', {})
         console.log('我退出了，清空cookie 和 vuex')
 
-        this.$router.push({path: '/login'});
-      },
-
-      // 导航跳转
-      go (name) {
-        if (this.role === 'user') {
-          this.goUser(name)
-        } else if (this.role === 'admin') {
-          this.goAdmin(name)
-        } else if (this.role === 'leader') {
-          this.goApproval(name)
-        } else {
-          this.$Message.warning('没有权限，请重新登录')
-        }
-      },
-      goUser(name) {
-        switch (name) {
-          case '11': //部署实例
-            this.$router.push({name: 'user_deployExample'});
-            break;
-
-          case '21': //资源申请
-            this.$router.push({name: 'user_resourceApplication'});
-            break;
-          case '22': //资源查询
-            this.$router.push({name: 'user_resourceQuery'});
-            break;
-          case '23': //我的资源
-            this.$router.push({name: 'user_myResource'});
-            break;
-
-          case '31': //用户管理
-            this.$router.push({name: 'user_changePassword'});
-            break;
-          case '32': //操作日志
-            this.$router.push({name: 'user_operationLog'});
-            break;
-          default:
-        }
-      },
-      goAdmin(name) {
-        switch (name) {
-          case '11': //资源池管理
-            this.$router.push({name: 'admin_poolManage'});
-            break;
-
-          case '21': //镜像管理
-            this.$router.push({name: 'admin_mirrorManagement'});
-            break;
-          case '22': //虚拟机管理
-            this.$router.push({name: 'admin_virtualManage'});
-            break;
-          case '23': //部署实例管理
-            this.$router.push({name: 'admin_deployManage'});
-            break;
-          case '24': //公网IP管理
-            this.$router.push({name: 'admin_publicNetIp'});
-            break;
-
-          case '31': //资源审批
-            this.$router.push({name: 'admin_resourceApproval'});
-            break;
-
-          case '41': //用户管理
-            this.$router.push({name: 'admin_userManage'});
-            break;
-          case '42': //操作日志
-            this.$router.push({name: 'admin_operationLog'});
-            break;
-          default:
-        }
-      },
-      goApproval(name) {
-        switch (name) {
-          case '11': //资源查询
-            this.$router.push({name: 'approval_approvalQuery'});
-            break;
-
-          case '21': //用户管理
-            this.$router.push({name: 'approval_changePassword'});
-            break;
-          case '22': //操作日志
-            this.$router.push({name: 'approval_operationLog'});
-            break;
-
-          default:
-        }
+        location.reload()
       }
     }
 
