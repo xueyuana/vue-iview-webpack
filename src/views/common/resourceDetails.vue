@@ -193,7 +193,7 @@
       <Form v-for="(item, idx) in formValidate.resources" :label-width="120" :class="{border: idx == 0?false:true}">
         <Row>
           <Col span="8">
-          <Form-item label="虚拟机名称:" class="form-item">{{item.vm_name}}</Form-item>
+          <Form-item label="虚拟机:" class="form-item">{{item.vm_name}}</Form-item>
           <Form-item label="存储空间:" class="form-item">{{item.storage}} G</Form-item>
           </Col>
           <Col span="8">

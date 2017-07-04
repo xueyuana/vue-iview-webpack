@@ -104,7 +104,7 @@
               }
             } else {
               passwordData = {
-                old_password: this.formCustom.originPasswd,
+                old_password: sha256(this.formCustom.originPasswd + '!@#$%^').toString(crypto.enc.Hex),
                 new_password: sha256(this.formCustom.passwd + '!@#$%^').toString(crypto.enc.Hex)
               }
             }
