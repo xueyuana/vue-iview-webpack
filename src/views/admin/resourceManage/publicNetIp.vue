@@ -3,11 +3,14 @@
         <div class="inquire-form">
             <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="70">
                 <div class="form-wrap">
-                    <Form-item label="日期:" prop="start_time" class="form-item">
-                        <Date-picker  type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" style="min-width: 250px"></Date-picker>
+                    <Form-item label="IP地址池:" prop="ip_pool" class="form-item">
+                        <Input v-model="formValidate.ip_pool" placeholder="请输入" style="min-width: 250px"></Input>
                     </Form-item>
                     <Form-item label="IP地址:" prop="id_address" class="form-item">
                         <Input v-model="formValidate.id_address" placeholder="请输入" style="min-width: 250px"></Input>
+                    </Form-item>
+                    <Form-item label="分配时间:" prop="start_time" class="form-item">
+                        <Date-picker  type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" style="min-width: 250px"></Date-picker>
                     </Form-item>
                 </div>
                 <Row type="flex" justify="end">
@@ -27,22 +30,44 @@
             <div class="tjbssl">
                 <Button type="primary" @click.native="addCase">新建</Button>
                 <Modal
-                        v-model="modal1"
-                        title="新增IP地址池"
-                        @on-ok="addmessage('ipData')"
-                        @on-cancel="cancel">
-                    <Form ref="ipData" :model="ipData" :rules="ruleInline" label-position="right" :label-width="130" >
-                        <Form-item label="名称：" prop="ip_pool">
-                            <Input v-model="ipData.ip_pool" placeholder="请输入" style="width: 210px"></Input>
-                        </Form-item>
-                        <Form-item label="IP范围：" prop="ipOne">
-                            <Input v-model="ipData.ipOne" placeholder="192.168.2.1" style="width: 100px"></Input>
-                            - <Input v-model="ipData.ipTwo" placeholder="192.168.2.6" style="width: 100px"></Input>
-                        </Form-item>
-                        <Form-item label="子网掩码：" prop="subnetmask">
-                            <Input v-model="ipData.subnetmask" placeholder="255.255.255.0" style="width: 210px"></Input>
-                        </Form-item>
-                    </Form>
+                    v-model="modal1"
+                    title="新增IP地址池"
+                    @on-ok="addIp('ipData')"
+                    @on-cancel="cancelIp('ipData')"
+                    :mask-closable="false">
+                    <div class="ipWrap">
+                        <Form ref="ipData" :model="ipData" :rules="ruleInline" label-position="right" :label-width="130" >
+                            <Form-item label="名称：" prop="ip_pool">
+                                <Input v-model="ipData.ip_pool" placeholder="请输入" style="width: 210px"></Input>
+                            </Form-item>
+                            <!--<Form-item label="IP范围：" prop="ipOne">-->
+                                <!--<Input v-model="ipData.ipOne" placeholder="192.168.2.1" style="width: 100px"></Input>-->
+                                 <!-- - <Input v-model="ipData.ipTwo" placeholder="192.168.2.6" style="width: 100px"></Input>-->
+                            <!--</Form-item>-->
+                            <Form-item label="IP范围：">
+                                <Row type="flex" justify="start">
+                                    <Col span="7">
+                                    <Form-item prop="ipOne">
+                                        <Input v-model="ipData.ipOne" placeholder="192.168.2.1" style="width: 90px"></Input>
+                                    </Form-item>
+                                    </Col>
+                                    <Col span="1">- </Col>
+                                    <Col span="7">
+                                    <Form-item prop="ipTwo">
+                                        <Input v-model="ipData.ipTwo" placeholder="192.168.2.6" style="width: 90px"></Input>
+                                    </Form-item>
+                                    </Col>
+                                </Row>
+                            </Form-item>
+                            <Form-item label="子网掩码：" prop="subnetmask">
+                                <Input v-model="ipData.subnetmask" placeholder="255.255.255.0" style="width: 210px"></Input>
+                            </Form-item>
+                        </Form>
+                    </div>
+                    <div slot="footer">
+                        <Button type="text" @click="cancelIp('ipData')">取消</Button>
+                        <Button type="primary" size="large" @click="addIp('ipData')" >确定</Button>
+                    </div>
                 </Modal>
             </div>
             <Table :columns="columns7" stripe :data="queryResult"></Table>
@@ -61,8 +86,6 @@
               if (value === '') {
                   callback(new Error('请输入IP范围'));
               } else {
-//                  var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
-//                  return reg.test(ip);
                   if (!this.ipReg.test(value)) {
                       callback(new Error('请输入正确IP地址'));
                   } else {
@@ -85,6 +108,7 @@
           return {
               ipReg:/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/,
               formValidate: {
+                  ip_pool: '',
                   id_address: '',
                   start_time: ''
               },
@@ -174,7 +198,6 @@
                                               title: '删除IP地址',
                                               content: '请确认！！！',
                                               onOk: () => {
-//                                                  this.remove(params.index);
                                                   const url = 'api/ip_manager/ip_managers/' + params.row.id
                                                   this.$http.delete(url).then( (res) => {
                                                       console.log('删除IP地址',res.body)
@@ -216,6 +239,7 @@
               let requestBody = {}
               start_time && (requestBody.start_time = formatDate(start_time));
               end_time && (requestBody.end_time = formatDate(end_time));
+              this.formValidate.ip_pool && (requestBody.ip_pool = this.formValidate.ip_pool);
               this.formValidate.id_address && (requestBody.ip = this.formValidate.id_address);
               this.getNetIp(requestBody);
           },
@@ -264,7 +288,12 @@
           addCase (){
               this.modal1 = true;
           },
-          addmessage (create_name) {
+          cancelIp (name) {//取消编辑
+              this.modal1 = false
+              //重置
+              this.$refs[name].resetFields();
+          },
+          addIp (create_name) {
               this.$refs[create_name].validate((valid) => {
                   if (valid) {
                       const url = 'api/ip_manager/ip_managers'
@@ -276,48 +305,40 @@
 
                       this.$http.post(url,requestBody).then((res) => {
                           console.log(res.body.result)
-                          //重新获取列表
-                          this.goQuery();
-                          //重置
-                          this.$refs[create_name].resetFields();
-                          this.ipData.ipTwo='';
+                          if (res.body.code === 200) {
+                              this.modal1 = false;//关闭modal
+                              this.$Message.info('新建IP地址池成功');
+                              //重新获取列表
+                              this.goQuery();
+                          }
                       },(err) => {
-                          console.log(err)
-                          this.$Message.info('创建失败');
-                      })
+//                          this.$Message.error(err.body.result.msg);
+                          this.$Message.error('新建IP地址池失败');
+                          this.modal1 = false;//关闭modal
+                      });
+
+                      //重置
+                      this.$refs[create_name].resetFields();
                   } else {
-//                    this.modal1 = false;
                     this.$Message.error('表单验证失败!');
                   }
               })
           },
-          cancel () {
-              this.$Message.info('点击了取消');
-          },
           // 分页
           changePage (page) {
-
               this.queryResult = this.mockTableData(this.getResult,this.page_size,page)
-
               this.current_page = page
           },
           page_size_change (size) {
               this.page_size = size
-
               this.current_page = 1
-
               this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
-
           },
           mockTableData (originData, pageSize, index) {//进行分页
-
               let data = [];
-
               let num = (index - 1) * pageSize
               let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize)
-
               data = originData.slice(num,maxNum)
-
               return data;
           }
       },
