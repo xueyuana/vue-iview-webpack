@@ -269,7 +269,6 @@
       getUser () {
 
         Object.assign(this.user_info,this.$store.state.userData.userInfo)
-        console.log('yonghu',this.user_info)
 
       },
       query () {
@@ -316,7 +315,7 @@
           if(this.index !== 4) {
             this.index ++
           }
-          console.log('虚机',res.body)
+//          console.log('虚机',res.body)
           this.getResult = res.body.result.res
 
           this.data_length = this.getResult.length
@@ -341,8 +340,6 @@
           this.instance.forEach((inst) => {//循环实例
             if(inst.instance_id == vm.deploy_inst_id) {
               vm.deploy_inst_id = inst.instance_name
-            }else {
-              vm.deploy_inst_id = ''
             }
           })
 
@@ -455,6 +452,7 @@
               }
             ])
               break
+            default: this.operationList.push([])
           }
 
         })
@@ -576,10 +574,7 @@
     watch: {
       index (newVal,oldVal) {
         if(newVal == 4) {
-//          console.log('instance',this.instance)
-//          console.log('image',this.mirrorImage)
-//          console.log('flavor',this.flavor)
-//          console.log('vm',this.getResult)
+
           this.formatData()
 
         }

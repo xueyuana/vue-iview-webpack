@@ -96,7 +96,7 @@
       </div>
       <div class="item">
         <span class="title">数量</span>
-        <Input-number :max="10" :min="0" :disabled="isDisabled" v-model="item.vm_num"></Input-number>
+        <Input-number :max="10" :min="1" :disabled="isDisabled" v-model="item.vm_num"></Input-number>
       </div>
     </div>
     <div class="inquire-table-title">业务信息</div>
@@ -154,7 +154,7 @@
         department: '',
         resourceInformation: [{
           vm_name: '',
-          vm_num: 0,
+          vm_num: 1,
           flavor_id: '',
           image_id: '',
           storage: ''
@@ -297,7 +297,7 @@
 
         this.resourceInformation.push({
           vm_name: '',
-          vm_num: 0,
+          vm_num: 1,
           flavor_id: '',
           image_id: '',
           storage: ''
