@@ -35,7 +35,7 @@
                         @on-cancel="cancel">
                     <Form ref="createUser" :model="createUser" :rules="ruleInline" label-position="right" :label-width="130" >
                         <Form-item label="名称：" prop="instance_name">
-                            <Input v-model="createUser.instance_name" placeholder="最多10个字符" style="width: 200px"></Input>
+                            <Input v-model="createUser.instance_name" :maxlength="15" placeholder="最多15个字符" style="width: 200px"></Input>
                         </Form-item>
                         <Form-item label="用户群体规模：" prop="user_size">
                             <Select v-model="createUser.user_size" style="width:200px">
@@ -71,7 +71,7 @@
                         @on-cancel="cancel">
                     <Form ref="formCompile" :model="compileUser" :rules="ruleCompile" label-position="right" :label-width="130" >
                         <Form-item label="名称：" prop="instance_name">
-                            <Input v-model="compileUser.instance_name" placeholder="最多10个字符" style="width: 200px"></Input>
+                            <Input v-model="compileUser.instance_name" :maxlength="15" placeholder="最多15个字符" style="width: 200px"></Input>
                         </Form-item>
                         <Form-item label="用户群体规模：" prop="user_size">
                             <Select v-model="compileUser.user_size" style="width:200px">
@@ -398,16 +398,21 @@
       methods: {
           goQuery () {
               let instance_name = this.formValidate.instance_name
+
               let start_time = this.formValidate.created_time[0]
+
               let end_time = this.formValidate.created_time[1]
 
+              let user_id = this.$store.state.userData.userInfo.id
+
               this.current_page = 1
+
               let params = {}
 
               instance_name && (params.instance_name = instance_name)
               start_time && (params.start_time = this.timeFormat(start_time))
               end_time && (params.end_time = this.timeFormat(end_time))
-              console.log('查询',params)
+              user_id && (params.user_id = user_id)
 
               this.getUserResource(params)
           },
