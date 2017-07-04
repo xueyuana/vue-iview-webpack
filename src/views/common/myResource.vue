@@ -10,20 +10,20 @@
 
         <div class="item">
           <span class="title">部署区域:</span>
-          <Select v-model="query_info.az_name" style="width:250px">
+          <Select v-model="query_info.az_name" clearable style="width:250px">
             <Option v-for="item in az" :value="item.az_name" :key="item">{{ item.az_name }}</Option>
           </Select>
         </div>
 
         <div class="item">
           <span class="title">状态:</span>
-          <Select v-model="query_info.status" style="width:250px">
+          <Select v-model="query_info.status" clearable style="width:250px">
             <Option v-for="item in approvalStatusVal" :value="item.key" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
         <div class="item">
           <span class="title">部署实例:</span>
-          <Select v-model="query_info.instance_id" style="width:250px">
+          <Select v-model="query_info.instance_id" clearable style="width:250px">
             <Option v-for="item in instance" :value="item.instance_id" :key="item" >{{ item.instance_name }} </Option>
           </Select>
         </div>
@@ -52,7 +52,7 @@
       </thead>
       <tbody>
         <tr v-for="(item,index) in queryResult" :class="{bac: index%2 != 0}">
-          <td width="50">{{item.number}}</td>
+          <td>{{item.number}}</td>
           <td>{{item.vm_name}}</td>
           <td>{{item.deploy_inst_id}}</td>
           <td>{{item.ip}}</td>
@@ -176,7 +176,7 @@
             key: 'flavor_id'
           },
           {
-            title: '存储空间',
+            title: '存储空间(G)',
             key: 'storage'
           },
           {
@@ -249,7 +249,7 @@
 
         this.$http.get(url,{params:params}).then((res) => {
           this.index ++
-//          console.log('实例',res.body)
+          console.log('实例',res.body)
           this.instance = res.body.result.res
 
         },(err) => {
@@ -452,6 +452,7 @@
               }
             ])
               break
+            default: this.operationList.push([])
           }
 
         })
@@ -573,10 +574,7 @@
     watch: {
       index (newVal,oldVal) {
         if(newVal == 4) {
-//          console.log('instance',this.instance)
-//          console.log('image',this.mirrorImage)
-//          console.log('flavor',this.flavor)
-//          console.log('vm',this.getResult)
+
           this.formatData()
 
         }
@@ -638,8 +636,8 @@
     width: 100%;
     border-collapse: collapse;
     color: #657180;
-    table-layout: fixed;
-    /*word-break: break-all;*/
+    /*table-layout: fixed;*/
+    word-break: break-all;
   }
   table td,th{
     text-align: center;
@@ -662,8 +660,41 @@
   }
 
   table tr td:first-child {
-    /*width: 50px;*/
+    width: 34px;
   }
+  table tr td:nth-child(2) {
+    min-width: 60px;
+  }
+  table tr td:nth-child(3) {
+    width: 8%;
+  }
+
+  table tr td:nth-child(4) {
+    width: 88px;
+  }
+  table tr td:nth-child(5) {
+    width: 14%;
+  }
+
+  table tr td:nth-child(6) {
+    min-width: 60px;
+  }
+  table tr td:nth-child(7) {
+    width: 8%;
+  }
+  table tr td:nth-child(8) {
+    min-width: 90px;
+  }
+  table tr td:nth-child(9) {
+    width: 78px;
+  }
+  table tr td:nth-child(10) {
+    width: 50px;
+  }
+  table tr td:nth-child(11) {
+    width: 50px;
+  }
+
 
  .hidden {
    display: none;

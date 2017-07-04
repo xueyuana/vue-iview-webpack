@@ -2,33 +2,25 @@
   <div class="inquire">
     <div class="inquire-form">
       <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="70">
-        <Row :gutter="16">
-          <Col span="5">
-            <Form-item label="申请人:" prop="user_name">
-              <Input v-model="formValidate.user_name" placeholder="请输入"></Input>
+        <div class="form-wrap">
+            <Form-item label="申请人:" prop="user_name" class="form-item">
+              <Input v-model="formValidate.user_name" placeholder="请输入" style="min-width: 250px"></Input>
             </Form-item>
-          </Col>
-          <Col span="8">
-            <Form-item label="申请日期:" prop="start_time">
-              <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" style="max-width: 250px"></Date-picker>
+            <Form-item label="申请日期:" prop="start_time" class="form-item">
+              <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" style="min-width: 250px"></Date-picker>
             </Form-item>
-          </Col>
-          <Col span="5">
-            <Form-item label="审批状态:" prop="apply_status">
-              <Select v-model="formValidate.apply_status" clearable style="">
+            <Form-item label="审批状态:" prop="apply_status" class="form-item">
+              <Select v-model="formValidate.apply_status" clearable style="min-width: 250px">
                 <Option v-for="item in approvalStatusVal" :value="item.key" :key="item">{{ item.value }}</Option>
               </Select>
             </Form-item>
-          </Col>
-          <Col span="5">
-            <Form-item label="部署实例:" prop="instance_id">
-              <Select v-model="formValidate.instance_id" clearable style="">
+            <Form-item label="部署实例:" prop="instance_id" class="form-item">
+              <Select v-model="formValidate.instance_id" clearable style="min-width: 250px">
                 <!--<Option v-for="item in instance" :value="item.id" :key="item">{{ item.value }}</Option>-->
                 <Option v-for="item in instance" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
               </Select>
             </Form-item>
-          </Col>
-        </Row>
+        </div>
         <Row type="flex" justify="end">
           <Col span="24">
             <Form-item>
@@ -51,7 +43,7 @@
   </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="less">
 </style>
 
 <script>

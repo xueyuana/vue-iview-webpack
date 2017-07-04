@@ -5,13 +5,13 @@
 
         <div class="item">
           <span class="title">审批状态</span>
-          <Select v-model="query_info.status" style="width:260px">
+          <Select v-model="query_info.status" clearable style="width:260px">
             <Option v-for="item in approvalStatusVal" :value="item.key" :key="item">{{ item.value }}</Option>
           </Select>
         </div>
         <div class="item">
           <span class="title">部署实例</span>
-          <Select v-model="query_info.instance_id" style="width:260px">
+          <Select v-model="query_info.instance_id" clearable style="width:260px">
             <Option v-for="item in instance" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
           </Select>
         </div>

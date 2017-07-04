@@ -2,22 +2,22 @@
   <div class="inquire">
     <div class="inquire-form">
       <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="70">
-        <Row :gutter="16">
-          <Col span="8">
-            <Form-item label="日期:" prop="start_time">
-              <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" style="max-width: 250px"></Date-picker>
+        <div class="form-wrap">
+            <Form-item label="日期:" prop="start_time" class="form-item">
+              <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.start_time" style="min-width: 250px"></Date-picker>
             </Form-item>
-          </Col>
-          <Col span="7">
-            <Form-item label="关键字:" prop="key_name">
-              <Input v-model="formValidate.key_name" placeholder="请输入"></Input>
+            <Form-item label="关键字:" prop="key_name" class="form-item">
+              <Input v-model="formValidate.key_name" placeholder="请输入" style="min-width: 250px"></Input>
             </Form-item>
-          </Col>
-          <Col span="5">
+        </div>
+        <Row type="flex" justify="end">
+          <Col span="24">
+          <Form-item>
             <div class="inquire-form-query">
               <Button type="primary" class="inquire-form-query-add" @click.native="goQuery">查询</Button>
               <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
             </div>
+          </Form-item>
           </Col>
         </Row>
       </Form>

@@ -2,22 +2,22 @@
     <div class="inquire">
         <div class="inquire-form">
             <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="90">
-                <Row :gutter="16">
-                    <Col span="8">
-                    <Form-item label="创建日期:" prop="created_time">
-                        <Date-picker  type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.created_time" style="max-width: 250px"></Date-picker>
+                <div class="form-wrap">
+                    <Form-item label="创建日期:" prop="created_time" class="form-item">
+                        <Date-picker  type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="formValidate.created_time" style="min-width: 250px"></Date-picker>
                     </Form-item>
-                    </Col>
-                    <Col span="7">
-                    <Form-item label="部署实例名称:" prop="instance_name">
-                        <Input v-model="formValidate.instance_name" placeholder="请输入"></Input>
+                    <Form-item label="部署实例名称:" prop="instance_name" class="form-item">
+                        <Input v-model="formValidate.instance_name" placeholder="请输入" style="min-width: 250px"></Input>
                     </Form-item>
-                    </Col>
-                    <Col span="5">
+                </div>
+                <Row type="flex" justify="end">
+                    <Col span="24">
+                    <Form-item>
                         <div class="inquire-form-query">
                             <Button type="primary" class="inquire-form-query-add" @click.native="goQuery">查询</Button>
                             <Button type="ghost" @click="handleReset('formValidate')">重置</Button>
                         </div>
+                    </Form-item>
                     </Col>
                 </Row>
             </Form>
@@ -35,7 +35,7 @@
                         @on-cancel="cancel">
                     <Form ref="createUser" :model="createUser" :rules="ruleInline" label-position="right" :label-width="130" >
                         <Form-item label="名称：" prop="instance_name">
-                            <Input v-model="createUser.instance_name" placeholder="最多10个字符" style="width: 200px"></Input>
+                            <Input v-model="createUser.instance_name" :maxlength="15" placeholder="最多15个字符" style="width: 200px"></Input>
                         </Form-item>
                         <Form-item label="用户群体规模：" prop="user_size">
                             <Select v-model="createUser.user_size" style="width:200px">
@@ -71,7 +71,7 @@
                         @on-cancel="cancel">
                     <Form ref="formCompile" :model="compileUser" :rules="ruleCompile" label-position="right" :label-width="130" >
                         <Form-item label="名称：" prop="instance_name">
-                            <Input v-model="compileUser.instance_name" placeholder="最多10个字符" style="width: 200px"></Input>
+                            <Input v-model="compileUser.instance_name" :maxlength="15" placeholder="最多15个字符" style="width: 200px"></Input>
                         </Form-item>
                         <Form-item label="用户群体规模：" prop="user_size">
                             <Select v-model="compileUser.user_size" style="width:200px">
@@ -398,16 +398,21 @@
       methods: {
           goQuery () {
               let instance_name = this.formValidate.instance_name
+
               let start_time = this.formValidate.created_time[0]
+
               let end_time = this.formValidate.created_time[1]
 
+              let user_id = this.$store.state.userData.userInfo.id
+
               this.current_page = 1
+
               let params = {}
 
               instance_name && (params.instance_name = instance_name)
               start_time && (params.start_time = this.timeFormat(start_time))
               end_time && (params.end_time = this.timeFormat(end_time))
-              console.log('查询',params)
+              user_id && (params.user_id = user_id)
 
               this.getUserResource(params)
           },
@@ -605,7 +610,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .tjbssl Button{
     margin-bottom: 20px;
 }
