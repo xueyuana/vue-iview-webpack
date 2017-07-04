@@ -5,21 +5,21 @@
 
         <div class="item">
           <span class="title">审批状态</span>
-          <Select v-model="query_info.status" style="width:260px">
+          <Select v-model="query_info.status" clearable style="width:260px">
             <Option v-for="item in approvalStatusVal" :value="item.key" :key="item">{{ item.value }}</Option>
+          </Select>
+        </div>
+        <div class="item">
+          <span class="title">部署实例</span>
+          <Select v-model="query_info.instance_id" clearable style="width:260px">
+            <Option v-for="item in instance" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
           </Select>
         </div>
         <div class="item date-picker">
           <span class="title">申请日期</span>
           <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.created_date" placeholder="选择日期" style="width: 260px"></Date-picker>
         </div>
-        <div class="item">
-          <span class="title">部署实例</span>
-          <Select v-model="query_info.instance_id" style="width:260px">
-            <Option v-for="item in instance" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
 
-          </Select>
-        </div>
       </div>
       <div class="query">
         <Button type="primary" @click="query">查询</Button>
@@ -87,14 +87,12 @@
           {
             title: '序号',
             key: 'number',
-            width: 80,
             align: 'center'
 
           },
           {
             title: '申请单号',
             key: 'resource_id',
-            width: 130,
             align: 'center',
             render: (h,params) => {
               return h('a',
@@ -103,11 +101,11 @@
                     innerHTML: params.row.resource_id
                   },
                   style: {
-                    display: 'inline-block',
-                    width: '80px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
+                    display: 'inline-block'
+//                    width: '80px'
+//                    overflow: 'hidden',
+//                    textOverflow: 'ellipsis',
+//                    whiteSpace: 'nowrap'
                   },
                   on: {
                     click: () => {
@@ -123,7 +121,6 @@
           {
             title: '申请人',
             key: 'applyPerson',
-            width: 80,
             align: 'center'
           },
           {
@@ -139,7 +136,6 @@
           {
             title: '状态',
             key: 'status',
-            width: 160,
             align: 'center'
           },
           {
@@ -151,6 +147,7 @@
             title: '操作',
             key: 'operate',
             align: 'center',
+            width: 90,
             render: (h,params) => {
 //              console.log(params.row)
               return h('Button',{

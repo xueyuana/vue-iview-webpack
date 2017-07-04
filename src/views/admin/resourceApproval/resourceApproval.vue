@@ -3,35 +3,28 @@
     <!--查询条件-->
     <div class="inquire-form">
       <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="70">
-        <Row :gutter="32">
-          <Col span="5">
-            <Form-item label="申请人:" prop="userName">
-              <Input v-model="formItem.userName" placeholder="请输入"></Input>
-            </Form-item>
-          </Col>
-          <Col span="8">
-            <Form-item label="申请日期:" prop="date">
-              <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="max-width: 250px"></Date-picker>
-            </Form-item>
-          </Col>
-          <Col span="5">
-            <Form-item label="审批状态:" prop="status">
-              <Select v-model="formItem.status" clearable>
-                <Option value="l_success">待审批</Option>
-                <Option value="a_success">已审批</Option>
-                <Option value="a_fail">审批不通过</Option>
-                <Option value="created_success">已创建</Option>
-              </Select>
-            </Form-item>
-          </Col>
-          <Col span="5"><Option v-for="item in instance" @click.native="instanceDetails" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
-            <Form-item label="部署实例:" prop="instance_id">
-              <Select v-model="formItem.instance_id" clearable>
-                <Option :value="item.instance_id" v-for="item in formItem.instance">{{item.instance_name}}</Option>
-              </Select>
-            </Form-item>
-          </Col>
-        </Row>
+        <div class="form-wrap">
+          <Form-item label="申请日期:" prop="date" class="form-item">
+            <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="min-width: 250px"></Date-picker>
+          </Form-item>
+          <Form-item label="申请人:" prop="userName" class="form-item">
+            <Input v-model="formItem.userName" placeholder="请输入" style="min-width: 250px"></Input>
+          </Form-item>
+          <Form-item label="审批状态:" prop="status" class="form-item">
+            <Select v-model="formItem.status" clearable style="min-width: 250px">
+              <Option value="l_success">待审批</Option>
+              <Option value="a_success">已审批</Option>
+              <Option value="a_fail">审批不通过</Option>
+              <Option value="created_success">已创建</Option>
+            </Select>
+          </Form-item>
+          <Form-item label="部署实例:" prop="instance_id" class="form-item">
+            <Select v-model="formItem.instance_id" clearable style="min-width: 250px">
+              <Option :value="item.instance_id" v-for="item in formItem.instance">{{item.instance_name}}</Option>
+            </Select>
+          </Form-item>
+        </div>
+
         <Row type="flex" justify="end">
           <Col span="24">
           <Form-item>
@@ -58,7 +51,8 @@
   </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="less">
+
 </style>
 
 <script>
@@ -95,14 +89,6 @@
             align: 'center',
             render: (h, params) => {
               return h('a', {
-                style: {
-                  display: 'inline-block',
-                  width: '80px',
-                  margin: '0 auto',
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis'
-                },
                 on: {
                   click: () => {
                     this.$router.push({name: 'approval_resourceDetails', query: { id: params.row.resource_id}})

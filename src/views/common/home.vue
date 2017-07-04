@@ -359,7 +359,7 @@
       },
       // 退出登录
       toLogOut() {
-        delCookie('userInfo')
+        this.$Cookie.remove('userInfo')
         this.$store.commit('getUserInfo', {})
         console.log('我退出了，清空cookie 和 vuex')
 

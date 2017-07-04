@@ -5,7 +5,7 @@
       <Button type="primary" :disabled="isDisabled" @click="sendInformation">提交</Button>
     </div>
     <div class="steps">
-      <Steps :current="current" :status="stepsStatus">
+      <Steps :current="current" :status="stepsStatus" >
         <Step title="提交申请" ></Step>
         <Step title="直属领导审批" ></Step>
         <Step title="经信委技术审批" ></Step>
@@ -14,26 +14,31 @@
     </div>
     <div class="inquire-table-title">资源信息</div>
     <div class="contain" v-for="(item,index) in resourceInformation" :class="{border: index == 0?false:true}">
-     <div class="delete" :class="{hidden: index == 0 || isDisabled? true:false}">
-       <Button type="primary" @click="deleteVm(index)">删除</Button>
+     <div class="option" :class="{hidden: index == 0 || isDisabled? true:false}">
+       <div class="delete" @click="deleteVm(index)">
+         <Icon type="trash-a"  size="26" color="#0063d0"></Icon>
+       </div>
+       <div class="add-s" @click="addInformation">
+         <Icon type="plus-round" size="26" color="#0063d0"></Icon>
+       </div>
      </div>
       <div class="item">
-        <span class="title">虚拟机名称</span>
-        <Input v-model="item.vm_name" placeholder="请输入" :disabled="isDisabled" style="width: 200px"></Input>
+        <span class="title">虚拟机</span>
+        <Input v-model="item.vm_name" placeholder="请输入" :disabled="isDisabled" style="width: 180px"></Input>
       </div>
       <div class="item">
         <span class="title">部门</span>
-        <Input v-model="department" :disabled="isDisabled" disabled style="width: 200px"></Input>
+        <Input v-model="department" :disabled="isDisabled" disabled style="width: 180px"></Input>
       </div>
       <div class="item">
         <span class="title">部署区域</span>
-        <Select v-model="az_name" style="width:200px" :disabled="index ==0 && !isDisabled?false:true">
+        <Select v-model="az_name" style="width:180px" :disabled="index ==0 && !isDisabled?false:true">
           <Option v-for="item in az" :value="item.az_name" :key="item">{{ item.az_name }}</Option>
         </Select>
       </div>
       <div class="item example">
         <span class="title">部署实例</span>
-          <Select v-model="instance_id" style="width:200px" :disabled="index ==0 && !isDisabled?false:true">
+          <Select v-model="instance_id" style="width:180px" :disabled="index ==0 && !isDisabled?false:true">
             <Option v-for="item in instance" @click.native="instanceDetails" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
           </Select>
         <Button type="dashed" class="add-example" :class="{hidden: index == 0?false:true}" @click="createExample">新建部署实例</Button>
@@ -74,19 +79,19 @@
       </div>
       <div class="item">
         <span class="title">操作系统</span>
-        <Select v-model="item.image_id" :disabled="isDisabled" style="width:200px">
+        <Select v-model="item.image_id" :disabled="isDisabled" style="width:180px">
           <Option v-for="item in mirrorImage" :value="item.id" :key="item">{{ item.image_name }}</Option>
         </Select>
       </div>
       <div class="item">
         <span class="title">规格</span>
-        <Select v-model="item.flavor_id" :disabled="isDisabled" style="width:200px">
+        <Select v-model="item.flavor_id" :disabled="isDisabled" style="width:180px">
           <Option v-for="item in flavor" :value="item.flavor_id" :key="item">{{ item.flavor_name }}</Option>
         </Select>
       </div>
       <div class="item add-unit">
         <span class="title">存储空间</span>
-        <Input v-model="item.storage" placeholder="最小单位G，最大500G" :disabled="isDisabled" style="width: 200px"></Input>
+        <Input v-model="item.storage" placeholder="最小单位G，最大500G" :disabled="isDisabled" style="width: 180px"></Input>
         <span class="unit">G</span>
       </div>
       <div class="item">
@@ -496,8 +501,14 @@
     margin-right: 20px;
   }
   .steps {
-    width: 70%;
+    width: 80%;
     margin: 30px auto;
+  }
+  @media screen and (max-width: 1024px){
+    .steps {
+      width: 90%;
+    }
+
   }
   .contain {
     width: 100%;
@@ -509,19 +520,18 @@
 
   }
   .item {
-    padding-right: 160px;
+    padding-right: 110px;
     padding-bottom: 10px;
 
   }
   .title{
-    width: 80px;
+    width: 60px;
     text-align: center;
-    margin-right: 20px;
     display: inline-block;
   }
   .add-example {
     position: absolute;
-    right: 38px;
+    right: 0;
     top: 0;
   }
   .example {
@@ -529,15 +539,14 @@
   }
   .unit {
     position: absolute;
-    right: 146px;
+    right: 88px;
     top: 8px;
   }
   .add-unit {
     position: relative;
   }
   .comment {
-    width: 800px;
-    padding-left: 30px;
+    padding-left: 20px;
 
   }
   .hidden {
@@ -555,10 +564,17 @@
     margin: 0 auto;
   }
 
-  .delete {
+  .option {
     width: 100%;
-    padding-left: 94%;
-
+    display: flex;
+    padding-left: 90%;
+  }
+  .add-s {
+    margin-left: 30px;
+    cursor: pointer;
+  }
+  .delete {
+    cursor: pointer;
   }
   .hidden {
     display: none;
@@ -586,6 +602,9 @@
   table tbody tr td:first-child {
     background-color: #ebf4fe;
     width: 120px;
+  }
+  textarea.ivu-input {
+    width: 100%;
   }
 
 </style>

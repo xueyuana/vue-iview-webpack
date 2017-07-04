@@ -3,24 +3,21 @@
     <!--查询条件-->
     <div class="inquire-form">
       <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="90">
-        <Row :gutter="32">
-          <Col span="8">
-          <Form-item label="选择日期:" prop="date">
+        <div class="form-wrap">
+          <Form-item label="选择日期:" prop="date" class="form-item">
             <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间"
-                         style="max-width: 250px"></Date-picker>
+                         style="min-width: 250px"></Date-picker>
           </Form-item>
-          </Col>
-          <Col span="8">
-          <Form-item label="用户:" prop="user">
-            <Input v-model="formItem.user" placeholder="请输入" style="max-width: 250px"></Input>
+          <Form-item label="用户:" prop="user" class="form-item">
+            <Input v-model="formItem.user" placeholder="请输入" style="min-width: 150px"></Input>
           </Form-item>
-          </Col>
-          <Col span="8">
-          <Form-item label="部署实例名称:" prop="deploy_name">
-            <Input v-model="formItem.deploy_name" placeholder="请输入" style="max-width: 250px"></Input>
+          <Form-item label="部署实例名称:" prop="instance_name" class="form-item">
+            <Select v-model="formItem.instance_name"  style="min-width: 250px">
+              <Option v-for="item in instanceList" :value="item.instance_name" :key="item">{{ item.instance_name }}</Option>
+            </Select>
           </Form-item>
-          </Col>
-        </Row>
+        </div>
+
         <Row type="flex" justify="end">
           <Col span="24">
           <Form-item>
@@ -104,13 +101,14 @@
         formItem: {
           date: [],
           user: '',
-          deploy_name: ''
+          instance_name: ''
         },
         ruleValidate: {
           date: [],
           user: [],
-          deploy_name: []
+          instance_name: []
         },
+        instanceList: [],
         userInfo: '',
         columns: [
           {
@@ -121,7 +119,7 @@
           },
           {
             title: '部署实例名称',
-            key: 'deploy_name',
+            key: 'instance_name',
             align: 'center',
             render: (h, params) => {
               return h('a', {
@@ -130,7 +128,7 @@
                     this.$router.push({name: 'admin_deployDetails'})
                   }
                 }
-              }, params.row.deploy_name)
+              }, params.row.instance_name)
             }
           },
           {
@@ -176,7 +174,7 @@
         data: [],
         filterDate: [
           {
-            deploy_name: 'mySql',
+            instance_name: 'mySql',
             user: 'user',
             online_ip: '172,16.2.1',
             test_ip: '',
@@ -196,6 +194,7 @@
 
     mounted() {
 //      this.onInquire()
+      this.getInstance()
     },
 
     methods: {
@@ -205,7 +204,7 @@
         this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
         this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
         this.formItem.user && (query.user = this.formItem.user)
-        this.formItem.deploy_name && (query.deploy_name = this.formItem.deploy_name)
+        this.formItem.instance_name && (query.instance_name = this.formItem.instance_name)
 
         this.$http.get('api/image/images', {
           params: query
@@ -228,6 +227,19 @@
       // 确定分配
       onOk() {
 
+      },
+
+      getInstance() {
+        this.$http.get('api/deploy_instance/deploy_instances').then(res => {
+          if (res.body.code === 200) {
+            this.instanceList = res.body.result.res
+            console.log(this.instanceList)
+          } else {
+            this.$Message.error(res.body.result.msg)
+          }
+        }, err => {
+          console.log('error', err)
+        })
       },
 
       // 分页

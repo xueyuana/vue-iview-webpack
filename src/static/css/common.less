@@ -1,4 +1,3 @@
-//@import "../../static/mytheme/redtheme.less";
 @import "../../static/mytheme/index.less";
 
 html, body {
@@ -36,6 +35,17 @@ html, body {
     .cellRed {
       color: #f00;
     }
+  }
+}
+
+// form查询表单flex布局
+.form-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+  .form-item {
+    margin-right: 20px;
   }
 }
 
@@ -81,4 +91,61 @@ html, body {
       }
     }
   }
+}
+
+@media all and (min-width: 1024px) {
+  h1 {
+    font-size: 30px;
+  }
+  h2 {
+    font-size: 18px;
+  }
+  h3 {
+    font-size: 16px;
+  }
+  h4 {
+    font-size: 14px;
+  }
+
+  .font-large {
+    font-size: 18px;
+  }
+
+  .font-middle {
+    font-size: 16px;
+  }
+
+  .font-small {
+    font-size: 14px;
+  }
+
+}
+
+@media all and (max-width: 1024px) {
+
+  h1 {
+    font-size: 26px;
+  }
+  h2 {
+    font-size: 16px;
+  }
+  h3 {
+    font-size: 14px;
+  }
+  h4 {
+    font-size: 12px;
+  }
+
+  .font-large {
+    font-size: 16px;
+  }
+
+  .font-middle {
+    font-size: 14px;
+  }
+
+  .font-small {
+    font-size: 12px;
+  }
+
 }

@@ -2,7 +2,7 @@
   <div class="inquire">
     <!--查询结果-->
     <div class="inquire-table">
-      <div class="inquire-table-title">部署区域列表：</div>
+      <div class="inquire-table-title font-large">部署区域列表：</div>
       <Table stripe size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="less">
 
 </style>
 

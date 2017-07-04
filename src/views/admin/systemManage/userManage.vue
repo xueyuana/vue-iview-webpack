@@ -2,14 +2,15 @@
   <div class="my-resource">
     <div class="query-form inquire-form">
       <div class="queryInformation">
-        <div class="item">
-          <span class="title">用户名:</span>
-          <Input v-model="query_info.user_name" placeholder="请输入" style="width: 300px"></Input>
-        </div>
         <div class="item date-picker">
           <span class="title">申请日期:</span>
-          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 300px"></Date-picker>
+          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.applyDate" placeholder="选择日期" style="width: 260px"></Date-picker>
         </div>
+        <div class="item">
+          <span class="title">用户名:</span>
+          <Input v-model="query_info.user_name" placeholder="请输入" style="width: 260px"></Input>
+        </div>
+
       </div>
       <div class="query">
         <Button type="primary" @click="query">查询</Button>
@@ -18,13 +19,15 @@
     </div>
     <div class="inquire-table-title">用户列表</div>
     <div class="createUser">
-      <Button @click="isCreate = true" type="primary" >创 建</Button>
+      <Button @click="create" type="primary" >创 建</Button>
       <Modal
           v-model="isCreate"
           title="用户信息"
           width="360"
           @on-ok="createOk('formInline')"
-          @on-cancel="createCancel('formInline')">
+          @on-cancel="createCancel('formInline')"
+          :mask-closable="false"
+      >
         <div class="createWrap">
 
           <Form ref="formInline" :model="createUser" :rules="ruleInline" label-position="right" :label-width="80" >
@@ -50,15 +53,21 @@
             </Form-item>
           </Form>
         </div>
+        <div slot="footer">
+          <Button type="text" @click="createCancel('formInline')">取消</Button>
+          <Button type="primary" size="large" @click="createOk('formInline')" >确定</Button>
+        </div>
       </Modal>
     </div>
-    <Table border stripe :columns="columns" :data="queryResult"></Table>
+    <Table stripe :columns="columns" :data="queryResult"></Table>
     <Modal
         v-model="isCompile"
         title="用户信息"
         width="360"
         @on-ok="compileOk('formCompile')"
-        @on-cancel="compileCancel('formCompile')">
+        @on-cancel="compileCancel('formCompile')"
+        :mask-closable="false"
+    >
       <div class="createWrap">
 
         <Form ref="formCompile" :model="compileUser" :rules="ruleCompile" label-position="right" :label-width="80" >
@@ -84,6 +93,10 @@
           </Form-item>
         </Form>
       </div>
+      <div slot="footer">
+        <Button type="text" @click="compileCancel('formCompile')">取消</Button>
+        <Button type="primary" size="large" @click="compileOk('formCompile')" >确定</Button>
+      </div>
     </Modal>
     <div class="page">
       <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
@@ -105,14 +118,10 @@
 
         } else {
 
-          if(!Number.isInteger(Number.parseInt(value))) {
-            callback(new Error('请输入数字'))
+          if(!/^[0-9]{11}$/.test(value)) {
+            callback(new Error('请输入11位电话号'))
           } else {
-            if (value.length !==11) {
-              callback(new Error('请输入11位数字'))
-            } else {
-              callback()
-            }
+            callback()
           }
         }
 
@@ -122,9 +131,6 @@
         data_length: 0,
         current_page: 1,
         page_size: 10,
-        passwordReg: /^[a-zA-Z0-9]{6,15}$/,
-        phoneReg: /^[0-9]{11}$/,
-        emailReg: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
         getResult: [],//获取的全部数据
         query_info: {
           user_name: '',
@@ -147,7 +153,7 @@
             {required: true,message: '请填写用户名',trigger: 'blur'}
           ],
           password: [
-            {required: true, min: 6, max: 15, message: '请填写密码',trigger: 'blur'}
+            {required: true, min: 6, max: 15, message: '请输入6到15位密码',trigger: 'blur'}
           ],
           department: [
             {required: true, message: '请填写部门', trigger: 'blur'}
@@ -168,7 +174,7 @@
             {required: true,message: '请填写用户名',trigger: 'blur'}
           ],
           password: [
-            { min: 6, max: 15, message: '密码最少6位最多15位',trigger: 'blur'}
+            { min: 6, max: 15, message: '请输入6到15位密码',trigger: 'blur'}
           ],
           department: [
             {required: true, message: '请填写部门', trigger: 'blur'}
@@ -201,7 +207,9 @@
         columns: [
           {
             title: '序号',
-            key: 'number'
+            key: 'number',
+            align: 'center',
+            width: 60
           },
           {
             title: '用户名',
@@ -230,6 +238,7 @@
           {
             title: '操作',
             key: 'operate',
+            width: 130,
             render: (h,params) => {
               return h('div',[
                 h('Button',{
@@ -350,6 +359,10 @@
 
         })
       },
+      create () {
+        this.isCreate = true
+
+      },
       compileOk (name) {//确定编辑
         //TODO:表单的坑
         let temporary = {}
@@ -398,6 +411,8 @@
             this.$http.put(url,requestBody).then((res) => {
               console.log(res.body)
 
+              this.$Message.info('编辑用户成功');
+
               this.current_page = 1
 //        修改成功之后改变列表数据
               for(var key in temporary) {
@@ -417,25 +432,21 @@
 
               }
 
-
             },(err) => {
 
               this.$Message.info('编辑用户失败');
 
               console.log('err',err)
-
-              //重置
-              this.$refs[name].resetFields()
-
             })
 
-//
-          } else {
-
-            this.$Message.info('编辑用户失败');
+            this.isCompile = false
 
             //重置
             this.$refs[name].resetFields()
+//
+          } else {
+
+            this.$Message.info('验证用户失败');
 
             console.log('验证失败')
 
@@ -445,6 +456,7 @@
 
       },
       compileCancel (name) {//取消编辑
+        this.isCompile = false
         //重置
         this.$refs[name].resetFields()
 
@@ -470,33 +482,38 @@
             requestBody.password = sha256(this.createUser.password + '!@#$%^').toString(crypto.enc.Hex)
 
             this.$http.post(url,requestBody).then((res) => {
+
+              this.isCreate = false//关闭modal
+              this.$Message.info('创建用户成功');
               console.log(res.body.result)
               //重新获取用户
               this.getUser()
-
-              //重置
-              this.$refs[name].resetFields()
 
             },(err) => {
               console.log(err)
 
               this.$Message.info('创建用户失败');
+              this.isCreate = false//关闭modal
 
             })
+            //重置
+            this.$refs[name].resetFields()
 
           } else {
             console.log('验证失败')
 
-            this.$Message.info('创建用户失败');
+            this.$Message.info('验证用户失败');
 
           }
         })
 
       },
       createCancel (name) {//创建用户取消
+        this.isCreate = false
 
         //重置
         this.$refs[name].resetFields()
+
 
       },
       query () {//查询
@@ -619,9 +636,6 @@
   .ivu-form-item {
     margin-bottom: 24px;
   }
-  /*.createWrap {*/
-    /*height: 340px;*/
-  /*}*/
   .queryInformation{
     width: 100%;
     display: flex;
@@ -640,7 +654,7 @@
   }
   .item {
     margin: 10px 30px;
-    margin-right: 50px;
+    margin-right: 30px;
   }
   .title {
     display: inline-block;

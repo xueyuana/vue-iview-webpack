@@ -12,9 +12,8 @@ import page from 'views/page/index.vue'                    // 首页
 import main from 'views/page/main.vue'                     // 首屏
 import notice from 'views/page/notice.vue'                 // 公告
 
-
-import login from 'views/common/login.vue'                // 登录
-import home from 'views/common/home.vue'                  // Home页
+import login from 'views/common/login.vue'                 // 登录
+import home from 'views/common/home.vue'                   // Home页
 
 import user_manageConsole from 'views/user/manageConsole.vue'                                 // 用户 > 管理控制台
 import user_deployExample from 'views/user/businessManage/deployExamples.vue'                 // 用户 > 部署实例
@@ -44,7 +43,7 @@ import approval_operationLog from 'views/common/operationLog.vue'               
 
 // 创建路由对象
 var routes = [
-  {name: 'page', path: '/', component: page,
+  {path: '/', component: page,
     children: [
       {path: '', component: main},
       {name: 'notice', path: 'notice', component: notice}

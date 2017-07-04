@@ -6,16 +6,18 @@
         <Row :gutter="16">
           <Col span="12">
             <Form-item label="操作系统名称:" prop="image_name">
-              <Input v-model="formItem.image_name" placeholder="请输入" style="max-width: 250px"></Input>
+              <Select v-model="formItem.image_name" style="min-width: 150px">
+                <Option v-for="item in mirrorImage" :value="item.image_name" :key="item">{{ item.image_name }}</Option>
+              </Select>
             </Form-item>
           </Col>
           <Col span="12">
-          <Form-item>
-            <div class="inquire-form-query">
-              <Button type="primary" class="inquire-form-query-add" @click.native="onInquire">查询</Button>
-              <Button type="ghost" @click="handleReset('formItem')">重置</Button>
-            </div>
-          </Form-item>
+            <Form-item>
+              <div class="inquire-form-query">
+                <Button type="primary" class="inquire-form-query-add" @click.native="onInquire">查询</Button>
+                <Button type="ghost" @click="handleReset('formItem')">重置</Button>
+              </div>
+            </Form-item>
           </Col>
         </Row>
       </Form>
@@ -27,7 +29,8 @@
       <Table stripe size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
-          <Page :total="this.data.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
+          <Page :total="this.data.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage"
+                @on-page-size-change="changePageSize"></Page>
         </div>
       </div>
     </div>
@@ -36,7 +39,7 @@
 </template>
 
 <style lang="less">
-  .a{
+  .a {
     text-overflow: ellipsis;
   }
 </style>
@@ -56,7 +59,8 @@
           image_format: [],
           image_name: []
         },
-        columns:  [
+        mirrorImage: [],
+        columns: [
           {
             title: '序号',
             key: 'index',
@@ -66,25 +70,14 @@
           {
             title: '操作系统名称',
             key: 'image_name',
-            align: 'center',
-            render: (h, params) => {
-              return h('p', {
-                style: {
-                  width: '80px',
-                  margin: '0 auto',
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis'
-                }
-              }, params.row.image_name)
-            }
+            align: 'center'
           },
           {
             title: '尺寸 (M)',
             key: 'image_size',
             align: 'center',
             render: (h, params) => {
-              return h('p', parseInt(params.row.image_size/1024/1024))
+              return h('p', parseInt(params.row.image_size / 1024 / 1024))
             }
           },
           {
@@ -108,14 +101,14 @@
       }
     },
 
-    mounted() {
+    created() {
       this.onInquire()
+      this.getImage ()
     },
 
     methods: {
-        // 查找
+      // 查找
       onInquire() {
-
         let query = {}
         this.formItem.image_name && (query.image_name = this.formItem.image_name)
 
@@ -144,7 +137,18 @@
         this.onInquire()
       },
 
-        // 分页
+      getImage () {
+        const url = 'api/image/images'
+        this.$http.get(url).then(res => {
+          if (res.body.code === 200) {
+            this.mirrorImage = res.body.result.res
+          }
+        }, err => {
+          console.log(err)
+        })
+      },
+
+      // 分页
       changePage(val) {
         this.filterDate = this.mockTableData(this.data, this.pageSize, val)
         this.num = val

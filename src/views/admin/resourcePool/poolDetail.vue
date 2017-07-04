@@ -129,7 +129,7 @@
         columns: [
           {
             title: '序号',
-            type: 'index',
+            key: 'index',
             align: 'center',
             width: '100'
           },
@@ -161,11 +161,11 @@
             }
           },
           {
-            title: '内存占比（M）',
+            title: '内存占比（G）',
             key: 'RAM_proportion',
             align: 'center',
             render: (h, params) => {
-              return h('p', params.row.memory_mb_use + ' / ' + params.row.memory_mb_total)
+              return h('p', parseInt(params.row.memory_mb_use/1024 ) + ' / ' + parseInt(params.row.memory_mb_total/1024))
             }
           },
           {
@@ -203,6 +203,10 @@
         this.$http.get(url).then(res => {
           if (res.body.code === 200) {
             this.data1 = res.body.result.res
+            this.data1.forEach((item, index) => {
+              item.index = index + 1
+            })
+
             this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
             // 开始绘制饼图
             this.drawPie(this.data1)
@@ -222,8 +226,8 @@
       drawPie(data) {
         let cpu_use = this.countSum(data, 'vcpu_use')
         let cpu_unUse = this.countSum(data, 'vcpu_total') - cpu_use
-        let memory_use = this.countSum(data, 'memory_mb_use')
-        let memory_unUse = this.countSum(data, 'memory_mb_total') - memory_use
+        let memory_use = parseInt(this.countSum(data, 'memory_mb_use')/1024)
+        let memory_unUse = parseInt((this.countSum(data, 'memory_mb_total') - memory_use)/1024)
         let storage_use = this.countSum(data, 'storage_gb_use')
         let storage_unUse = this.countSum(data, 'storage_gb_total') - storage_use
 
@@ -235,7 +239,7 @@
           },
           tooltip: {
             trigger: 'item',
-            formatter: "{b} : {c} ({d}%)"
+            formatter: "{b} : {c} 个 ({d}%)"
           },
           legend: {
             orient: 'horizontal',
@@ -303,7 +307,7 @@
           },
           tooltip: {
             trigger: 'item',
-            formatter: "{b} : {c} ({d}%)"
+            formatter: "{b} : {c} G ({d}%)"
           },
           legend: {
             orient: 'horizontal',
@@ -370,7 +374,7 @@
           },
           tooltip: {
             trigger: 'item',
-            formatter: "{b} : {c} ({d}%)"
+            formatter: "{b} : {c} G ({d}%)"
           },
           legend: {
             orient: 'horizontal',
