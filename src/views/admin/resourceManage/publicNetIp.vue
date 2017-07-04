@@ -4,7 +4,7 @@
             <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="70">
                 <div class="form-wrap">
                     <Form-item label="IP地址池:" prop="ip_pool" class="form-item">
-                        <Input v-model="formValidate.ip_pool" placeholder="请输入" style="min-width: 250px"></Input>
+                        <Input v-model="formValidate.ip_pool" placeholder="最多10位" style="min-width: 250px"></Input>
                     </Form-item>
                     <Form-item label="IP地址:" prop="id_address" class="form-item">
                         <Input v-model="formValidate.id_address" placeholder="请输入" style="min-width: 250px"></Input>
@@ -38,7 +38,7 @@
                     <div class="ipWrap">
                         <Form ref="ipData" :model="ipData" :rules="ruleInline" label-position="right" :label-width="130" >
                             <Form-item label="名称：" prop="ip_pool">
-                                <Input v-model="ipData.ip_pool" placeholder="请输入" style="width: 210px"></Input>
+                                <Input v-model="ipData.ip_pool" :maxlength="10" placeholder="请输入" style="width: 210px"></Input>
                             </Form-item>
                             <!--<Form-item label="IP范围：" prop="ipOne">-->
                                 <!--<Input v-model="ipData.ipOne" placeholder="192.168.2.1" style="width: 100px"></Input>-->
@@ -82,6 +82,17 @@
     import {formatDate} from 'tools/formatDate.js'
   export default {
       data () {
+          const validateIpPool = (rule, value, callback) => {
+              if (value === '') {
+                  callback(new Error('请输入名称'));
+              } else {
+                  if (value.length > 10) {
+                      callback(new Error('最多可输入10位'));
+                  } else {
+                      callback();
+                  }
+              }
+          };
           const validateIp = (rule, value, callback) => {
               if (value === '') {
                   callback(new Error('请输入IP范围'));
@@ -131,7 +142,7 @@
                       {required: true, validator: validateIp, trigger: 'blur'}
                   ],
                   ip_pool: [
-                      { required: true, message: '请填写名称', trigger: 'blur' }
+                      { required: true, max: 15, validateIpPool: validateIpPool, trigger: 'blur' }
                   ],
                   subnetmask: [
                       {required: true, validator: validateMask, trigger: 'blur'}
@@ -296,33 +307,76 @@
           addIp (create_name) {
               this.$refs[create_name].validate((valid) => {
                   if (valid) {
-                      const url = 'api/ip_manager/ip_managers'
-                      let requestBody =  {};
-                      this.ipData.ip_pool && (requestBody.ip_pool = this.ipData.ip_pool);
-                      this.ipData.ipOne && (requestBody.ip_start = this.ipData.ipOne);
-                      this.ipData.ipTwo && (requestBody.ip_end = this.ipData.ipTwo);
-                      this.ipData.subnetmask && (requestBody.subnet_mask = this.ipData.subnetmask);
+                      //判断是否同网段
+                      let isIp = false;
+                      isIp = this.isEqualIPAddress(this.ipData.ipOne,this.ipData.ipTwo,this.ipData.subnetmask);
+                      if (isIp) {
+                          var ipOarr = this.ipData.ipOne.split('.');
+                          var ipOne4 = parseInt(ipOarr[3]);
+                          var ipTarr = this.ipData.ipTwo.split('.');
+                          var ipTwo4 = parseInt(ipTarr[3]);
+                          //判断IP范围中'结束值'和'起始值'的大小
+                          if (ipOne4 > ipTwo4) {
+                              this.$Message.error('IP范围结束值应大于起始值');
+                          } else {
+                              const url = 'api/ip_manager/ip_managers'
+                              let requestBody =  {};
+                              this.ipData.ip_pool && (requestBody.ip_pool = this.ipData.ip_pool);
+                              this.ipData.ipOne && (requestBody.ip_start = this.ipData.ipOne);
+                              this.ipData.ipTwo && (requestBody.ip_end = this.ipData.ipTwo);
+                              this.ipData.subnetmask && (requestBody.subnet_mask = this.ipData.subnetmask);
 
-                      this.$http.post(url,requestBody).then((res) => {
-                          console.log(res.body.result)
-                          if (res.body.code === 200) {
-                              this.modal1 = false;//关闭modal
-                              this.$Message.info('新建IP地址池成功');
-                              //重新获取列表
-                              this.goQuery();
+                              this.$http.post(url,requestBody).then((res) => {
+                                  console.log(res.body.result)
+                                  if (res.body.code === 200) {
+                                      this.modal1 = false;//关闭modal
+                                      this.$Message.info('新建IP地址池成功');
+                                      //重新获取列表
+                                      this.goQuery();
+                                  }
+                              },(err) => {
+//                                  this.$Message.error(err.body.result.msg);
+                                  this.$Message.error('新建IP地址池失败');
+                                  this.modal1 = false;//关闭modal
+                              });
+
+                              //重置
+                              this.$refs[create_name].resetFields();
                           }
-                      },(err) => {
-//                          this.$Message.error(err.body.result.msg);
-                          this.$Message.error('新建IP地址池失败');
-                          this.modal1 = false;//关闭modal
-                      });
 
-                      //重置
-                      this.$refs[create_name].resetFields();
+                      } else {
+                          this.$Message.error('不在同一网段!');
+                      }
                   } else {
                     this.$Message.error('表单验证失败!');
                   }
               })
+          },
+          //判断两个IP，是否在同一个网段
+          isEqualIPAddress (addr1,addr2,mask) {
+              if(!addr1 || !addr2 || !mask){
+                  console.log("各参数不能为空");
+                  return false;
+              }
+              var res1 = [], res2 = [];
+              addr1 = addr1.split(".");
+              addr2 = addr2.split(".");
+              mask  = mask.split(".");
+              for(var i = 0,ilen = addr1.length; i < ilen ; i += 1){
+                  res1.push(parseInt(addr1[i]) & parseInt(mask[i]));
+                  res2.push(parseInt(addr2[i]) & parseInt(mask[i]));
+              }
+              console.log(res1);
+              console.log(res1.join("."));
+              console.log(res2);
+              console.log(res2.join("."));
+              if(res1.join(".") == res2.join(".")){
+                  console.log("在同一个网段");
+                  return true;
+              }else{
+                  console.log("不在同一个网段");
+                  return false;
+              }
           },
           // 分页
           changePage (page) {
