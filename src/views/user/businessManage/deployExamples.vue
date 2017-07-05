@@ -299,7 +299,7 @@
                                 on: {
                                     click: () => {
                                         //this.$router.push({instance_name: 'user_resourceQuery', query: {instance_num: params.row.instance_num}});
-                                        this.$router.push({name: 'user_resourceQuery'});
+                                        this.$router.push({name: '资源查询'});
                                     }
                                 }
                             }, params.row.instance_num)
