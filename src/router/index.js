@@ -42,7 +42,7 @@ import approval_changePassword from 'views/common/changePassword.vue'           
 import approval_operationLog from 'views/common/operationLog.vue'                             // 行政审批 > 操作日志
 
 
-// 创建路由对象
+  // 创建公共路由
 var routes = [
   {path: '/', component: page,
     children: [
@@ -53,7 +53,7 @@ var routes = [
   {name: 'login', path: '/login', component: login}
 ]
 
-export var userRoutes = [
+export const userRoutes = [
   {
     name: '管理控制台', path: '/home', redirect: '/home/user_manageConsole', component: home,
     children: [
@@ -83,7 +83,7 @@ export var userRoutes = [
   }
 ]
 
-export var adminRoutes = [
+export const adminRoutes = [
   {
     name: '管理控制台', path: '/home', redirect: '/home/admin_manageConsole', component: home,
     children: [
@@ -91,14 +91,14 @@ export var adminRoutes = [
     ]
   },
   {
-    name: '部署区域', path: '/home', component: home, icon: 'icon-resource',
+    name: '部署区域', path: '/home', component: home, icon: 'icon-resource-chi',
     children: [
       {name: '部署区域管理', path: 'admin_poolManage', component: admin_poolManage},
       {name: '部署区域详情', path: 'admin_poolDetails', component: admin_poolDetails, hidden: true}
     ]
   },
   {
-    name: '资源管理', path: '/home', component: home, icon: 'icon-system',
+    name: '资源管理', path: '/home', component: home, icon: 'icon-resource',
     children: [
       {name: '操作系统管理', path: 'admin_mirrorManagement', component: admin_mirrorManagement},
       {name: '虚拟机管理', path: 'admin_virtualManage', component: admin_virtualManage},
@@ -108,7 +108,7 @@ export var adminRoutes = [
     ]
   },
   {
-    name: '资源审批', path: '/home', component: home, icon: 'icon-system',
+    name: '资源审批', path: '/home', component: home, icon: 'icon-approval',
     children: [
       {name: '资源审批管理', path: 'admin_resourceApproval', component: admin_resourceApproval},
       {name: '资源详情', path: 'admin_resourceDetails', component: admin_resourceDetails, hidden: true}
@@ -123,9 +123,12 @@ export var adminRoutes = [
   }
 ]
 
-export var leaderRoutes = [
+export const leaderRoutes = [
   {
-    name: '管理控制台', path: '/home', redirect: '/home/approval_approvalQuery', component: home
+    name: '管理控制台', path: '/home', redirect: '/home/approval_approvalQuery', component: home,
+    children: [
+      {path: 'approval_approvalQuery', component: approval_approvalQuery}
+    ]
   },
   {
     name: '资源管理', path: '/home', component: home, icon: 'icon-resource',
