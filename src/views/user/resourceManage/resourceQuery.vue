@@ -110,7 +110,7 @@
                   on: {
                     click: () => {
                       let id = params.row.resource_id//c0967990-5a38-11e7-8a35-fa163e9474c9
-                      this.$router.push({name: 'user_resourceApplication',query: {id: id}})
+                      this.$router.push({name: '资源申请',query: {id: id}})
                     }
                   }
 
@@ -181,7 +181,7 @@
                           this.$http.put(url_put,requestBody_put).then((res) => {//修改状态
                             console.log('状态',res.body)
 
-                            this.$router.push({name: 'user_myResource'})
+                            this.$router.push({name: '我的资源'})
 
                           })
 

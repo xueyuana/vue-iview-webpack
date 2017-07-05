@@ -342,7 +342,7 @@
       },
       createExample () {//跳转新建部署实例
 
-        this.$router.push({name: 'user_deployExample'})
+        this.$router.push({name: '部署实例'})
 
       },
       sendInformation () { //提交资源申请
@@ -373,10 +373,11 @@
         this.$http.post(url,requestBody).then((res) => {
           console.log(res.body)
 
-          this.$router.push({name: 'user_resourceQuery'})
+          this.$router.push({name: '资源查询'})
 
         },(err) => {
           console.log(err)
+          this.$Message.info('创建失败，内容不能为空');
         })
 
 
