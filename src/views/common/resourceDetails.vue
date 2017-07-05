@@ -694,9 +694,9 @@
               this.$Message.success('不通过完成!');
             }
             if (this.role === 'leader') {
-              this.$router.push({name: 'approval_approvalQuery'});
+              this.$router.push({name: '资源查询'});
             } else {
-              this.$router.push({name: 'admin_resourceApproval'});
+              this.$router.push({name: '资源审批管理'});
             }
           }
         }, err => {

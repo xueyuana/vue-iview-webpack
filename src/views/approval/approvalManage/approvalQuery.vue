@@ -101,7 +101,7 @@
                         on: {
                           click: () => {
                           let id = params.row.resource_id;
-                          this.$router.push({name: 'approval_resourceDetails', query: {id: id}});
+                          this.$router.push({name: '资源详情', query: {id: id}});
                       }
                   }
               })

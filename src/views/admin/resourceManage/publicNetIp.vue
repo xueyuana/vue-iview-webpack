@@ -206,12 +206,12 @@
                                   on: {
                                       click: () => {
                                           this.$Modal.confirm({
-                                              title: '删除IP地址',
+                                              title: '保留IP地址',
                                               content: '请确认！！！',
                                               onOk: () => {
                                                   const url = 'api/ip_manager/ip_managers/' + params.row.id
                                                   this.$http.delete(url).then( (res) => {
-                                                      console.log('删除IP地址',res.body)
+                                                      console.log('保留IP地址',res.body)
                                                       //重新获取用户
                                                       this.goQuery();
                                                   },(err) => {
@@ -224,7 +224,7 @@
                                           });
                                       }
                                   }
-                              }, '删除')
+                              }, '保留')
                           ]);
                       }
                   }
