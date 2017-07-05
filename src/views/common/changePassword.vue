@@ -1,9 +1,9 @@
 <template>
   <div class="page-changePwd">
     <div class="sub-title cp_title">修改密码</div>
-    <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="85">
+    <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="95">
       <Row type="flex" justify="start">
-        <Col span="10">
+        <Col span="14">
           <Form-item label="原密码:" prop="originPasswd">
             <Input type="password" v-model="formCustom.originPasswd" placeholder="可为空"></Input>
           </Form-item>
