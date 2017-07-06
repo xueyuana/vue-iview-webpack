@@ -4,7 +4,10 @@
             <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="70">
                 <div class="form-wrap">
                     <Form-item label="IP地址池:" prop="ip_pool" class="form-item">
-                        <Input v-model="formValidate.ip_pool" placeholder="最多10位" style="min-width: 250px"></Input>
+                        <!--<Input v-model="formValidate.ip_pool" placeholder="最多10位" style="min-width: 250px"></Input>-->
+                        <Select v-model="formValidate.ip_pool" clearable style="min-width: 250px">
+                            <Option v-for="item in ip_poolVal" :value="item.key" :key="item">{{ item.value }}</Option>
+                        </Select>
                     </Form-item>
                     <Form-item label="IP地址:" prop="id_address" class="form-item">
                         <Input v-model="formValidate.id_address" placeholder="请输入" style="min-width: 250px"></Input>
@@ -139,12 +142,12 @@
               },
               ip_poolVal: [
                   {
-                      value: '测试IP',
-                      key: 'test'
-                  },
-                  {
                       value: '上线IP',
                       key: 'online'
+                  },
+                  {
+                      value: '测试IP',
+                      key: 'test'
                   }
               ],
               ruleInline: {
