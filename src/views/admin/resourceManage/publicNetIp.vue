@@ -189,7 +189,12 @@
                   {
                       title: '分配时间',
                       key: 'created_date',
-                      align: 'center'
+                      align: 'center',
+                      render: (h, params) => {
+                          if (params.row.created_date) {
+                              return h('p', params.row.created_date.slice(0, 16))
+                          }
+                      }
                   },
                   {
                       title: '操作',
@@ -209,7 +214,8 @@
                                               title: '保留IP地址',
                                               content: '请确认！！！',
                                               onOk: () => {
-                                                  const url = 'api/ip_manager/ip_managers/' + params.row.id
+                                                  const url = 'api/ip_manager/ip_managers/' + params.row.uuid
+                                                 console.log('保留IP地址',url)
                                                   this.$http.delete(url).then( (res) => {
                                                       console.log('保留IP地址',res.body)
                                                       //重新获取用户
@@ -261,33 +267,23 @@
               this.$http.get(url,{params: query}).then((res) => {
                   console.log('sssss', res);
                 if (res.body.code === 200) {
-                  this.data_length = res.body.result.res.length;
-                  res.body.result.res.forEach((item,index) => {
-                      if (item.status == 'submit') {
-                          this.getResult.unshift({
-                              id: item.uuid,
-                              ip: item.ip,
-                              ip_pool: item.ip_pool,
-                              subnet_mask: item.subnet_mask,
-                              status: item.status,
-                              created_date: item.created_date.slice(0, 16)
-                          });
-                      } else {
-                          this.getResult.push({
-                              id: item.uuid,
-                              ip: item.ip,
-                              ip_pool: item.ip_pool,
-                              subnet_mask: item.subnet_mask,
-                              status: item.status,
-                              created_date: item.created_date.slice(0, 16)
-                          });
-                      }
-                  });
-                  console.log(this.getResult);
-                  this.getResult.forEach((item,index) => {
-                      item.index=index + 1;
-                  });
-                  this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page);
+                    this.data_length = res.body.result.res.length;
+                    this.getResult = res.body.result.res
+                    // 排序
+                    let pending = []
+                    this.getResult.forEach((item, index) => {
+                        if (item.status === 'alloc') {
+                            pending.push(item)
+                            this.getResult.splice(index, 1)
+                        }
+                    })
+                    this.getResult = pending.concat(...this.getResult)
+
+                    this.getResult.forEach((item, index) => {
+                        item.index = index + 1
+                    })
+                    console.log('排序后的数组', this.getResult)
+                    this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page);;
                 }
               },(err) => {
                   this.$Message.error(err.body.result.msg)
