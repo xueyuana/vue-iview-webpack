@@ -304,7 +304,7 @@
                             this.getResult.splice(index, 1)
                         }
                     })
-                    this.getResult = pending.concat(...this.getResult)
+                    this.getResult = this.getResult.concat(...pending)
 
                     this.getResult.forEach((item, index) => {
                         item.index = index + 1
