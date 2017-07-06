@@ -4,7 +4,10 @@
             <Form :model="formValidate" ref="formValidate" :rules="ruleValidate" :label-width="70">
                 <div class="form-wrap">
                     <Form-item label="IP地址池:" prop="ip_pool" class="form-item">
-                        <Input v-model="formValidate.ip_pool" placeholder="最多10位" style="min-width: 250px"></Input>
+                        <!--<Input v-model="formValidate.ip_pool" placeholder="最多10位" style="min-width: 250px"></Input>-->
+                        <Select v-model="formValidate.ip_pool" clearable style="min-width: 250px">
+                            <Option v-for="item in ip_poolVal" :value="item.key" :key="item">{{ item.value }}</Option>
+                        </Select>
                     </Form-item>
                     <Form-item label="IP地址:" prop="id_address" class="form-item">
                         <Input v-model="formValidate.id_address" placeholder="请输入" style="min-width: 250px"></Input>
@@ -38,7 +41,10 @@
                     <div class="ipWrap">
                         <Form ref="ipData" :model="ipData" :rules="ruleInline" label-position="right" :label-width="130" >
                             <Form-item label="名称：" prop="ip_pool">
-                                <Input v-model="ipData.ip_pool" :maxlength="10" placeholder="请输入" style="width: 210px"></Input>
+                                <Select v-model="ipData.ip_pool" clearable style="width: 210px">
+                                    <Option v-for="item in ip_poolVal" :value="item.key" :key="item">{{ item.value }}</Option>
+                                </Select>
+                                <!--<Input v-model="ipData.ip_pool" :maxlength="10" placeholder="请输入" style="width: 210px"></Input>-->
                             </Form-item>
                             <!--<Form-item label="IP范围：" prop="ipOne">-->
                                 <!--<Input v-model="ipData.ipOne" placeholder="192.168.2.1" style="width: 100px"></Input>-->
@@ -82,17 +88,17 @@
     import {formatDate} from 'tools/formatDate.js'
   export default {
       data () {
-          const validateIpPool = (rule, value, callback) => {
-              if (value === '') {
-                  callback(new Error('请输入名称'));
-              } else {
-                  if (value.length > 10) {
-                      callback(new Error('最多可输入10位'));
-                  } else {
-                      callback();
-                  }
-              }
-          };
+//          const validateIpPool = (rule, value, callback) => {
+//              if (value === '') {
+//                  callback(new Error('请输入名称'));
+//              } else {
+//                  if (value.length > 10) {
+//                      callback(new Error('最多可输入10位'));
+//                  } else {
+//                      callback();
+//                  }
+//              }
+//          };
           const validateIp = (rule, value, callback) => {
               if (value === '') {
                   callback(new Error('请输入IP范围'));
@@ -134,6 +140,16 @@
                 subnetmask:'',
                 state: ''
               },
+              ip_poolVal: [
+                  {
+                      value: '上线IP',
+                      key: 'online'
+                  },
+                  {
+                      value: '测试IP',
+                      key: 'test'
+                  }
+              ],
               ruleInline: {
                   ipOne: [
                       {required: true, validator: validateIp, trigger: 'blur'}
@@ -142,7 +158,8 @@
                       {required: true, validator: validateIp, trigger: 'blur'}
                   ],
                   ip_pool: [
-                      { required: true, max: 15, validateIpPool: validateIpPool, trigger: 'blur' }
+//                      { required: true, max: 15, validateIpPool: validateIpPool, trigger: 'blur' }
+                      { required: true, message: '请选择名称', trigger: 'change' }
                   ],
                   subnetmask: [
                       {required: true, validator: validateMask, trigger: 'blur'}
@@ -157,14 +174,24 @@
                       width: 100
                   },
                   {
-                      title: 'IP地址',
-                      key: 'ip',
-                      align: 'center'
-                  },
-                  {
                       title: 'IP地址池',
                       key: 'ip_pool',
                       align: 'center',
+                      render: (h, params) => {
+                          const row = params.row;
+                          const color = row.ip_pool === 'test' ? '#3F94FC' : '#657180';
+                          const text = row.ip_pool === 'test' ? '测试IP' : '上线IP';
+                          return h('span', {
+                              style: {
+                                  color: color
+                              },
+                          }, text);
+                      }
+                  },
+                  {
+                      title: 'IP地址',
+                      key: 'ip',
+                      align: 'center'
                   },
                   {
                       title: '子网掩码',
