@@ -9,10 +9,10 @@
                          style="min-width: 250px"></Date-picker>
           </Form-item>
           <Form-item label="用户:" prop="user" class="form-item">
-            <Input v-model="formItem.user" placeholder="请输入" style="min-width: 150px"></Input>
+            <Input v-model="formItem.user" placeholder="请输入" style="width: 150px"></Input>
           </Form-item>
           <Form-item label="部署实例名称:" prop="instance_name" class="form-item">
-            <Select v-model="formItem.instance_name"  style="min-width: 250px">
+            <Select v-model="formItem.instance_name" clearable style="width: 250px" :placeholder="instanceList.length ? '请选择' : '空'">
               <Option v-for="item in instanceList" :value="item.instance_name" :key="item">{{ item.instance_name }}</Option>
             </Select>
           </Form-item>
@@ -33,7 +33,7 @@
 
     <!--查询结果-->
     <div class="inquire-table">
-      <div class="inquire-table-title">镜像列表</div>
+      <div class="inquire-table-title">部署实例列表</div>
       <Table stripe size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
@@ -52,21 +52,20 @@
         :mask-closable="false"
         class-name="vertical-center-modal">
       <div class="from_wrap">
-        <Form ref="formCustom" :model="formCustom" :label-width="80">
+        <Form ref="formCustom" :model="ipForm"  :label-width="80">
           <Form-item label="IP类型:">
-            <Select v-model="formCustom.ip_type" placeholder="请选择">
-              <Option value="test_ip">测试IP</Option>
-              <Option value="online_ip">上线IP</Option>
+            <Select v-model="ipForm.ip_type" placeholder="请选择" @on-change="onSelectType" clearable>
+              <Option value="online">上线IP</Option>
+              <Option value="test">测试IP</Option>
             </Select>
           </Form-item>
           <Form-item label="公网IP地址:">
-            <Select v-model="formCustom.pub_ip" placeholder="请选择" filterable clearable>
-              <Option value="192.168.1.2">192.168.1.2</Option>
-              <Option value="294.192.56.2">294.192.56.2</Option>
+            <Select v-model="ipForm.ip_uuid" :placeholder="pubIpList.length ? '请选择' : '空'" filterable clearable>
+              <Option v-for="(item, index) in pubIpList" :value="item.uuid" :key="index">{{item.ip}}</Option>
             </Select>
           </Form-item>
           <Form-item label="内网IP地址:">
-            <Input v-model="formCustom.pri_ip" placeholder="192.168.2.1/24"></Input>
+            <Input v-model="ipForm.inner_ip" placeholder="192.168.2.1/24"></Input>
           </Form-item>
         </Form>
       </div>
@@ -120,20 +119,11 @@
           {
             title: '部署实例名称',
             key: 'instance_name',
-            align: 'center',
-            render: (h, params) => {
-              return h('a', {
-                on: {
-                  click: () => {
-                    this.$router.push({path: '/home/admin_deployDetails'})
-                  }
-                }
-              }, params.row.instance_name)
-            }
+            align: 'center'
           },
           {
             title: '用户',
-            key: 'user',
+            key: 'user_name',
             align: 'center'
           },
           {
@@ -147,9 +137,17 @@
             align: 'center'
           },
           {
-            title: '分配日期',
-            key: 'created_time',
+            title: '内网IP',
+            key: 'inner_ip',
             align: 'center'
+          },
+          {
+            title: '分配日期',
+            key: 'created_date',
+            align: 'center',
+            render: (h, params) => {
+              return h('p', params.row.created_date.slice(0, 16))
+            }
           },
           {
             title: '操作',
@@ -172,33 +170,36 @@
 
         ],
         data: [],
-        filterDate: [
-          {
-            instance_name: 'mySql',
-            user: 'user',
-            online_ip: '172,16.2.1',
-            test_ip: '',
-            created_time: '2017-06-23'
-          }
-        ],
-        formCustom: {
+        filterDate: [],
+
+        ipForm: {
           ip_type: '',
-          pub_ip: '',
-          pri_ip: ''
+          ip_uuid: '',
+          inner_ip: ''
         },
+        ipTypeList: [],
+        pubIpList: [],
         option: false,
         pageSize: 10,
         num: 1
       }
     },
 
-    mounted() {
-//      this.onInquire()
-      this.getInstance()
+    created() {
+      this.onInquire()
+        // 1. 实例名称
+      this.getInstance().then(res => {
+        this.instanceList = res.body.result.res
+      })
+    },
+
+    watch: {
+
     },
 
     methods: {
-      // 查找
+
+        // 2. 部署实例列表
       onInquire() {
         let query = {}
         this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
@@ -206,39 +207,71 @@
         this.formItem.user && (query.user = this.formItem.user)
         this.formItem.instance_name && (query.instance_name = this.formItem.instance_name)
 
-        this.$http.get('api/image/images', {
-          params: query
-        }).then(res => {
-          console.log('镜像列表', res)
-          if (res.body.code === 200) {
-            this.data = res.body.result.res
-            this.filterDate = this.mockTableData(this.data, this.pageSize, 1)
-          } else {
-            this.$Message.error(res.body.result.msg)
-          }
-        }, err => {
-          console.log('error', err)
-          this.$Message.error(err.body.result.msg)
+        this.getInstance(query).then(res => {
+          this.filterDate = this.mockTableData(res.body.result.res, this.pageSize, 1)
         })
       },
       handleReset(name) {
         this.$refs[name].resetFields()
       },
-      // 确定分配
-      onOk() {
 
+        // 3. 选中类型后筛选公网IP
+      onSelectType(val) {
+        if (!val) {
+          this.pubIpList = []
+        } else {
+          this.getPubIpList({ip_pool: val}).then(res => {
+            console.log()
+            this.pubIpList = res
+          })
+        }
       },
 
-      getInstance() {
-        this.$http.get('api/deploy_instance/deploy_instances').then(res => {
+        // 4. 确定分配
+      onOk() {
+        let body = {}
+        body.
+
+        this.$http.post('api/ip_manager/ip_publish', body).then(res => {
           if (res.body.code === 200) {
-            this.instanceList = res.body.result.res
-            console.log(this.instanceList)
+
           } else {
             this.$Message.error(res.body.result.msg)
           }
         }, err => {
-          console.log('error', err)
+          console.log(err)
+        })
+      },
+
+      getInstance(obj) {    // 获取实例列表
+        return new Promise((resolve, reject) => {
+          this.$http.get('api/deploy_instance/deploy_instances', {
+            params: obj || {}
+          }).then(res => {
+            if (res.body.code === 200) {
+              resolve(res)
+            } else {
+              this.$Message.error(res.body.result.msg)
+            }
+          }, err => {
+            reject(err)
+          })
+        })
+      },
+
+      getPubIpList(query) {   // 获取公网ip列表
+        return new Promise(resolve => {
+          this.$http.get('api/ip_manager/ip_managers', {
+            params: query || {}
+          }).then((res) => {
+            if (res.body.code === 200) {
+              resolve(res.body.result.res)
+            } else {
+              this.$Message.error(res.body.result.msg)
+            }
+          }, (err) => {
+            this.$Message.error(res.body.result.msg)
+          })
         })
       },
 

@@ -5,13 +5,13 @@
       <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="70">
         <div class="form-wrap">
           <Form-item label="申请日期:" prop="date" class="form-item">
-            <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="min-width: 250px"></Date-picker>
+            <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="width: 250px"></Date-picker>
           </Form-item>
           <Form-item label="申请人:" prop="userName" class="form-item">
-            <Input v-model="formItem.userName" placeholder="请输入" style="min-width: 250px"></Input>
+            <Input v-model="formItem.userName" placeholder="请输入" style="width: 250px"></Input>
           </Form-item>
           <Form-item label="审批状态:" prop="status" class="form-item">
-            <Select v-model="formItem.status" clearable style="min-width: 250px">
+            <Select v-model="formItem.status" clearable style="width: 250px">
               <Option value="l_success">待审批</Option>
               <Option value="a_success">已审批</Option>
               <Option value="a_fail">审批不通过</Option>
@@ -19,7 +19,7 @@
             </Select>
           </Form-item>
           <Form-item label="部署实例:" prop="instance_id" class="form-item">
-            <Select v-model="formItem.instance_id" clearable style="min-width: 250px">
+            <Select v-model="formItem.instance_id" clearable style="width: 250px">
               <Option :value="item.instance_id" v-for="item in formItem.instance">{{item.instance_name}}</Option>
             </Select>
           </Form-item>

@@ -8,7 +8,7 @@
             <p class="sub-title-zi">192.168.1.1访问曲线图</p>
           </div>
         <div id="my-resource"
-             style="width: 100%;height: 300px;-webkit-tap-highlight-color: transparent;use-select: none;cursor: default;">
+             style="width: 100%; height: 300px; -webkit-tap-highlight-color: transparent;use-select: none;cursor: default;">
         </div>
         </Col>
       </Row>
