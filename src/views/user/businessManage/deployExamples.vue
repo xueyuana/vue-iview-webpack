@@ -295,7 +295,6 @@
                                                 onOk: () => {
                                                     const url = 'api/deploy_instance/deploy_instances/' + params.row.id
                                                     this.$http.delete(url).then((res) => {
-                                                        console.log('删除成功', res)
                                                         //重新获取用户
                                                         const query_user = {user_id: this.$store.state.userData.userInfo.id}
                                                         this.getUserResource(query_user)
@@ -394,17 +393,11 @@
                         this.createUser.user_name = this.$store.state.userData.userInfo.username;
                         this.createUser.instance_num='0';
                         delete this.createUser.created_time;
-                        console.log("==========",JSON.stringify(this.createUser));
                         if(this.createUser.hasOwnProperty("id")){
                             this.createUser.instance_id=this.createUser.id;
-                            console.log("==========",JSON.stringify(this.createUser));
                             this.$http.put(url, this.createUser).then((res) => {
-                                console.log(res.body)
                                 this.current_page = 1
-                                //修改成功之后改变列表数据
-                                for (var key in this.createUser) {
-                                    this.data6[this.index][key] = this.createUser[key]
-                                }
+                                this.goQuery();
                             }, (err) => {
                                 this.$Message.error({
                                     content: '编辑部署实例失败!',
