@@ -12,7 +12,7 @@
             <Input v-model="formItem.user" placeholder="请输入" style="min-width: 150px"></Input>
           </Form-item>
           <Form-item label="部署实例名称:" prop="instance_name" class="form-item">
-            <Select v-model="formItem.instance_name"  style="min-width: 250px">
+            <Select clearable	 v-model="formItem.instance_name"  style="min-width: 250px">
               <Option v-for="item in instanceList" :value="item.instance_name" :key="item">{{ item.instance_name }}</Option>
             </Select>
           </Form-item>

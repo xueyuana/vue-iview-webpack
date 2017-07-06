@@ -21,83 +21,78 @@
     <div class="createUser">
       <Button @click="create" type="primary" >创 建</Button>
       <Modal
-          v-model="isCreate"
+          v-model="isOpenModal"
           title="用户信息"
           width="360"
-          @on-ok="createOk('formInline')"
-          @on-cancel="createCancel('formInline')"
           :mask-closable="false"
       >
         <div class="createWrap">
-
-          <Form ref="formInline" :model="createUser" :rules="ruleInline" label-position="right" :label-width="80" >
+          <Form ref="formInline" :model="model_info" :rules="ruleInline" label-position="right" :label-width="80" >
             <Form-item label="用户名：" prop="username">
-              <Input v-model="createUser.username" placeholder="请输入" style="width: 200px"></Input>
+              <Input v-model="model_info.username" placeholder="请输入" style="width: 200px"></Input>
             </Form-item>
-            <Form-item label="密码：" prop="password">
-              <Input v-model="createUser.password" placeholder="最少6位最多15位" type="password" style="width: 200px"></Input>
+            <Form-item label="密码：" prop="password" :class="{'ivu-form-item-required': info == '创建'?true:false}">
+              <Input v-model="model_info.password" placeholder="最少6位最多15位" type="password" style="width: 200px"></Input>
             </Form-item>
             <Form-item label="部门：" prop="department">
-              <Input v-model="createUser.department" placeholder="请输入" style="width: 200px"></Input>
+              <Input v-model="model_info.department" placeholder="请输入" style="width: 200px"></Input>
             </Form-item>
             <Form-item label="手机：" prop="phone">
-              <Input v-model="createUser.phone" placeholder="请输入" style="width: 200px"></Input>
+              <Input v-model="model_info.phone" placeholder="请输入" style="width: 200px"></Input>
             </Form-item>
             <Form-item label="邮箱：" prop="email">
-              <Input v-model="createUser.email" placeholder="请输入" style="width: 200px"></Input>
+              <Input v-model="model_info.email" placeholder="请输入" style="width: 200px"></Input>
             </Form-item>
             <Form-item label="角色：" prop="role">
-              <Select v-model="createUser.role" style="width:196px">
+              <Select v-model="model_info.role" style="width:196px">
                 <Option v-for="item in roleList" :value="item.key" :key="item">{{ item.value }}</Option>
               </Select>
             </Form-item>
           </Form>
         </div>
         <div slot="footer">
-          <Button type="text" @click="createCancel('formInline')">取消</Button>
-          <Button type="primary" size="large" @click="createOk('formInline')" >确定</Button>
+          <Button type="text" @click="cancel">取消</Button>
+          <Button type="primary" size="large" @click="Ok('formInline')" >确定</Button>
         </div>
       </Modal>
     </div>
     <Table stripe :columns="columns" :data="queryResult"></Table>
-    <Modal
-        v-model="isCompile"
-        title="用户信息"
-        width="360"
-        @on-ok="compileOk('formCompile')"
-        @on-cancel="compileCancel('formCompile')"
-        :mask-closable="false"
-    >
-      <div class="createWrap">
+    <!--<Modal-->
+        <!--v-model="isCompile"-->
+        <!--title="用户信息"-->
+        <!--width="360"-->
+        <!--:mask-closable="false"-->
+    <!--&gt;-->
+      <!--<div class="createWrap">-->
 
-        <Form ref="formCompile" :model="compileUser" :rules="ruleCompile" label-position="right" :label-width="80" >
-          <Form-item label="用户名：" prop="username">
-            <Input v-model="compileUser.username" placeholder="请输入" style="width: 200px"></Input>
-          </Form-item>
-          <Form-item label="密码：" prop="password">
-            <Input v-model="compileUser.password" placeholder="最少6位最多15位" type="password" style="width: 200px"></Input>
-          </Form-item>
-          <Form-item label="部门：" prop="department">
-            <Input v-model="compileUser.department" placeholder="请输入" style="width: 200px"></Input>
-          </Form-item>
-          <Form-item label="手机：" prop="phone">
-            <Input v-model="compileUser.phone" placeholder="请输入" style="width: 200px"></Input>
-          </Form-item>
-          <Form-item label="邮箱：" prop="email">
-            <Input v-model="compileUser.email" placeholder="请输入" style="width: 200px"></Input>
-          </Form-item>
-          <Form-item label="角色：" prop="role">
-            <Select v-model="compileUser.role" style="width:196px">
-              <Option v-for="item in roleList" :value="item.key" :key="item">{{ item.value }}</Option>
-            </Select>
-          </Form-item>
-        </Form>
-      </div>
-      <div slot="footer">
-        <Button type="text" @click="compileCancel('formCompile')">取消</Button>
-        <Button type="primary" size="large" @click="compileOk('formCompile')" >确定</Button>
-      </div>
-    </Modal>
+        <!--<Form ref="formCompile" :model="compileUser" :rules="ruleCompile" label-position="right" :label-width="80" >-->
+          <!--<Form-item label="用户名：" prop="username">-->
+            <!--<Input v-model="compileUser.username" placeholder="请输入" style="width: 200px"></Input>-->
+          <!--</Form-item>-->
+          <!--<Form-item label="密码：" prop="password">-->
+            <!--<Input v-model="compileUser.password" placeholder="最少6位最多15位" type="password" style="width: 200px"></Input>-->
+          <!--</Form-item>-->
+          <!--<Form-item label="部门：" prop="department">-->
+            <!--<Input v-model="compileUser.department" placeholder="请输入" style="width: 200px"></Input>-->
+          <!--</Form-item>-->
+          <!--<Form-item label="手机：" prop="phone">-->
+            <!--<Input v-model="compileUser.phone" placeholder="请输入" style="width: 200px"></Input>-->
+          <!--</Form-item>-->
+          <!--<Form-item label="邮箱：" prop="email">-->
+            <!--<Input v-model="compileUser.email" placeholder="请输入" style="width: 200px"></Input>-->
+          <!--</Form-item>-->
+          <!--<Form-item label="角色：" prop="role">-->
+            <!--<Select v-model="compileUser.role" style="width:196px">-->
+              <!--<Option v-for="item in roleList" :value="item.key" :key="item">{{ item.value }}</Option>-->
+            <!--</Select>-->
+          <!--</Form-item>-->
+        <!--</Form>-->
+      <!--</div>-->
+      <!--<div slot="footer">-->
+        <!--<Button type="text" @click="compileCancel('formCompile')">取消</Button>-->
+        <!--<Button type="primary" size="large" @click="compileOk('formCompile')" >确定</Button>-->
+      <!--</div>-->
+    <!--</Modal>-->
     <div class="page">
       <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
     </div>
@@ -118,8 +113,8 @@
 
         } else {
 
-          if(!/^[0-9]{11}$/.test(value)) {
-            callback(new Error('请输入11位电话号'))
+          if(!/^1[34578]\d{9}$/.test(value)) {
+            callback(new Error('请输入格式正确的电话'))
           } else {
             callback()
           }
@@ -131,16 +126,18 @@
         data_length: 0,
         current_page: 1,
         page_size: 10,
+        index: '',
+        info: '',
+        user_id: '',
         getResult: [],//获取的全部数据
         query_info: {
           user_name: '',
           applyDate: []
         },
-        isCreate: false,
-        isCompile: false,
-        index: '',
-        user_id: '',
-        createUser: {
+        isOpenModal: false,
+//        isCreate: false,
+//        isCompile: false,
+        model_info: {
           username: '',
           password: '',
           department: '',
@@ -148,48 +145,56 @@
           email: '',
           role: ''
         },
+//        createUser: {
+//          username: '',
+//          password: '',
+//          department: '',
+//          phone: '',
+//          email: '',
+//          role: ''
+//        },
+//        compileUser: {},
         ruleInline: {
           username: [
-            {required: true,message: '请填写用户名',trigger: 'blur'}
+            {required: true, max: 100, message: '请填写用户名',trigger: 'change'}
           ],
           password: [
-            {required: true, min: 6, max: 15, message: '请输入6到15位密码',trigger: 'blur'}
+            { min: 6, max: 15, message: '请输入6到15位密码',trigger: 'change'}
           ],
           department: [
-            {required: true, message: '请填写部门', trigger: 'blur'}
+            {required: true, max: 100, message: '请填写部门', trigger: 'change'}
           ],
           phone: [
-            {validator: validatePhone,trigger:'blur'}
+            {validator: validatePhone,trigger:'change'}
           ],
           email: [
-            {type: 'email',message: '邮箱格式不正确',tirgger: 'blur'}
+            {type: 'email',message: '邮箱格式不正确',tirgger: 'change'}
           ],
           role: [
-            {required: true,message: '请选择角色',trigger: 'blur'}
+            {required: true, message: '请选择角色',trigger: 'change'}
           ]
 
         },
-        ruleCompile: {
-          username: [
-            {required: true,message: '请填写用户名',trigger: 'blur'}
-          ],
-          password: [
-            { min: 6, max: 15, message: '请输入6到15位密码',trigger: 'blur'}
-          ],
-          department: [
-            {required: true, message: '请填写部门', trigger: 'blur'}
-          ],
-          phone: [
-            {validator: validatePhone,trigger:'blur'}
-          ],
-          email: [
-            {type: 'email',message: '邮箱格式不正确',tirgger: 'blur'}
-          ],
-          role: [
-            {required: true,message: '请选择角色',trigger: 'blur'}
-          ]
-        },
-        compileUser: {},
+//        ruleCompile: {
+//          username: [
+//            {required: true, max: 100, message: '请填写用户名',trigger: 'change'}
+//          ],
+//          password: [
+//            { min: 6, max: 15, message: '请输入6到15位密码',trigger: 'change'}
+//          ],
+//          department: [
+//            {required: true, max: 100, message: '请填写部门', trigger: 'change'}
+//          ],
+//          phone: [
+//            {validator: validatePhone,trigger:'change'}
+//          ],
+//          email: [
+//            {type: 'email',message: '邮箱格式不正确',tirgger: 'change'}
+//          ],
+//          role: [
+//            {required: true, message: '请选择角色',trigger: 'change'}
+//          ]
+//        },
         roleList: [
           {
             value: '普通用户',
@@ -251,11 +256,13 @@
                   },
                   on: {
                     click: () => {
-                      this.isCompile = true
+                      //重置
+                      this.$refs.formInline.resetFields()
+                      this.info = '编辑'
+                      delete this.ruleInline.password[0].required
+                      this.isOpenModal = true
                       let rowDate = {}
-                      for(var key in params.row) {
-                        rowDate[key] = params.row[key]
-                      }
+                      Object.assign(rowDate,params.row)
                       switch (rowDate.role) {
                         case '管理员': rowDate.role = 'admin'
                           break
@@ -264,12 +271,12 @@
                         case '普通用户': rowDate.role = 'user'
                           break
                       }
-                      console.log('row',rowDate)
 
-                      Object.assign(this.compileUser,rowDate)
-                      this.compileUser.password = null
 
-                      console.log('编辑',this.compileUser)
+                      Object.assign(this.model_info,rowDate)
+                      this.model_info.password = null
+
+//                      console.log('编辑',this.model_info)
 
                       this.index = params.index
                       this.user_id = params.row.id
@@ -285,15 +292,17 @@
                       click: () => {
                         this.$Modal.confirm({
                           title: '确认',
-                          content: '<p>确认删除吗？</p>',
+                          content: '<p>确认删除'+ params.row.username+'吗？</p>',
                           onOk: () => {
 
                             const url = 'api/user/users/' + params.row.id
                             this.$http.delete(url).then( (res) => {
                               console.log('删除用户',res.body)
+                              this.$Message.info('成功删除用户');
                               //重新获取用户
                               this.getUser()
                             },(err) => {
+                              this.$Message.info('删除用户失败');
                               console.log('err',err)
                             })
 
@@ -357,63 +366,72 @@
         })
       },
       create () {
-        this.isCreate = true
+        //重置
+        this.$refs.formInline.resetFields()
+        this.info = '创建'
+        this.ruleInline.password[0].required = true
+        this.isOpenModal = true
 
       },
-      compileOk (name) {//确定编辑
+      cancel () {
+        this.isOpenModal = false
+        //重置
+        this.$refs.formInline.resetFields()
+      },
+      Ok () {
+        console.log(this.info)
+        if(this.info == '创建') {
+          this.createOk()
+
+        }else if(this.info == '编辑') {
+          this.compileOk()
+        }
+
+      },
+      compileOk () {//确定编辑
         //TODO:表单的坑
-        let temporary = {}//存储表单内筒
+        console.log('确定后的内容',this.model_info)
+//        let temporary = {}//存储表单内容
 
-        Object.assign(temporary,this.compileUser)
+//        Object.assign(temporary,this.compileUser)
 
-        this.$refs[name].validate((valid) => {
+        this.$refs.formInline.validate((valid) => {
           if(valid) {
 //            this.compileUser = temporary
             console.log('验证成功')
-            console.log('temporary',temporary)
-
-            console.log('表单信息',this.compileUser)
-            console.log('request',requestBody)
-            console.log(this.user_id)
 
             const url = 'api/user/users/'+this.user_id
 
 
             let requestBody = {}
 
-
             //判断密码是否修改
-            if(temporary.password){
+            if(this.model_info.password){
 
-              for(var key in temporary) {
-
-                requestBody[key] = temporary[key]
-              }
+              Object.assign(requestBody,this.model_info)
 
               requestBody.password = sha256(requestBody.password + '!@#$%^').toString(crypto.enc.Hex)
 
 
             }else{
-              requestBody = {
-                username: temporary.username,
-                department: temporary.department,
-                phone: temporary.phone,
-                email: temporary.email,
-                role: temporary.role
-              }
+              requestBody.username = this.model_info.username
+              requestBody.department = this.model_info.department
+              requestBody.phone = this.model_info.phone
+              requestBody.email = this.model_info.email
+              requestBody.role = this.model_info.role
+
             }
 
             console.log('请求',requestBody)
 
             this.$http.put(url,requestBody).then((res) => {
-              console.log(res.body)
 
               this.$Message.info('编辑用户成功');
 
               this.current_page = 1
-//        修改成功之后改变列表数据
-              for(var key in temporary) {
-                this.queryResult[this.index][key] = temporary[key]
+//          修改成功之后改变列表数据
+              for(var key in this.model_info) {
+                this.queryResult[this.index][key] = this.model_info[key]
 
                 if(key == 'role') {
 
@@ -436,10 +454,9 @@
               console.log('err',err)
             })
 
-            this.isCompile = false
+            this.isOpenModal = false
 
-            //重置
-            this.$refs[name].resetFields()
+
 //
           } else {
 
@@ -452,15 +469,15 @@
 
 
       },
-      compileCancel (name) {//取消编辑
-        this.isCompile = false
-        //重置
-        this.$refs[name].resetFields()
+//      compileCancel (name) {//取消编辑
+//        this.isCompile = false
+//        //重置
+//        this.$refs[name].resetFields()
+//
+//      },
+      createOk () {//确定创建用户
 
-      },
-      createOk (name) {//确定创建用户
-
-        this.$refs[name].validate((valid) => {
+        this.$refs.formInline.validate((valid) => {
           if(valid) {
             console.log('验证成功')
 
@@ -469,19 +486,19 @@
 
             let requestBody =  {}
 
-            this.createUser.department && (requestBody.department = this.createUser.department)
-            this.createUser.phone && (requestBody.phone = this.createUser.phone)
-            this.createUser.email && (requestBody.email = this.createUser.email)
-            requestBody.username = this.createUser.username
-            requestBody.password = this.createUser.password
-            requestBody.role = this.createUser.role
+            this.model_info.phone && (requestBody.phone = this.model_info.phone)
+            this.model_info.email && (requestBody.email = this.model_info.email)
+            requestBody.username = this.model_info.username
+            requestBody.password = this.model_info.password
+            requestBody.role = this.model_info.role
+            requestBody.department = this.model_info.department
 
-            requestBody.password = sha256(this.createUser.password + '!@#$%^').toString(crypto.enc.Hex)
+            requestBody.password = sha256(this.model_info.password + '!@#$%^').toString(crypto.enc.Hex)
 
             this.$http.post(url,requestBody).then((res) => {
 
-              this.isCreate = false//关闭modal
               this.$Message.info('创建用户成功');
+              this.isOpenModal = false//关闭modal
               console.log(res.body.result)
               //重新获取用户
               this.getUser()
@@ -490,11 +507,12 @@
               console.log(err)
 
               this.$Message.info('创建用户失败');
-              this.isCreate = false//关闭modal
+              this.isOpenModal = false//关闭modal
 
             })
-            //重置
-            this.$refs[name].resetFields()
+
+//            //重置
+//            this.$refs.formInline.resetFields()
 
           } else {
             console.log('验证失败')
@@ -505,14 +523,12 @@
         })
 
       },
-      createCancel (name) {//创建用户取消
-        this.isCreate = false
-
-        //重置
-        this.$refs[name].resetFields()
-
-
-      },
+//      createCancel (name) {//创建用户取消
+//        this.isOpenModal = false
+//        //重置
+//        this.$refs.formInline.resetFields()
+//
+//      },
       query () {//查询
 
         let user_name = this.query_info.user_name

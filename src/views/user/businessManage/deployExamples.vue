@@ -298,8 +298,7 @@
                                 },
                                 on: {
                                     click: () => {
-                                        //this.$router.push({instance_name: 'user_resourceQuery', query: {instance_num: params.row.instance_num}});
-                                        this.$router.push({name: '资源查询'});
+                                        this.$router.push({name: '资源查询', query: {instance_id: params.row.id}});
                                     }
                                 }
                             }, params.row.instance_num)

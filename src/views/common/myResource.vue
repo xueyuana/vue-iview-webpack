@@ -116,10 +116,6 @@
             key: 'reboot'
           },
           {
-            value: '硬重启中',
-            key: 'hard_reboot'
-          },
-          {
             value: '虚机创建失败',
             key: 'vm_error'
           },
@@ -281,7 +277,7 @@
 
         let requestBody = {}
 
-        if (this.user_info.role) {
+        if (this.user_info.role === 'user') {
           requestBody.user_id = this.user_info.id
         }
         start_time && (requestBody.start_time = this.timeFormat(start_time))
@@ -296,12 +292,7 @@
 
       },
       reload () {
-
-        if (this.user_info.role === 'user') {
-          this.getVm({user_id: this.user_info.id})//获取虚机
-        } else {
-          this.getVm({})
-        }
+        this.query()
       },
       getVm (query) {//获取虚拟机
 
@@ -466,49 +457,70 @@
 
             item.selected = true
 
-            let restartType = ''
+            if(item.value === '删除') {
 
-            switch (this.user_info.role) {
-              case 'user': restartType = 'SOFT'
-                break
-              case 'admin': restartType = 'HARD'
-                break
-            }
-
-
-            const url = 'api/mpc_vm_operation/operations'
-
-            let requestBody = {
-              vm_uuid: vm_uuid,
-              operation: item.key
-            }
-
-
-            item.key == 'restart' && (requestBody.reboot_type = restartType )//operation为restart的时候可以传reboot_type
-
-            this.$http.post(url,requestBody).then((res) => {
-
-              if(res.body.code == 200) {
-
-
-                if(item.key == 'delete') {
-
-                  this.getVm({user_id: this.user_info.id})
-
+              this.$Modal.confirm({
+                title: '确认删除',
+                content: '<p>是否删除虚机</p>',
+                onOk: () => {
+                  this.operation(item,vm_uuid)
+                },
+                onCancel: () => {
+                  item.selected = false
                 }
+              });
 
-                this.$Message.info('操作成功');
+            }else {
+              this.operation(item,vm_uuid)
+            }
 
-              }
-
-            },(err) => {
-              console.log(err)
-              this.$Message.info('操作失败');
-            })
 
           }else {
             item.selected = false
           }
+        })
+
+      },
+      operation (item,vm_uuid) {//虚机操作
+
+        let restartType = ''
+
+        switch (this.user_info.role) {
+          case 'user': restartType = 'SOFT'
+            break
+          case 'admin': restartType = 'HARD'
+            break
+        }
+
+
+        const url = 'api/mpc_vm_operation/operations'
+
+        let requestBody = {
+          vm_uuid: vm_uuid,
+          operation: item.key
+        }
+
+
+        item.key == 'restart' && (requestBody.reboot_type = restartType )//operation为restart的时候可以传reboot_type
+
+        this.$http.post(url,requestBody).then((res) => {
+
+          if(res.body.code == 200) {
+
+
+            if(item.key == 'delete') {
+
+              this.getVm({user_id: this.user_info.id})
+
+            }
+
+            this.$Message.info('操作成功');
+
+          }
+
+        },(err) => {
+          console.log(err)
+          this.$Message.info('操作失败');
         })
 
       },

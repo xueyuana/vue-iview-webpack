@@ -49,6 +49,7 @@
         createResourceIndex: 0,
         text: '创建资源',
         fontColor: 'fail',
+        route_id : this.$route.query.instance_id,
         approvalStatusVal: [
           {
             value: '直属领导待审批',
@@ -152,7 +153,7 @@
 //              console.log(params.row)
               return h('Button',{
                 props: {
-                  type: 'primary',
+                  type: params.row.status == '资源已创建'?'success':'primary',
                   size: 'small',
                   disabled:  params.row.status == '审批完成' || params.row.status == '资源已创建'?false:true
                 },
@@ -212,6 +213,22 @@
         ]
 
       }
+    },
+    created () {
+      this.getInstance()//获取实例
+      this.getUser()//获取用户信息
+
+      //获取用户的所有申请资源
+      const id = this.user_info.id
+
+      let query = {user_id:id}
+
+      if(this.route_id !== undefined) {
+        query.instance_id = this.route_id
+      }
+
+      this.getUserResource(query)
+
     },
     methods: {
 
@@ -279,7 +296,7 @@
 
           this.data_length = res.body.result.res.length
 
-          console.log('查询资源',res.body.result.res)
+//          console.log('查询资源',res.body.result.res)
 
           res.body.result.res.forEach((item,index) => {
 
@@ -321,11 +338,10 @@
 
             })
 
-
           })
 
           this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
-          console.log(this.queryResult)
+//          console.log(this.queryResult)
 
 
         },(err) => {
@@ -370,15 +386,7 @@
         return data;
       }
     },
-    created () {
-      this.getInstance()//获取实例
-      this.getUser()//获取用户信息
-      //获取用户的所有申请资源
-      const id = this.user_info.id
-      const  query = {user_id:id}
-      this.getUserResource(query)
 
-    }
 
   }
 
