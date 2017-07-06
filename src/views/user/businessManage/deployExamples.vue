@@ -394,7 +394,10 @@
                         this.createUser.user_name = this.$store.state.userData.userInfo.username;
                         this.createUser.instance_num='0';
                         delete this.createUser.created_time;
+                        console.log("==========",JSON.stringify(this.createUser));
                         if(this.createUser.hasOwnProperty("id")){
+                            this.createUser.instance_id=this.createUser.id;
+                            console.log("==========",JSON.stringify(this.createUser));
                             this.$http.put(url, this.createUser).then((res) => {
                                 console.log(res.body)
                                 this.current_page = 1
