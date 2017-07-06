@@ -24,9 +24,9 @@
     </div>
     <div class="inquire-table">
       <div class="inquire-table-title">日志列表</div>
-      <Table :columns="columns" :data="queryResult" stripe class="inquire-table-tb"></Table>
+      <Table stripe :columns="columns" :data="queryResult"></Table>
       <div class="inquire-table-page">
-        <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
+        <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page" :page-size="page_size"></Page>
       </div>
     </div>
   </div>
@@ -109,7 +109,7 @@
         this.$http.get(url,{params: query}).then((res) => {
           console.log('sssss', res);
         if (res.body.code === 200) {
-          this.page_size = res.body.result.res.length;
+          this.data_length = res.body.result.res.length;
           res.body.result.res.forEach((item,index) => {
             this.getResult.push({
             index: index +1,
@@ -130,7 +130,9 @@
       },
       // 分页
       changePage (page) {
-        this.queryResult = this.mockTableData(this.getResult,this.page_size,page);
+
+        this.queryResult = this.mockTableData(this.getResult,this.page_size,page)
+
         this.current_page = page
       },
       page_size_change (size) {
@@ -139,12 +141,17 @@
         this.current_page = 1
 
         this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
+
       },
       mockTableData (originData, pageSize, index) {//进行分页
+
         let data = [];
+
         let num = (index - 1) * pageSize
-        let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize);
-        data = originData.slice(num,maxNum);
+        let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize)
+
+        data = originData.slice(num,maxNum)
+
         return data;
       }
     }
