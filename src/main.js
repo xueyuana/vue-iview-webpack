@@ -18,8 +18,9 @@ import vueRouters from './router/index.js'  // 引入vue-router
 import './static/css/reset.css'             // 导入初始化的css
 import './static/css/common.less'
 
-import './tools/fullpage/index.js'          // 引入 fullpage
-import './tools/fullpage/fullpage.css'
+import './tools/fullpage/index.js'
+
+import './tools/fullpage/fullpage.css'      // 引入 fullpage
 Vue.prototype.$fullpage = fullpage
 
 import Cookie from 'js-cookie'              // 引入cookie工具
@@ -35,6 +36,7 @@ vueRouters.beforeEach((to, from, next) => {
   let userInfo = Cookie.getJSON('userInfo') ? Cookie.getJSON('userInfo') : ''
 
   if (userInfo.id) {  // 如果Cookie中id存在，免登陆
+
     if (to.path === '/login') {
       next('/home')
     } else {
@@ -56,6 +58,7 @@ vueRouters.beforeEach((to, from, next) => {
       next('/login')
     }
   }
+
 
 })
 

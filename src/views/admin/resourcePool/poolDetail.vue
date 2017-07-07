@@ -146,7 +146,7 @@
               return h('a', {
                 on: {
                   click: () => {
-                    this.$router.push({name: '虚拟机管理'})
+                    this.$router.push({name: '虚拟机管理', query: {host_name: params.row.host_name}})
                   }
                 }
               }, params.row.running_vms)

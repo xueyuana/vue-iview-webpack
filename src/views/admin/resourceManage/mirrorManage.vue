@@ -6,7 +6,7 @@
         <Row :gutter="16">
           <Col span="12">
             <Form-item label="操作系统名称:" prop="image_name">
-              <Select clearable	 v-model="formItem.image_name" style="min-width: 150px">
+              <Select clearable v-model="formItem.image_name" style="width: 150px">
                 <Option v-for="item in mirrorImage" :value="item.image_name" :key="item">{{ item.image_name }}</Option>
               </Select>
             </Form-item>
