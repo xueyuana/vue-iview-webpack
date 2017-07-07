@@ -214,6 +214,7 @@
                     ha: [
                         {required: true, message: '请选择高可用', trigger: 'change'}
                     ]
+
                 },
                 columns7: [
                     {
@@ -243,9 +244,10 @@
                                     },
                                     on: {
                                         click: () => {
-                                            //this.$router.push({instance_name: 'user_resourceQuery', query: {instance_num: params.row.instance_num}});
-                                            this.$router.push({name: '资源查询'});
+
+                                          this.$router.push({name: '资源查询', query: {instance_id: params.row.id}});
                                         }
+
                                     }
                                 }, params.row.instance_num)
                             ]);
@@ -295,7 +297,6 @@
                                                 onOk: () => {
                                                     const url = 'api/deploy_instance/deploy_instances/' + params.row.id
                                                     this.$http.delete(url).then((res) => {
-                                                        console.log('删除成功', res)
                                                         //重新获取用户
                                                         const query_user = {user_id: this.$store.state.userData.userInfo.id}
                                                         this.getUserResource(query_user)
@@ -395,13 +396,10 @@
                         this.createUser.instance_num='0';
                         delete this.createUser.created_time;
                         if(this.createUser.hasOwnProperty("id")){
+                            this.createUser.instance_id=this.createUser.id;
                             this.$http.put(url, this.createUser).then((res) => {
-                                console.log(res.body)
                                 this.current_page = 1
-                                //修改成功之后改变列表数据
-                                for (var key in this.createUser) {
-                                    this.data6[this.index][key] = this.createUser[key]
-                                }
+                                this.goQuery();
                             }, (err) => {
                                 this.$Message.error({
                                     content: '编辑部署实例失败!',

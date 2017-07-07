@@ -193,10 +193,11 @@
 
               res.body.result.res.forEach((item,index) => {
 
-                if(item.status == 'a_success' || item.status == 'created_success') {
-                  this.success ++
-                }else {
+                if(item.status == 'submit' || item.status == 'l_success') {
+
                   this.no_success ++
+                }else {
+                  this.success ++
                 }
               })
 
@@ -238,10 +239,10 @@
           },
 
           goResourceApp () {
-                this.$router.push({name: 'user_resourceApplication'});
+                this.$router.push({name: '资源申请'});
             },
           myApplication () {
-                this.$router.push({name: 'user_resourceQuery'});
+                this.$router.push({name: '资源查询'});
             }
         },
       watch: {

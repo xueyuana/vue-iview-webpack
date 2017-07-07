@@ -27,6 +27,7 @@ import Cookie from 'js-cookie'              // 引入cookie工具
 Vue.prototype.$Cookie = Cookie
 
 vueRouters.beforeEach((to, from, next) => {
+
   if (to.path === '/' || to.path === '/notice') {
     next()
     return
