@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="set">
-      <Button type="primary" :class="{hidden: !isDisabled}" class="add" @click="return_query">返回</Button>
+      <Button type="ghost" :class="{hidden: !isDisabled}" class="add" @click="return_query">返回</Button>
       <Button type="primary" :disabled="isDisabled" class="add" @click="addInformation">添加</Button>
       <Button type="primary" :disabled="isDisabled" @click="sendInformation">提交</Button>
     </div>
