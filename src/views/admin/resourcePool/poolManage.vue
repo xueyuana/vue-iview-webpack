@@ -48,6 +48,9 @@
             className: 'table-column-overflow',
             render: (h, params) => {
               return h('a', {
+                attrs: {
+                  title: params.row.pool_name
+                },
                 on: {
                   click: () => {
                     this.$router.push({name: '部署区域详情', query: {hosts: JSON.stringify(params.row.hosts)}})

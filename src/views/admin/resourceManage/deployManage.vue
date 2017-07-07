@@ -8,12 +8,17 @@
             <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间"
                          style="min-width: 250px"></Date-picker>
           </Form-item>
-          <Form-item label="用户:" prop="user" class="form-item">
-            <Input v-model="formItem.user" placeholder="请输入" style="width: 150px"></Input>
+          <Form-item label="用户:" prop="user_id" class="form-item">
+            <Select v-model="formItem.user_id" filterable clearable style="width: 250px"
+                    :placeholder="instanceList.length ? '请选择' : '无'">
+              <Option v-for="(item, index) in userList" :value="item.id" :key="index">{{ item.username }}</Option>
+            </Select>
           </Form-item>
           <Form-item label="部署实例名称:" prop="instance_name" class="form-item">
-            <Select v-model="formItem.instance_name" clearable style="width: 250px" :placeholder="instanceList.length ? '请选择' : '空'">
-              <Option v-for="item in instanceList" :value="item.instance_name" :key="item">{{ item.instance_name }}</Option>
+            <Select v-model="formItem.instance_name" clearable style="width: 250px"
+                    :placeholder="instanceList.length ? '请选择' : '空'">
+              <Option v-for="item in instanceList" :value="item.instance_name" :key="item">{{ item.instance_name }}
+              </Option>
             </Select>
           </Form-item>
         </div>
@@ -65,7 +70,7 @@
             </Select>
           </Form-item>
           <Form-item label="内网IP地址:" prop="internal_ip">
-            <Input v-model="ipForm.internal_ip" placeholder="192.168.2.1/24"></Input>
+            <Input v-model="ipForm.internal_ip" placeholder="192.168.2.1"></Input>
           </Form-item>
         </Form>
       </div>
@@ -115,15 +120,16 @@
       return {
         formItem: {
           date: [],
-          user: '',
+          user_id: '',
           instance_name: ''
         },
         ruleValidate: {
           date: [],
-          user: [],
+          user_id: [],
           instance_name: []
         },
-        instanceList: [],
+        instanceList: [],   // 实例列表
+        userList: [],       // 用户列表
         userInfo: '',
         columns: [
           {
@@ -135,7 +141,8 @@
           {
             title: '部署实例名称',
             key: 'instance_name',
-            align: 'center'
+            align: 'center',
+            className: 'table-column-overflow'
           },
           {
             title: '用户',
@@ -162,7 +169,7 @@
             key: 'created_date',
             align: 'center',
             render: (h, params) => {
-              return h('p', params.row.created_date.slice(0, 16))
+              return h('span', params.row.created_date.slice(0, 16))
             }
           },
           {
@@ -199,20 +206,19 @@
         },
         ruleValidate: {
           ip_type: [
-            { required: true, message: '请选择IP类型', trigger: 'change' }
+            {required: true, message: '请选择IP类型', trigger: 'change'}
           ],
           ip_uuid: [
-            { required: true, message: '请选择公网IP', trigger: 'change' }
+            {required: true, message: '请选择公网IP', trigger: 'change'}
           ],
           internal_ip: [
-            { required: true, validator: validateIp, trigger: 'change' }
+            {required: true, validator: validateIp, trigger: 'change'}
           ]
         },
         pubIpList: [],  // 公网IP列表
         visible: false,
         index: '',      // 记录修改的数据
-        ipReg:/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/,
-
+        ipReg: /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/,
 
         pageSize: 10,
         num: 1
@@ -220,9 +226,11 @@
     },
 
     created() {
-        // 1. 部署实例列表
+      // 0. 部署实例列表
       this.onInquire()
-        // 2. 实例名称
+      // 1. 用户列表
+      this.getUserList()
+      // 2. 实例名称
       this.getInstance().then(res => {
         this.instanceList = res
       })
@@ -234,11 +242,10 @@
         let query = {}
         this.formItem.date[0] && (query.start_time = formatDate(this.formItem.date[0]))
         this.formItem.date[1] && (query.end_time = formatDate(this.formItem.date[1]))
-        this.formItem.user && (query.user = this.formItem.user)
+        this.formItem.user_id && (query.user_id = this.formItem.user_id)
         this.formItem.instance_name && (query.instance_name = this.formItem.instance_name)
 
         this.getInstance(query).then(res => {
-          console.log('部署实例列表',  res)
           res.forEach((item, index) => {
             item.index = index + 1
           })
@@ -249,19 +256,18 @@
         this.$refs[name].resetFields()
       },
 
-        // 3. 选中类型后筛选公网IP
+      // 3. 选中类型后筛选公网IP
       onSelectType(val) {
         if (!val) {
           this.pubIpList = []
         } else {
           this.getPubIpList({ip_pool: val}).then(res => {
-            console.log()
             this.pubIpList = res
           })
         }
       },
 
-        // 4. 确定分配
+      // 4. 确定分配
       onOk() {
         this.$refs['formCustom'].validate((valid) => {
           if (valid) {
@@ -281,12 +287,11 @@
           }
         })
       },
-
       onCancel() {
         this.visible = false
       },
 
-        // 5. 更新列表
+      // 5. 更新列表
       updateTable() {
         let obj = this.pubIpList.filter(item => {
           return item.uuid === this.ipForm.ip_uuid
@@ -328,6 +333,19 @@
           }, (err) => {
             this.$Message.error(res.body.result.msg)
           })
+        })
+      },
+
+      getUserList () {
+        const url = 'api/user/users'
+        this.$http.get(url).then(res => {
+          if (res.body.code === 200) {
+            this.userList = res.body.result.res
+          } else {
+            this.$Message.error(res.res.body.result.msg)
+          }
+        }, err => {
+          console.log(err)
         })
       },
 
