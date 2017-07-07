@@ -56,7 +56,7 @@
           <td>{{item.vm_name}}</td>
           <td>{{item.deploy_inst_id}}</td>
           <td>{{item.ip}}</td>
-          <td>{{item.image_id}}</td>
+          <td class="table-column-overflow">{{item.image_id}}</td>
           <td>{{item.host_name}}</td>
           <td>{{item.az_name}}</td>
           <td>{{item.flavor_id}}</td>
@@ -688,7 +688,7 @@
   }
 
   table tr td:nth-child(4) {
-    width: 88px;
+    min-width: 60px;
   }
   table tr td:nth-child(5) {
     width: 14%;
@@ -701,16 +701,16 @@
     width: 8%;
   }
   table tr td:nth-child(8) {
-    min-width: 90px;
+    min-width: 80px;
   }
   table tr td:nth-child(9) {
     width: 78px;
   }
   table tr td:nth-child(10) {
-    width: 50px;
+    min-width: 50px;
   }
   table tr td:nth-child(11) {
-    width: 50px;
+    min-width: 50px;
   }
 
 
