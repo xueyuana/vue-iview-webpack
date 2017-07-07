@@ -191,7 +191,7 @@
     },
     created () {
       this.getUser()
-      let host_name = tihs.$route.query.host_name
+      let host_name = this.$route.query.host_name
       let query = {}
       if(host_name) {
         query.host_name = host_name
