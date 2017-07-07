@@ -15,6 +15,8 @@ import notice from 'views/page/notice.vue'                 // 公告
 import login from 'views/common/login.vue'                 // 登录
 import home from 'views/common/home.vue'                   // Home页
 
+import err404 from 'views/error/404.vue'                    // 404界面
+
 import user_manageConsole from 'views/user/manageConsole.vue'                                 // 用户 > 管理控制台
 import user_deployExample from 'views/user/businessManage/deployExamples.vue'                 // 用户 > 部署实例
 import user_resourceApplication from 'views/user/resourceManage/resourceApplication.vue'      // 用户 > 资源申请
@@ -50,7 +52,8 @@ var routes = [
       {name: 'notice', path: 'notice', component: notice}
     ]
   },
-  {name: 'login', path: '/login', component: login}
+  {name: 'login', path: '/login', component: login},
+  {path: '/404', component: err404},
 ]
 
 export const userRoutes = [
@@ -80,7 +83,8 @@ export const userRoutes = [
       {name: '用户管理', path: 'user_changePassword', component: user_changePassword},
       {name: '操作日志', path: 'user_operationLog', component: user_operationLog}
     ]
-  }
+  },
+  {path: '*', redirect: '/404', hidden: true}
 ]
 
 export const adminRoutes = [

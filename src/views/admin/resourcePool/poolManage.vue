@@ -45,6 +45,7 @@
             title: '部署区域',
             key: 'pool_name',
             align: 'center',
+            className: 'table-column-overflow',
             render: (h, params) => {
               return h('a', {
                 on: {

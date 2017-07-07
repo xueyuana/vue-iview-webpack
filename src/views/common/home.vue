@@ -34,11 +34,14 @@
               <template v-for="(item, index) in asyncRouters">
                 <div v-if="!index" class="layout-logo-left" @click="goConsole">{{item.name}}</div>
 
-                <Submenu v-else :name="item.name">
+                <Submenu v-else-if="!item.hidden" :name="item.name">
                   <template slot="title">
                     <i :class="'ivu-icon ' + item.icon"></i>{{item.name}}
+
+
                   </template>
-                  <router-link v-for="child in item.children" :key="child.path" :to="item.path+'/'+child.path" v-if="!child.hidden">
+                  <router-link v-for="child in item.children" :key="child.path" :to="item.path+'/'+child.path"
+                               v-if="!child.hidden">
                     <Menu-item :name="item.path+'/'+child.path">
                       {{child.name}}
                     </Menu-item>
@@ -51,9 +54,11 @@
 
           <i-col span="20" offset="4" class="right-col">
             <div class="layout-header">
-              <Breadcrumb separator=">" >
+              <Breadcrumb separator=">">
                 <Breadcrumb-item href="/home">主页</Breadcrumb-item>
-                <Breadcrumb-item v-for="item in $route.matched" v-if="item.name" :href="item.path">{{item.name}}</Breadcrumb-item>
+                <Breadcrumb-item v-for="item in $route.matched" v-if="item.name" :href="item.path">{{item.name}}
+
+                </Breadcrumb-item>
               </Breadcrumb>
             </div>
             <div class="layout-content">
@@ -117,25 +122,27 @@
   .uop-header .user-info li {
     height: 100%;
     float: left;
-    font-size:16px;
-    color:#777E8C;
+    font-size: 16px;
+    color: #777E8C;
     margin: 0 10px;
   }
 
   .uop-header .user-info li a {
     display: block;
     height: 100%;
-    color:#777E8C;
+    color: #777E8C;
   }
-  .uop-header .user-info li .ivu-icon{
+
+  .uop-header .user-info li .ivu-icon {
     vertical-align: middle;
-    width:26px;
-    height:26px;
+    width: 26px;
+    height: 26px;
   }
-  .uop-header .user-info li .icon-logout{
+
+  .uop-header .user-info li .icon-logout {
     /*margin-right:6px;*/
-    background:url("../../static/icon-logout.png") no-repeat;
-    background-size:cover;
+    background: url("../../static/icon-logout.png") no-repeat;
+    background-size: cover;
   }
 
   /*主题内容布局*/
@@ -146,7 +153,7 @@
   }
 
   .layout {
-    background:#F0F5FA;
+    background: #F0F5FA;
     height: 100%;
     position: relative;
     overflow: auto;
@@ -182,40 +189,49 @@
     min-height: 800px;
     position: fixed;
   }
-  .layout-menu-left .ivu-menu-submenu-title{
+
+  .layout-menu-left .ivu-menu-submenu-title {
 
   }
-  .layout-menu-left .ivu-icon{
+
+  .layout-menu-left .ivu-icon {
     vertical-align: bottom;
-    width:20px;
-    height:20px;
+    width: 20px;
+    height: 20px;
   }
-  .layout-menu-left .icon-system{
-    background:url("../../static/icon-system.png") no-repeat;
-    background-size:cover;
+
+  .layout-menu-left .icon-system {
+    background: url("../../static/icon-system.png") no-repeat;
+    background-size: cover;
   }
-  .layout-menu-left .icon-business{
-    background:url("../../static/icon-business.png") no-repeat;
-    background-size:cover;
+
+  .layout-menu-left .icon-business {
+    background: url("../../static/icon-business.png") no-repeat;
+    background-size: cover;
   }
-  .layout-menu-left .icon-resource{
-    background:url("../../static/icon-resource.png") no-repeat;
-    background-size:cover;
+
+  .layout-menu-left .icon-resource {
+    background: url("../../static/icon-resource.png") no-repeat;
+    background-size: cover;
   }
-  .layout-menu-left .icon-resource{
-    background:url("../../static/icon-resource.png") no-repeat;
-    background-size:cover;
+
+  .layout-menu-left .icon-resource {
+    background: url("../../static/icon-resource.png") no-repeat;
+    background-size: cover;
   }
-  .layout-menu-left .icon-approval{
-    background:url("../../static/icon-approval.png") no-repeat;
-    background-size:cover;
+
+  .layout-menu-left .icon-approval {
+    background: url("../../static/icon-approval.png") no-repeat;
+    background-size: cover;
   }
-  .layout-menu-left .icon-resource-chi{
-    background:url("../../static/icon-resource-chi.png") no-repeat;
-    background-size:cover;
+
+  .layout-menu-left .icon-resource-chi {
+    background: url("../../static/icon-resource-chi.png") no-repeat;
+    background-size: cover;
   }
-  .right-col{
-    background:#F0F5FA;
+
+  .right-col {
+    background: #F0F5FA;
   }
 
   .layout-header {
@@ -228,9 +244,11 @@
     background: #fff;
     box-shadow: 0 1px 1px rgba(0, 0, 0, .1);*/
   }
-  .layout-header .ivu-breadcrumb > span:last-child{
+
+  .layout-header .ivu-breadcrumb > span:last-child {
     font-weight: normal;
   }
+
   .layout-logo-left {
     width: 100%;
     line-height: 50px;
@@ -246,7 +264,7 @@
 
 </style>
 <script>
-  import { mapState } from 'vuex'
+  import {mapState} from 'vuex'
   import common from '../../tools/common.js';
 
   export default {
@@ -255,14 +273,13 @@
       return {
         // 保存用户名
         userInfo: {},
-        role: '',
-        openName: []
+        role: ''
       }
     },
+
     created() {
       this.userInfo = this.$store.state.userData.userInfo
       this.role = this.userInfo.role
-      console.log(this.$route)
     },
 
     computed: {
@@ -272,12 +289,12 @@
     },
 
     methods: {
-        // 获取用户名
+      // 获取用户名
       getUserInfo () {
         this.userInfo = getStroage('userInfo');
         console.log('用户信息', this.userInfo)
       },
-        // 跳转到管理控制台
+      // 跳转到管理控制台
       goConsole () {
         // 根据不同身份跳转不同界面
         if (this.role) {

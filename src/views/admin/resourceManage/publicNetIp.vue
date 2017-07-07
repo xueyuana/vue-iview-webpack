@@ -276,16 +276,16 @@
       methods: {
           goQuery (name) {
               console.log('ddsss', this.formValidate);
-              this.current_page = 1
-              const start_time = this.formValidate.start_time[0];
-              const end_time = this.formValidate.start_time[1];
+            this.current_page = 1
+            const start_time = this.formValidate.start_time[0];
+            const end_time = this.formValidate.start_time[1];
 
-              let requestBody = {}
-              start_time && (requestBody.start_time = formatDate(start_time));
-              end_time && (requestBody.end_time = formatDate(end_time));
-              this.formValidate.ip_pool && (requestBody.ip_pool = this.formValidate.ip_pool);
-              this.formValidate.id_address && (requestBody.ip = this.formValidate.id_address);
-              this.getNetIp(requestBody);
+            let requestBody = {}
+            start_time && (requestBody.start_time = formatDate(start_time));
+            end_time && (requestBody.end_time = formatDate(end_time));
+            this.formValidate.ip_pool && (requestBody.ip_pool = this.formValidate.ip_pool);
+            this.formValidate.id_address && (requestBody.ip = this.formValidate.id_address);
+            this.getNetIp(requestBody);
           },
           getNetIp (query) {
               this.queryResult = [];
@@ -304,7 +304,7 @@
                             this.getResult.splice(index, 1)
                         }
                     })
-                    this.getResult = pending.concat(...this.getResult)
+                    this.getResult = this.getResult.concat(...pending)
 
                     this.getResult.forEach((item, index) => {
                         item.index = index + 1

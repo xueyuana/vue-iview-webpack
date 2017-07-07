@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div class="set">
+      <Button type="ghost" :class="{hidden: !isDisabled}" class="add" @click="return_query">返回</Button>
       <Button type="primary" :disabled="isDisabled" class="add" @click="addInformation">添加</Button>
       <Button type="primary" :disabled="isDisabled" @click="sendInformation">提交</Button>
     </div>
@@ -13,92 +14,112 @@
       </Steps>
     </div>
     <div class="inquire-table-title">资源信息</div>
-    <div class="contain" v-for="(item,index) in resourceInformation" :class="{border: index == 0?false:true}">
-     <div class="option" :class="{hidden: index == 0 || isDisabled? true:false}">
-       <div class="delete" @click="deleteVm(index)">
-         <Icon type="trash-a"  size="26" color="#0063d0"></Icon>
-       </div>
-       <div class="add-s" @click="addInformation">
-         <Icon type="plus-round" size="26" color="#0063d0"></Icon>
-       </div>
-     </div>
-      <div class="item">
-        <span class="title">虚拟机</span>
-        <Input v-model="item.vm_name" placeholder="请输入" :disabled="isDisabled" style="width: 180px"></Input>
-      </div>
-      <div class="item">
-        <span class="title">部门</span>
-        <Input v-model="department" :disabled="isDisabled" disabled style="width: 180px"></Input>
-      </div>
-      <div class="item">
-        <span class="title">部署区域</span>
-        <Select v-model="az_name" style="width:180px" :disabled="index ==0 && !isDisabled?false:true">
-          <Option v-for="item in az" :value="item.az_name" :key="item">{{ item.az_name }}</Option>
-        </Select>
-      </div>
-      <div class="item example">
-        <span class="title">部署实例</span>
-          <Select v-model="instance_id" style="width:180px" :disabled="index ==0 && !isDisabled?false:true">
+
+    <Form ref="formCommon" :model="common_info" :rules="ruleCommon" label-position="right" :label-width="90" >
+      <div class="contain">
+      <Form-item label="部署区域：" prop="az_name">
+        <div class="item-common">
+          <Select clearable v-model="common_info.az_name" :disabled="isDisabled" style="width:180px">
+            <Option v-for="item in az" :value="item.az_name" :key="item">{{ item.az_name }}</Option>
+          </Select>
+        </div>
+      </Form-item>
+      <Form-item label="部署实例：" prop="instance_id">
+        <div class="item-common example">
+          <Select clearable v-model="common_info.instance_id" :disabled="isDisabled" style="width:180px" >
             <Option v-for="item in instance" @click.native="instanceDetails" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
           </Select>
-        <Button type="dashed" class="add-example" :class="{hidden: index == 0?false:true}" @click="createExample">新建部署实例</Button>
-        <Modal v-model="instanceCreate" title="提示" :ok-text="okText" :mask-closable="false" :closable="false">
-          <div class="modal-wrap">
-            <div class="instance-title">您的业务类型:</div>
-            <table>
-              <tbody>
-              <tr>
-                <td>用户群体规模</td>
-                <td>{{recomConfig.user_size}}</td>
-              </tr>
-              <tr>
-                <td>用户活跃度</td>
-                <td>{{recomConfig.liveness}}</td>
-              </tr>
-              <tr>
-                <td>业务类型</td>
-                <td>{{recomConfig.business_type}}</td>
-              </tr>
-              <tr>
-                <td>数据大小</td>
-                <td>{{recomConfig.data_unit}}</td>
-              </tr>
-              <tr>
-                <td>高可用</td>
-                <td>{{recomConfig.ha}}</td>
-              </tr>
-              </tbody>
-            </table>
-            <div class="instance-title">推荐配置:</div>
-            <Table :columns="columns" :data="configuration"></Table>
+          <Button type="dashed" class="add-example" @click="createExample">新建部署实例</Button>
+          <Modal v-model="instanceCreate" title="提示" :ok-text="okText" :mask-closable="false" :closable="false">
+            <div class="modal-wrap">
+              <div class="instance-title">您的业务类型:</div>
+              <table>
+                <tbody>
+                <tr>
+                  <td>用户群体规模</td>
+                  <td>{{recomConfig.user_size}}</td>
+                </tr>
+                <tr>
+                  <td>用户活跃度</td>
+                  <td>{{recomConfig.liveness}}</td>
+                </tr>
+                <tr>
+                  <td>业务类型</td>
+                  <td>{{recomConfig.business_type}}</td>
+                </tr>
+                <tr>
+                  <td>数据大小</td>
+                  <td>{{recomConfig.data_unit}}</td>
+                </tr>
+                <tr>
+                  <td>高可用</td>
+                  <td>{{recomConfig.ha}}</td>
+                </tr>
+                </tbody>
+              </table>
+              <div class="instance-title">推荐配置:</div>
+              <Table :columns="columns" :data="configuration"></Table>
+            </div>
+            <div slot="footer">
+              <Button type="primary" size="large" v-text="okText" @click="closeModal"></Button>
+            </div>
+          </Modal>
+        </div>
+      </Form-item>
+      <Form-item label="部门：" prop="department">
+        <div class="item-common">
+          <Input v-model="common_info.department" :disabled="isDisabled" disabled style="width: 180px"></Input>
+        </div>
+      </Form-item>
+      </div>
+    </Form>
+
+    <Form ref="formInfo" v-for="(item,index) in resourceInformation" :model="item" :rules="rule" label-position="right" :label-width="90" >
+
+      <div class="contain" :class="{border: index == 0?false:true}" >
+
+        <div class="option" :class="{hidden: index == 0 || isDisabled? true:false}">
+          <div class="delete" @click="deleteVm(index)">
+            <Icon type="trash-a"  size="26" color="#0063d0"></Icon>
           </div>
-          <div slot="footer">
-            <Button type="primary" size="large" v-text="okText" @click="closeModal"></Button>
+          <div class="add-s" @click="addInformation">
+            <Icon type="plus-round" size="26" color="#0063d0"></Icon>
           </div>
-        </Modal>
+        </div>
+
+        <Form-item label="虚拟机：" prop="vm_name">
+          <div class="item-common">
+            <Input v-model="item.vm_name" placeholder="请输入" :disabled="isDisabled" style="width: 180px"></Input>
+          </div>
+        </Form-item>
+        <Form-item label="操作系统：" prop="image_id">
+          <div class="item-common">
+            <Select clearable v-model="item.image_id" :disabled="isDisabled" style="width:180px">
+              <Option v-for="item in mirrorImage" :value="item.id" :key="item">{{ item.image_name }}</Option>
+            </Select>
+          </div>
+        </Form-item>
+        <Form-item label="规格：" prop="flavor_id">
+          <div class="item-common">
+            <Select clearable v-model="item.flavor_id" :disabled="isDisabled" style="width:180px">
+              <Option v-for="item in flavor" :value="item.flavor_id" :key="item">{{ item.flavor_name }}</Option>
+            </Select>
+          </div>
+        </Form-item>
+        <Form-item label="存储空间：" prop="storage">
+          <div class="item-common add-unit">
+            <Input v-model="item.storage" placeholder="最小单位G，最大500G" number :disabled="isDisabled" style="width: 180px"></Input>
+            <span class="unit">G</span>
+          </div>
+        </Form-item>
+        <Form-item label="数量：" prop="vm_num">
+          <div class="item-common">
+            <Input-number :max="10" :min="1" :disabled="isDisabled" v-model="item.vm_num"></Input-number>
+          </div>
+        </Form-item>
+
       </div>
-      <div class="item">
-        <span class="title">操作系统</span>
-        <Select v-model="item.image_id" :disabled="isDisabled" style="width:180px">
-          <Option v-for="item in mirrorImage" :value="item.id" :key="item">{{ item.image_name }}</Option>
-        </Select>
-      </div>
-      <div class="item">
-        <span class="title">规格</span>
-        <Select v-model="item.flavor_id" :disabled="isDisabled" style="width:180px">
-          <Option v-for="item in flavor" :value="item.flavor_id" :key="item">{{ item.flavor_name }}</Option>
-        </Select>
-      </div>
-      <div class="item add-unit">
-        <span class="title">存储空间</span>
-        <Input v-model="item.storage" placeholder="最小单位G，最大500G" :disabled="isDisabled" style="width: 180px"></Input>
-        <span class="unit">G</span>
-      </div>
-      <div class="item">
-        <span class="title">数量</span>
-        <Input-number :max="10" :min="1" :disabled="isDisabled" v-model="item.vm_num"></Input-number>
-      </div>
-    </div>
+    </Form>
     <div class="inquire-table-title">业务信息</div>
     <Input class="comment" v-model="business_info" :disabled="isDisabled" type="textarea" :maxlength="500" :rows=6 placeholder="请输入"></Input>
     <div :class="{hidden: !isDisabled}">
@@ -147,11 +168,24 @@
           storage: 50,
           num: 1
         },
+        common_info: {
+          instance_id: '',
+          az_name: '',
+          department: ''
+        },
+        ruleCommon: {
+          instance_id: [
+            {required: true,message: '请填写部署实例',trigger: 'change'}
+          ],
+          az_name: [
+            {required: true, message: '请输入部署区域',trigger: 'change'}
+          ],
+          department: [
+            {required: true, message: '请填写部门', trigger: 'change'}
+          ]
 
-        instance_id: '',
-        az_name: '',
+        },
         business_info: '',
-        department: '',
         resourceInformation: [{
           vm_name: '',
           vm_num: 1,
@@ -159,7 +193,22 @@
           image_id: '',
           storage: ''
         }],
-        instance: [],
+        rule: {
+          vm_name: [
+            {required: true, max: 100,message: '请填写虚机名称，最多20位',trigger: 'change'}
+          ],
+          flavor_id: [
+            {required: true, message: '请选择规格', trigger: 'change'}
+          ],
+          image_id: [
+            {required: true, message: '请选择操作系统', trigger: 'change'}
+          ],
+          storage: [
+            {required: true, type: 'number', message: '请填写存储空间并为数字', trigger: 'change'},
+
+          ]
+        },
+        instance: [],//部署实例
         az:[],//资源池
         flavor: [],//虚机规格
         mirrorImage: []//镜像
@@ -192,22 +241,25 @@
     watch: {
       routeId (newId,oldId) {
 
-        if(newId === undefined) {
+        if(newId === undefined && oldId) {
+          window.location.reload()
 
-          this.isDisabled = false
-          this.business_info = ''
-          this.resourceInformation = [
-            {
-              vm_name: '',
-              vm_num: 0,
-              flavor_id: '',
-              image_id: '',
-              storage: ''
-            }
-          ]
-          this.instance_id = ''
-          this.az_name = ''
-
+//          this.isDisabled = false
+//          this.business_info = ''
+//          this.resourceInformation = [
+//            {
+//              vm_name: '',
+//              vm_num: 0,
+//              flavor_id: '',
+//              image_id: '',
+//              storage: ''
+//            }
+//          ]
+//          this.common_info = {
+//            instance_id: '',
+//            az_name: '',
+//            department: ''
+//          }
         }
 
       }
@@ -280,8 +332,11 @@
       getUser () {
 
         Object.assign(this.user_info,this.$store.state.userData.userInfo)
-        this.department = this.user_info.department
+        this.common_info.department = this.user_info.department
 
+      },
+      return_query () {
+        this.$router.push({name: '资源查询'})
       },
       addInformation () {//添加虚机
         let count = 0
@@ -289,9 +344,7 @@
           count += item.vm_num
         })
         if(count >=10){
-          this.$Notice.open({
-            title: '最多添加10个虚拟机'
-          })
+          this.$Message.info('最多选择10个虚机');
           return
         }
 
@@ -303,7 +356,7 @@
           storage: ''
         })
       },
-      deleteVm (index) {
+      deleteVm (index) {//删除创建虚机
         this.resourceInformation.splice(index,1)
       },
 
@@ -330,8 +383,8 @@
           }
 
           this.business_info = resource_info.business_info
-          this.az_name = resource_info.az_name
-          this.instance_id = resource_info.instance_id
+          this.common_info.az_name = resource_info.az_name
+          this.common_info.instance_id = resource_info.instance_id
           this.resourceInformation = resource_info.resources
           this.suggestion = resource_info.suggestion
           this.admin_suggestion = resource_info.admin_suggestion
@@ -346,41 +399,65 @@
 
       },
       sendInformation () { //提交资源申请
-        let count = 0
-        this.resourceInformation.forEach((item, index) => {
-          count += item.vm_num
+        let num = -1
+        this.$refs.formCommon.validate((valid) => {
+
+          if(valid){
+
+            this.$refs.formInfo.some((item,index) => {
+
+              this.$refs.formInfo[index].validate((valid) => {
+                if(!valid) {
+
+                  this.$Message.info('表单验证失败');
+                  num = index
+                }
+              })
+
+            })
+
+            console.log('验证数量',num)
+            if(num === -1) {//表单验证成功
+
+              let count = 0
+              this.resourceInformation.forEach((item) => {
+                count += item.vm_num
+              })
+              if (count > 10) {
+                this.$Message.info('最多选择10个虚机');
+                return
+              }
+
+
+              let requestBody = {
+                user_name: this.user_info.username,
+                user_id: this.user_info.id,
+                business_info: this.business_info,
+                az_name: this.common_info.az_name,
+                instance_id: this.common_info.instance_id,
+                department: this.common_info.department,
+                resources: this.resourceInformation
+              }
+
+              const url = 'api/mpc_resource/mpc_resources'
+
+              this.$http.post(url, requestBody).then((res) => {
+                console.log(res.body)
+
+                this.$router.push({name: '资源查询'})
+
+              }, (err) => {
+                console.log(err)
+                this.$Message.info('创建失败');
+              })
+
+            }
+
+          }else {
+            this.$Message.info('表单验证失败');
+
+          }
         })
-        if(count >10){
-          this.$Notice.open({
-            title: '最多添加10个虚拟机'
-          })
-          return
-        }
-
-
-        let requestBody = {
-          user_name: this.user_info.username,
-          user_id: this.user_info.id,
-          business_info: this.business_info,
-          az_name: this.az_name,
-          instance_id: this.instance_id,
-          department: this.department,
-          resources: this.resourceInformation
-        }
-
-        const url = 'api/mpc_resource/mpc_resources'
-
-        this.$http.post(url,requestBody).then((res) => {
-          console.log(res.body)
-
-          this.$router.push({name: '资源查询'})
-
-        },(err) => {
-          console.log(err)
-          this.$Message.info('创建失败，内容不能为空');
-        })
-
-
 
       },
 
@@ -520,6 +597,9 @@
     margin-bottom: 5px;
 
   }
+  .item-common {
+    padding-right: 84px;
+  }
   .item {
     padding-right: 110px;
     padding-bottom: 10px;
@@ -532,7 +612,7 @@
   }
   .add-example {
     position: absolute;
-    right: 0;
+    right: -24px;
     top: 0;
   }
   .example {
@@ -540,8 +620,8 @@
   }
   .unit {
     position: absolute;
-    right: 88px;
-    top: 8px;
+    right: 70px;
+    top: 2px;
   }
   .add-unit {
     position: relative;

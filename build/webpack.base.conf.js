@@ -12,7 +12,7 @@ var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: ["babel-polyfill", "./src/main.js"] // 兼容vuex 在IE9的编译
   },
   output: {
     path: config.build.assetsRoot,
