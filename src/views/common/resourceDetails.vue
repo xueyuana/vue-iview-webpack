@@ -221,7 +221,7 @@
                        placeholder="示例：xxx业务为xxx提供互联网服务，此业务位于政务外网区域，业务上线日期预计xxx日，建设周期xx日"></Input>
                 </Col>
                 <Col span="24">
-                <div class="sub-title"><Icon type="ios-medical"></Icon>直属领导审批意见</div>
+                <div class="sub-title"><Icon v-if="role === 'leader'" type="ios-medical"></Icon>直属领导审批意见</div>
                 <Input v-model="xzInfo" type="textarea" :maxlength="100" :rows="4" :disabled="leaderDisable"></Input>
                 </Col>
                 <Col span="24" v-if="role === 'admin'">
@@ -548,6 +548,7 @@
         created () {
             this.resourceId = this.$route.query.id;
             this.role = this.$store.state.userData.userInfo.role
+            console.log("****************",this.role);
             if (this.resourceId) {
                 const query = {resource_id: this.resourceId};
                 // 规格列表
