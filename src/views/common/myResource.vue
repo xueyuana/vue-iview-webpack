@@ -191,12 +191,18 @@
     },
     created () {
       this.getUser()
+      let host_name = tihs.$route.query.host_name
+      let query = {}
+      if(host_name) {
+        query.host_name = host_name
+      }
 
       if (this.user_info.role === 'user') {
-        this.getVm({user_id: this.user_info.id})//获取虚机
-      } else {
-        this.getVm({})
+        query.user_id = this.user_info.id
+
       }
+      this.getVm(query)
+
 
       this.getAz()//获取资源池
       this.getInstance()//获取实例
