@@ -56,8 +56,8 @@
           <td>{{item.vm_name}}</td>
           <td>{{item.deploy_inst_id}}</td>
           <td>{{item.ip}}</td>
-          <td class="table-column-overflow">{{item.image_id}}</td>
-          <td>{{item.host_name}}</td>
+          <td><div class="table-column-overflow" :title="item.image_id">{{item.image_id}}</div></td>
+          <td> <div class="table-column-overflow" :title="item.image_id">{{item.host_name}} </div></td>
           <td>{{item.az_name}}</td>
           <td>{{item.flavor_id}}</td>
           <td>{{item.storage}}</td>
@@ -192,9 +192,13 @@
     created () {
       this.getUser()
       let host_name = this.$route.query.host_name
+      let instance_id = this.$route.query.instance_id
       let query = {}
       if(host_name) {
         query.host_name = host_name
+      }
+      if(instance_id) {
+        query.instance_id = instance_id
       }
 
       if (this.user_info.role === 'user') {
@@ -503,7 +507,9 @@
 
         let requestBody = {
           vm_uuid: vm_uuid,
-          operation: item.key
+          operation: item.key,
+          user_name: this.user_info.username,
+          user_id: this.user_info.id
         }
 
 
@@ -681,33 +687,30 @@
     width: 34px;
   }
   table tr td:nth-child(2) {
-    min-width: 60px;
+    min-width: 44px;
   }
   table tr td:nth-child(3) {
-    width: 8%;
+    min-width: 34px;
   }
 
   table tr td:nth-child(4) {
     min-width: 60px;
-  }
-  table tr td:nth-child(5) {
-    width: 14%;
   }
 
   table tr td:nth-child(6) {
     min-width: 60px;
   }
   table tr td:nth-child(7) {
-    width: 8%;
+    min-width: 30px;
   }
   table tr td:nth-child(8) {
-    min-width: 80px;
+    min-width: 70px;
   }
   table tr td:nth-child(9) {
     width: 78px;
   }
   table tr td:nth-child(10) {
-    min-width: 50px;
+    min-width: 44px;
   }
   table tr td:nth-child(11) {
     min-width: 50px;
