@@ -114,8 +114,10 @@
 
 
             let body = {
-              "username": userName,
-              "password": passWord
+              username: userName,
+              password: passWord,
+              user_id: this.$store.state.userData.userInfo.id,
+              user_name: this.$store.state.userData.userInfo.username
             }
             this.$http.post('api/user/login', body)
               .then(res => {

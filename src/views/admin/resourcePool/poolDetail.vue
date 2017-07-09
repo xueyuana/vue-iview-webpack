@@ -197,7 +197,6 @@
             this.data1.forEach((item, index) => {
               item.index = index + 1
             })
-            console.log('物理机', this.data1 )
             this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
             // 开始绘制饼图
             this.drawPie(this.data1)

@@ -124,7 +124,8 @@ export const adminRoutes = [
       {name: '用户管理', path: 'admin_userManage', component: admin_userManage},
       {name: '操作日志', path: 'admin_operationLog', component: admin_operationLog}
     ]
-  }
+  },
+  {path: '*', redirect: '/404', hidden: true}
 ]
 
 export const leaderRoutes = [
@@ -147,7 +148,8 @@ export const leaderRoutes = [
       {name: '用户管理', path: 'approval_changePassword', component: approval_changePassword},
       {name: '操作日志', path: 'approval_operationLog', component: approval_operationLog}
     ]
-  }
+  },
+  {path: '*', redirect: '/404', hidden: true}
 ]
 
 
