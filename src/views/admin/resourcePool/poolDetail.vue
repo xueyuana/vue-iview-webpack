@@ -2,6 +2,9 @@
   <div class="survey">
     <!--资源使用概况-->
     <div class="resource-survey">
+      <div class="btn-wrap">
+        <Button class="btn" type="ghost" >返回</Button>
+      </div>
       <div class="title">
         <span>资源概况</span>
       </div>
@@ -54,6 +57,12 @@
     margin-top: 20px;
   }
 
+  .btn-wrap {
+    .btn {
+      float: right;
+    }
+  }
+
   .survey .title {
     /*#0AB7E9;*/
     background-color: #3F94FC;
@@ -87,24 +96,6 @@
     text-decoration: underline;
   }
 
-  .inquire {
-    margin-top: 30px;
-    &-form {
-      padding: 15px;
-      background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 0%, rgb(228, 228, 228) 100%, rgb(228, 228, 228) 100%);
-      border: 1px solid rgb(228, 228, 228);
-      border-radius: 10px;
-      &-project_name {
-        width: 30%;
-      }
-      &-formStatus {
-        width: 50%;
-      }
-    }
-    &-table {
-      padding: 20px 20px;
-    }
-  }
 </style>
 
 <script>
@@ -136,7 +127,8 @@
           {
             title: '名称',
             key: 'host_name',
-            align: 'center'
+            align: 'center',
+            className: 'table-column-overflow'
           },
           {
             title: '虚拟机数量',
@@ -184,20 +176,19 @@
       }
     },
 
-    mounted() {
+    created() {
       this.hosts = JSON.parse(this.$route.query.hosts)
       this.onInquire()
     },
 
     methods: {
-      // 查询
+      // 1. 查询物理机
       onInquire() {
         let url = 'api/pool/getHosts'
         let params = ''
         this.hosts.forEach(item => {
           params += ('&host=' + item)
         })
-
         url += ('?' +  params.slice(1))
 
         this.$http.get(url).then(res => {
@@ -206,7 +197,6 @@
             this.data1.forEach((item, index) => {
               item.index = index + 1
             })
-
             this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
             // 开始绘制饼图
             this.drawPie(this.data1)
@@ -214,15 +204,14 @@
             this.$Message.error(res.body.result.msg)
           }
         }, err => {
-          this.$Message.error(res.body.result.msg)
           console.log('error', err)
         })
       },
-      // 重置
       handleReset(name) {
         this.$refs[name].resetFields()
       },
-      // 绘制饼图
+
+      // 2. 绘制饼图
       drawPie(data) {
         let cpu_use = this.countSum(data, 'vcpu_use')
         let cpu_unUse = this.countSum(data, 'vcpu_total') - cpu_use
@@ -431,13 +420,13 @@
         };
 
         myChart3.clear();
-        myChart3.setOption(option3);
+        myChart3.setOption(option3)
 
       },
+
       // 计算所有数据中某条信息的总和
       countSum(data, attr) {
-
-        var sum = 0
+        let sum = 0
         data.forEach(item => {
           if ((typeof item[attr]) == 'number') {
             sum += item[attr]
@@ -447,6 +436,7 @@
         })
         return sum
       },
+
       // 分页
       changePage(val) {
         this.filterDate = this.mockTableData(this.data1, this.pageSize, val)

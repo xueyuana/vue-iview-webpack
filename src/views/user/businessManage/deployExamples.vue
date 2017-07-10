@@ -105,6 +105,7 @@
         value: '',
         index: '',
         user_id: '',
+        user_info: {},
         instance: [],//部署实例
         getResult: [],
         az: [
@@ -253,7 +254,7 @@
                   on: {
                     click: () => {
 
-                      this.$router.push({name: '资源查询', query: {instance_id: params.row.id}});
+                      this.$router.push({name: '我的资源', query: {instance_id: params.row.id}});
                     }
 
                   }
@@ -300,11 +301,16 @@
                   on: {
                     click: () => {
                       this.$Modal.confirm({
-                        title: '是否下线' + params.row.instance_name + '，下线操作将删除此部署实例内的所有资源并不可恢复，请慎重操作！！！',
+                        title: '是否下线' + params.row.instance_name + '，下线操作将删除此部署实例内的所有资源并不可恢复，请慎重操作!',
                         content: '注：删除此部署实例后，实例所属的资源也将一并删除，请谨慎操作！',
                         onOk: () => {
                           const url = 'api/deploy_instance/deploy_instances/' + params.row.id
-                          this.$http.delete(url).then((res) => {
+
+                          let requestBody = {
+                            user_name: this.user_info.username,
+                            user_id: this.user_info.id
+                          }
+                          this.$http.delete(url,{body:requestBody}).then((res) => {
                             //重新获取用户
                             const query_user = {user_id: this.$store.state.userData.userInfo.id}
                             this.getUserResource(query_user)
@@ -325,15 +331,11 @@
           }
         ],
         data6: [
-          //{
-          //    name: '实例1',
-          //    instance_num: '10',
-          //    created_time: '2017-06-23 15:00:00'
-          //}
         ]
       }
     },
     created () {
+      this.getUser()
       //获取用户的所有申请资源
       const id = this.$store.state.userData.userInfo.id
       const query = {user_id: id}
@@ -341,6 +343,9 @@
       this.getInstance()//获取实例
     },
     methods: {
+      getUser () {
+        Object.assign(this.user_info,this.$store.state.userData.userInfo)
+      },
       getInstance () {//获取实例
         const url = 'api/deploy_instance/deploy_instances'
 

@@ -196,7 +196,7 @@
                 if(item.status == 'submit' || item.status == 'l_success') {
 
                   this.no_success ++
-                }else {
+                }else if(item.status == 'a_success') {
                   this.success ++
                 }
               })

@@ -57,42 +57,7 @@
       </Modal>
     </div>
     <Table stripe :columns="columns" :data="queryResult"></Table>
-    <!--<Modal-->
-        <!--v-model="isCompile"-->
-        <!--title="用户信息"-->
-        <!--width="360"-->
-        <!--:mask-closable="false"-->
-    <!--&gt;-->
-      <!--<div class="createWrap">-->
 
-        <!--<Form ref="formCompile" :model="compileUser" :rules="ruleCompile" label-position="right" :label-width="80" >-->
-          <!--<Form-item label="用户名：" prop="username">-->
-            <!--<Input v-model="compileUser.username" placeholder="请输入" style="width: 200px"></Input>-->
-          <!--</Form-item>-->
-          <!--<Form-item label="密码：" prop="password">-->
-            <!--<Input v-model="compileUser.password" placeholder="最少6位最多15位" type="password" style="width: 200px"></Input>-->
-          <!--</Form-item>-->
-          <!--<Form-item label="部门：" prop="department">-->
-            <!--<Input v-model="compileUser.department" placeholder="请输入" style="width: 200px"></Input>-->
-          <!--</Form-item>-->
-          <!--<Form-item label="手机：" prop="phone">-->
-            <!--<Input v-model="compileUser.phone" placeholder="请输入" style="width: 200px"></Input>-->
-          <!--</Form-item>-->
-          <!--<Form-item label="邮箱：" prop="email">-->
-            <!--<Input v-model="compileUser.email" placeholder="请输入" style="width: 200px"></Input>-->
-          <!--</Form-item>-->
-          <!--<Form-item label="角色：" prop="role">-->
-            <!--<Select v-model="compileUser.role" style="width:196px">-->
-              <!--<Option v-for="item in roleList" :value="item.key" :key="item">{{ item.value }}</Option>-->
-            <!--</Select>-->
-          <!--</Form-item>-->
-        <!--</Form>-->
-      <!--</div>-->
-      <!--<div slot="footer">-->
-        <!--<Button type="text" @click="compileCancel('formCompile')">取消</Button>-->
-        <!--<Button type="primary" size="large" @click="compileOk('formCompile')" >确定</Button>-->
-      <!--</div>-->
-    <!--</Modal>-->
     <div class="page">
       <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
     </div>
@@ -129,14 +94,13 @@
         index: '',
         info: '',
         user_id: '',
+        user_info: {},
         getResult: [],//获取的全部数据
         query_info: {
           user_name: '',
           applyDate: []
         },
         isOpenModal: false,
-//        isCreate: false,
-//        isCompile: false,
         model_info: {
           username: '',
           password: '',
@@ -145,15 +109,7 @@
           email: '',
           role: ''
         },
-//        createUser: {
-//          username: '',
-//          password: '',
-//          department: '',
-//          phone: '',
-//          email: '',
-//          role: ''
-//        },
-//        compileUser: {},
+
         ruleInline: {
           username: [
             {required: true, max: 100, message: '请填写用户名',trigger: 'change'}
@@ -175,26 +131,6 @@
           ]
 
         },
-//        ruleCompile: {
-//          username: [
-//            {required: true, max: 100, message: '请填写用户名',trigger: 'change'}
-//          ],
-//          password: [
-//            { min: 6, max: 15, message: '请输入6到15位密码',trigger: 'change'}
-//          ],
-//          department: [
-//            {required: true, max: 100, message: '请填写部门', trigger: 'change'}
-//          ],
-//          phone: [
-//            {validator: validatePhone,trigger:'change'}
-//          ],
-//          email: [
-//            {type: 'email',message: '邮箱格式不正确',tirgger: 'change'}
-//          ],
-//          role: [
-//            {required: true, message: '请选择角色',trigger: 'change'}
-//          ]
-//        },
         roleList: [
           {
             value: '普通用户',
@@ -292,11 +228,16 @@
                       click: () => {
                         this.$Modal.confirm({
                           title: '确认',
-                          content: '<p>确认删除'+ params.row.username+'吗？</p>',
+                          content: `<p>确认删除 ${params.row.username} 吗？</p>`,
                           onOk: () => {
 
                             const url = 'api/user/users/' + params.row.id
-                            this.$http.delete(url).then( (res) => {
+                            let requestBody = {
+                              user_name: this.user_info.username,
+                              user_id: this.user_info.id
+                            }
+
+                            this.$http.delete(url,{body:requestBody}).then( (res) => {
                               console.log('删除用户',res.body)
                               this.$Message.info('成功删除用户');
                               //重新获取用户
@@ -319,22 +260,13 @@
             }
           }
         ],
-        queryResult: [
-//          {
-//            number: 1,
-//            username: '用户1',
-//            phone: '188',
-//            email: '@xx.com',
-//            role: '用户',
-//            department: '部门1',
-//            created_time: '2017'
-//          }
-        ]
+        queryResult: []
 
       }
     },
     methods: {
       getUser () {//获取用户
+        Object.assign(this.user_info,this.$store.state.userData.userInfo)
 
         const url = 'api/user/users'
         this.$http.get(url).then((res) => {
@@ -389,7 +321,6 @@
 
       },
       compileOk () {//确定编辑
-        //TODO:表单的坑
         console.log('确定后的内容',this.model_info)
 //        let temporary = {}//存储表单内容
 
@@ -421,6 +352,8 @@
               requestBody.role = this.model_info.role
 
             }
+            requestBody.user_name = this.user_info.username
+            requestBody.user_id = this.user_info.id
 
             console.log('请求',requestBody)
 
@@ -469,12 +402,6 @@
 
 
       },
-//      compileCancel (name) {//取消编辑
-//        this.isCompile = false
-//        //重置
-//        this.$refs[name].resetFields()
-//
-//      },
       createOk () {//确定创建用户
 
         this.$refs.formInline.validate((valid) => {
@@ -494,6 +421,8 @@
             requestBody.department = this.model_info.department
 
             requestBody.password = sha256(this.model_info.password + '!@#$%^').toString(crypto.enc.Hex)
+            requestBody.user_name = this.user_info.username
+            requestBody.user_id = this.user_info.id
 
             this.$http.post(url,requestBody).then((res) => {
 
@@ -511,8 +440,6 @@
 
             })
 
-//            //重置
-//            this.$refs.formInline.resetFields()
 
           } else {
             console.log('验证失败')
@@ -523,12 +450,6 @@
         })
 
       },
-//      createCancel (name) {//创建用户取消
-//        this.isOpenModal = false
-//        //重置
-//        this.$refs.formInline.resetFields()
-//
-//      },
       query () {//查询
 
         let user_name = this.query_info.user_name
@@ -635,6 +556,7 @@
       }
     },
     created () {
+
       //获取用户
       this.getUser()
 

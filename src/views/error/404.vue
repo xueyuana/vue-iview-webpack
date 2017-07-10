@@ -2,12 +2,13 @@
   <div class="err404">
     <div class="wscn-http404">
       <div class="pic-404">
-        <img class="pic-404__parent" src="./image/404.png" alt="404">
+        <img class="pic-404__parent" src="./image/airship@1x.png" alt="404">
         <img class="pic-404__child left" src="./image/404_cloud.png" alt="404">
         <img class="pic-404__child mid" src="./image/404_cloud.png" alt="404">
         <img class="pic-404__child right" src="./image/404_cloud.png" alt="404">
       </div>
       <div class="bullshit">
+        <div class="bullshit__404"><img src="./image/404.png" alt=""></div>
         <div class="bullshit__headline">{{ message }}</div>
         <div class="bullshit__info">请检查您输入的网址是否正确，请点击以下按钮返回主页</div>
         <router-link to="/home" class="bullshit__return-home">返回首页</router-link>
@@ -43,10 +44,12 @@
       position: relative;
       float: left;
       width: 600px;
-      padding: 150px 0;
+      padding: 180px 0;
       overflow: hidden;
       &__parent {
-        width: 100%;
+        display: block;
+        width: 60%;
+        margin: 0 auto;
       }
       &__child {
         position: absolute;
@@ -154,9 +157,11 @@
     .bullshit {
       position: relative;
       float: left;
-      width: 300px;
-      padding: 220px 0;
+      padding: 190px 0;
       overflow: hidden;
+      &__404 {
+        margin-bottom: 35px;
+      }
       &__oops {
         font-size: 32px;
         font-weight: bold;

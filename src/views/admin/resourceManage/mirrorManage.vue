@@ -70,14 +70,23 @@
           {
             title: '操作系统名称',
             key: 'image_name',
-            align: 'center'
+            align: 'center',
+            className: 'table-column-overflow',
+            render: (h, params) => {
+              return h('span', {
+                attrs: {
+                  title: params.row.image_name
+                }
+              }, params.row.image_name)
+            }
           },
           {
-            title: '尺寸 (M)',
+            title: '操作系统尺寸',
             key: 'image_size',
             align: 'center',
             render: (h, params) => {
-              return h('p', parseInt(params.row.image_size / 1024 / 1024))
+              let count = parseInt(params.row.image_size / 1024 / 1024)
+              return h('p', count > 1024 ? (count/1024).toFixed(2) + ' G' : count + ' M')
             }
           },
           {
@@ -90,7 +99,7 @@
             key: 'created_time',
             align: 'center',
             render: (h, params) => {
-              return h('p', params.row.created_time.replace(/[T]/g, ' ').substring(0, 16))
+              return h('span', params.row.created_time.replace(/[T]/g, ' ').substring(0, 16))
             }
           }
         ],

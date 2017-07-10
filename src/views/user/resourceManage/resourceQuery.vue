@@ -49,7 +49,6 @@
         createResourceIndex: 0,
         text: '创建资源',
         fontColor: 'fail',
-        route_id : this.$route.query.instance_id,
         approvalStatusVal: [
           {
             value: '直属领导待审批',
@@ -166,14 +165,18 @@
                     const url_post = 'api/mpc_resource/mpc_resource_creater'
 
                     let requestBody_post = {
-                      resource_id: params.row.resource_id
+                      resource_id: params.row.resource_id,
+                      user_name: this.user_info.username,
+                      user_id: this.user_info.id
                     }
 
                     const url_put = 'api/mpc_resource/mpc_resources'
 
                     let requestBody_put = {
                       resource_id: params.row.resource_id,
-                      status: 'created_success'
+                      status: 'created_success',
+                      user_name: this.user_info.username,
+                      user_id: this.user_info.id
                     }
 
                       this.$http.post(url_post,requestBody_post).then((res) => {//成功创建资源
@@ -199,18 +202,7 @@
             }
           }
         ],
-        queryResult: [
-//          {
-//            number: 1,
-//            resource_id: 'id001',
-//            status: '审批完成',
-//            instance_name: '实例1',
-//            az: 'DMZ',
-//            created_date: '12',
-//            applyPerson: 'admin'
-//
-//          }
-        ]
+        queryResult: []
 
       }
     },
@@ -222,10 +214,6 @@
       const id = this.user_info.id
 
       let query = {user_id:id}
-
-      if(this.route_id !== undefined) {
-        query.instance_id = this.route_id
-      }
 
       this.getUserResource(query)
 
