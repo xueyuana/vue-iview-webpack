@@ -87,13 +87,15 @@
           {
             title: '序号',
             key: 'number',
-            align: 'center'
+            align: 'center',
+            width: 60
 
           },
           {
             title: '申请单号',
             key: 'resource_id',
             align: 'center',
+            width: 108,
             render: (h,params) => {
               return h('a',
                 {

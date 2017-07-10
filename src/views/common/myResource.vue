@@ -735,6 +735,13 @@
     top: 0;
     cursor: pointer;
   }
+  .table-column-overflow {
+    width: 70px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin: 0 auto;
+  }
 
 
 

@@ -244,22 +244,6 @@
         if(newId === undefined && oldId) {
           window.location.reload()
 
-//          this.isDisabled = false
-//          this.business_info = ''
-//          this.resourceInformation = [
-//            {
-//              vm_name: '',
-//              vm_num: 0,
-//              flavor_id: '',
-//              image_id: '',
-//              storage: ''
-//            }
-//          ]
-//          this.common_info = {
-//            instance_id: '',
-//            az_name: '',
-//            department: ''
-//          }
         }
 
       }

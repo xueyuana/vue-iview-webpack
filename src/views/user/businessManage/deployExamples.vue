@@ -270,7 +270,7 @@
           {
             title: '操作',
             key: 'action',
-            width: 260,
+            width: 160,
             align: 'center',
             render: (h, params) => {
               return h('div', [
@@ -301,8 +301,8 @@
                   on: {
                     click: () => {
                       this.$Modal.confirm({
-                        title: '是否下线' + params.row.instance_name + '，下线操作将删除此部署实例内的所有资源并不可恢复，请慎重操作!',
-                        content: '注：删除此部署实例后，实例所属的资源也将一并删除，请谨慎操作！',
+                        title: '确认下线',
+                        content: '是否下线' + params.row.instance_name + '，下线操作将删除此部署实例内的所有资源并不可恢复，请慎重操作!',
                         onOk: () => {
                           const url = 'api/deploy_instance/deploy_instances/' + params.row.id
 

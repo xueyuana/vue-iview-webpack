@@ -53,7 +53,6 @@
         title="分配公网IP"
         width="300"
         v-model="visible"
-        @on-ok="onOk"
         :mask-closable="false"
         class-name="vertical-center-modal">
       <div class="from_wrap">
@@ -65,7 +64,7 @@
             </Select>
           </Form-item>
           <Form-item label="公网IP地址:" prop="ip_uuid">
-            <Select v-model="ipForm.ip_uuid" :placeholder="pubIpList.length ? '请选择' : '空'" filterable clearable>
+            <Select v-model="ipForm.ip_uuid" :placeholder="pubIpList.length ? '请选择' : '空'" filterable clearable >
               <Option v-for="(item, index) in pubIpList" :value="item.uuid" :key="index">{{item.ip}}</Option>
             </Select>
           </Form-item>
@@ -258,10 +257,13 @@
 
       // 3. 选中类型后筛选公网IP
       onSelectType(val) {
+        console.log('change')
         if (!val) {
           this.pubIpList = []
         } else {
+
           this.getPubIpList({ip_pool: val}).then(res => {
+
             this.pubIpList = res
           })
         }
@@ -326,6 +328,9 @@
             params: query || {}
           }).then((res) => {
             if (res.body.code === 200) {
+
+              console.log('1',res.body.result.res)
+
               resolve(res.body.result.res)
             } else {
               this.$Message.error(res.body.result.msg)
