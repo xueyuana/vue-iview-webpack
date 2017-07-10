@@ -3,11 +3,11 @@
         <div class="approval-button">
             <div v-for="(item, index) in funcBtns">
                 <Button @click="onLink(index)" v-if="item =='返回'" type="ghost">{{item}}</Button>
-                <div v-if="role === 'admin'">
+                <div v-if="role === 'admin' && buttonDisable">
                     <Button @click="onLink(index)" v-if="item =='通过'" type="primary" :disabled="jxwFlag">{{item}}</Button>
                     <Button @click="onLink(index)" v-if="item =='不通过'" type="error" :disabled="jxwFlag">{{item}}</Button>
                 </div>
-                <div v-else>
+                <div v-else-if="role === 'leader' && buttonDisable">
                     <Button @click="onLink(index)" v-if="item =='通过'" type="primary" :disabled="xzFlag">{{item}}</Button>
                     <Button @click="onLink(index)" v-if="item =='不通过'" type="error" :disabled="xzFlag">{{item}}</Button>
                 </div>
@@ -565,16 +565,16 @@
                 if (this.role === 'leader') {
                     switch (this.formValidate.status) {
                         case 'submit':
-                            return false
-                        default:
                             return true
+                        default:
+                            return false
                     }
                 } else if (this.role === 'admin') {
                     switch (this.formValidate.status) {
                         case 'l_success':
-                            return false
-                        default:
                             return true
+                        default:
+                            return false
                     }
                 }
 
