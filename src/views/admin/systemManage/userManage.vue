@@ -228,7 +228,7 @@
                       click: () => {
                         this.$Modal.confirm({
                           title: '确认',
-                          content: '<p>确认删除'+ params.row.username+'吗？</p>',
+                          content: `<p>确认删除 ${params.row.username} 吗？</p>`,
                           onOk: () => {
 
                             const url = 'api/user/users/' + params.row.id
