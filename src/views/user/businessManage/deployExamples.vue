@@ -28,7 +28,7 @@
     <div class="inquire-table">
       <div class="inquire-table-title">部署实例列表</div>
       <div class="tjbssl">
-        <Button type="primary" @click.native="addCase">添加部署实例</Button>
+        <Button type="primary" @click.native="addCase('createUser')">添加部署实例</Button>
         <Modal
             v-model="modal"
             title="添加部署实例"
@@ -406,8 +406,9 @@
       handleReset (name) {
         this.$refs[name].resetFields();
       },
-      addCase (){
-        this.modal = true;
+      addCase (name){
+          this.$refs[name].resetFields();
+          this.modal = true;
       },
       closeAddMsg(){
         this.modal = false;

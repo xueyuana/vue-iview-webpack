@@ -75,7 +75,7 @@
       </div>
       <div slot="footer">
         <Button type="text" @click.native="onCancel">取消</Button>
-        <Button type="primary" @click.native="onOk">确定</Button>
+        <Button type="primary" :loading="loading" @click.native="onOk">确定</Button>
       </div>
     </Modal>
 
@@ -117,19 +117,18 @@
       }
 
       return {
-        formItem: {
+        formItem: {         // 查询表单
           date: [],
           user_id: '',
           instance_name: ''
         },
-        ruleValidate: {
+        ruleValidate: {     // 查询表单验证
           date: [],
           user_id: [],
           instance_name: []
         },
         instanceList: [],   // 实例列表
         userList: [],       // 用户列表
-        userInfo: '',
         columns: [
           {
             title: '序号',
@@ -186,6 +185,12 @@
                     this.$refs['formCustom'].resetFields()
                     this.visible = true
                     this.ipForm.instance_id = params.row.instance_id
+                    if (params.row.online_ip) {
+                      this.ipForm.ip_type = 'online'
+                    } else if (params.row.test_ip) {
+                      this.ipForm.ip_type = 'test'
+                    }
+                    this.ipForm.internal_ip = params.row.internal_ip
                     this.index = params.index
                   }
                 }
@@ -197,13 +202,15 @@
         data: [],
         filterDate: [],
 
-        ipForm: {
+        ipForm: {           // 发布数据
           instance_id: '',
           ip_type: '',
           ip_uuid: '',
-          internal_ip: ''
+          internal_ip: '',
+          user_id: this.$store.state.userData.userInfo.id,
+          user_name: this.$store.state.userData.userInfo.username
         },
-        ruleValidate: {
+        ruleValidate: {     // 发布验证
           ip_type: [
             {required: true, message: '请选择IP类型', trigger: 'change'}
           ],
@@ -214,9 +221,10 @@
             {required: true, validator: validateIp, trigger: 'change'}
           ]
         },
-        pubIpList: [],  // 公网IP列表
-        visible: false,
-        index: '',      // 记录修改的数据
+        pubIpList: [],      // 公网IP列表
+        visible: false,     // 弹窗状态
+        loading: false,     // 按钮状态
+        index: '',          // 记录修改的数据
         ipReg: /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/,
 
         pageSize: 10,
@@ -273,10 +281,12 @@
       onOk() {
         this.$refs['formCustom'].validate((valid) => {
           if (valid) {
+            this.loading = true
             this.$http.post('api/ip_manager/ip_publish', this.ipForm).then(res => {
               if (res.body.code === 200) {
                 this.updateTable()
-                this.visible = true
+                this.loading = false
+                this.visible = false
               } else {
                 this.$Message.error(res.body.result.msg)
               }
@@ -299,8 +309,10 @@
           return item.uuid === this.ipForm.ip_uuid
         })
         if (this.ipForm.ip_type === 'online') {
+          this.filterDate[this.index].test_ip = ''
           this.filterDate[this.index].online_ip = obj[0].ip
         } else {
+          this.filterDate[this.index].online_ip = ''
           this.filterDate[this.index].test_ip = obj[0].ip
         }
         this.filterDate[this.index].internal_ip = this.ipForm.internal_ip
