@@ -66,11 +66,11 @@
           </Modal>
         </div>
       </Form-item>
-      <Form-item label="部门：" prop="department">
-        <div class="item-common">
-          <Input v-model="common_info.department" :disabled="isDisabled" disabled style="width: 180px"></Input>
-        </div>
-      </Form-item>
+      <!--<Form-item label="部门：" prop="department">-->
+        <!--<div class="item-common">-->
+          <!--<Input v-model="common_info.department" :disabled="isDisabled" disabled style="width: 180px"></Input>-->
+        <!--</div>-->
+      <!--</Form-item>-->
       </div>
     </Form>
 
@@ -170,8 +170,7 @@
         },
         common_info: {
           instance_id: '',
-          az_name: '',
-          department: ''
+          az_name: ''
         },
         ruleCommon: {
           instance_id: [
@@ -179,13 +178,11 @@
           ],
           az_name: [
             {required: true, message: '请输入部署区域',trigger: 'change'}
-          ],
-          department: [
-            {required: true, message: '请填写部门', trigger: 'change'}
           ]
 
         },
         business_info: '',
+        department: '',
         resourceInformation: [{
           vm_name: '',
           vm_num: 1,
@@ -195,7 +192,7 @@
         }],
         rule: {
           vm_name: [
-            {required: true, max: 100,message: '请填写虚机名称，最多20位',trigger: 'change'}
+            {required: true, max: 30,message: '请填写虚机名称，最多30位',trigger: 'change'}
           ],
           flavor_id: [
             {required: true, message: '请选择规格', trigger: 'change'}
@@ -204,7 +201,7 @@
             {required: true, message: '请选择操作系统', trigger: 'change'}
           ],
           storage: [
-            {required: true, type: 'number', message: '请填写存储空间并为数字', trigger: 'change'},
+            {required: true, type: 'number', max: 500, message: '请填写存储空间并且为数字，最大为500', trigger: 'change'},
 
           ]
         },
@@ -267,7 +264,6 @@
         const url = 'api/flavor/flavors'
 
         this.$http.get(url).then((res) => {
-//          console.log('规格',res.body)
           this.flavor = res.body.result.res
         },(err) => {
           console.log(err)
@@ -277,7 +273,6 @@
       getImage () {//获取镜像
         const url = 'api/image/images'
         this.$http.get(url).then((res) => {
-//          console.log('镜像',res.body)
           this.mirrorImage =  res.body.result.res
         },(err) => {
           console.log(err)
@@ -287,7 +282,6 @@
         const url = 'api/pool/pools'
 
         this.$http.get(url).then((res) => {
-//          console.log('资源池',res.body)
           res.body.result.res.forEach((item ,index) => {
             this.az.push({
               az_name: item.pool_name
@@ -306,7 +300,7 @@
         }
 
         this.$http.get(url,{params:params}).then((res) => {
-//          console.log('实例',res.body)
+
           this.instance = res.body.result.res
 
         },(err) => {
@@ -316,7 +310,7 @@
       getUser () {
 
         Object.assign(this.user_info,this.$store.state.userData.userInfo)
-        this.common_info.department = this.user_info.department
+        this.department = this.user_info.department
 
       },
       return_query () {
@@ -328,7 +322,7 @@
           count += item.vm_num
         })
         if(count >=10){
-          this.$Message.info('最多选择10个虚机');
+          this.$Message.info('最多申请10个虚机');
           return
         }
 
@@ -348,7 +342,7 @@
         const url = 'api/mpc_resource/mpc_resources'
 
         this.$http.get(url,{params:query}).then(res => {
-          console.log('资源查询',res.body)
+
           let resource_info = res.body.result.res[0]
 
           switch (resource_info.status) {
@@ -393,14 +387,13 @@
               this.$refs.formInfo[index].validate((valid) => {
                 if(!valid) {
 
-                  this.$Message.info('表单验证失败');
+                  this.$Message.info('请正确填写申请内容');
                   num = index
                 }
               })
 
             })
 
-            console.log('验证数量',num)
             if(num === -1) {//表单验证成功
 
               let count = 0
@@ -408,7 +401,7 @@
                 count += item.vm_num
               })
               if (count > 10) {
-                this.$Message.info('最多选择10个虚机');
+                this.$Message.info('最多申请10个虚机');
                 return
               }
 
@@ -419,14 +412,13 @@
                 business_info: this.business_info,
                 az_name: this.common_info.az_name,
                 instance_id: this.common_info.instance_id,
-                department: this.common_info.department,
+                department: this.department,
                 resources: this.resourceInformation
               }
 
               const url = 'api/mpc_resource/mpc_resources'
 
               this.$http.post(url, requestBody).then((res) => {
-                console.log(res.body)
 
                 this.$router.push({name: '资源查询'})
 
@@ -438,7 +430,7 @@
             }
 
           }else {
-            this.$Message.info('表单验证失败');
+            this.$Message.info('请正确填写申请内容');
 
           }
         })
