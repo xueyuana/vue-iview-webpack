@@ -99,20 +99,12 @@
             const url = 'api/user/chpasswd/'+this.$store.state.userData.userInfo.id;
             let passwordData;
 
-//            if(this.formCustom.originPasswd == ''){
-//              passwordData = {
-//                new_password: sha256(this.formCustom.passwd + '!@#$%^').toString(crypto.enc.Hex),
-//                user_id: this.$store.state.userData.userInfo.id,
-//                user_name: this.$store.state.userData.userInfo.username
-//              }
-//            } else {
-              passwordData = {
-                old_password: sha256(this.formCustom.originPasswd + '!@#$%^').toString(crypto.enc.Hex),
-                new_password: sha256(this.formCustom.passwd + '!@#$%^').toString(crypto.enc.Hex),
-                user_id: this.$store.state.userData.userInfo.id,
-                user_name: this.$store.state.userData.userInfo.username
-              }
-//            }
+            passwordData = {
+              old_password: sha256(this.formCustom.originPasswd + '!@#$%^').toString(crypto.enc.Hex),
+              new_password: sha256(this.formCustom.passwd + '!@#$%^').toString(crypto.enc.Hex),
+              user_id: this.$store.state.userData.userInfo.id,
+              user_name: this.$store.state.userData.userInfo.username
+            }
 
             this.$http.put(url, passwordData).then((res) => {
                 console.log(res.body);

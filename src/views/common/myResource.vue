@@ -44,22 +44,23 @@
         <Icon type="refresh" :size="30" @click.native="reload"></Icon>
       </div>
     </div>
-    <table>
-      <thead>
+    <div class="table-wrap">
+      <table>
+        <thead>
         <tr>
           <th v-for="item in columns" :key="item.key">{{item.title}}</th>
         </tr>
-      </thead>
-      <tbody>
+        </thead>
+        <tbody>
         <tr v-for="(item,index) in queryResult" :class="{bac: index%2 != 0}">
           <td>{{item.number}}</td>
           <td>{{item.vm_name}}</td>
           <td>{{item.deploy_inst_id}}</td>
           <td>{{item.ip}}</td>
           <td><div class="table-column-overflow" :title="item.image_id">{{item.image_id}}</div></td>
-          <td> <div class="table-column-overflow" :title="item.image_id">{{item.host_name}} </div></td>
-          <td>{{item.az_name}}</td>
-          <td>{{item.flavor_id}}</td>
+          <td> <div class="table-column-overflow" :title="item.host_name">{{item.host_name}} </div></td>
+          <td> <div class="table-column-overflow" :title="item.az_name">{{item.az_name}} </div></td>
+          <td> <div class="table-column-overflow" :title="item.flavor_id">{{item.flavor_id}} </div></td>
           <td>{{item.storage}}</td>
           <td> {{item.status}} </td>
           <td>
@@ -75,12 +76,13 @@
           </td>
         </tr>
         <tr :class="{hidden: data_length}">
-         <td colspan="11"> 暂无数据</td>
+          <td colspan="11"> 暂无数据</td>
         </tr>
 
-      </tbody>
+        </tbody>
 
-    </table>
+      </table>
+    </div>
     <div class="page">
       <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page" :page-size="page_size"></Page>
     </div>
@@ -678,36 +680,29 @@
   }
 
   table tr td:first-child {
-    width: 34px;
+    min-width: 34px;
   }
   table tr td:nth-child(2) {
     min-width: 44px;
   }
   table tr td:nth-child(3) {
-    min-width: 34px;
+    min-width: 58px;
   }
 
   table tr td:nth-child(4) {
-    min-width: 60px;
-  }
-
-  table tr td:nth-child(6) {
-    min-width: 60px;
-  }
-  table tr td:nth-child(7) {
-    min-width: 30px;
-  }
-  table tr td:nth-child(8) {
-    min-width: 70px;
+    min-width: 86px;
   }
   table tr td:nth-child(9) {
-    width: 78px;
+    min-width: 78px;
   }
   table tr td:nth-child(10) {
     min-width: 44px;
   }
   table tr td:nth-child(11) {
     min-width: 50px;
+  }
+  .table-wrap {
+    overflow-x: auto;
   }
 
 
@@ -729,17 +724,15 @@
     top: 0;
     cursor: pointer;
   }
-  .table-column-overflow {
-    width: 70px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    margin: 0 auto;
+  @media screen and (max-width: 1366px) {
+    .table-column-overflow {
+      width: 70px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      margin: 0 auto;
+    }
   }
-
-
-
-
 
 
 </style>
