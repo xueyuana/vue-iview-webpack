@@ -5,7 +5,8 @@
       <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="70">
         <div class="form-wrap">
           <Form-item label="申请日期:" prop="date" class="form-item">
-            <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" style="width: 250px"></Date-picker>
+            <Date-picker v-model="formItem.date" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间"
+                         style="width: 250px"></Date-picker>
           </Form-item>
           <Form-item label="申请人:" prop="userName" class="form-item">
             <Input v-model="formItem.userName" placeholder="请输入" style="width: 250px"></Input>
@@ -44,7 +45,8 @@
       <Table size="small" :columns="columns" :data="filterDate"></Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
-          <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage" @on-page-size-change="changePageSize"></Page>
+          <Page :total="this.data1.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage"
+                @on-page-size-change="changePageSize"></Page>
         </div>
       </div>
     </div>
@@ -74,7 +76,7 @@
           instance_id: []
         },
         userInfo: '',
-        columns:  [
+        columns: [
           {
             title: '序号',
             key: 'index',
@@ -89,7 +91,7 @@
               return h('a', {
                 on: {
                   click: () => {
-                    this.$router.push({name: '资源详情', query: { id: params.row.resource_id}})
+                    this.$router.push({name: '资源详情', query: {id: params.row.resource_id}})
                   }
                 }
               }, params.row.resource_id)
@@ -121,7 +123,7 @@
                 case 'l_fail':
                   return h('p', '直属领导审批不通过')
                 case 'l_success':
-                  return h('p',{
+                  return h('p', {
                     style: {
                       color: 'red'
                     }
@@ -148,16 +150,7 @@
           }
         ],
         data1: [],
-        filterDate: [
-          {
-            order_number: 'ID0001',
-            userName: 'user',
-            deploy_name: '实例1',
-            resource_pool: 'MDZ',
-            status: '审批中',
-            data: '2017-6-23'
-          }
-        ],
+        filterDate: [],
         pageSize: 10,
         num: 1
       }
@@ -165,14 +158,14 @@
 
     created() {
       this.userInfo = this.$store.state.userData.userInfo
-        // 部署实例列表
+      // 部署实例列表
       this.getInstanceList()
-        // 资源列表
+      // 资源列表
       this.onInquire()
     },
 
     methods: {
-        // 查找
+      // 查找
       onInquire() {
         let url = 'api/mpc_resource/mpc_resources'
         let query = {}
@@ -187,14 +180,18 @@
         }).then(data => {
           if (data.body.code === 200) {
             this.data1 = data.body.result.res
-              // 排序
+            // 排序
+
+            console.log(this.data1)
             let pending = []
-            this.data1.forEach((item, index) => {
-              if (item.status === 'l_success') {
-                pending.push(item)
-                this.data1.splice(index, 1)
+            for (let i = 0; i < this.data1.length; i++) {
+              if (this.data1[i].status === 'l_success') {
+                pending.push(this.data1[i])
+                this.data1.splice(i, 1)
+                i--
               }
-            })
+            }
+
             this.data1 = pending.concat(...this.data1)
 
             this.data1.forEach((item, index) => {
@@ -217,7 +214,7 @@
       handleReset(name) {
         this.$refs[name].resetFields()
       },
-        // 获取实例列表
+      // 获取实例列表
       getInstanceList () {
         const url = 'api/deploy_instance/deploy_instances'
 
@@ -227,11 +224,11 @@
           } else {
             this.$Message.error(res.body.result.msg)
           }
-        },(err) => {
+        }, (err) => {
           console.log(err)
         })
       },
-        // 分页
+      // 分页
       changePage(val) {
         this.filterDate = this.mockTableData(this.data1, this.pageSize, val)
         this.num = val

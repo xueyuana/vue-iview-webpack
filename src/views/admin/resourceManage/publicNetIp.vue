@@ -172,12 +172,13 @@
                       title: '序号',
                       key: 'index',
                       align: 'center',
-                      width: 100
+                      width: 60
                   },
                   {
                       title: 'IP地址池',
                       key: 'ip_pool',
                       align: 'center',
+                      width: 85,
                       render: (h, params) => {
                           const row = params.row;
                           const color = row.ip_pool === 'test' ? '#3F94FC' : '#657180';
@@ -192,12 +193,14 @@
                   {
                       title: 'IP地址',
                       key: 'ip',
-                      align: 'center'
+                      align: 'center',
+                      width: 130
                   },
                   {
                       title: '子网掩码',
                       key: 'subnet_mask',
                       align: 'center',
+                      width: 130
                   },
                   {
                       title: '分配状态',
@@ -227,7 +230,7 @@
                   {
                       title: '操作',
                       key: 'action',
-                      width: 100,
+                      width: 70,
                       align: 'center',
                       render: (h, params) => {
                           return h('div', [

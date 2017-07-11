@@ -4,7 +4,7 @@
       <Row type="flex" justify="center" align="middle"
            style="text-align: center;font-size: 30px;color:#3399ff;margin-bottom:20px">
         <Col span="24" @click.native="goHome" style="cursor: pointer">
-        <h1>门头沟政务云资源管理平台</h1>
+        <h1 class="title">门头沟政务云资源管理平台</h1>
       </Col>
       </Row>
 
@@ -12,7 +12,7 @@
         <Row type="flex" justify="center" align="middle">
 
           <Col span="24">
-          <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70" inline>
+          <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70">
 
             <Form-item prop="userName" label="用户名">
               <Input type="text" v-model="formInline.userName" placeholder="请输入账号" @keydown.native.enter="handleSubmit('formInline')"></Input>
@@ -38,8 +38,7 @@
                </Form-item>-->
 
             <Form-item>
-              <Checkbox v-model="formInline.rememberPassword" @click.prevent.native="doRememberPassword">记住密码</Checkbox>
-              <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
+              <Button type="primary" @click="handleSubmit('formInline')" style="float: right">登录</Button>
             </Form-item>
 
           </Form>
@@ -59,12 +58,16 @@
     width: 380px;
   }
 
+  .login-container-div .title {
+    font-size: 30px;
+  }
+
   .login-container {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     -moz-border-radius: 5px;
     background-clip: padding-box;
-    padding: 35px 35px 15px 35px;
+    padding: 35px 100px 15px 35px;
 
     background: #fff;
     border: 1px solid #eaeaea;

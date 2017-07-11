@@ -24,7 +24,7 @@
     </div>
     <div class="inquire-table">
       <div class="inquire-table-title">日志列表</div>
-      <Table stripe :columns="columns" :data="queryResult"></Table>
+      <Table stripe size="small" :columns="columns" :data="queryResult"></Table>
       <div class="inquire-table-page">
         <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page" :page-size="page_size"></Page>
       </div>
@@ -54,12 +54,13 @@
             title: '序号',
             key: 'index',
             align: 'center',
-            width: 100
+            width: 80
           },
           {
             title: '用户',
             key: 'user_name',
-            align: 'center'
+            align: 'center',
+            width: 100
           },
           {
             title: '操作日志',
@@ -70,7 +71,8 @@
             title: '日期',
             key: 'created_time',
             align: 'center',
-            sortable: true
+            sortable: true,
+            width: 150
           }
         ],
         queryResult: [],
