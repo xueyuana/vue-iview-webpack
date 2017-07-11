@@ -39,13 +39,14 @@
     <!--查询结果-->
     <div class="inquire-table">
       <div class="inquire-table-title">部署实例列表</div>
-      <Table stripe size="small" :columns="columns" :data="filterDate"></Table>
-      <div style="margin: 10px;overflow: hidden">
-        <div style="float: right;">
+      <div class="table-wrap">
+        <Table stripe size="small" :columns="columns" :data="filterDate"></Table>
+        <div class="page-change">
           <Page :total="this.data.length" :page-size="pageSize" :current="num" show-sizer @on-change="changePage"
                 @on-page-size-change="changePageSize"></Page>
         </div>
       </div>
+
     </div>
 
     <!--弹出层-->
@@ -84,7 +85,7 @@
   </div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
   .vertical-center-modal {
     display: flex;
     align-items: center;
@@ -97,6 +98,10 @@
 
   .from_wrap {
     padding-right: 25px;
+  }
+
+  .table-wrap {
+    max-width: 885px;
   }
 </style>
 
@@ -134,45 +139,46 @@
             title: '序号',
             key: 'index',
             align: 'center',
-            width: '60'
+            width: 60,
+            fixed: 'left'
           },
           {
             title: '部署实例名称',
             key: 'instance_name',
             align: 'center',
-            className: 'table-column-overflow',
-            render: (h, params) => {
-              return h('span', {
-                attrs: {
-                  title: params.row.instance_name
-                }
-              }, params.row.instance_name)
-            }
+            width: 110,
+            fixed: 'left',
+            className: 'table-column-overflow'
           },
           {
             title: '用户',
             key: 'user_name',
-            align: 'center'
+            align: 'center',
+            width: 100
           },
           {
             title: '上线IP',
             key: 'online_ip',
-            align: 'center'
+            align: 'center',
+            width: 130
           },
           {
             title: '测试IP',
             key: 'test_ip',
-            align: 'center'
+            align: 'center',
+            width: 130
           },
           {
             title: '内网IP',
             key: 'internal_ip',
-            align: 'center'
+            align: 'center',
+            width: 130
           },
           {
             title: '分配日期',
             key: 'created_date',
             align: 'center',
+            width: 140,
             render: (h, params) => {
               return h('span', params.row.created_date.slice(0, 16))
             }
@@ -181,6 +187,8 @@
             title: '操作',
             key: 'option',
             align: 'center',
+            width: 70,
+            fixed: 'right',
             render: (h, params) => {
               return h('Button', {
                 props: {
@@ -217,10 +225,7 @@
           instance_id: '',
           ip_type: '',
           ip_uuid: '',
-          internal_ip: '',
-
-          user_id: this.$store.state.userData.userInfo.id,
-          user_name: this.$store.state.userData.userInfo.username
+          internal_ip: ''
         },
         ruleValidate: {     // 发布验证
           ip_type: [
@@ -304,13 +309,16 @@
             this.$http.post('api/ip_manager/ip_publish', this.ipForm).then(res => {
               if (res.body.code === 200) {
                 this.updateTable()
-                this.loading = false
-                this.visible = false
+                this.$Message.success('发布成功')
               } else {
                 this.$Message.error(res.body.result.msg)
               }
+              this.loading = false
+              this.visible = false
             }, err => {
-              console.log(err)
+              this.loading = false
+              this.visible = false
+              this.$Message.error(err.body.result.msg)
             })
           } else {
             this.$Message.error('表单验证失败!')

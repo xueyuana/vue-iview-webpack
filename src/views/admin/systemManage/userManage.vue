@@ -56,11 +56,14 @@
         </div>
       </Modal>
     </div>
-    <Table stripe :columns="columns" :data="queryResult"></Table>
-
-    <div class="page">
-      <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
+    <div class="table-wrap">
+      <Table stripe size="small" :columns="columns" :data="queryResult"></Table>
+      <div class="page-change">
+        <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page"></Page>
+      </div>
     </div>
+
+
 
   </div>
 
@@ -150,36 +153,54 @@
             title: '序号',
             key: 'number',
             align: 'center',
-            width: 60
+            width: 60,
+            fixed: 'left'
           },
           {
             title: '用户名',
-            key: 'username'
+            key: 'username',
+            align: 'center',
+            width: 120,
+            fixed: 'left'
           },
           {
             title: '手机',
-            key: 'phone'
+            key: 'phone',
+            align: 'center',
+            width: 120
           },
           {
             title: '邮箱',
-            key: 'email'
+            key: 'email',
+            align: 'center',
+            width: 150
           },
           {
             title: '角色',
-            key: 'role'
+            key: 'role',
+            width: 90
           },
           {
             title: '部门',
-            key: 'department'
+            key: 'department',
+            align: 'center',
+            width: 120
           },
           {
             title: '创建日期',
-            key: 'created_time'
+            key: 'created_time',
+            align: 'center',
+            width: 140,
+            render: (h, params) => {
+              return h('span', params.row.created_time.slice(0, 16))
+            }
           },
           {
             title: '操作',
             key: 'operate',
-            width: 130,
+            align: 'center',
+            width: 125,
+            fixed: 'right',
             render: (h,params) => {
               return h('div',[
                 h('Button',{
@@ -354,8 +375,6 @@
             }
             requestBody.user_name = this.user_info.username
             requestBody.user_id = this.user_info.id
-
-            console.log('请求',requestBody)
 
             this.$http.put(url,requestBody).then((res) => {
 
@@ -607,11 +626,7 @@
   .reset {
     margin-left: 20px;
   }
-  .page {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-  }
+
   .pre {
     margin-right: 20px;
   }
@@ -628,6 +643,9 @@
     margin-bottom: 20px;
   }
 
+  .table-wrap {
+    max-width: 940px;
+  }
 
 
 

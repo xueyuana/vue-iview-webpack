@@ -28,10 +28,13 @@
       </div>
     </div>
     <div class="inquire-table-title">申请资源列表</div>
-    <Table stripe :columns="columns" :data="queryResult"></Table>
-    <div class="page">
-      <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page" :page-size="page_size"></Page>
+    <div class="table-wrap">
+      <Table stripe :columns="columns" :data="queryResult"></Table>
+      <div class="page-change">
+        <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page" :page-size="page_size"></Page>
+      </div>
     </div>
+
 
   </div>
 
@@ -88,14 +91,15 @@
             title: '序号',
             key: 'number',
             align: 'center',
-            width: 60
-
+            width: 60,
+            fixed: 'left'
           },
           {
             title: '申请单号',
             key: 'resource_id',
             align: 'center',
-            width: 108,
+            width: 110,
+            fixed: 'left',
             render: (h,params) => {
               return h('a',
                 {
@@ -123,33 +127,42 @@
           {
             title: '申请人',
             key: 'applyPerson',
-            align: 'center'
+            align: 'center',
+            width: 100,
+            className: 'table-column-overflow'
           },
           {
             title: '部署实例',
             key: 'instance_name',
-            align: 'center'
+            align: 'center',
+            width: 110,
+            className: 'table-column-overflow'
           },
           {
             title: '部署区域',
             key: 'az',
-            align: 'center'
+            align: 'center',
+            width: 130,
+            className: 'table-column-overflow'
           },
           {
             title: '状态',
             key: 'status',
-            align: 'center'
+            align: 'center',
+            width: 160
           },
           {
             title: '申请日期',
             key: 'created_date',
-            align: 'center'
+            align: 'center',
+            width: 150
           },
           {
             title: '操作',
             key: 'operate',
             align: 'center',
             width: 90,
+            fixed: 'right',
             render: (h,params) => {
 //              console.log(params.row)
               return h('Button',{
@@ -381,6 +394,7 @@
   }
 
 </script>
+
 <style scoped>
   .resouce-query {
     width: 100%;
@@ -420,11 +434,7 @@
     box-sizing: border-box;
     margin-top: 20px;
   }
-  .page {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-  }
+
   .pre {
     margin-right: 20px;
   }
@@ -432,6 +442,9 @@
     margin-left: 20px;
   }
 
+  .table-wrap {
+    max-width: 925px;
+  }
 
 
 </style>

@@ -229,7 +229,7 @@
           {
             title: '序号',
             type: 'index',
-            width: 80,
+            width: 60,
             align: 'center'
           },
           {
@@ -270,7 +270,7 @@
           {
             title: '操作',
             key: 'action',
-            width: 160,
+            width: 130,
             align: 'center',
             render: (h, params) => {
               return h('div', [
