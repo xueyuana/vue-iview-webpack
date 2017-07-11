@@ -19,12 +19,11 @@ import './static/css/reset.css'             // 导入初始化的css
 import './static/css/common.less'
 
 import './tools/fullpage/index.js'
-
-import './tools/fullpage/fullpage.css'      // 引入 fullpage
+import './tools/fullpage/fullpage.css'      // 引入fullpage
 Vue.prototype.$fullpage = fullpage
 
-import Cookie from 'js-cookie'              // 引入cookie工具
-Vue.prototype.$Cookie = Cookie
+// import Cookie from 'js-cookie'              // 引入cookie工具
+// Vue.prototype.$Cookie = Cookie
 
 vueRouters.beforeEach((to, from, next) => {
 
@@ -33,7 +32,7 @@ vueRouters.beforeEach((to, from, next) => {
     return
   }
 
-  let userInfo = Cookie.getJSON('userInfo') ? Cookie.getJSON('userInfo') : ''
+  let userInfo = sessionStorage.getItem('userInfo') ? JSON.parse(sessionStorage.getItem('userInfo')) : {}
 
   if (userInfo.id) {  // 如果Cookie中id存在，免登陆
 
@@ -61,7 +60,6 @@ vueRouters.beforeEach((to, from, next) => {
 
 
 })
-
 
 //创建Vue对象
 new Vue({

@@ -35,13 +35,14 @@
                 <Modal
                     v-model="modal1"
                     title="新增IP地址池"
+                    width="430"
                     @on-ok="addIp('ipData')"
                     @on-cancel="cancelIp('ipData')"
                     :mask-closable="false">
                     <div class="ipWrap">
-                        <Form ref="ipData" :model="ipData" :rules="ruleInline" label-position="right" :label-width="130" >
+                        <Form ref="ipData" :model="ipData" :rules="ruleInline" label-position="right" :label-width="100" >
                             <Form-item label="名称：" prop="ip_pool">
-                                <Select v-model="ipData.ip_pool" clearable style="width: 210px">
+                                <Select v-model="ipData.ip_pool" clearable style="width: 235px">
                                     <Option v-for="item in ip_poolVal" :value="item.key" :key="item">{{ item.value }}</Option>
                                 </Select>
                                 <!--<Input v-model="ipData.ip_pool" :maxlength="10" placeholder="请输入" style="width: 210px"></Input>-->
@@ -52,21 +53,21 @@
                             <!--</Form-item>-->
                             <Form-item label="IP范围：">
                                 <Row type="flex" justify="start">
-                                    <Col span="7">
+                                    <Col span="9">
                                     <Form-item prop="ipOne">
-                                        <Input v-model="ipData.ipOne" placeholder="192.168.2.1" style="width: 90px"></Input>
+                                        <Input v-model="ipData.ipOne" placeholder="192.168.2.1"></Input>
                                     </Form-item>
                                     </Col>
-                                    <Col span="1">- </Col>
-                                    <Col span="7">
+                                    <Col span="1" style="text-align: center">- </Col>
+                                    <Col span="9">
                                     <Form-item prop="ipTwo">
-                                        <Input v-model="ipData.ipTwo" placeholder="192.168.2.6" style="width: 90px"></Input>
+                                        <Input v-model="ipData.ipTwo" placeholder="192.168.2.6"></Input>
                                     </Form-item>
                                     </Col>
                                 </Row>
                             </Form-item>
                             <Form-item label="子网掩码：" prop="subnetmask">
-                                <Input v-model="ipData.subnetmask" placeholder="255.255.255.0" style="width: 210px"></Input>
+                                <Input v-model="ipData.subnetmask" placeholder="255.255.255.0" style="width: 235px"></Input>
                             </Form-item>
                         </Form>
                     </div>

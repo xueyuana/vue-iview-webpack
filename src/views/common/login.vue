@@ -73,7 +73,6 @@
 </style>
 
 <script>
-  import common from 'tools/common.js';
   import crypto from 'crypto-js';
   import sha256 from 'crypto-js/sha256';
 
@@ -135,8 +134,9 @@
                   let userinfo = {}
                   userinfo.id = res.body.result.id
                   userinfo.role = res.body.result.role
+//                  this.$Cookie.set('userInfo', userinfo)
+                  window.sessionStorage.setItem('userInfo', JSON.stringify(userinfo))
 
-                  this.$Cookie.set('userInfo', userinfo)
                   this.$router.push({path: '/home'})
                 }
 

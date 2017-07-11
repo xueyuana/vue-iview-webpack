@@ -28,7 +28,7 @@
         <Row type="flex">
 
           <i-col span="4" class="layout-menu-left">
-            <Menu :open-names="[$route.matched[0].name]" :active-name="$route.path"
+            <Menu ref="left_menu" :open-names="[$route.matched[0].name]" :active-name="$route.path"
                   theme="dark" width="auto" accordion>
 
               <template v-for="(item, index) in asyncRouters">
@@ -240,9 +240,6 @@
     line-height: 76px;
     font-size: 16px;
     color: #777E8C;
-    /*padding-left: 10px;
-    background: #fff;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);*/
   }
 
   .layout-header .ivu-breadcrumb > span:last-child {
@@ -265,7 +262,6 @@
 </style>
 <script>
   import {mapState} from 'vuex'
-  import common from '../../tools/common.js';
 
   export default {
 
@@ -288,6 +284,14 @@
       })
     },
 
+    watch: {
+      '$route': function (newVal) {
+        this.$nextTick(() => {
+          this.$refs.left_menu.updateOpened()
+        })
+      }
+    },
+
     methods: {
       // 获取用户名
       getUserInfo () {
@@ -305,7 +309,8 @@
       },
       // 退出登录
       toLogOut() {
-        this.$Cookie.remove('userInfo')
+//        this.$Cookie.remove('userInfo')
+        sessionStorage.removeItem('userInfo')
         this.$store.commit('getUserInfo', {})
         console.log('我退出了，清空cookie 和 vuex')
 

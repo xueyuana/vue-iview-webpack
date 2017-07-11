@@ -65,7 +65,7 @@
             </Select>
           </Form-item>
           <Form-item label="公网IP地址:" prop="ip_uuid">
-            <Select v-model="ipForm.ip_uuid" :placeholder="pubIpList.length ? '请选择' : '空'" filterable clearable>
+            <Select v-model="ipForm.ip_uuid" :placeholder="pubIpList.length ? '请选择' : '空'" clearable>
               <Option v-for="(item, index) in pubIpList" :value="item.uuid" :key="index">{{item.ip}}</Option>
             </Select>
           </Form-item>
@@ -100,8 +100,6 @@
 </style>
 
 <script>
-  import {getStroage} from 'tools/cookieAction.js'
-  import {formatDate} from 'tools/formatDate.js'
 
   export default {
     data() {
@@ -141,7 +139,14 @@
             title: '部署实例名称',
             key: 'instance_name',
             align: 'center',
-            className: 'table-column-overflow'
+            className: 'table-column-overflow',
+            render: (h, params) => {
+              return h('span', {
+                attrs: {
+                  title: params.row.instance_name
+                }
+              }, params.row.instance_name)
+            }
           },
           {
             title: '用户',
@@ -183,16 +188,20 @@
                 },
                 on: {
                   click: () => {
-                    this.$refs['formCustom'].resetFields()
                     this.visible = true
-                    this.ipForm.instance_id = params.row.instance_id
-                    if (params.row.online_ip) {
-                      this.ipForm.ip_type = 'online'
-                    } else if (params.row.test_ip) {
-                      this.ipForm.ip_type = 'test'
-                    }
-                    this.ipForm.internal_ip = params.row.internal_ip
-                    this.index = params.index
+                    this.$refs['formCustom'].resetFields()
+                      // 1. 显示已存在数据
+                    this.$nextTick(() => {
+                      if (params.row.online_ip) {
+                        this.ipForm.ip_type = 'online'
+                      } else if (params.row.test_ip) {
+                        this.ipForm.ip_type = 'test'
+                      }
+                      this.ipForm.internal_ip = params.row.internal_ip
+
+                      this.ipForm.instance_id = params.row.instance_id
+                      this.index = params.index
+                    })
                   }
                 }
               }, '发布')
@@ -208,6 +217,7 @@
           ip_type: '',
           ip_uuid: '',
           internal_ip: '',
+
           user_id: this.$store.state.userData.userInfo.id,
           user_name: this.$store.state.userData.userInfo.username
         },
@@ -271,6 +281,13 @@
         } else {
           this.getPubIpList({ip_pool: val}).then(res => {
             this.pubIpList = res
+              // 1. 显示已经存在的数据
+            let currentObj = this.pubIpList.filter(item => {
+              return (item.ip === this.filterDate[this.index].online_ip || item.ip === this.filterDate[this.index].test_ip)
+            })
+            if (currentObj.length) {
+              this.ipForm.ip_uuid = currentObj[0].uuid
+            }
           })
         }
       },
