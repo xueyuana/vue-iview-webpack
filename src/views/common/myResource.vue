@@ -199,6 +199,7 @@
       }
       if(instance_id) {
         query.instance_id = instance_id
+        this.query_info.instance_id = instance_id
       }
 
       if (this.user_info.role === 'user') {

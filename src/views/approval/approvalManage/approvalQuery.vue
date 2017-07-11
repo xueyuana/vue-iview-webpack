@@ -115,20 +115,17 @@
           {
             title: '部署实例',
             key: 'instance_id',
-            align: 'center',
-            sortable: true
+            align: 'center'
           },
           {
             title: '部署区域',
             key: 'az_name',
-            align: 'center',
-            sortable: true
+            align: 'center'
           },
           {
             title: '审批状态',
             key: 'status',
             align: 'center',
-            sortable: true,
             render: (h, params) => {
               const row = params.row;
               const color = row.status === 'submit' ? '#f00' : '#657180';
@@ -147,8 +144,7 @@
           {
             title: '申请日期',
             key: 'created_time',
-            align: 'center',
-            sortable: true
+            align: 'center'
           }
         ],
         queryResult: [],
@@ -197,26 +193,26 @@
       getApprovalResource (query) {
         this.queryResult = [];
         this.getResult = [];
+        let tempArr = []
         const url = 'api/mpc_resource/mpc_resources';
         this.$http.get(url,{params: query}).then((res) => {
             console.log('sssss', res);
             if (res.body.code === 200) {
                 this.data_length = res.body.result.res.length;
                 res.body.result.res.forEach((item,index) => {
-                  console.log('sssssseeeess', item.status);
+
                   if (item.status == 'submit'){
-                    this.getResult.unshift({
-//                      index: index + 1,
+                    tempArr.push({
                       resource_id: item.resource_id,
                       status: item.status,
                       instance_id: item.deploy_name,
                       az_name: item.az_name,
                       created_time: item.created_date.slice(0, 16),
                       user_name: item.user_name
-                    });
+                    })
+
                   } else {
                     this.getResult.push({
-//                      index: index + 1,
                       resource_id: item.resource_id,
                       status: item.status,
                       instance_id: item.deploy_name,
@@ -226,6 +222,7 @@
                     });
                   }
                 })
+                this.getResult = tempArr.concat(this.getResult)
                 console.log(this.getResult);
                 this.getResult.forEach((item,index) => {
                     item.index=index + 1;
