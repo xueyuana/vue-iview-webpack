@@ -117,7 +117,7 @@
               }, err => {
                 this.$Message.error(err.body.result.msg)
               });
-            }
+
 
           } else {
             this.$Message.error('表单验证失败!');
