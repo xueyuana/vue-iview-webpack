@@ -25,7 +25,6 @@
 
 <script>
   var echarts = require('echarts/lib/echarts');
-  // 关系图
   require('echarts/lib/chart/line');
 
   export default {

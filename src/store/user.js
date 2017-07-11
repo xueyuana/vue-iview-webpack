@@ -18,7 +18,8 @@ export const userData = {
 
   actions: {  //处理异步的方法
     getUserInfo({commit}) {
-      let id = Cookie.getJSON('userInfo').id
+      // let id = Cookie.getJSON('userInfo').id
+      let id = JSON.parse(sessionStorage.getItem('userInfo')).id
       return new Promise((resolve, reject) => {
         Vue.http.get('api/user/users/' + id).then(response => {
           if (response.body.code === 200) {

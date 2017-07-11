@@ -45,8 +45,6 @@
 </style>
 
 <script>
-  import {getStroage} from 'tools/cookieAction.js'
-  import {formatDate} from 'tools/formatDate.js'
 
   export default {
     data() {
