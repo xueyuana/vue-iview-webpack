@@ -78,7 +78,10 @@
           passwdCheck: ''
         },
         ruleCustom: {
-          originPasswd: [],
+          originPasswd: [
+            {required: true,  trigger: 'blur', message: '请填写原密码' },
+            {min: 6, max: 15, trigger: 'blur', message: '原密码必须在6到15位'}
+          ],
           passwd: [
             {required: true, min: 6, max: 15, validator: validatePass, trigger: 'blur'}
           ],
@@ -96,20 +99,20 @@
             const url = 'api/user/chpasswd/'+this.$store.state.userData.userInfo.id;
             let passwordData;
 
-            if(this.formCustom.originPasswd == ''){
-              passwordData = {
-                new_password: sha256(this.formCustom.passwd + '!@#$%^').toString(crypto.enc.Hex),
-                user_id: this.$store.state.userData.userInfo.id,
-                user_name: this.$store.state.userData.userInfo.username
-              }
-            } else {
+//            if(this.formCustom.originPasswd == ''){
+//              passwordData = {
+//                new_password: sha256(this.formCustom.passwd + '!@#$%^').toString(crypto.enc.Hex),
+//                user_id: this.$store.state.userData.userInfo.id,
+//                user_name: this.$store.state.userData.userInfo.username
+//              }
+//            } else {
               passwordData = {
                 old_password: sha256(this.formCustom.originPasswd + '!@#$%^').toString(crypto.enc.Hex),
                 new_password: sha256(this.formCustom.passwd + '!@#$%^').toString(crypto.enc.Hex),
                 user_id: this.$store.state.userData.userInfo.id,
                 user_name: this.$store.state.userData.userInfo.username
               }
-            }
+//            }
 
             this.$http.put(url, passwordData).then((res) => {
                 console.log(res.body);
