@@ -199,6 +199,7 @@
       }
       if(instance_id) {
         query.instance_id = instance_id
+        this.query_info.instance_id = instance_id
       }
 
       if (this.user_info.role === 'user') {
@@ -222,7 +223,7 @@
 
         this.$http.get(url).then((res) => {
           this.index ++
-//          console.log('规格',res.body)
+
           this.flavor = res.body.result.res
         },(err) => {
           console.log(err)
@@ -233,7 +234,7 @@
         const url = 'api/pool/pools'
 
         this.$http.get(url).then((res) => {
-//          console.log('资源池',res.body)
+
           res.body.result.res.forEach((item ,index) => {
             this.az.push({
               az_name: item.pool_name
@@ -255,7 +256,6 @@
 
         this.$http.get(url,{params:params}).then((res) => {
           this.index ++
-          console.log('实例',res.body)
           this.instance = res.body.result.res
 
         },(err) => {
@@ -266,7 +266,6 @@
         const url = 'api/image/images'
         this.$http.get(url).then((res) => {
           this.index ++
-//          console.log('镜像',res.body)
           this.mirrorImage =  res.body.result.res
         },(err) => {
           console.log(err)
@@ -296,7 +295,6 @@
         this.query_info.instance_id && (requestBody.instance_id = this.query_info.instance_id)
         this.query_info.az_name && (requestBody.az_name = this.query_info.az_name)
         this.query_info.vm_name && (requestBody.vm_name = this.query_info.vm_name)
-//        console.log('res',requestBody)
 
         this.getVm(requestBody)
 
@@ -316,7 +314,6 @@
           if(this.index !== 4) {
             this.index ++
           }
-//          console.log('虚机',res.body)
           this.getResult = res.body.result.res
 
           this.data_length = this.getResult.length
@@ -374,7 +371,6 @@
           }
 
         })
-        console.log('vm',this.getResult)
 
         this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page)
 
@@ -459,9 +455,8 @@
         })
       },
       operationClick (event,index,vm_uuid,number) {//点击高亮显示
-        console.log('vm_id',vm_uuid)
+
         //index指的是行数
-        console.log(this.operationList[index])
         this.operationList[index].forEach((item,index) => {
           if(item.value == event.target.firstChild.data) {//确定用户点击的操作
 
@@ -573,7 +568,6 @@
         let maxNum = (num + pageSize) > originData.length ? originData.length : (num + pageSize)
 
         data = originData.slice(num,maxNum)
-//        console.log(num,maxNum)
 
         return data;
       },
@@ -734,6 +728,13 @@
     right: 34px;
     top: 0;
     cursor: pointer;
+  }
+  .table-column-overflow {
+    width: 70px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin: 0 auto;
   }
 
 
