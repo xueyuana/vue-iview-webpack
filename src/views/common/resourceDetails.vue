@@ -199,7 +199,11 @@
                   :class="{border: idx == 0?false:true}">
                 <Row>
                     <Col span="8">
-                    <Form-item label="虚拟机:" class="form-item">{{item.vm_name}}</Form-item>
+                    <Form-item label="虚拟机:" class="form-item">
+                        <span class="form-item-virtual" :title="item.vm_name">
+                            {{item.vm_name}}
+                        </span>
+                    </Form-item>
                     <Form-item label="存储空间:" class="form-item">{{item.storage}} G</Form-item>
                     </Col>
                     <Col span="8">
@@ -299,6 +303,14 @@
             }
             .form-item {
                 margin-bottom: 8px;
+                .form-item-virtual {
+                    display: inline-block;
+                    width: 159px;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    /*border: 1px solid #000;*/
+                }
                 .jingx {
                     overflow: hidden;
                     white-space: nowrap;
