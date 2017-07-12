@@ -93,8 +93,9 @@
             <Col span="12">
                 <div @click="myApplication">
                     <Icon type="record" size="10"></Icon>我的申请
-                    <span class="title">待审批：</span><span class="num">{{ no_success }}</span>
+                    <span class="title">待审批：</span><span class="num">{{ wait_approve }}</span>
                     <span class="title">审批完成：</span><span class="num">{{ success }}</span>
+                    <span class="title">审批未通过：</span><span class="num">{{ refuse }}</span>
                 </div>
             </Col>
             <Col span="12"></Col>
@@ -118,7 +119,8 @@
               pendingApproval: 1,
               approved: 1,
               success: 0,
-              no_success: 0,
+              wait_approve: 0,
+              refuse: 0
 
             }
         },
@@ -195,9 +197,11 @@
 
                 if(item.status == 'submit' || item.status == 'l_success') {
 
-                  this.no_success ++
-                }else if(item.status == 'a_success') {
+                  this.wait_approve ++
+                }else if(item.status == 'a_success' || item.status == 'created_success') {
                   this.success ++
+                }else {
+                  this.refuse ++
                 }
               })
 

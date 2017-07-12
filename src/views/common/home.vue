@@ -52,7 +52,7 @@
             </Menu>
           </i-col>
 
-          <i-col span="20" offset="4" class="right-col">
+          <i-col span="20" offset="4">
             <div class="layout-header">
               <Breadcrumb separator=">">
                 <Breadcrumb-item href="/home">主页</Breadcrumb-item>
@@ -228,10 +228,6 @@
   .layout-menu-left .icon-resource-chi {
     background: url("../../static/icon-resource-chi.png") no-repeat;
     background-size: cover;
-  }
-
-  .right-col {
-    background: #F0F5FA;
   }
 
   .layout-header {
