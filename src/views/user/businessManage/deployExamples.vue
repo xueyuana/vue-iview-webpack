@@ -37,8 +37,8 @@
           <Form ref="createUser" :model="createUser" :rules="ruleInline" label-position="right"
                 :label-width="130">
             <Form-item label="名称：" prop="instance_name">
-              <Input v-model="createUser.instance_name" :maxlength="15" placeholder="最多15个字符"
-                     style="width: 200px"></Input>
+              <Input v-model="createUser.instance_name" :maxlength="15"  placeholder="最多15个字符"
+                     style="width: 200px"></Input> 
             </Form-item>
             <Form-item label="用户群体规模：" prop="user_size">
               <Select v-model="createUser.user_size" style="width:200px">
@@ -302,7 +302,8 @@
                     click: () => {
                       this.$Modal.confirm({
                         title: '确认下线',
-                        content: '是否下线' + params.row.instance_name + '，下线操作将删除此部署实例内的所有资源并不可恢复，请慎重操作!',
+                        // 增加文字过多自动换行
+                        content: '是否下线' + `<span style="word-wrap: break-word;">${params.row.instance_name}</span>` + '，下线操作将删除此部署实例内的所有资源并不可恢复，请慎重操作!',
                         onOk: () => {
                           const url = 'api/deploy_instance/deploy_instances/' + params.row.id
 
