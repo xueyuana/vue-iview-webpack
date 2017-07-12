@@ -38,7 +38,7 @@
                 :label-width="130">
             <Form-item label="名称：" prop="instance_name">
               <Input v-model="createUser.instance_name" :maxlength="15"  placeholder="最多15个字符"
-                     style="width: 200px"></Input> 
+                     style="width: 200px"></Input>
             </Form-item>
             <Form-item label="用户群体规模：" prop="user_size">
               <Select v-model="createUser.user_size" style="width:200px">
