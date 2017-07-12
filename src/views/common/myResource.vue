@@ -1,37 +1,31 @@
 <template>
   <div class="my-resource">
     <div class="query-form inquire-form">
-      <div class="queryInformation">
-
-        <div class="item">
-          <span class="title">虚拟机名称:</span>
+      <Form :model="query_info" :label-width="80">
+        <div class="queryInformation">
+        <Form-item label="虚拟机:">
           <Input v-model="query_info.vm_name" placeholder="请输入" style="width: 250px"></Input>
+        </Form-item>
+          <Form-item label="部署区域:">
+            <Select v-model="query_info.az_name" clearable style="width:250px">
+              <Option v-for="item in az" :value="item.az_name" :key="item">{{ item.az_name }}</Option>
+            </Select>
+          </Form-item>
+          <Form-item label="状态:">
+            <Select v-model="query_info.status" clearable style="width:250px">
+              <Option v-for="item in approvalStatusVal" :value="item.key" :key="item">{{ item.value }}</Option>
+            </Select>
+          </Form-item>
+          <Form-item label="部署实例:">
+            <Select v-model="query_info.instance_id" clearable style="width:250px">
+              <Option v-for="item in instance" :value="item.instance_id" :key="item" >{{ item.instance_name }} </Option>
+            </Select>
+          </Form-item>
+          <Form-item label="申请日期:">
+            <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="query_info.applyDate" style="width: 250px"></Date-picker>
+          </Form-item>
         </div>
-
-        <div class="item">
-          <span class="title">部署区域:</span>
-          <Select v-model="query_info.az_name" clearable style="width:250px">
-            <Option v-for="item in az" :value="item.az_name" :key="item">{{ item.az_name }}</Option>
-          </Select>
-        </div>
-
-        <div class="item">
-          <span class="title">状态:</span>
-          <Select v-model="query_info.status" clearable style="width:250px">
-            <Option v-for="item in approvalStatusVal" :value="item.key" :key="item">{{ item.value }}</Option>
-          </Select>
-        </div>
-        <div class="item">
-          <span class="title">部署实例:</span>
-          <Select v-model="query_info.instance_id" clearable style="width:250px">
-            <Option v-for="item in instance" :value="item.instance_id" :key="item" >{{ item.instance_name }} </Option>
-          </Select>
-        </div>
-        <div class="item date-picker">
-          <span class="title">申请日期:</span>
-          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="query_info.applyDate" style="width: 250px"></Date-picker>
-        </div>
-      </div>
+      </Form>
       <div class="query">
         <Button type="primary" @click="query">查询</Button>
         <Button class="reset" type="ghost" @click="reset">重置</Button>
@@ -542,6 +536,13 @@
           instance_id: ''
 
         }
+        let query = {}
+
+        if (this.user_info.role === 'user') {
+          query.user_id = this.user_info.id
+
+        }
+        this.getVm(query)
       },
       changePage (page) {
 
@@ -619,20 +620,6 @@
     width: 100%;
     padding-bottom: 20px;
   }
-  .date-picker {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
-  .item {
-    margin: 10px 5px;
-  }
-  .title {
-    display: inline-block;
-    width: 80px;
-    margin-right: 10px;
-    text-align: center;
-  }
   .query {
     width: 100%;
     display: flex;
@@ -648,10 +635,6 @@
     justify-content: flex-end;
     margin-top: 20px;
   }
-  .header {
-    margin: 30px 0 10px;
-  }
-
   table {
     width: 100%;
     border-collapse: collapse;

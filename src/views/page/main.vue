@@ -400,6 +400,7 @@
           height: 50px;
           margin-left: 50px;
           background: url("image/top.png") no-repeat 0 0;
+
         }
       }
     }
@@ -428,7 +429,7 @@
         display: flex;
         justify-content: center;
         .box {
-          width: 70%;
+          width: 80%;
           padding-top: 40px;
           .title {
             font-family: PingFangSC-Light;
@@ -487,7 +488,7 @@
             line-height: 45px;
           }
           .box2 {
-            width: 80%;
+            width: 100%;
             height: 200px;
             margin: 60px auto;
           }
@@ -593,7 +594,7 @@
             font-family: PingFangSC-Light;
           }
           .content {
-            width: 80%;
+            width: 100%;
             margin: 60px auto;
             font-family: PingFangSC-Regular;
             font-size: 14px;

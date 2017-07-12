@@ -1,26 +1,24 @@
 <template>
   <div class="resouce-query">
     <div class="query-form">
-      <div class="queryInformation">
+      <Form :model="query_info" :label-width="80">
+        <div class="queryInformation">
+          <Form-item label="审批状态">
+            <Select v-model="query_info.status" clearable style="width:260px">
+              <Option v-for="item in approvalStatusVal" :value="item.key" :key="item">{{ item.value }}</Option>
+            </Select>
+          </Form-item>
+          <Form-item label="部署实例">
+            <Select v-model="query_info.instance_id" clearable style="width:260px">
+              <Option v-for="item in instance" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
+            </Select>
+          </Form-item>
+          <Form-item label="申请日期">
+            <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.created_date" placeholder="选择日期" style="width: 260px"></Date-picker>
+          </Form-item>
 
-        <div class="item">
-          <span class="title">审批状态</span>
-          <Select v-model="query_info.status" clearable style="width:260px">
-            <Option v-for="item in approvalStatusVal" :value="item.key" :key="item">{{ item.value }}</Option>
-          </Select>
         </div>
-        <div class="item">
-          <span class="title">部署实例</span>
-          <Select v-model="query_info.instance_id" clearable style="width:260px">
-            <Option v-for="item in instance" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
-          </Select>
-        </div>
-        <div class="item date-picker">
-          <span class="title">申请日期</span>
-          <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.created_date" placeholder="选择日期" style="width: 260px"></Date-picker>
-        </div>
-
-      </div>
+      </Form>
       <div class="query">
         <Button type="primary" @click="query">查询</Button>
         <Button type="ghost" class="ghost" @click="reset">重置</Button>
@@ -108,10 +106,6 @@
                   },
                   style: {
                     display: 'inline-block'
-//                    width: '80px'
-//                    overflow: 'hidden',
-//                    textOverflow: 'ellipsis',
-//                    whiteSpace: 'nowrap'
                   },
                   on: {
                     click: () => {
@@ -226,9 +220,8 @@
       this.getUser()//获取用户信息
 
       //获取用户的所有申请资源
-      const id = this.user_info.id
 
-      let query = {user_id:id}
+      let query = {user_id:this.user_info.id}
 
       this.getUserResource(query)
 
@@ -279,8 +272,12 @@
           created_date: [],
           status: '',
           instance_id: ''
-
         }
+
+        let query = {user_id:this.user_info.id}
+
+        this.getUserResource(query)
+
 
       },
       getUser () {
@@ -411,20 +408,6 @@
     border-bottom: 2px solid #EAEDF1;
     padding-bottom: 20px;
     padding-right: 15px;
-  }
-  .item {
-    margin-bottom: 10px;
-  }
-  .date-picker {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
-  .title {
-    display: inline-block;
-    width: 70px;
-    margin-right: 10px;
-    text-align: center;
   }
   .query {
     width: 100%;

@@ -337,8 +337,7 @@
     created () {
       this.getUser()
       //获取用户的所有申请资源
-      const id = this.$store.state.userData.userInfo.id
-      const query = {user_id: id}
+      let query = {user_id: this.user_info.id}
       this.getUserResource(query)
       this.getInstance()//获取实例
     },
@@ -405,6 +404,8 @@
       },
       handleReset (name) {
         this.$refs[name].resetFields();
+        let query = {user_id: this.user_info.id}
+        this.getUserResource(query)
       },
       addCase (name){
           this.$refs[name].resetFields();

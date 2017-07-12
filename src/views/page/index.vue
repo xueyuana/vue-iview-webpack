@@ -103,6 +103,7 @@
           height: 50px;
           margin-left: 50px;
           background: url("image/top.png") no-repeat 0 0;
+          cursor: pointer;
         }
       }
     }
