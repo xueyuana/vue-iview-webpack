@@ -187,7 +187,6 @@
           this.formValidate.apply_status && (requestBody.status = this.formValidate.apply_status);
           this.formValidate.instance_id && (requestBody.instance_id = this.formValidate.instance_id);
           department && (requestBody.department = department);
-          console.log('ddsss', requestBody.status);
           this.getApprovalResource(requestBody);
       },
       getApprovalResource (query) {
@@ -196,7 +195,6 @@
         let tempArr = []
         const url = 'api/mpc_resource/mpc_resources';
         this.$http.get(url,{params: query}).then((res) => {
-            console.log('sssss', res);
             if (res.body.code === 200) {
                 this.data_length = res.body.result.res.length;
                 res.body.result.res.forEach((item,index) => {
@@ -223,7 +221,6 @@
                   }
                 })
                 this.getResult = tempArr.concat(this.getResult)
-                console.log(this.getResult);
                 this.getResult.forEach((item,index) => {
                     item.index=index + 1;
                 });
@@ -235,7 +232,7 @@
       },
       handleReset (name) {
         this.$refs[name].resetFields();
-//        this.getApprovalResource();
+        this.goQuery();
       },
       // 分页
       changePage (page) {
