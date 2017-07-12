@@ -278,6 +278,7 @@
       },
       handleReset(name) {
         this.$refs[name].resetFields()
+        this.onInquire()
       },
 
       // 3. 选中类型后筛选公网IP

@@ -6,7 +6,7 @@
         <Row :gutter="16">
           <Col span="12">
             <Form-item label="操作系统名称:" prop="image_name">
-              <Select clearable v-model="formItem.image_name" style="width: 150px">
+              <Select clearable v-model="formItem.image_name" style="width: 250px" :placeholder="mirrorImage.length? '请选择' : '无'">
                 <Option v-for="item in mirrorImage" :value="item.image_name" :key="item">{{ item.image_name }}</Option>
               </Select>
             </Form-item>
@@ -122,7 +122,6 @@
         this.$http.get('api/image/images', {
           params: query
         }).then(res => {
-          console.log('操作系统列表', res)
           if (res.body.code === 200) {
             this.data = res.body.result.res
             this.data.forEach((item, index) => {
