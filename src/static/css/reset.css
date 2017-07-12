@@ -1,18 +1,26 @@
 /* 浮动 */
 .fl {
-  float: left;
+	float: left;
 }
 
 .fr {
-  float: right;
+	float: right;
 }
 
 .clearfix::after,.clearfix::before{
-  content: '';
-  display: block;
-  height: 0;
-  line-height: 0;
-  visibility: hidden;
-  clear: both;
-  zoom: 1;
+	content: '';
+	display: block;
+	height: 0;
+	line-height: 0;
+	visibility: hidden;
+	clear: both;
+	zoom: 1;
+}
+
+.textoverflow{
+	-webkit-box-orient:vertical;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+	-webkit-line-clamp:1;
 }
