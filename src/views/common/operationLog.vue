@@ -79,7 +79,8 @@
           {
             title: '操作日志',
             key: 'content',
-            align: 'center'
+            align: 'center',
+            ellipsis:true
           },
           {
             title: '日期',

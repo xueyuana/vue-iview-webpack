@@ -27,7 +27,7 @@
       <Form-item label="部署实例：" prop="instance_id">
         <div class="item-common example">
           <Select clearable v-model="common_info.instance_id" :disabled="isDisabled" style="width:180px" >
-            <Option v-for="item in instance" @click.native="instanceDetails" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
+            <Option v-for="item in instance" @click.native="instanceDetails(item.instance_id)" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
           </Select>
           <Button type="dashed" class="add-example" @click="createExample">新建部署实例</Button>
           <Modal v-model="instanceCreate" title="提示" :ok-text="okText" :mask-closable="false" :closable="false">
@@ -214,7 +214,6 @@
       }
     },
     created () {
-
       this.getUser()//获取用户信息
       this.getFlavor()//获取规格
       this.getImage()//获取镜像
@@ -437,9 +436,9 @@
 
       },
 
-      instanceDetails () {//展示实例详情推荐配置
+      instanceDetails (id) {//展示实例详情推荐配置
         this.instanceCreate = true
-        this.getDeploy(this.instance_id)
+        this.getDeploy(id)
       },
       closeModal () {
         this.instanceCreate = false

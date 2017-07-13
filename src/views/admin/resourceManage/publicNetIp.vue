@@ -243,7 +243,7 @@
                                       click: () => {
                                           this.$Modal.confirm({
                                               title: '保留IP地址',
-                                              content: '请确认！！！',
+                                              content: `请确认是否保留IP：${params.row.ip}`,
                                               onOk: () => {
                                                   const url = 'api/ip_manager/ip_managers/' + params.row.uuid
                                                  console.log('保留IP地址',url)

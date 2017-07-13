@@ -106,7 +106,7 @@
 </style>
 
 <script>
-
+  import { formatDate } from '../../../tools/formatDate'
   export default {
     data() {
       const validateIp = (rule, value, callback) => {
@@ -270,10 +270,11 @@
         this.formItem.instance_name && (query.instance_name = this.formItem.instance_name)
 
         this.getInstance(query).then(res => {
-          res.forEach((item, index) => {
+          this.data = res
+          this.data.forEach((item, index) => {
             item.index = index + 1
           })
-          this.filterDate = this.mockTableData(res, this.pageSize, 1)
+          this.filterDate = this.mockTableData(this.data, this.pageSize, 1)
         })
       },
       handleReset(name) {
@@ -401,6 +402,7 @@
       changePageSize(val) {
         this.pageSize = val
         this.changePage(1)
+        this.onInquire()
       },
       mockTableData (originData, pageSize, index) {
         let data = [];
