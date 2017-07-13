@@ -214,7 +214,7 @@
       }
     },
     created () {
-
+      alert("222222");
       this.getUser()//获取用户信息
       this.getFlavor()//获取规格
       this.getImage()//获取镜像
