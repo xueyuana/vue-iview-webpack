@@ -563,7 +563,6 @@
 
         computed: {
             buttonDisable() {
-                debugger
                 if (this.role === 'leader') {
                     switch (this.formValidate.status) {
                         case 'submit':
