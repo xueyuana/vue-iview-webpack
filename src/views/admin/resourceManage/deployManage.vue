@@ -148,7 +148,7 @@
             align: 'center',
             width: 110,
             fixed: 'left',
-            className: 'table-column-overflow'
+            ellipsis: true
           },
           {
             title: '用户',

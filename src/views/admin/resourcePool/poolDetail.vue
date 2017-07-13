@@ -3,7 +3,7 @@
     <!--资源使用概况-->
     <div class="resource-survey">
       <div class="btn-wrap">
-        <Button class="btn" type="ghost" >返回</Button>
+        <Button class="btn" type="ghost" @click.native="$router.go(-1)">返回</Button>
       </div>
       <div class="title">
         <span>资源概况</span>
@@ -73,6 +73,7 @@
     text-align: center;
     height: 30px;
     line-height: 30px;
+    margin: 15px 0;
   }
 
   .resource-pie {
@@ -128,7 +129,14 @@
             title: '名称',
             key: 'host_name',
             align: 'center',
-            className: 'table-column-overflow'
+            ellipsis: true,
+            render: (h, params) => {
+              return h('span', {
+                attrs: {
+                  title: params.row.host_name
+                }
+              }, params.row.host_name)
+            }
           },
           {
             title: '虚拟机数量',

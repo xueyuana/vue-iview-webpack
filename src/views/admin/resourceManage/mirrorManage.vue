@@ -69,7 +69,7 @@
             title: '操作系统名称',
             key: 'image_name',
             align: 'center',
-            className: 'table-column-overflow',
+            ellipsis: true,
             render: (h, params) => {
               return h('span', {
                 attrs: {

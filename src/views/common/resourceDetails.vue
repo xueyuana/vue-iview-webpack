@@ -200,9 +200,7 @@
                 <Row>
                     <Col span="8">
                     <Form-item label="虚拟机:" class="form-item">
-                        <span class="form-item-virtual" :title="item.vm_name">
-                            {{item.vm_name}}
-                        </span>
+                        <span class="form-item-virtual" :title="item.vm_name">{{item.vm_name}}</span>
                     </Form-item>
                     <Form-item label="存储空间:" class="form-item">{{item.storage}} G</Form-item>
                     </Col>
@@ -257,7 +255,7 @@
         }
 
         .approval-status {
-            width: 80%;
+            width: 90%;
             margin: 30px auto;
         }
 

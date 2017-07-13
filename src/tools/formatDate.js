@@ -13,8 +13,10 @@
 
 
 function formatDate(time) {
-//shijianchuo是整数，否则要parseInt转换
-  function add0(m){return m<10?'0'+m:m }
+// 时间戳是整数，否则要parseInt转换
+  function add0(m) {
+    return m < 10 ? '0' + m : m
+  }
 
   var y = time.getFullYear();
   var m = time.getMonth() + 1;
@@ -24,8 +26,6 @@ function formatDate(time) {
   var s = time.getSeconds();
   return y + '-' + add0(m) + '-' + add0(d) + ' ' + add0(h) + ':' + add0(mm) + ':' + add0(s);
 }
-
-
 
 
 export {
