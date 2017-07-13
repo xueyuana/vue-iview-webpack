@@ -86,7 +86,8 @@
           {
             title: '序号',
             key: 'index',
-            align: 'center'
+            align: 'center',
+            width: 60
           },
           {
             title: '申请单号',
