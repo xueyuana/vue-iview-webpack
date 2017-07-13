@@ -188,8 +188,6 @@
                 <Col span="8">
                     <Form-item label="部门:" class="form-item">
                         {{formValidate.department}}
-
-
                     </Form-item>
                 </Col>
             </Row>
@@ -257,7 +255,7 @@
         }
 
         .approval-status {
-            width: 80%;
+            width: 90%;
             margin: 30px auto;
         }
 

@@ -43,7 +43,7 @@
             title: '部署区域',
             key: 'pool_name',
             align: 'center',
-            className: 'table-column-overflow',
+            ellipsis: true,
             render: (h, params) => {
               return h('a', {
                 attrs: {

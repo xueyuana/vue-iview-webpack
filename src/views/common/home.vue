@@ -281,7 +281,10 @@
     },
 
     watch: {
-      '$route': function (newVal) {
+      '$route': function () {
+        this.$refs.left_menu.$children.forEach((item) => {
+          item.opened = false
+        })
         this.$nextTick(() => {
           this.$refs.left_menu.updateOpened()
         })
