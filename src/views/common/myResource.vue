@@ -64,7 +64,7 @@
                 <Icon type="arrow-down-b"></Icon>
               </a>
               <Dropdown-menu slot="list">
-                <Dropdown-item v-for="operation in operationList[index]" @click.native="operationClick($event,index,item.vm_uuid,item.number)" :selected="operation.selected">{{ operation.value }}</Dropdown-item>
+                <Dropdown-item v-for="operation in operationList[index]" @click.native="operationClick($event,index,item.vm_uuid,item.number,item.vm_name)" :selected="operation.selected">{{ operation.value }}</Dropdown-item>
               </Dropdown-menu>
             </Dropdown>
           </td>
@@ -450,7 +450,7 @@
 
         })
       },
-      operationClick (event,index,vm_uuid,number) {//点击高亮显示
+      operationClick (event,index,vm_uuid,number,vmName) {//点击高亮显示
 
         //index指的是行数
         this.operationList[index].forEach((item,index) => {
@@ -462,12 +462,14 @@
 
               this.$Modal.confirm({
                 title: '确认删除',
-                content: '<p>是否删除虚机</p>',
+                content: `<p>是否删除虚机：${vmName}</p>`,
                 onOk: () => {
                   this.operation(item,vm_uuid)
+                  console.log(this.getReslt)
                 },
                 onCancel: () => {
                   item.selected = false
+                  console.log(this.getReslt)
                 }
               });
 
