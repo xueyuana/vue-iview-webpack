@@ -243,7 +243,7 @@
                                       click: () => {
                                           this.$Modal.confirm({
                                               title: '保留IP地址',
-                                              content: '请确认！！！',
+                                              content: `请确认是否保留IP：${params.row.ip}`,
                                               onOk: () => {
                                                   const url = 'api/ip_manager/ip_managers/' + params.row.uuid
                                                  console.log('保留IP地址',url)
@@ -296,7 +296,6 @@
               this.getResult = [];
               const url = 'api/ip_manager/ip_managers';
               this.$http.get(url,{params: query}).then((res) => {
-                  console.log('sssss', res);
                 if (res.body.code === 200) {
                     this.data_length = res.body.result.res.length;
                     this.getResult = res.body.result.res
@@ -313,7 +312,6 @@
                     this.getResult.forEach((item, index) => {
                         item.index = index + 1
                     })
-                    console.log('排序后的数组', this.getResult)
                     this.queryResult = this.mockTableData(this.getResult,this.page_size,this.current_page);;
                 }
               },(err) => {
@@ -322,6 +320,7 @@
           },
           handleReset (name) {
               this.$refs[name].resetFields();
+              this.goQuery();
           },
           addCase (){
               this.modal1 = true;
@@ -354,7 +353,6 @@
                               this.ipData.subnetmask && (requestBody.subnet_mask = this.ipData.subnetmask);
 
                               this.$http.post(url,requestBody).then((res) => {
-                                  console.log(res.body.result)
                                   if (res.body.code === 200) {
                                       this.modal1 = false;//关闭modal
                                       this.$Message.info('新建IP地址池成功');
@@ -393,10 +391,7 @@
                   res1.push(parseInt(addr1[i]) & parseInt(mask[i]));
                   res2.push(parseInt(addr2[i]) & parseInt(mask[i]));
               }
-              console.log(res1);
-              console.log(res1.join("."));
-              console.log(res2);
-              console.log(res2.join("."));
+
               if(res1.join(".") == res2.join(".")){
                   console.log("在同一个网段");
                   return true;

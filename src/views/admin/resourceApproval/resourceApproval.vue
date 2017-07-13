@@ -9,7 +9,10 @@
                          style="width: 250px"></Date-picker>
           </Form-item>
           <Form-item label="申请人:" prop="userName" class="form-item">
-            <Input v-model="formItem.userName" placeholder="请输入" style="width: 250px"></Input>
+            <Select v-model="formItem.userName" filterable clearable style="width: 250px"
+                    :placeholder="userList.length ? '请选择' : '无'">
+              <Option v-for="(item, index) in userList" :value="item.username" :key="index">{{ item.username }}</Option>
+            </Select>
           </Form-item>
           <Form-item label="审批状态:" prop="status" class="form-item">
             <Select v-model="formItem.status" clearable style="width: 250px">
@@ -75,7 +78,6 @@
           status: [],
           instance_id: []
         },
-        userInfo: '',
         columns: [
           {
             title: '序号',
@@ -149,6 +151,9 @@
             }
           }
         ],
+
+        userList: [],   // 用户列表
+
         data1: [],
         filterDate: [],
         pageSize: 10,
@@ -157,7 +162,8 @@
     },
 
     created() {
-      this.userInfo = this.$store.state.userData.userInfo
+
+      this.getUserList ()
       // 部署实例列表
       this.getInstanceList()
       // 资源列表
@@ -181,8 +187,6 @@
           if (data.body.code === 200) {
             this.data1 = data.body.result.res
             // 排序
-
-            console.log(this.data1)
             let pending = []
             for (let i = 0; i < this.data1.length; i++) {
               if (this.data1[i].status === 'l_success') {
@@ -197,7 +201,6 @@
             this.data1.forEach((item, index) => {
               item.index = index + 1
             })
-            console.log('排序后的数组', this.data1)
 
             this.filterDate = this.mockTableData(this.data1, this.pageSize, 1)
             this.num = 1
@@ -213,6 +216,21 @@
       },
       handleReset(name) {
         this.$refs[name].resetFields()
+        this.onInquire()
+      },
+
+      // 用户列表
+      getUserList () {
+        const url = 'api/user/users'
+        this.$http.get(url).then(res => {
+          if (res.body.code === 200) {
+            this.userList = res.body.result.res
+          } else {
+            this.$Message.error(res.res.body.result.msg)
+          }
+        }, err => {
+          console.log(err)
+        })
       },
       // 获取实例列表
       getInstanceList () {
