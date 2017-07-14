@@ -51,7 +51,7 @@
                                 <!--<Input v-model="ipData.ipOne" placeholder="192.168.2.1" style="width: 100px"></Input>-->
                                  <!-- - <Input v-model="ipData.ipTwo" placeholder="192.168.2.6" style="width: 100px"></Input>-->
                             <!--</Form-item>-->
-                            <Form-item label="IP范围：">
+                            <Form-item class="ivu-form-item-required" label="IP范围：">
                                 <Row type="flex" justify="start">
                                     <Col span="9">
                                     <Form-item prop="ipOne">

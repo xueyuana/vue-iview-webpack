@@ -144,7 +144,7 @@
               this.flavor = res.body.result.res
 
               this.index ++
-              console.log('规格',this.flavor)
+
             },(err) => {
               console.log(err)
             })
@@ -176,7 +176,6 @@
               this.vm = res.body.result.res
 
               this.index ++
-              console.log('虚机',res.body.result.res)
 
             },(err) => {
               console.log(err)
@@ -191,7 +190,6 @@
 
 
             this.$http.get(url,{params: query}).then((res) => {
-              console.log(res)
 
               res.body.result.res.forEach((item,index) => {
 
@@ -237,8 +235,6 @@
 
 
             })
-            console.log(this.cpu,this.memory)
-
 
           },
 
