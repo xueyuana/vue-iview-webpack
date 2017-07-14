@@ -94,6 +94,7 @@
         current_page: 1,
         page_size: 10,
         interval: 30000,
+        setId: '',
         user_info: {},
         approvalStatusVal: [
           {
@@ -211,11 +212,14 @@
       this.getFlavor()//获取规格
       this.getImage()//获取镜像
 
-      setInterval( () => {
+      this.setId = setInterval( () => {
         this.reload()
       },this.interval)
 
 
+    },
+    beforeDestroy () {
+      clearInterval(this.setId)
     },
     methods: {
       getFlavor () {//获取虚拟规格
