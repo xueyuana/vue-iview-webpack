@@ -31,9 +31,9 @@
         <Button class="reset" type="ghost" @click="reset">重置</Button>
       </div>
     </div>
-
     <div class="inquire-table-title">
       资源列表
+      <span class="time">{{ second }}秒后刷新</span>
       <div class="reload">
         <Icon type="refresh" :size="30" @click.native="reload"></Icon>
       </div>
@@ -93,6 +93,8 @@
         data_length: 0,
         current_page: 1,
         page_size: 10,
+        interval: 30000,
+        second: 30,
         user_info: {},
         approvalStatusVal: [
           {
@@ -211,6 +213,17 @@
       this.getFlavor()//获取规格
       this.getImage()//获取镜像
 
+      setInterval( () => {
+        this.reload()
+      },this.interval)
+
+      setInterval( () => {
+        this.second --
+        if(this.second <= 0) {
+          this.second = 30
+        }
+      },1000)
+
 
     },
     methods: {
@@ -295,7 +308,7 @@
         this.getVm(requestBody)
 
       },
-      reload () {
+      reload () {//刷新
         this.query()
       },
       getVm (query) {//获取虚拟机
@@ -699,6 +712,11 @@
 
   .bac {
     background-color: #fcfcfc;
+  }
+  .time {
+    position: absolute;
+    right: 76px;
+    top: 8px;
   }
   .reload {
     position: absolute;

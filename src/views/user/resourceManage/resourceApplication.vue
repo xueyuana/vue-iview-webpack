@@ -66,11 +66,6 @@
           </Modal>
         </div>
       </Form-item>
-      <!--<Form-item label="部门：" prop="department">-->
-        <!--<div class="item-common">-->
-          <!--<Input v-model="common_info.department" :disabled="isDisabled" disabled style="width: 180px"></Input>-->
-        <!--</div>-->
-      <!--</Form-item>-->
       </div>
     </Form>
 
@@ -106,7 +101,7 @@
             </Select>
           </div>
         </Form-item>
-        <Form-item label="存储空间：" prop="storage">
+        <Form-item label="存储空间：" prop="storage" class="ivu-form-item-required">
           <div class="item-common add-unit">
             <Input v-model="item.storage" placeholder="最小单位G，最大500G" number :disabled="isDisabled" style="width: 180px"></Input>
             <span class="unit">G</span>
@@ -139,6 +134,27 @@
   export default {
     name: 'user-application',
     data () {
+
+      const validateAge = (rule,value,callback) => {
+        if(value == 0) {
+          callback(new Error('请填写存储空间'))
+        }else {
+          if(!Number.isInteger(value)) {
+            callback(new Error('请填写整数'))
+          }else {
+            if(value<0) {
+              callback(new Error('请填写大于0的整数'))
+            }else {
+              if(value > 500) {
+                callback(new Error('不能大于500'))
+              }else {
+                callback()
+              }
+            }
+          }
+        }
+
+      }
       return {
         current: 0,
         stepsStatus: 'process',
@@ -192,7 +208,7 @@
         }],
         rule: {
           vm_name: [
-            {required: true, max: 30,message: '请填写虚机名称，最多30位',trigger: 'change'}
+            {required: true, max: 15, message: '请输入最多15位虚机名',trigger: 'change'}
           ],
           flavor_id: [
             {required: true, message: '请选择规格', trigger: 'change'}
@@ -201,8 +217,7 @@
             {required: true, message: '请选择操作系统', trigger: 'change'}
           ],
           storage: [
-            {required: true, type: 'number', max: 500, message: '请填写存储空间并且为数字，最大为500', trigger: 'change'},
-
+            {validator: validateAge, trigger: 'change'},
           ]
         },
         instance: [],//部署实例
@@ -220,7 +235,6 @@
       this.getImage()//获取镜像
       this.getInstance()//获取实例
       this.getAz()//获取资源池
-
       let id = this.$route.query.id
       if(id === undefined) {
         return
@@ -397,14 +411,31 @@
             if(num === -1) {//表单验证成功
 
               let count = 0
+              let temp = []
+              let tempObj = {}
+              let flag = false
               this.resourceInformation.forEach((item) => {
                 count += item.vm_num
+                temp.push(item.vm_name)
               })
+              console.log('temp',temp)
+
               if (count > 10) {
                 this.$Message.info('最多申请10个虚机');
                 return
               }
 
+              temp.forEach((item) => {
+                if(tempObj[item]) {
+                  flag = true
+                }
+                tempObj[item] = true
+              })
+
+              if(flag) {
+                this.$Message.info('虚机名称不能重复');
+                return
+              }
 
               let requestBody = {
                 user_name: this.user_info.username,
@@ -443,6 +474,7 @@
       },
       closeModal () {
         this.instanceCreate = false
+
       },
 
       getDeploy(id) {     // 某条部署实例
