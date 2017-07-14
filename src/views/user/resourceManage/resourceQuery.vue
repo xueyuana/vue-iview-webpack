@@ -123,21 +123,21 @@
             key: 'applyPerson',
             align: 'center',
             width: 100,
-            className: 'table-column-overflow'
+            ellipsis: true
           },
           {
             title: '部署实例',
             key: 'instance_name',
             align: 'center',
             width: 110,
-            className: 'table-column-overflow'
+            ellipsis: true
           },
           {
             title: '部署区域',
             key: 'az',
             align: 'center',
             width: 130,
-            className: 'table-column-overflow'
+            ellipsis: true
           },
           {
             title: '状态',
