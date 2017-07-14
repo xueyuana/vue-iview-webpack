@@ -7,9 +7,9 @@
             <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间"
                          v-model="formValidate.date" style="min-width: 250px"></Date-picker>
           </Form-item>
-          <Form-item label="关键字:" prop="key_name" class="form-item">
-            <Input v-model="formValidate.key_name" placeholder="请输入" style="min-width: 250px"></Input>
-          </Form-item>
+          <!--<Form-item label="关键字:" prop="key_name" class="form-item">-->
+            <!--<Input v-model="formValidate.key_name" placeholder="请输入" style="min-width: 250px"></Input>-->
+          <!--</Form-item>-->
           <Form-item label="用户:" prop="user_id" class="form-item"
                      v-if="userInfo.role === 'admin'">
             <Select v-model="formValidate.user_id" filterable clearable style="width: 250px"
