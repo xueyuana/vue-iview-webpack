@@ -45,7 +45,7 @@
             </Form-item>
             <Form-item label="角色：" prop="role">
               <Select v-model="model_info.role" style="width:196px">
-                <Option v-for="item in roleList" :value="item.key" :key="item">{{ item.value }}</Option>
+                <Option v-for="item in roleList" :value="item.key">{{ item.value }}</Option>
               </Select>
             </Form-item>
           </Form>
@@ -343,13 +343,10 @@
       },
       compileOk () {//确定编辑
         console.log('确定后的内容',this.model_info)
-//        let temporary = {}//存储表单内容
-
-//        Object.assign(temporary,this.compileUser)
 
         this.$refs.formInline.validate((valid) => {
           if(valid) {
-//            this.compileUser = temporary
+
             console.log('验证成功')
 
             const url = 'api/user/users/'+this.user_id
@@ -412,7 +409,7 @@
 //
           } else {
 
-            this.$Message.info('验证用户失败');
+            this.$Message.info('验证表单失败');
 
             console.log('验证失败')
 
@@ -463,7 +460,7 @@
           } else {
             console.log('验证失败')
 
-            this.$Message.info('验证用户失败');
+            this.$Message.info('验证表单失败');
 
           }
         })
@@ -527,6 +524,9 @@
           user_name: '',
           applyDate: []
         }
+        //获取用户
+        this.getUser()
+
       },
       changePage (page) {//分页
 

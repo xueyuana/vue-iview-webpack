@@ -3,17 +3,17 @@
     <div class="query-form">
       <Form :model="query_info" :label-width="80">
         <div class="queryInformation">
-          <Form-item label="审批状态">
+          <Form-item label="审批状态:">
             <Select v-model="query_info.status" clearable style="width:260px">
               <Option v-for="item in approvalStatusVal" :value="item.key" :key="item">{{ item.value }}</Option>
             </Select>
           </Form-item>
-          <Form-item label="部署实例">
+          <Form-item label="部署实例:">
             <Select v-model="query_info.instance_id" clearable style="width:260px">
               <Option v-for="item in instance" :value="item.instance_id" :key="item">{{ item.instance_name }}</Option>
             </Select>
           </Form-item>
-          <Form-item label="申请日期">
+          <Form-item label="申请日期:">
             <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" v-model="query_info.created_date" placeholder="选择日期" style="width: 260px"></Date-picker>
           </Form-item>
 

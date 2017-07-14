@@ -31,9 +31,9 @@
         <Button class="reset" type="ghost" @click="reset">重置</Button>
       </div>
     </div>
-
     <div class="inquire-table-title">
       资源列表
+      <span class="time">{{ second }}秒后刷新</span>
       <div class="reload">
         <Icon type="refresh" :size="30" @click.native="reload"></Icon>
       </div>
@@ -64,7 +64,7 @@
                 <Icon type="arrow-down-b"></Icon>
               </a>
               <Dropdown-menu slot="list">
-                <Dropdown-item v-for="operation in operationList[index]" @click.native="operationClick($event,index,item.vm_uuid,item.number)" :selected="operation.selected">{{ operation.value }}</Dropdown-item>
+                <Dropdown-item v-for="operation in operationList[index]" @click.native="operationClick($event,index,item.vm_uuid,item.number,item.vm_name)" :selected="operation.selected">{{ operation.value }}</Dropdown-item>
               </Dropdown-menu>
             </Dropdown>
           </td>
@@ -93,6 +93,8 @@
         data_length: 0,
         current_page: 1,
         page_size: 10,
+        interval: 30000,
+        second: 30,
         user_info: {},
         approvalStatusVal: [
           {
@@ -211,6 +213,17 @@
       this.getFlavor()//获取规格
       this.getImage()//获取镜像
 
+      setInterval( () => {
+        this.reload()
+      },this.interval)
+
+      setInterval( () => {
+        this.second --
+        if(this.second <= 0) {
+          this.second = 30
+        }
+      },1000)
+
 
     },
     methods: {
@@ -295,7 +308,7 @@
         this.getVm(requestBody)
 
       },
-      reload () {
+      reload () {//刷新
         this.query()
       },
       getVm (query) {//获取虚拟机
@@ -450,7 +463,7 @@
 
         })
       },
-      operationClick (event,index,vm_uuid,number) {//点击高亮显示
+      operationClick (event,index,vm_uuid,number,vmName) {//点击高亮显示
 
         //index指的是行数
         this.operationList[index].forEach((item,index) => {
@@ -462,12 +475,14 @@
 
               this.$Modal.confirm({
                 title: '确认删除',
-                content: '<p>是否删除虚机</p>',
+                content: `<p>是否删除虚机：${vmName}</p>`,
                 onOk: () => {
                   this.operation(item,vm_uuid)
+                  console.log(this.getReslt)
                 },
                 onCancel: () => {
                   item.selected = false
+                  console.log(this.getReslt)
                 }
               });
 
@@ -699,6 +714,11 @@
 
   .bac {
     background-color: #fcfcfc;
+  }
+  .time {
+    position: absolute;
+    right: 76px;
+    top: 8px;
   }
   .reload {
     position: absolute;

@@ -90,7 +90,7 @@
             <span>资源审批</span>
         </div>
         <Row class="c_application">
-            <Col span="12">
+            <Col span="24">
                 <div @click="myApplication">
                     <Icon type="record" size="10"></Icon>我的申请
                     <span class="title">待审批：</span><span class="num">{{ wait_approve }}</span>
@@ -359,7 +359,7 @@
         text-align: center;
         display: -moz-box;
         display: -webkit-box;
-        display: box;
+        /*display: box;*/
         -moz-box-orient: horizontal;
         -webkit-box-orient: horizontal;
         box-orient: horizontal;
