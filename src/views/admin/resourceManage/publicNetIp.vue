@@ -51,7 +51,7 @@
                                 <!--<Input v-model="ipData.ipOne" placeholder="192.168.2.1" style="width: 100px"></Input>-->
                                  <!-- - <Input v-model="ipData.ipTwo" placeholder="192.168.2.6" style="width: 100px"></Input>-->
                             <!--</Form-item>-->
-                            <Form-item label="IP范围：">
+                            <Form-item class="ivu-form-item-required" label="IP范围：">
                                 <Row type="flex" justify="start">
                                     <Col span="9">
                                     <Form-item prop="ipOne">
@@ -77,7 +77,7 @@
                     </div>
                 </Modal>
             </div>
-            <Table :columns="columns7" stripe :data="queryResult"></Table>
+            <Table size="small" :columns="columns7" stripe :data="queryResult"></Table>
             <div class="inquire-table-page">
                 <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page" :page-size="page_size"></Page>
             </div>
@@ -194,13 +194,13 @@
                       title: 'IP地址',
                       key: 'ip',
                       align: 'center',
-                      width: 130
+                      className: 'table-min-width'
                   },
                   {
                       title: '子网掩码',
                       key: 'subnet_mask',
                       align: 'center',
-                      width: 130
+                      className: 'table-min-width'
                   },
                   {
                       title: '分配状态',
@@ -435,5 +435,9 @@
     /*font-size: 14px;*/
     /*border-radius: 6px;*/
     /*padding: 0;*/
+}
+
+.ivu-table td.table-min-width {
+    min-width: 130px;
 }
 </style>
