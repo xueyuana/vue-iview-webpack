@@ -410,31 +410,15 @@
             if(num === -1) {//表单验证成功
 
               let count = 0
-              let temp = []
-              let tempObj = {}
-              let flag = false
               this.resourceInformation.forEach((item) => {
                 count += item.vm_num
-                temp.push(item.vm_name)
               })
-              console.log('temp',temp)
 
               if (count > 10) {
                 this.$Message.info('最多申请10个虚机');
                 return
               }
 
-              temp.forEach((item) => {
-                if(tempObj[item]) {
-                  flag = true
-                }
-                tempObj[item] = true
-              })
-
-              if(flag) {
-                this.$Message.info('虚机名称不能重复');
-                return
-              }
 
               let requestBody = {
                 user_name: this.user_info.username,
