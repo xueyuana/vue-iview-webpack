@@ -7,7 +7,7 @@
           <Col span="12">
             <Form-item label="操作系统名称:" prop="image_name">
               <Select clearable v-model="formItem.image_name" style="width: 250px" :placeholder="mirrorImage.length? '请选择' : '无'">
-                <Option v-for="item in mirrorImage" :value="item.image_name" :key="item">{{ item.image_name }}</Option>
+                <Option v-for="(item, index) in mirrorImage" :value="item" :key="index">{{ item }}</Option>
               </Select>
             </Form-item>
           </Col>
@@ -38,7 +38,7 @@
   </div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
   .a {
     text-overflow: ellipsis;
   }
@@ -110,7 +110,6 @@
 
     created() {
       this.onInquire()
-      this.getImage ()
     },
 
     methods: {
@@ -118,24 +117,20 @@
       onInquire() {
         let query = {}
         this.formItem.image_name && (query.image_name = this.formItem.image_name)
+        this.getImageList(query).then(res => {
+          this.data = res
 
-        this.$http.get('api/image/images', {
-          params: query
-        }).then(res => {
-          if (res.body.code === 200) {
-            this.data = res.body.result.res
-            this.data.forEach((item, index) => {
-              item.index = index + 1
-            })
-            this.filterDate = this.mockTableData(this.data, this.pageSize, 1)
-            this.num = 1
-          } else {
-            this.$Message.error(res.body.result.msg)
+          let arr = []
+          this.data.forEach((item, index) => {
+            item.index = index + 1
+            arr.push(item.image_name)
+          })
+          if (!Object.keys(query).length) {
+            this.mirrorImage = Array.from(new Set(arr))
           }
-        }, err => {
-          console.log('error', err)
-          this.$Message.error(err.body.result.msg)
+          this.filterDate = this.mockTableData(this.data, this.pageSize, 1)
         })
+
       },
 
       handleReset(name) {
@@ -143,14 +138,20 @@
         this.onInquire()
       },
 
-      getImage () {
+      getImageList(query) {
         const url = 'api/image/images'
-        this.$http.get(url).then(res => {
-          if (res.body.code === 200) {
-            this.mirrorImage = res.body.result.res
-          }
-        }, err => {
-          console.log(err)
+        return new Promise(resolve => {
+          this.$http.get(url, {
+            params: query
+          }).then(res => {
+            if (res.body.code === 200) {
+              resolve(res.body.result.res)
+            } else {
+              this.$Message.error(res.body.result.msg)
+            }
+          }, err => {
+            console.log(err)
+          })
         })
       },
 

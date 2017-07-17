@@ -52,7 +52,7 @@
     <!--弹出层-->
     <Modal
         title="分配公网IP"
-        width="300"
+        width="320"
         v-model="visible"
         :mask-closable="false"
         class-name="vertical-center-modal">
@@ -65,10 +65,8 @@
             </Select>
           </Form-item>
           <Form-item label="公网IP地址:" prop="ip_uuid">
-
             <Select v-model="ipForm.ip_uuid" :placeholder="pubIpList.length ? '请选择' : '空'" clearable>
-
-              <Option v-for="(item, index) in pubIpList" :value="item.uuid" :key="index">{{item.ip}}</Option>
+              <Option v-for="(item, index) in pubIpList" :value="item.uuid" :key="index">{{item.ip}}{{item.status === 'alloc' ? '（已分配）' : '（未分配）'}}</Option>
             </Select>
           </Form-item>
           <Form-item label="内网IP地址:" prop="internal_ip">
@@ -199,17 +197,18 @@
                   click: () => {
                     this.visible = true
                     this.$refs['formCustom'].resetFields()
-                      // 1. 显示已存在数据
+
                     this.$nextTick(() => {
-                      if (params.row.online_ip) {
+                      this.someTableData = params
+                      this.index = params.index
+                      this.ipForm.instance_id = params.row.instance_id
+                      // 1. 显示已存在数据
+                      if (params.row.online_ip) {                       // 显示 IP类型
                         this.ipForm.ip_type = 'online'
                       } else if (params.row.test_ip) {
                         this.ipForm.ip_type = 'test'
                       }
-                      this.ipForm.internal_ip = params.row.internal_ip
-
-                      this.ipForm.instance_id = params.row.instance_id
-                      this.index = params.index
+                      this.ipForm.internal_ip = params.row.internal_ip  // 显示 内网IP
                     })
                   }
                 }
@@ -241,7 +240,8 @@
         pubIpList: [],      // 公网IP列表
         visible: false,     // 弹窗状态
         loading: false,     // 按钮状态
-        index: '',          // 记录修改的数据
+        index: '',          // 记录修改的数据序号
+        someTableData: {},  // 记录修改的数据
         ipReg: /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/,
 
         pageSize: 10,
@@ -284,21 +284,24 @@
 
       // 3. 选中类型后筛选公网IP
       onSelectType(val) {
-        console.log('change')
-        if (!val) {
-          this.pubIpList = []
-        } else {
-
+        this.pubIpList = []
+        if (val) {
           this.getPubIpList({ip_pool: val}).then(res => {
-
-            this.pubIpList = res
-              // 1. 显示已经存在的数据
-            let currentObj = this.pubIpList.filter(item => {
-              return (item.ip === this.filterDate[this.index].online_ip || item.ip === this.filterDate[this.index].test_ip)
+            this.pubIpList = res.sort((a, b) => {
+              return b.status.localeCompare(a.status)
             })
-            if (currentObj.length) {
-              this.ipForm.ip_uuid = currentObj[0].uuid
-            }
+
+            // 1. 显示已经存在的数据
+            this.$nextTick(() => {
+              if (this.someTableData.row[val + '_ip']) {
+                let currentObj = this.pubIpList.filter(item => {
+                  return val === 'online' ? (item.ip === this.filterDate[this.index].online_ip) : (item.ip === this.filterDate[this.index].test_ip)
+                })
+                if (currentObj.length) {
+                  this.ipForm.ip_uuid = currentObj[0].uuid
+                }
+              }
+            })
           })
         }
       },
@@ -369,9 +372,6 @@
             params: query || {}
           }).then((res) => {
             if (res.body.code === 200) {
-
-              console.log('1',res.body.result.res)
-
               resolve(res.body.result.res)
             } else {
               this.$Message.error(res.body.result.msg)
