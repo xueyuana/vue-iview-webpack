@@ -53,7 +53,7 @@
                             hide-info></Progress>
                         </Col>
                         <Col span="5" class="rd_left">
-                            <div class="rd_pro2">{{poolStatus.memory_use + '&nbsp;/&nbsp;' + poolStatus.memory_total}}</div>
+                            <div class="rd_pro2">{{poolStatus.memory_use + '/' + poolStatus.memory_total}}</div>
                         </Col>
                     </Row>
                 </li>
@@ -101,7 +101,7 @@
                             <Progress :percent="100" :stroke-width="18" class="rd_progress" hide-info></Progress>
                         </Col>
                         <Col span="5" class="rd_left">
-                            <div class="rd_pro2">{{formValidate.memory_total}}</div>
+                            <div class="rd_pro2">{{formValidate.memory_total/1024}}</div>
                         </Col>
                     </Row>
                 </li>
@@ -240,8 +240,9 @@
         .sub-title {
             margin: 20px 0 10px 0;
             .ivu-icon-ios-medical{
-                color:red;
-                margin-right: 5px;
+                color:#FF3907;
+                margin-right: 2px;
+                font-size: 10px;
             }
         }
         .approval-button {

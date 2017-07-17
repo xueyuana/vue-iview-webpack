@@ -5,7 +5,7 @@
       <Row type="flex" justify="start">
         <Col span="14">
         <Form-item label="原密码:" prop="originPasswd">
-          <Input type="password" v-model="formCustom.originPasswd" placeholder="可为空"></Input>
+          <Input type="password" v-model="formCustom.originPasswd" placeholder="不能为空"></Input>
         </Form-item>
         <Form-item label="新密码:" prop="passwd">
           <Input type="password" v-model="formCustom.passwd" :maxlength="15" placeholder="最少6位最多15位"></Input>

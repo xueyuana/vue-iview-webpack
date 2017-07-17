@@ -176,6 +176,7 @@
             title: '分配日期',
             key: 'created_date',
             align: 'center',
+            sortable: true,
             width: 140,
             render: (h, params) => {
               return h('span', params.row.created_date.slice(0, 16))
@@ -186,7 +187,6 @@
             key: 'option',
             align: 'center',
             width: 70,
-            fixed: 'right',
             render: (h, params) => {
               return h('Button', {
                 props: {
