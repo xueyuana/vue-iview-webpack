@@ -659,7 +659,7 @@
 
   }
   table tr {
-    height: 48px;
+    height: 40px;
     border: 1px solid #dddee1;
   }
   table thead tr {

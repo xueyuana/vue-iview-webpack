@@ -240,8 +240,9 @@
         .sub-title {
             margin: 20px 0 10px 0;
             .ivu-icon-ios-medical{
-                color:red;
-                margin-right: 5px;
+                color:#FF3907;
+                margin-right: 2px;
+                font-size: 10px;
             }
         }
         .approval-button {
