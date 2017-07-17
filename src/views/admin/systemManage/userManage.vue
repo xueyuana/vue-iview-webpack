@@ -35,7 +35,23 @@
               <Input v-model="model_info.password" placeholder="最少6位最多15位" type="password" style="width: 200px"></Input>
             </Form-item>
             <Form-item label="部门：" prop="department">
-              <Input v-model="model_info.department" placeholder="请输入" style="width: 200px"></Input>
+                <!-- <Input v-model="model_info.department" placeholder="请输入" style="width: 200px"></Input> -->
+                <!--  <Select v-model="model_info.department" clearable style="width: 200px" filterable>
+                    <Option v-for="item in ip_poolVal" :value="item.key" :key="item">{{ item.value }}</Option>
+                </Select> -->
+                <div class="select">
+                    <input  @mousedown="departmentshow" 
+                            @blur="departmentshow1" 
+                            v-model="model_info.department" 
+                            type="text" class="inp" 
+                            :class="[departcontent? 'activecontent' : '']"
+                            placeholder="请输入">
+                    <span :class="[departmentul ?'spantrans':'']" @mousedown="departmentshow"></span>
+                    <ul :class="[departmentul ? 'active' : '']">
+                        <li :class="[model_info.department == item ? 'lislec' : '']" @mousedown="departli(item)" v-for="item in departmentList" :value="item">{{item}}</li>
+                    </ul>
+                </div>
+                <div v-if="departcontent" class="err_tip">请输入部门名称</div>
             </Form-item>
             <Form-item label="手机：" prop="phone">
               <Input v-model="model_info.phone" placeholder="请输入" style="width: 200px"></Input>
@@ -91,6 +107,20 @@
 
       }
       return {
+        //可下拉可输入组件参数
+        departmentul:false,
+        departcontent:false,
+        departmentList:[],//部门
+        ip_poolVal: [
+          {
+              value: '上线IP',
+              key: 'online'
+          },
+          {
+              value: '测试IP',
+              key: 'test'
+          }
+        ],
         data_length: 0,
         current_page: 1,
         page_size: 10,
@@ -287,13 +317,24 @@
     },
     methods: {
       getUser () {//获取用户
+        this.departmentList = [];
         Object.assign(this.user_info,this.$store.state.userData.userInfo)
 
         const url = 'api/user/users'
         this.$http.get(url).then((res) => {
 
           this.data_length = res.body.result.res.length
-
+          // console.log("asdssssssss");
+          // console.log(res.body.result.res);
+          for(let i = 0;i<this.data_length;i++){
+            if(this.departmentList.indexOf(res.body.result.res[i].department)==-1){
+                if(res.body.result.res[i].department == null){
+                    i++;
+                }
+                this.departmentList.push(res.body.result.res[i].department);
+            }
+          }
+            // console.log(this.departmentList); 
           this.current_page = 1
 
           res.body.result.res.forEach((item,index) => {
@@ -330,6 +371,7 @@
         this.isOpenModal = false
         //重置
         this.$refs.formInline.resetFields()
+        // this.model_info.department="";
       },
       Ok () {
         console.log(this.info)
@@ -572,7 +614,23 @@
 
         this.queryResult = this.mockTableData(this.getResult,this.page_size,1)
 
-      }
+      },
+      //可搜索可输入组件方法
+      departmentshow:function(){
+        this.departmentul = !this.departmentul;
+      }, 
+      departmentshow1:function(){
+        this.departmentul = false;
+        if(this.model_info.department == ""){
+            this.departcontent = true;
+        }else{
+            this.departcontent = false;
+        }
+      },
+      departli:function(name){
+        this.model_info.department = name;
+        this.departmentul = false;
+      }, 
     },
     created () {
 
@@ -583,7 +641,7 @@
   }
 
 </script>
-<style scoped>
+<style lang="less" scoped>
   .my-resource {
     width: 100%;
   }
@@ -646,7 +704,103 @@
   .table-wrap {
     max-width: 940px;
   }
+    
+  .select{
+    .inp{
+        float:left;
+        width: 200px;
+        height:35px;
+        border:none;
+        border:1px solid #ccc;
+        border-radius:4px;
+        text-indent:6px;
+        color:#657180;
+        outline:none;
+    }
+    .active{
+        display:block;
+    }
+    .activecontent{
+        border:1px solid red;
+    }
+    .lislec{
+        background-color:#3F94FC;
+        color:#fff;
+        &:hover{
+            background-color:#3F94FC;
+        }
+    }
+    ul{
+        display:none;
+        position:absolute;
+        top:35px;
+        width:200px;
+        height: 90px;
+        overflow: auto;
+        border-radius:5px;
+        border:1px solid #ccc;
+        background:#fff;
+        z-index:1000;
+        li{
+            height:30px;
+            line-height:30px;
+            text-align:left;
+            padding-left:10px;
+            cursor:pointer;
+            width:178px;
+            color:#657180;
+            &:hover{
+                background:#eff7fc;
+            }
+        }
+    }
+    span{
+        display:inline-block;
+        // border:1px solid red;
+        float:left;
+        width:10px;
+        height:7px;
+        margin:14px 0 0 -20px;
+        background:url(../../../static/dot.jpg) no-repeat;
+        cursor:pointer;
+        -webkit-transition: -webkit-transform .3s ease-out;
+        -moz-transition: -moz-transform .3s ease-out;
+        -o-transition: -o-transform .3s ease-out;
+        -ms-transition: -ms-transform .3s ease-out;
+    }
+    .spantrans{
+        cursor: pointer;
+        -webkit-transform: rotateZ(180deg);
+        -moz-transform: rotateZ(180deg);
+        -o-transform: rotateZ(180deg);
+        -ms-transform: rotateZ(180deg);
+        transform: rotateZ(180deg);
+    }
+  }
+  .err_tip{
+    position: absolute;
+    top: 38px;
+    left: 0;
+    line-height: 1;
+    color: #ff3300;
+  }
 
-
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #ccc;  
+}
+ 
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #ccc;
+}
+ 
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+    color: #ccc;
+}
+ 
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #ccc;
+}
 
 </style>

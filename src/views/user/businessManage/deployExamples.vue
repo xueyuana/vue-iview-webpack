@@ -319,9 +319,6 @@
                             console.log('err', err)
                           })
 
-                        },
-                        onCancel: () => {
-                          this.$Message.info('点击了取消');
                         }
                       });
                     }

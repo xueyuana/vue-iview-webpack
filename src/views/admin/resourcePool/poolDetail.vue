@@ -123,7 +123,7 @@
             title: '序号',
             key: 'index',
             align: 'center',
-            width: '100'
+            width: '60'
           },
           {
             title: '名称',
@@ -153,15 +153,16 @@
             }
           },
           {
-            title: 'CPU占比（已分配/总计）',
+            title: 'CPU占比 (已分配/总计)',
             key: 'CPU_proportion',
             align: 'center',
+            width: 180,
             render: (h, params) => {
               return h('p', params.row.vcpu_use + ' / ' + params.row.vcpu_total)
             }
           },
           {
-            title: '内存占比（G）',
+            title: '内存占比 (G)',
             key: 'RAM_proportion',
             align: 'center',
             render: (h, params) => {
@@ -169,7 +170,7 @@
             }
           },
           {
-            title: '磁盘占比（G）',
+            title: '磁盘占比 (G)',
             key: 'disk_proportion',
             align: 'center',
             render: (h, params) => {

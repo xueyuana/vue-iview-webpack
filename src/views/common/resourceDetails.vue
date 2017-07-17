@@ -29,7 +29,7 @@
                 <li>
                     <Row>
                         <Col span="5" class="rd_right">
-                            <div class="rd_pro1" style="padding-right:12px;">vCPU个</div>
+                            <div class="rd_pro1" style="padding-right:12px;">vCPU（个）</div>
                         </Col>
                         <Col span="10">
                             <Progress
@@ -82,7 +82,7 @@
                 <li>
                     <Row>
                         <Col span="5" class="rd_right">
-                            <div class="rd_pro1" style="padding-right:12px;">vCPU个</div>
+                            <div class="rd_pro1" style="padding-right:12px;">vCPU（个）</div>
                         </Col>
                         <Col span="10">
                             <Progress :percent="100" :stroke-width="18" class="rd_progress" hide-info></Progress>
@@ -101,7 +101,7 @@
                             <Progress :percent="100" :stroke-width="18" class="rd_progress" hide-info></Progress>
                         </Col>
                         <Col span="5" class="rd_left">
-                            <div class="rd_pro2">{{formValidate.memory_total}}</div>
+                            <div class="rd_pro2">{{formValidate.memory_total/1024}}</div>
                         </Col>
                     </Row>
                 </li>
@@ -141,7 +141,7 @@
                         <Form-item label="部署实例:" class="form-item">
                             {{formValidate.deploy_name}}
                             <span class="form-item-span" @click="onInstanceDetails"
-                            v-if="$store.state.userData.userInfo.role == 'admin'">推荐配置</span>
+                            v-if="$store.state.userData.userInfo.role == 'admin'">推荐配置<Icon :type="iconArrow" size="13" style="margin-left: 2px"></Icon></span>
 
                             <!--推荐配置-->
                             <Modal v-model="instanceCreate" title="提示" :ok-text="okText" :mask-closable="false"
@@ -507,10 +507,10 @@
                 stepsStatus: 'process',
                 userId: '',
                 resourceId: '',
-                isTjpz: false,//推荐配置
-                flavor_name: '',//规格名称
+                isTjpz: false,      // 推荐配置
+                flavor_name: '',    // 规格名称
                 flavorList: [],
-                image_name: '',//操作系统名称
+                image_name: '',     //操作系统名称
                 imageList: [],
                 funcBtns: ['返回', '通过', '不通过'],
 
@@ -536,6 +536,7 @@
                     storage: 50,
                     num: 1
                 },
+                iconArrow: '',
 
                 ywInfo: '',
                 xzInfo: '',
@@ -644,6 +645,7 @@
                     this.formValidate.vCPU_total = 0
                     this.formValidate.memory_total = 0
                     this.formValidate.storage_total = 0
+                    this.formValidate.vm_num_total = 0
 
                     this.formValidate.resources.forEach((ritem, index) => {
 
@@ -662,12 +664,16 @@
                             }
                         })
                         this.formValidate.vCPU_total += ritem.cpu
-                        this.formValidate.memory_total += ritem.memory/1024;
+                        this.formValidate.memory_total += parseInt(ritem.memory / 1024)
                         this.formValidate.storage_total += ritem.storage
+                        this.formValidate.vm_num_total += ritem.vm_num
                     })
-                    console.log('formValidate', this.formValidate)
+
+                    console.log('计算后的资源',this.formValidate)
                     // 请求资源池列表
                     this.getPoolList()
+                    // 计算推荐配置信息
+                    this.getDeploy(this.formValidate.instance_id)
                 }
             },
             "xzInfo":function (newVal,oldVal) {
@@ -738,14 +744,10 @@
                 },
 
             // 点击推荐配置
-            onInstanceDetails () {    //展示实例详情推荐配置
+            onInstanceDetails () {    // 展示实例详情推荐配置
                 if (this.formValidate.instance_id) {
                     this.instanceCreate = true
-                    this.getDeploy(this.formValidate.instance_id)
-                } else {
-                    this.$Message.error('没有实例ID')
                 }
-
             },
 
             getInfo (query) {
@@ -753,14 +755,15 @@
                 this.$http.get(url, {params: query}).then((res) => {
                     if (res.body.code === 200) {
                         this.formValidate = res.body.result.res[0]
-                        this.index++
+                      console.log('本次申请资源',this.formValidate)
+                      this.index++
                     }
                 }, (err) => {
                     console.log(err)
                 });
             },
 
-            getFlaver () {//获取规格
+            getFlaver () {  // 获取规格
                 const url = 'api/flavor/flavors'
                 this.$http.get(url).then((res) => {
                     if (res.body.code === 200) {
@@ -818,7 +821,7 @@
                         this.poolStatus.cpu_use = this.countSum(res.body.result.res, 'vcpu_use')
                         this.poolStatus.cpu_total = this.countSum(res.body.result.res, 'vcpu_total')
                         this.poolStatus.memory_use = parseInt(this.countSum(res.body.result.res, 'memory_mb_use') / 1024)
-                        this.poolStatus.memory_total = parseInt(this.countSum(res.body.result.res, 'memory_mb_total') / 1024)
+                        this.poolStatus.memory_total = parseInt(this.countSum(res.body.result.res, 'memory_mb_total') / 1024 )
                         this.poolStatus.storage_use = this.countSum(res.body.result.res, 'storage_gb_use')
                         this.poolStatus.storage_total = this.countSum(res.body.result.res, 'storage_gb_total')
                     } else {
@@ -972,6 +975,15 @@
                     this.configData.num *= 2
                     break
                     default:
+                }
+
+                if (this.configData.cpu < this.formValidate.vCPU_total ||
+                  this.configData.memory < this.formValidate.memory_total ||
+                  this.configData.storage < this.formValidate.storage_total ||
+                  this.configData.num < this.formValidate.vm_num_total ) {
+                    this.iconArrow = 'arrow-up-c'
+                } else {
+                    this.iconArrow = 'arrow-down-c'
                 }
 
             },
