@@ -101,7 +101,7 @@
                             <Progress :percent="100" :stroke-width="18" class="rd_progress" hide-info></Progress>
                         </Col>
                         <Col span="5" class="rd_left">
-                            <div class="rd_pro2">{{formValidate.memory_total}}</div>
+                            <div class="rd_pro2">{{formValidate.memory_total/1024}}</div>
                         </Col>
                     </Row>
                 </li>
@@ -661,7 +661,7 @@
                             }
                         })
                         this.formValidate.vCPU_total += ritem.cpu
-                        this.formValidate.memory_total += ritem.memory/1024;
+                        this.formValidate.memory_total += ritem.memory
                         this.formValidate.storage_total += ritem.storage
                     })
                     console.log('formValidate', this.formValidate)
