@@ -53,7 +53,7 @@
                             hide-info></Progress>
                         </Col>
                         <Col span="5" class="rd_left">
-                            <div class="rd_pro2">{{poolStatus.memory_use + '&nbsp;/&nbsp;' + poolStatus.memory_total}}</div>
+                            <div class="rd_pro2">{{poolStatus.memory_use + '/' + poolStatus.memory_total}}</div>
                         </Col>
                     </Row>
                 </li>
@@ -661,7 +661,7 @@
                             }
                         })
                         this.formValidate.vCPU_total += ritem.cpu
-                        this.formValidate.memory_total += ritem.memory
+                        this.formValidate.memory_total += ritem.memory/1024;
                         this.formValidate.storage_total += ritem.storage
                     })
                     console.log('formValidate', this.formValidate)
