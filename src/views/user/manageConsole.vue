@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="top_right fr">
                                     <div class="count">{{ cpu }}</div>
-                                    <div class="name">VCPU</div>
+                                    <div class="name">vCPU</div>
                                 </div>
                             </div>
                         </div>

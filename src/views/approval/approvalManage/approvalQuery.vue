@@ -34,7 +34,7 @@
       </Form>
     </div>
     <div class="inquire-table">
-      <div class="inquire-table-title">申请资源列表</div>
+      <div class="inquire-table-title">资源审批列表</div>
       <Table stripe :columns="columns" :data="queryResult"></Table>
       <div class="inquire-table-page">
         <Page :total="data_length" show-sizer @on-change="changePage" @on-page-size-change="page_size_change" :current="current_page" :page-size="page_size"></Page>
